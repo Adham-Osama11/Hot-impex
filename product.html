@@ -3,66 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - HOT IMPEX</title>
+        <title>Product Details - HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom font for better aesthetics */
-        body {
-            font-family: "Inter", sans-serif;
-            background-color: #F2F0EB; /* Light off-white background */
-        }
-        /* Inline SVG for user icon */
-        .user-icon {
-            display: inline-block;
-            width: 1.5em; /* Increased size */
-            height: 1.5em; /* Increased size */
-            vertical-align: middle;
-            fill: currentColor;
-        }
-        /* Custom CSS to hide the scrollbar */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        /* Mobile menu styles */
-        .mobile-menu-transition {
-            transition: all 0.3s ease-in-out;
-        }
-        /* Sticky navbar */
-        .sticky-navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        /* Thumbnail hover effect */
-        .thumbnail:hover {
-            border-color: #3b82f6;
-        }
-        /* Quantity input styling */
-        .quantity-btn {
-            transition: all 0.2s ease;
-        }
-        .quantity-btn:hover {
-            background-color: #3b82f6;
-            color: white;
-        }
-        /* Tab active state */
-        .tab-active {
-            border-bottom: 2px solid #3b82f6;
-            color: #3b82f6;
-        }
-        /* Product image zoom effect */
-        .product-image {
-            transition: transform 0.3s ease;
-        }
-        .product-image:hover {
-            transform: scale(1.05);
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="min-h-screen bg-gray-50">
     <header class="sticky-navbar w-full max-w-7xl mx-auto py-4 sm:py-6 lg:py-8">
@@ -540,81 +485,7 @@
         </div>
     </footer>
 
-    <script>
-        // Mobile menu toggle functionality
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const mainNav = document.getElementById('main-nav');
-
-        mobileMenuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('hidden');
-        });
-
-        // Image gallery functionality
-        function changeImage(src) {
-            document.getElementById('main-image').src = src;
-        }
-
-        // Quantity controls
-        const qtyMinus = document.getElementById('qty-minus');
-        const qtyPlus = document.getElementById('qty-plus');
-        const quantity = document.getElementById('quantity');
-
-        qtyMinus.addEventListener('click', () => {
-            let currentQty = parseInt(quantity.textContent);
-            if (currentQty > 1) {
-                quantity.textContent = currentQty - 1;
-            }
-        });
-
-        qtyPlus.addEventListener('click', () => {
-            let currentQty = parseInt(quantity.textContent);
-            if (currentQty < 15) { // Max available stock
-                quantity.textContent = currentQty + 1;
-            }
-        });
-
-        // Size selection
-        const sizeOptions = document.querySelectorAll('.size-option');
-        sizeOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                // Remove active class from all options
-                sizeOptions.forEach(opt => {
-                    opt.classList.remove('border-blue-500', 'bg-blue-50', 'text-blue-700');
-                    opt.classList.add('border-gray-300');
-                });
-                // Add active class to clicked option
-                option.classList.remove('border-gray-300');
-                option.classList.add('border-blue-500', 'bg-blue-50', 'text-blue-700');
-            });
-        });
-
-        // Tab functionality
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.dataset.tab;
-                
-                // Remove active class from all tabs
-                tabBtns.forEach(tab => {
-                    tab.classList.remove('tab-active', 'border-blue-500', 'text-blue-600');
-                    tab.classList.add('border-transparent', 'text-gray-500');
-                });
-                
-                // Add active class to clicked tab
-                btn.classList.remove('border-transparent', 'text-gray-500');
-                btn.classList.add('tab-active', 'border-blue-500', 'text-blue-600');
-                
-                // Hide all tab contents
-                tabContents.forEach(content => {
-                    content.classList.add('hidden');
-                });
-                
-                // Show selected tab content
-                document.getElementById(tabId + '-tab').classList.remove('hidden');
-            });
-        });
-    </script>
+    <!-- JavaScript -->
+    <script src="scripts.js"></script>
 </body>
 </html>

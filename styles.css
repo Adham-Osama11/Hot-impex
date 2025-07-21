@@ -1,0 +1,109 @@
+/* Global Styles for Hot Impex Website */
+
+/* Custom font for better aesthetics */
+body {
+    font-family: "Inter", sans-serif;
+    background-color: #f8f7f5; /* Light off-white background */
+}
+
+/* Inline SVG for user icon */
+.user-icon {
+    display: inline-block;
+    width: 1.5em; /* Increased size */
+    height: 1.5em; /* Increased size */
+    vertical-align: middle;
+    fill: currentColor;
+}
+
+/* Hero section background image styling */
+.hero-background {
+    background-image: url('https://placehold.co/1200x600/E8DCC6/4A4A4A?text=Premium+Beauty+Products'); /* Updated placeholder */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Custom CSS to hide the scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Mobile menu styles */
+.mobile-menu-transition {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Sticky navbar */
+.sticky-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Category active state */
+.category-active {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Responsive text scaling */
+@media (max-width: 640px) {
+    .hero-text-large {
+        font-size: 3rem;
+        line-height: 1.1;
+    }
+    .hero-text-medium {
+        font-size: 1.5rem;
+    }
+}
+@media (min-width: 641px) and (max-width: 1024px) {
+    .hero-text-large {
+        font-size: 4rem;
+        line-height: 1.1;
+    }
+    .hero-text-medium {
+        font-size: 1.75rem;
+    }
+}
+@media (min-width: 1025px) {
+    .hero-text-large {
+        font-size: 5rem;
+        line-height: 1.1;
+    }
+    .hero-text-medium {
+        font-size: 2rem;
+    }
+}
+
+/* Product Page Specific Styles */
+/* Thumbnail hover effect */
+.thumbnail:hover {
+    border-color: #3b82f6;
+}
+
+/* Quantity input styling */
+.quantity-btn {
+    transition: all 0.2s ease;
+}
+.quantity-btn:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Tab active state */
+.tab-active {
+    border-bottom: 2px solid #3b82f6;
+    color: #3b82f6;
+}
+
+/* Product image zoom effect */
+.product-image {
+    transition: transform 0.3s ease;
+}
+.product-image:hover {
+    transform: scale(1.05);
+}

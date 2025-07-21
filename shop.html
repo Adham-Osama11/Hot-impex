@@ -6,44 +6,8 @@
     <title>Shop - HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom font for better aesthetics */
-        body {
-            font-family: "Inter", sans-serif;
-            background-color: #f8f7f5; /* Light off-white background */
-        }
-        /* Inline SVG for user icon */
-        .user-icon {
-            display: inline-block;
-            width: 1.5em; /* Increased size */
-            height: 1.5em; /* Increased size */
-            vertical-align: middle;
-            fill: currentColor;
-        }
-        /* Custom CSS to hide the scrollbar */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        /* Mobile menu styles */
-        .mobile-menu-transition {
-            transition: all 0.3s ease-in-out;
-        }
-        /* Sticky navbar */
-        .sticky-navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        /* Category active state */
-        .category-active {
-            background-color: #3b82f6;
-            color: white;
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="min-h-screen bg-gray-50">
     <header class="sticky-navbar w-full max-w-7xl mx-auto py-4 sm:py-6 lg:py-8">
@@ -68,8 +32,8 @@
             <!-- Main Navigation Section -->
             <div id="main-nav" class="w-full lg:w-auto hidden lg:block">
                 <div class="bg-gray-300 rounded-full p-3 flex flex-col lg:flex-row items-center shadow-lg gap-3 lg:gap-6 w-full lg:w-auto">
-                    <a href="#" class="text-gray-800 px-6 py-3 rounded-full bg-white transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Home</a>
-                    <a href="/shop.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Shop</a>
+                    <a href="./index.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Home</a>
+                    <a href="./shop.html" class="text-gray-800 px-6 py-3 rounded-full bg-white transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Shop</a>
                     <a href="#" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Contact Us</a>
                     <a href="#" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">About Us</a>
                     
@@ -283,26 +247,7 @@
         </div>
     </footer>
 
-    <script>
-        // Mobile menu toggle functionality
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const mainNav = document.getElementById('main-nav');
-
-        mobileMenuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('hidden');
-        });
-
-        // Category filtering functionality
-        const categoryLinks = document.querySelectorAll('a[href="#"]');
-        categoryLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                // Remove active class from all links
-                categoryLinks.forEach(l => l.classList.remove('category-active'));
-                // Add active class to clicked link
-                link.classList.add('category-active');
-            });
-        });
-    </script>
+    <!-- JavaScript -->
+    <script src="scripts.js"></script>
 </body>
 </html>

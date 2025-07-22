@@ -4,6 +4,45 @@
 let currentProducts = [];
 let cart = [];
 let isSearchVisible = false;
+let currentHeroProduct = 0;
+let heroProducts = [
+    {
+        id: 1,
+        name: "Active JR",
+        price: "64.00EGP",
+        title: "PREMIUM ACTIVE FORMULA",
+        subtitle: "Advanced skincare technology for active lifestyles",
+        description: "Revolutionary formula designed for active individuals seeking premium skincare results",
+        background: "from-purple-600 via-blue-600 to-indigo-800"
+    },
+    {
+        id: 2,
+        name: "Bio Original",
+        price: "119.00EGP",
+        title: "ORGANIC BIO SOLUTION",
+        subtitle: "Natural ingredients for sustainable beauty",
+        description: "Eco-friendly formulation with certified organic ingredients for conscious consumers",
+        background: "from-emerald-500 via-teal-600 to-cyan-700"
+    },
+    {
+        id: 3,
+        name: "Bio Perform",
+        price: "99.00EGP",
+        title: "PERFORMANCE ENHANCEMENT",
+        subtitle: "Maximum results for demanding lifestyles",
+        description: "High-performance formula engineered for professionals who demand excellence",
+        background: "from-orange-500 via-red-500 to-pink-600"
+    },
+    {
+        id: 4,
+        name: "Limited DL",
+        price: "129.00EGP",
+        title: "LIMITED EDITION LUXURY",
+        subtitle: "Exclusive premium collection",
+        description: "Rare and exclusive formula available for a limited time only",
+        background: "from-violet-600 via-purple-600 to-fuchsia-700"
+    }
+];
 
 // Sample products data
 const products = [
@@ -32,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeQuickView();
     initializeScrollAnimations();
     initializeMobileGestures();
+    initializeHeroShowroom();
     loadProductsFromStorage();
     
     // Initialize products on main page
@@ -871,6 +911,186 @@ function addProduct(productData) {
     products.push(newProduct);
     saveProductsToStorage();
     return newProduct;
+}
+
+// Hero Showroom Functionality
+function initializeHeroShowroom() {
+    if (!document.getElementById('hero-showroom')) return;
+
+    let scrollTimeout;
+    let lastScrollTime = 0;
+    let scrollAccumulator = 0;
+    const scrollThreshold = 800; // Increased minimum time between switches (ms)
+    const scrollSensitivity = 100; // Amount of scroll needed to trigger change
+    const scrollDebounce = 200; // Debounce delay
+
+    // Initialize first product
+    updateHeroContent(0);
+
+    // Handle scroll-based switching with better control
+    window.addEventListener('wheel', (e) => {
+        const now = Date.now();
+        
+        const heroSection = document.getElementById('hero-showroom');
+        const rect = heroSection.getBoundingClientRect();
+        
+        // Only switch when hero section is in viewport
+        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+            // Prevent default scroll behavior on hero section
+            e.preventDefault();
+            
+            // Accumulate scroll delta
+            scrollAccumulator += Math.abs(e.deltaY);
+            
+            // Clear any existing timeout
+            clearTimeout(scrollTimeout);
+            
+            // Only trigger change if enough scroll accumulated and enough time passed
+            if (scrollAccumulator >= scrollSensitivity && (now - lastScrollTime) >= scrollThreshold) {
+                if (e.deltaY > 0) {
+                    // Scroll down - next product
+                    currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
+                } else {
+                    // Scroll up - previous product
+                    currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
+                }
+                
+                updateHeroContent(currentHeroProduct);
+                lastScrollTime = now;
+                scrollAccumulator = 0; // Reset accumulator
+            } else {
+                // Set timeout to reset accumulator if no action taken
+                scrollTimeout = setTimeout(() => {
+                    scrollAccumulator = 0;
+                }, scrollDebounce);
+            }
+        }
+    }, { passive: false });
+
+    // Handle dot navigation
+    const dots = document.querySelectorAll('.showroom-dot');
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentHeroProduct = index;
+            updateHeroContent(currentHeroProduct);
+            lastScrollTime = Date.now(); // Update time to prevent immediate scroll changes
+        });
+    });
+
+    // Auto-rotate every 8 seconds (increased from 5 seconds)
+    setInterval(() => {
+        // Only auto-rotate if user hasn't interacted recently
+        if (Date.now() - lastScrollTime > 3000) {
+            currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
+            updateHeroContent(currentHeroProduct);
+        }
+    }, 8000);
+
+    // Handle touch/swipe on mobile with better sensitivity
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartTime = 0;
+
+    const heroSection = document.getElementById('hero-showroom');
+    
+    heroSection.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartTime = Date.now();
+    });
+
+    heroSection.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const touchEndTime = Date.now();
+        
+        // Only trigger if touch was quick enough (not a slow drag)
+        if (touchEndTime - touchStartTime < 500) {
+            handleSwipe();
+        }
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 75; // Increased threshold for less sensitivity
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next product
+                currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
+            } else {
+                // Swipe right - previous product
+                currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
+            }
+            updateHeroContent(currentHeroProduct);
+            lastScrollTime = Date.now(); // Prevent immediate auto-rotation
+        }
+    }
+}
+
+function updateHeroContent(index) {
+    const product = heroProducts[index];
+    
+    // Update text content with smooth transition
+    const elements = {
+        title: document.getElementById('hero-title'),
+        subtitle: document.getElementById('hero-subtitle'),
+        productName: document.getElementById('product-name'),
+        productPrice: document.getElementById('product-price'),
+        productDescription: document.getElementById('product-description')
+    };
+
+    // Fade out current content
+    Object.values(elements).forEach(el => {
+        if (el) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+        }
+    });
+
+    setTimeout(() => {
+        // Update content
+        if (elements.title) elements.title.textContent = product.title;
+        if (elements.subtitle) elements.subtitle.textContent = product.subtitle;
+        if (elements.productName) elements.productName.textContent = product.name;
+        if (elements.productPrice) elements.productPrice.textContent = product.price;
+        if (elements.productDescription) elements.productDescription.textContent = product.description;
+
+        // Fade in new content
+        Object.values(elements).forEach((el, i) => {
+            if (el) {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, i * 100);
+            }
+        });
+    }, 300);
+
+    // Update background slides
+    const slides = document.querySelectorAll('.hero-slide');
+    slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+    });
+
+    // Update product images
+    const images = document.querySelectorAll('.product-image');
+    images.forEach((image, i) => {
+        image.classList.toggle('active', i === index);
+    });
+
+    // Update navigation dots
+    const dots = document.querySelectorAll('.showroom-dot');
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+
+    // Add entrance animation to product image
+    const activeImage = document.querySelector(`.product-image[data-product="${index}"]`);
+    if (activeImage) {
+        activeImage.style.transform = 'translateX(100px) scale(0.8)';
+        setTimeout(() => {
+            activeImage.style.transform = 'translateX(0) scale(1)';
+        }, 100);
+    }
 }
 
 // Make functions globally available

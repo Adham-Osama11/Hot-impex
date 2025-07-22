@@ -1,10 +1,14 @@
-// Hot Impex Website JavaScript
+// Hot Impex Website JavaScript - Enhanced Version
 
 // Global variables
 let currentProducts = [];
 let cart = [];
 let isSearchVisible = false;
 let currentHeroProduct = 0;
+let autoSlideInterval;
+let mouseInHero = false;
+
+// Enhanced hero products data
 let heroProducts = [
     {
         id: 1,
@@ -12,8 +16,9 @@ let heroProducts = [
         price: "64.00EGP",
         title: "PREMIUM ACTIVE FORMULA",
         subtitle: "Advanced skincare technology for active lifestyles",
-        description: "Revolutionary formula designed for active individuals seeking premium skincare results",
-        background: "from-purple-600 via-blue-600 to-indigo-800"
+        description: "Revolutionary formula designed for active individuals seeking premium skincare results with cutting-edge ingredients",
+        background: "from-purple-600 via-blue-600 to-indigo-800",
+        accent: "purple"
     },
     {
         id: 2,
@@ -21,8 +26,9 @@ let heroProducts = [
         price: "119.00EGP",
         title: "ORGANIC BIO SOLUTION",
         subtitle: "Natural ingredients for sustainable beauty",
-        description: "Eco-friendly formulation with certified organic ingredients for conscious consumers",
-        background: "from-emerald-500 via-teal-600 to-cyan-700"
+        description: "Eco-friendly formulation with certified organic ingredients for conscious consumers who value sustainability",
+        background: "from-emerald-500 via-teal-600 to-cyan-700",
+        accent: "emerald"
     },
     {
         id: 3,
@@ -30,8 +36,9 @@ let heroProducts = [
         price: "99.00EGP",
         title: "PERFORMANCE ENHANCEMENT",
         subtitle: "Maximum results for demanding lifestyles",
-        description: "High-performance formula engineered for professionals who demand excellence",
-        background: "from-orange-500 via-red-500 to-pink-600"
+        description: "High-performance formula engineered for professionals who demand excellence and visible results",
+        background: "from-orange-500 via-red-500 to-pink-600",
+        accent: "orange"
     },
     {
         id: 4,
@@ -39,8 +46,9 @@ let heroProducts = [
         price: "129.00EGP",
         title: "LIMITED EDITION LUXURY",
         subtitle: "Exclusive premium collection",
-        description: "Rare and exclusive formula available for a limited time only",
-        background: "from-violet-600 via-purple-600 to-fuchsia-700"
+        description: "Rare and exclusive formula available for a limited time only - experience true luxury skincare",
+        background: "from-violet-600 via-purple-600 to-fuchsia-700",
+        accent: "violet"
     }
 ];
 

@@ -11,6 +11,22 @@ body {
 #hero-showroom {
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+#hero-showroom:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(124, 58, 237, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Scroll indicator enhancement on hover */
+#hero-showroom:hover .scroll-indicator {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.scroll-indicator {
+    transition: all 0.3s ease;
 }
 
 .hero-slide {

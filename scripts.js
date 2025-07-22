@@ -920,6 +920,7 @@ function initializeHeroShowroom() {
     let scrollTimeout;
     let lastScrollTime = 0;
     let scrollAccumulator = 0;
+    let isHeroHovered = false; // Track hover state
     const scrollThreshold = 800; // Increased minimum time between switches (ms)
     const scrollSensitivity = 100; // Amount of scroll needed to trigger change
     const scrollDebounce = 200; // Debounce delay
@@ -927,16 +928,30 @@ function initializeHeroShowroom() {
     // Initialize first product
     updateHeroContent(0);
 
-    // Handle scroll-based switching with better control
+    const heroSection = document.getElementById('hero-showroom');
+
+    // Add hover detection to hero section
+    heroSection.addEventListener('mouseenter', () => {
+        isHeroHovered = true;
+        heroSection.style.cursor = 'grab';
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+        isHeroHovered = false;
+        heroSection.style.cursor = 'default';
+        // Reset scroll accumulator when leaving
+        scrollAccumulator = 0;
+    });
+
+    // Handle scroll-based switching with hover detection
     window.addEventListener('wheel', (e) => {
         const now = Date.now();
         
-        const heroSection = document.getElementById('hero-showroom');
         const rect = heroSection.getBoundingClientRect();
         
-        // Only switch when hero section is in viewport
-        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-            // Prevent default scroll behavior on hero section
+        // Only switch when hero section is in viewport AND hovered
+        if (isHeroHovered && rect.top <= window.innerHeight && rect.bottom >= 0) {
+            // Prevent default scroll behavior on hero section when hovered
             e.preventDefault();
             
             // Accumulate scroll delta
@@ -979,8 +994,8 @@ function initializeHeroShowroom() {
 
     // Auto-rotate every 8 seconds (increased from 5 seconds)
     setInterval(() => {
-        // Only auto-rotate if user hasn't interacted recently
-        if (Date.now() - lastScrollTime > 3000) {
+        // Only auto-rotate if user hasn't interacted recently and not hovering
+        if (Date.now() - lastScrollTime > 3000 && !isHeroHovered) {
             currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
             updateHeroContent(currentHeroProduct);
         }
@@ -990,12 +1005,11 @@ function initializeHeroShowroom() {
     let touchStartX = 0;
     let touchEndX = 0;
     let touchStartTime = 0;
-
-    const heroSection = document.getElementById('hero-showroom');
     
     heroSection.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
         touchStartTime = Date.now();
+        isHeroHovered = true; // Treat touch as hover
     });
 
     heroSection.addEventListener('touchend', (e) => {
@@ -1006,6 +1020,11 @@ function initializeHeroShowroom() {
         if (touchEndTime - touchStartTime < 500) {
             handleSwipe();
         }
+        
+        // Reset hover state after touch
+        setTimeout(() => {
+            isHeroHovered = false;
+        }, 1000);
     });
 
     function handleSwipe() {

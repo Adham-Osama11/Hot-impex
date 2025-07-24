@@ -7,45 +7,140 @@ let isSearchVisible = false;
 let currentHeroProduct = 0;
 let autoSlideInterval;
 let mouseInHero = false;
+let scrollProgressBar;
+let animationObserver;
+
+// Scroll Animation Functions
+function initScrollAnimations() {
+    // Create scroll progress bar
+    const progressBar = document.querySelector('.scroll-progress');
+    if (progressBar) {
+        updateScrollProgress(progressBar);
+        window.addEventListener('scroll', () => updateScrollProgress(progressBar));
+    }
+
+    // Initialize Intersection Observer for animations
+    initIntersectionObserver();
+    
+    // Add parallax effect to hero background
+    initParallaxEffect();
+    
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+}
+
+function updateScrollProgress(progressBar) {
+    const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    progressBar.style.width = Math.min(scrolled, 100) + '%';
+}
+
+function initIntersectionObserver() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    animationObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                
+                // Handle staggered animations
+                if (entry.target.classList.contains('stagger-animation')) {
+                    const delay = parseFloat(entry.target.style.animationDelay) || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('fade-in');
+                    }, delay * 1000);
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe all animation elements
+    document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right, .scroll-animate-scale, .scroll-animate-rotate, .stagger-animation').forEach(el => {
+        animationObserver.observe(el);
+    });
+}
+
+function initParallaxEffect() {
+    const heroSection = document.getElementById('hero-showroom');
+    if (heroSection) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            const parallaxElements = heroSection.querySelectorAll('.parallax-bg');
+            parallaxElements.forEach(element => {
+                element.style.transform = `translateY(${rate}px)`;
+            });
+        });
+    }
+}
+
+// Sticky navbar functionality
+function initStickyNavbar() {
+    const header = document.querySelector('header');
+    
+    if (header) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            
+            if (scrolled > 50) { // Start sticky effect after scrolling 50px
+                header.classList.add('sticky');
+            } else {
+                header.classList.remove('sticky');
+            }
+        });
+    }
+}
+
+// Add floating animation to elements
+function addFloatingAnimation() {
+    const floatingElements = document.querySelectorAll('.floating-particle');
+    floatingElements.forEach((element, index) => {
+        element.style.animation = `float ${3 + index * 0.5}s ease-in-out infinite`;
+        element.style.animationDelay = `${index * 0.5}s`;
+    });
+}
 
 // Enhanced hero products data
 let heroProducts = [
     {
         id: 1,
-        name: "Active JR",
+        name: "ACTIVE JR",
         price: "64.00EGP",
         title: "PREMIUM ACTIVE FORMULA",
-        subtitle: "Advanced skincare technology for active lifestyles",
+        subtitle: "Premium Active Formula",
         description: "Revolutionary formula designed for active individuals seeking premium skincare results with cutting-edge ingredients",
         background: "from-purple-600 via-blue-600 to-indigo-800",
         accent: "purple"
     },
     {
         id: 2,
-        name: "Bio Original",
+        name: "BIO ORIGINAL",
         price: "119.00EGP",
         title: "ORGANIC BIO SOLUTION",
-        subtitle: "Natural ingredients for sustainable beauty",
+        subtitle: "Organic Bio Solution",
         description: "Eco-friendly formulation with certified organic ingredients for conscious consumers who value sustainability",
         background: "from-emerald-500 via-teal-600 to-cyan-700",
         accent: "emerald"
     },
     {
         id: 3,
-        name: "Bio Perform",
+        name: "BIO PERFORM",
         price: "99.00EGP",
         title: "PERFORMANCE ENHANCEMENT",
-        subtitle: "Maximum results for demanding lifestyles",
+        subtitle: "Performance Enhancement",
         description: "High-performance formula engineered for professionals who demand excellence and visible results",
         background: "from-orange-500 via-red-500 to-pink-600",
         accent: "orange"
     },
     {
         id: 4,
-        name: "Limited DL",
+        name: "LIMITED DL",
         price: "129.00EGP",
         title: "LIMITED EDITION LUXURY",
-        subtitle: "Exclusive premium collection",
+        subtitle: "Limited Edition Luxury",
         description: "Rare and exclusive formula available for a limited time only - experience true luxury skincare",
         background: "from-violet-600 via-purple-600 to-fuchsia-700",
         accent: "violet"
@@ -80,6 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScrollAnimations();
     initializeMobileGestures();
     initializeHeroShowroom();
+    initStickyNavbar(); // Initialize sticky navbar
+    initProductShowcase(); // Initialize dynamic product showcase
     loadProductsFromStorage();
     
     // Initialize products on main page
@@ -651,22 +748,24 @@ function closeQuickViewModal() {
 
 // Scroll Animations
 function initializeScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.scroll-animate');
+    // Create scroll progress bar
+    const progressBar = document.querySelector('.scroll-progress');
+    if (progressBar) {
+        updateScrollProgress(progressBar);
+        window.addEventListener('scroll', () => updateScrollProgress(progressBar));
+    }
+
+    // Initialize Intersection Observer for animations
+    initIntersectionObserver();
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
+    // Add parallax effect to hero background
+    initParallaxEffect();
     
-    animatedElements.forEach(el => {
-        observer.observe(el);
-    });
+    // Add floating animation
+    addFloatingAnimation();
+    
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
 }
 
 // Mobile Gestures
@@ -921,151 +1020,141 @@ function addProduct(productData) {
     return newProduct;
 }
 
-// Hero Showroom Functionality
+// Enhanced Hero Showroom Functionality - Automotive Style
 function initializeHeroShowroom() {
     if (!document.getElementById('hero-showroom')) return;
-
-    let scrollTimeout;
-    let lastScrollTime = 0;
-    let scrollAccumulator = 0;
-    let isHeroHovered = false; // Track hover state
-    const scrollThreshold = 800; // Increased minimum time between switches (ms)
-    const scrollSensitivity = 100; // Amount of scroll needed to trigger change
-    const scrollDebounce = 200; // Debounce delay
 
     // Initialize first product
     updateHeroContent(0);
 
-    const heroSection = document.getElementById('hero-showroom');
-
-    // Add hover detection to hero section
-    heroSection.addEventListener('mouseenter', () => {
-        isHeroHovered = true;
-        heroSection.style.cursor = 'grab';
-    });
-
-    heroSection.addEventListener('mouseleave', () => {
-        isHeroHovered = false;
-        heroSection.style.cursor = 'default';
-        // Reset scroll accumulator when leaving
-        scrollAccumulator = 0;
-    });
-
-    // Handle scroll-based switching with hover detection
-    window.addEventListener('wheel', (e) => {
-        const now = Date.now();
-        
-        const rect = heroSection.getBoundingClientRect();
-        
-        // Only switch when hero section is in viewport AND hovered
-        if (isHeroHovered && rect.top <= window.innerHeight && rect.bottom >= 0) {
-            // Prevent default scroll behavior on hero section when hovered
-            e.preventDefault();
-            
-            // Accumulate scroll delta
-            scrollAccumulator += Math.abs(e.deltaY);
-            
-            // Clear any existing timeout
-            clearTimeout(scrollTimeout);
-            
-            // Only trigger change if enough scroll accumulated and enough time passed
-            if (scrollAccumulator >= scrollSensitivity && (now - lastScrollTime) >= scrollThreshold) {
-                if (e.deltaY > 0) {
-                    // Scroll down - next product
-                    currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
-                } else {
-                    // Scroll up - previous product
-                    currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
-                }
-                
-                updateHeroContent(currentHeroProduct);
-                lastScrollTime = now;
-                scrollAccumulator = 0; // Reset accumulator
-            } else {
-                // Set timeout to reset accumulator if no action taken
-                scrollTimeout = setTimeout(() => {
-                    scrollAccumulator = 0;
-                }, scrollDebounce);
-            }
-        }
-    }, { passive: false });
-
-    // Handle dot navigation
-    const dots = document.querySelectorAll('.showroom-dot');
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
+    // Handle product thumbnail clicks
+    const productThumbs = document.querySelectorAll('.product-thumb');
+    productThumbs.forEach((thumb, index) => {
+        thumb.addEventListener('click', () => {
             currentHeroProduct = index;
             updateHeroContent(currentHeroProduct);
-            lastScrollTime = Date.now(); // Update time to prevent immediate scroll changes
         });
     });
 
-    // Auto-rotate every 8 seconds (increased from 5 seconds)
+    // Handle bottom navigation dots
+    const heroDots = document.querySelectorAll('.hero-dot');
+    heroDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentHeroProduct = index;
+            updateHeroContent(currentHeroProduct);
+        });
+    });
+
+    // Handle navigation arrows
+    const prevBtn = document.getElementById('prev-product');
+    const nextBtn = document.getElementById('next-product');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
+            updateHeroContent(currentHeroProduct);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
+            updateHeroContent(currentHeroProduct);
+        });
+    }
+
+    // Auto-rotate every 8 seconds
     setInterval(() => {
-        // Only auto-rotate if user hasn't interacted recently and not hovering
-        if (Date.now() - lastScrollTime > 3000 && !isHeroHovered) {
+        currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
+        updateHeroContent(currentHeroProduct);
+    }, 8000);
+
+    // Handle keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
+            updateHeroContent(currentHeroProduct);
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+            e.preventDefault();
             currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
             updateHeroContent(currentHeroProduct);
         }
-    }, 8000);
+    });
 
-    // Handle touch/swipe on mobile with better sensitivity
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let touchStartTime = 0;
+    // Handle touch/swipe on mobile
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    const heroSection = document.getElementById('hero-showroom');
     
     heroSection.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartTime = Date.now();
-        isHeroHovered = true; // Treat touch as hover
+        touchStartY = e.changedTouches[0].screenY;
     });
 
     heroSection.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        const touchEndTime = Date.now();
-        
-        // Only trigger if touch was quick enough (not a slow drag)
-        if (touchEndTime - touchStartTime < 500) {
-            handleSwipe();
-        }
-        
-        // Reset hover state after touch
-        setTimeout(() => {
-            isHeroHovered = false;
-        }, 1000);
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
     });
 
     function handleSwipe() {
-        const swipeThreshold = 75; // Increased threshold for less sensitivity
-        const diff = touchStartX - touchEndX;
+        const swipeThreshold = 50;
+        const diff = touchStartY - touchEndY;
 
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
-                // Swipe left - next product
+                // Swipe up - next product
                 currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
             } else {
-                // Swipe right - previous product
+                // Swipe down - previous product
                 currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
             }
             updateHeroContent(currentHeroProduct);
-            lastScrollTime = Date.now(); // Prevent immediate auto-rotation
         }
+    }
+
+    // Handle scroll indicator click
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', () => {
+            // Smooth scroll to the next section after hero
+            const nextSection = document.querySelector('#hero-showroom').nextElementSibling;
+            if (nextSection) {
+                nextSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+
+        // Add hover effects
+        scrollIndicator.addEventListener('mouseenter', () => {
+            scrollIndicator.style.transform = 'translateX(-50%) scale(1.1)';
+        });
+
+        scrollIndicator.addEventListener('mouseleave', () => {
+            scrollIndicator.style.transform = 'translateX(-50%) scale(1)';
+        });
     }
 }
 
 function updateHeroContent(index) {
     const product = heroProducts[index];
     
-    // Update text content with smooth transition
+    // Update product counter
+    const productCounter = document.getElementById('current-product-num');
+    if (productCounter) {
+        productCounter.textContent = String(index + 1).padStart(2, '0');
+    }
+    
+    // Update text content with smooth transitions
     const elements = {
-        title: document.getElementById('hero-title'),
-        subtitle: document.getElementById('hero-subtitle'),
-        productName: document.getElementById('product-name'),
-        productPrice: document.getElementById('product-price'),
-        productDescription: document.getElementById('product-description')
+        productName: document.getElementById('hero-product-name'),
+        productSubtitle: document.getElementById('hero-product-subtitle'),
+        productPrice: document.getElementById('hero-product-price')
     };
 
-    // Fade out current content
+    // Animate text changes
     Object.values(elements).forEach(el => {
         if (el) {
             el.style.opacity = '0';
@@ -1075,13 +1164,11 @@ function updateHeroContent(index) {
 
     setTimeout(() => {
         // Update content
-        if (elements.title) elements.title.textContent = product.title;
-        if (elements.subtitle) elements.subtitle.textContent = product.subtitle;
         if (elements.productName) elements.productName.textContent = product.name;
+        if (elements.productSubtitle) elements.productSubtitle.textContent = product.subtitle;
         if (elements.productPrice) elements.productPrice.textContent = product.price;
-        if (elements.productDescription) elements.productDescription.textContent = product.description;
 
-        // Fade in new content
+        // Fade in new content with stagger
         Object.values(elements).forEach((el, i) => {
             if (el) {
                 setTimeout(() => {
@@ -1098,25 +1185,114 @@ function updateHeroContent(index) {
         slide.classList.toggle('active', i === index);
     });
 
-    // Update product images
+    // Update product images with enhanced animation
     const images = document.querySelectorAll('.product-image');
     images.forEach((image, i) => {
-        image.classList.toggle('active', i === index);
+        if (i === index) {
+            image.classList.add('active');
+            image.style.opacity = '1';
+            image.style.transform = 'scale(1)';
+        } else {
+            image.classList.remove('active');
+            image.style.opacity = '0';
+            image.style.transform = 'scale(0.9)';
+        }
     });
 
-    // Update navigation dots
-    const dots = document.querySelectorAll('.showroom-dot');
+    // Update thumbnail active states with enhanced styling
+    const thumbs = document.querySelectorAll('.product-thumb');
+    thumbs.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+    });
+
+    // Update bottom navigation dots
+    const dots = document.querySelectorAll('.hero-dot');
     dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === index);
+        if (i === index) {
+            dot.classList.add('active');
+            dot.style.backgroundColor = '#f97316'; // orange-500
+            dot.style.transform = 'scale(1.25)';
+        } else {
+            dot.classList.remove('active');
+            dot.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+            dot.style.transform = 'scale(1)';
+        }
     });
 
-    // Add entrance animation to product image
-    const activeImage = document.querySelector(`.product-image[data-product="${index}"]`);
-    if (activeImage) {
-        activeImage.style.transform = 'translateX(100px) scale(0.8)';
+    // Update product counter
+    const productNum = document.getElementById('current-product-num');
+    if (productNum) {
+        productNum.textContent = String(index + 1).padStart(2, '0');
+    }
+
+    // Add subtle animation to the entire hero section
+    const heroSection = document.getElementById('hero-showroom');
+    if (heroSection) {
+        heroSection.style.transform = 'scale(0.998)';
         setTimeout(() => {
-            activeImage.style.transform = 'translateX(0) scale(1)';
-        }, 100);
+            heroSection.style.transform = 'scale(1)';
+        }, 200);
+    }
+}
+
+// ===== DYNAMIC PRODUCT SHOWCASE FUNCTIONALITY =====
+
+// Array of product images for showcase
+const showcaseProducts = [
+    'screen telescopic_without BG.png',
+    'racing sim seat_without BG.png',
+    'kiosks without BG.png'
+];
+
+let currentIndex = 0;
+
+/**
+ * Displays a product with an animation.
+ * @param {string} imageUrl - The URL of the product image.
+ * @param {number} index - The index of the product in the array.
+ */
+function displayProduct(imageUrl, index) {
+    const productDisplay = document.getElementById('product-display');
+    if (!productDisplay) return;
+
+    // Create a new image element
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = `Product ${index + 1}`;
+    img.classList.add('product-item'); // Add base styling class
+    productDisplay.appendChild(img);
+
+    // Set initial position (off-screen right)
+    img.style.transform = 'translateX(100vw) scale(0.8)';
+    img.style.opacity = '0';
+
+    // Animate to center
+    setTimeout(() => {
+        img.style.transform = 'translateX(0) scale(1)';
+        img.style.opacity = '1';
+    }, 100); // Small delay for initial render
+
+    // Set a timeout to remove the current product and display the next
+    setTimeout(() => {
+        // Animate out (off-screen left)
+        img.style.transform = 'translateX(-100vw) scale(0.8)';
+        img.style.opacity = '0';
+
+        // Remove the image after it moves off screen
+        img.addEventListener('transitionend', () => {
+            img.remove();
+        }, { once: true });
+
+        // Move to the next product
+        currentIndex = (currentIndex + 1) % showcaseProducts.length;
+        displayProduct(showcaseProducts[currentIndex], currentIndex);
+    }, 5000); // Display each product for 5 seconds
+}
+
+// Initialize product showcase when DOM is loaded
+function initProductShowcase() {
+    if (document.getElementById('product-display')) {
+        displayProduct(showcaseProducts[currentIndex], currentIndex);
     }
 }
 
@@ -1130,3 +1306,5 @@ window.closeQuickViewModal = closeQuickViewModal;
 window.viewProduct = viewProduct;
 window.toggleCart = toggleCart;
 window.closeCartSidebar = closeCartSidebar;
+window.initProductShowcase = initProductShowcase;
+window.displayProduct = displayProduct;

@@ -20,26 +20,158 @@
     --transition-quick: all 0.2s ease;
 }
 
+/* Scroll Animation Classes */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-animate.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-animate-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-animate-left.fade-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.scroll-animate-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-animate-right.fade-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.scroll-animate-scale {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-animate-scale.fade-in {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.scroll-animate-rotate {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-animate-rotate.fade-in {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+/* Parallax Effect */
+.parallax-bg {
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
+/* Smooth Scroll Progress Bar */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    z-index: 9999;
+    transition: width 0.1s ease-out;
+}
+
+/* Stagger Animation */
+.stagger-animation {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.stagger-animation.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* Enhanced body with improved typography */
-body {
+html, body {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     transition: background 0.3s ease, color 0.3s ease;
     min-height: 100vh;
+    height: 100%;
+    margin: 0;
+    padding: 0;
     font-weight: 400;
     line-height: 1.6;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
-/* Enhanced Hero Showroom Styles */
+/* Enhanced Hero Showroom Styles - Dynamic Product Showcase */
 #hero-showroom {
+    background-image: url('https://placehold.co/1920x1080/E0E0E0/333333?text=New+Podium+Background');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
+    min-height: 100vh;
     overflow: hidden;
     transition: var(--transition-smooth);
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0 auto;
+    max-width: 1400px; /* Added max-width to decrease overall width */
+    border-radius: 0 0 24px 24px; /* Added subtle bottom border radius */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
+}
+
+/* Hero content container with better width control */
+#hero-showroom .absolute.inset-0 {
+    max-width: 1200px; /* Constrain the content width */
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%; /* Use 90% of available width */
+}
+
+/* Custom styles for the product movement */
+.product-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    /* Changed to align items to the bottom of the container */
+    align-items: flex-end; 
+    overflow: hidden; /* Hide overflow when products move off screen */
+    padding-bottom: 5vh; /* Adjust this value to fine-tune vertical position */
+}
+
+.product-item {
+    position: absolute;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    opacity: 0; /* Start hidden */
+    max-height: 80%; /* Ensure products fit within the view */
+    max-width: 80%;
+    object-fit: contain;
+    z-index: 5;
 }
 
 #hero-showroom::before {
@@ -50,35 +182,256 @@ body {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.15) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
     z-index: 1;
     pointer-events: none;
+    border-radius: 0 0 24px 24px;
 }
 
-#hero-showroom:hover {
+/* Enhanced hero text styling */
+.hero-title {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #ffffff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Hero button enhancements */
+.hero-button {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.hero-button:hover::before {
+    left: 100%;
+}
+
+/* Body spacing for sticky navbar */
+body {
+    scroll-padding-top: 100px; /* Adjust based on navbar height */
+}
+
+/* Main content spacing after hero */
+.main-content {
+    margin-top: 3rem;
+    position: relative;
+}
+
+/* Section spacing improvements */
+section + section {
+    margin-top: 4rem;
+}
+
+/* Improved main content container */
+.min-h-screen.flex.flex-col {
+    padding-top: 2rem;
+}
+
+/* Product Thumbnail Styles */
+.product-thumb {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.product-thumb.active {
+    border-color: #f97316 !important;
+    transform: scale(1.1);
     box-shadow: 
-        0 30px 60px -12px rgba(0, 0, 0, 0.25), 
-        0 0 50px rgba(124, 58, 237, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transform: translateY(-4px);
+        0 8px 20px rgba(249, 115, 22, 0.4),
+        0 0 20px rgba(249, 115, 22, 0.3);
 }
 
-/* Enhanced scroll indicator */
-#hero-showroom:hover .scroll-indicator {
+.product-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Enhanced Hero Slide Animations */
+.hero-slide {
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.hero-slide.active {
     opacity: 1;
-    transform: translateY(-50%) scale(1.1);
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
-.scroll-indicator {
-    transition: var(--transition-smooth);
+/* Enhanced Product Image Animations */
+.product-image {
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.product-image.active {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
+
+/* Enhanced Navigation Dots */
+.hero-dot {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius-sm);
-    padding: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-dot.active {
+    background-color: #f97316;
+    transform: scale(1.25);
+    box-shadow: 
+        0 0 20px rgba(249, 115, 22, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hero-dot:hover {
+    background-color: rgba(249, 115, 22, 0.7);
+    transform: scale(1.1);
+}
+
+.product-image:not(.active) {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+}
+
+/* Product Display Enhancement */
+.product-image > div {
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+}
+
+.product-image > div:hover {
+    transform: scale(1.02);
+}
+
+/* Navigation Button Styles */
+#prev-product:hover,
+#next-product:hover {
+    background: #f97316;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+/* Product Counter Animation */
+#current-product-num {
+    transition: var(--transition-quick);
+}
+
+/* Typography Enhancements */
+#hero-product-name {
+    font-family: "Playfair Display", serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: var(--transition-smooth);
+}
+
+#hero-product-subtitle {
+    transition: var(--transition-smooth);
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    #hero-showroom {
+        height: 80vh;
+        min-height: 80vh;
+        max-width: 95%;
+        border-radius: 0 0 16px 16px;
+    }
+    
+    .product-thumb {
+        width: 3rem;
+        height: 3rem;
+    }
+    
+    #hero-product-name {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #hero-showroom {
+        min-height: 70vh;
+        height: 70vh;
+        padding: 2rem 1rem;
+        max-width: 100%;
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    #hero-showroom .flex {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    #hero-showroom .w-1\/2 {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .product-thumb {
+        width: 3rem;
+        height: 3rem;
+        margin: 0 0.5rem;
+    }
+    
+    #hero-product-name {
+        font-size: 2.5rem;
+    }
+    
+    .text-7xl {
+        font-size: 3rem;
+    }
+    
+    .text-9xl {
+        font-size: 4rem;
+    }
+    
+    .product-image > div .w-40 {
+        width: 8rem;
+        height: 8rem;
+    }
+    
+    /* Mobile navigation adjustments */
+    .hero-dot {
+        width: 0.75rem;
+        height: 0.75rem;
+        margin: 0 0.25rem;
+    }
+    
+    /* Hero content width adjustments for mobile */
+    #hero-showroom .absolute.inset-0 {
+        width: 95%;
+        max-width: none;
+    }
 }
 
 /* Enhanced Hero Slide Animations */
@@ -574,20 +927,45 @@ html.dark {
 
 /* Enhanced Glassmorphism adjustments for navigation */
 .sticky-navbar nav > div:nth-child(2) > div {
-    background: linear-gradient(135deg, var(--surface-glass), rgba(255, 255, 255, 0.05)) !important;
-    backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)) !important;
+    backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
-        var(--shadow-soft), 
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
+        0 8px 32px rgba(0, 0, 0, 0.1), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
 }
 
+/* Add floating glass particles effect */
+.sticky-navbar nav > div:nth-child(2) > div::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(255, 255, 255, 0.03),
+        transparent,
+        rgba(255, 255, 255, 0.03),
+        transparent
+    );
+    animation: glassRotate 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes glassRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .dark .sticky-navbar nav > div:nth-child(2) > div {
-    background: linear-gradient(135deg, var(--surface-glass-dark), rgba(31, 41, 55, 0.1)) !important;
-    backdrop-filter: blur(24px) saturate(180%);
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.15), rgba(31, 41, 55, 0.05)) !important;
+    backdrop-filter: blur(25px) saturate(200%);
     border: 1px solid rgba(75, 85, 99, 0.3);
     box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.4),
@@ -609,19 +987,20 @@ html.dark {
 
 /* Enhanced logo button with premium glassmorphism */
 .logo {
-    background: linear-gradient(135deg, var(--surface-glass), rgba(255, 255, 255, 0.05)) !important;
-    backdrop-filter: blur(24px) saturate(180%);
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(25px) saturate(200%);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
-        var(--shadow-soft), 
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        0 0 20px rgba(124, 58, 237, 0.1);
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
-    color: #1f2937;
+    color: #1f2937 !important;
     font-family: "Playfair Display", serif;
     font-weight: 700;
     transition: var(--transition-smooth);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .logo::before {
@@ -640,40 +1019,71 @@ html.dark {
 }
 
 .logo:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.15)) !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(30px) saturate(250%);
     box-shadow: 
-        0 16px 48px rgba(0, 0, 0, 0.12), 
+        0 12px 48px rgba(0, 0, 0, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.8),
-        0 0 30px rgba(124, 58, 237, 0.2);
-    transform: translateY(-3px) scale(1.05);
-    border-color: rgba(255, 255, 255, 0.5);
+        0 0 0 1px rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px) scale(1.02);
+    color: #1e40af !important;
 }
 
 .logo:active {
-    transform: translateY(-1px) scale(1.02);
+    transform: translateY(-1px) scale(1.01);
     transition: var(--transition-quick);
 }
 
 /* Enhanced dark mode logo button */
 .dark .logo {
-    background-color: rgba(31, 41, 55, 0.3) !important;
+    background: rgba(31, 41, 55, 0.9) !important;
     border: 1px solid rgba(75, 85, 99, 0.4);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: #f9fafb !important;
 }
 
 .dark .logo:hover {
-    background-color: rgba(31, 41, 55, 0.4) !important;
+    background: rgba(31, 41, 55, 0.95) !important;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode navbar styling */
+.dark nav a {
+    color: #f9fafb !important;
+}
+
+.dark nav a:hover {
+    color: #ffffff !important;
+    background: rgba(59, 130, 246, 0.3) !important;
+}
+
+.dark .navbar-container {
+    background: rgba(31, 41, 55, 0.9) !important;
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark #mobile-menu-toggle {
+    background: rgba(31, 41, 55, 0.9) !important;
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    color: #f9fafb !important;
+}
+
+.dark #mobile-menu-toggle:hover {
+    background: rgba(31, 41, 55, 0.95) !important;
 }
 
 /* Enhanced mobile menu toggle button glassmorphism to match navbar */
 #mobile-menu-toggle {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1)) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
+    color: #1f2937 !important;
 }
 
 #mobile-menu-toggle::before {
@@ -683,7 +1093,7 @@ html.dark {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
     transition: left 0.6s ease;
 }
 
@@ -692,9 +1102,13 @@ html.dark {
 }
 
 #mobile-menu-toggle:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2)) !important;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(-2px) scale(1.05);
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(30px) saturate(250%);
+    box-shadow: 
+        0 12px 48px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px) scale(1.02);
 }
 
 /* Enhanced dark mode mobile menu toggle */
@@ -742,10 +1156,92 @@ html.dark {
 
 /* Sticky navbar */
 .sticky-navbar {
-    
     position: sticky;
     top: 0;
     z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+/* Enhanced sticky navbar with glassmorphism */
+header {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+header.sticky {
+    background: transparent !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Navbar glassmorphism enhancement when sticky */
+header.sticky .bg-white\/10 {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Default navbar styling */
+header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced navbar contrast for better visibility */
+.navbar-container {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Navigation links styling */
+nav a {
+    color: #374151 !important;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+}
+
+nav a:hover::before {
+    opacity: 1;
+}
+
+nav a:hover {
+    color: #1f2937 !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(15px) saturate(180%);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: translateY(-1px);
+}
+
+/* Active link styling */
+nav a.active {
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(20px) saturate(200%);
+    color: #1e40af !important;
+    box-shadow: 
+        0 6px 20px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 /* Category active state */
@@ -1876,4 +2372,376 @@ html.dark {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Enhanced Floating Animations */
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 0.7;
+    }
+    33% { 
+        transform: translateY(-20px) rotate(120deg); 
+        opacity: 1;
+    }
+    66% { 
+        transform: translateY(-10px) rotate(240deg); 
+        opacity: 0.8;
+    }
+}
+
+@keyframes floatReverse {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 0.6;
+    }
+    50% { 
+        transform: translateY(15px) rotate(-180deg); 
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% { 
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rotateIn {
+    0% {
+        transform: rotate(-10deg) scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Hover Effects for Cards */
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover .card__image {
+    transform: scale(1.05);
+}
+
+/* Scroll-triggered animations */
+.scroll-animate.fade-in {
+    animation: slideInFromBottom 0.8s ease-out;
+}
+
+.scroll-animate-left.fade-in {
+    animation: slideInFromLeft 0.8s ease-out;
+}
+
+.scroll-animate-right.fade-in {
+    animation: slideInFromRight 0.8s ease-out;
+}
+
+.scroll-animate-scale.fade-in {
+    animation: scaleIn 0.8s ease-out;
+}
+
+.scroll-animate-rotate.fade-in {
+    animation: rotateIn 0.8s ease-out;
+}
+
+.stagger-animation.fade-in {
+    animation: slideInFromBottom 0.6s ease-out;
+}
+
+/* Modern Floating Particles for Hero */
+.floating-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(45deg, rgba(249, 115, 22, 0.3), rgba(124, 58, 237, 0.3));
+    pointer-events: none;
+    z-index: 2;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-particle:nth-child(1) {
+    width: 20px;
+    height: 20px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-particle:nth-child(2) {
+    width: 15px;
+    height: 15px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.floating-particle:nth-child(3) {
+    width: 25px;
+    height: 25px;
+    top: 80%;
+    left: 70%;
+    animation-delay: 4s;
+    animation: floatReverse 8s ease-in-out infinite;
+}
+
+.floating-particle:nth-child(4) {
+    width: 18px;
+    height: 18px;
+    top: 30%;
+    left: 80%;
+    animation-delay: 1s;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.floating-particle:nth-child(5) {
+    width: 12px;
+    height: 12px;
+    top: 40%;
+    left: 5%;
+    animation-delay: 3s;
+}
+
+.floating-particle:nth-child(6) {
+    width: 22px;
+    height: 22px;
+    top: 65%;
+    right: 40%;
+    animation-delay: 2.5s;
+    animation: floatReverse 7s ease-in-out infinite;
+}
+
+/* Micro-interactions */
+.logo {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo:hover {
+    transform: scale(1.05) rotate(5deg);
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+/* Navigation hover effects */
+#main-nav a {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+#main-nav a::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+#main-nav a:hover::before {
+    width: 100%;
+}
+
+/* Product card enhanced hover */
+.card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.card:hover::before {
+    left: 100%;
+}
+
+/* Button animations */
+button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Section titles animation */
+h2 {
+    position: relative;
+    display: inline-block;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: -10px;
+    left: 0;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.8s ease;
+}
+
+.scroll-animate.fade-in h2::after {
+    width: 50%;
+}
+
+/* Image hover zoom effect */
+img {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.group:hover img {
+    transform: scale(1.08);
+}
+
+.floating-particle:nth-child(3) {
+    width: 25px;
+    height: 25px;
+    bottom: 30%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+    }
+}
+
+/* Modern Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.scroll-indicator::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 8px;
+    background: rgba(249, 115, 22, 0.8);
+    border-radius: 2px;
+    animation: scroll-bounce 2s infinite;
+}
+
+.scroll-indicator:hover {
+    border-color: rgba(249, 115, 22, 0.6);
+    background: rgba(249, 115, 22, 0.1);
+    transform: translateX(-50%) scale(1.1);
+}
+
+@keyframes scroll-bounce {
+    0%, 20% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+    }
+}
+
+/* Additional modern enhancements */
+.geometric-accent {
+    position: absolute;
+    background: linear-gradient(45deg, rgba(124, 58, 237, 0.1), rgba(249, 115, 22, 0.1));
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Enhanced hero slide transitions */
+.hero-slide {
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.hero-slide.active {
+    opacity: 1;
 }

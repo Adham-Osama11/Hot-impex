@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOT IMPEX - Product Showcase</title>
+    <title>HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom CSS -->
@@ -79,12 +79,12 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="fixed inset-0 z-50 lg:hidden hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-50"></div>
-        <div class="fixed top-0 right-0 h-full w-80 bg-gray-900/95 backdrop-blur-lg shadow-lg transform transition-transform duration-300 ease-in-out border-l border-white/20">
+        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+        <div class="fixed top-0 right-0 h-full w-80 bg-white/15 backdrop-blur-3xl shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-white/30">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-bold text-white">Menu</h2>
-                    <button id="close-mobile-menu" class="text-white hover:text-orange-400 transition-colors duration-200">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Menu</h2>
+                    <button id="close-mobile-menu" class="text-gray-800 dark:text-white hover:text-orange-400 transition-colors duration-200 p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -92,14 +92,14 @@
                 </div>
                 <nav class="space-y-6">
                     <ul class="space-y-4">
-                        <li><a href="#" class="block py-3 px-4 rounded-lg bg-orange-500/20 text-orange-400 font-medium">Home</a></li>
-                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg hover:bg-white/10 text-white">Shop</a></li>
-                        <li><a href="#" class="block py-3 px-4 rounded-lg hover:bg-white/10 text-white">Contact Us</a></li>
-                        <li><a href="#" class="block py-3 px-4 rounded-lg hover:bg-white/10 text-white">About Us</a></li>
+                        <li><a href="#" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Home</a></li>
+                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Shop</a></li>
+                        <li><a href="#" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Contact Us</a></li>
+                        <li><a href="#" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">About Us</a></li>
                     </ul>
-                    <div class="mt-8 pt-8 border-t border-white/20">
-                        <div class="flex items-center justify-between">
-                            <span class="text-white">Dark Mode</span>
+                    <div class="mt-8 pt-8 border-t border-white/30">
+                        <div class="flex items-center justify-between p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
+                            <span class="text-gray-800 dark:text-white font-medium">Dark Mode</span>
                             <div id="mobile-theme-toggle" class="theme-toggle">
                                 <svg class="sun-icon w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
@@ -116,7 +116,7 @@
     </div>
 
     <!-- Hero Showroom Section with Dynamic Product Showcase -->
-    <section id="hero-showroom" class="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <section id="hero-showroom" class="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black" style="position:relative; margin-top: 20px;border-radius: 10px;">
         <!-- Product Display Container -->
         <div id="product-display" class="product-container">
             <!-- Products will be dynamically loaded here -->
@@ -144,7 +144,7 @@
     </section>
 
     <!-- Main Content Container -->
-    <div class="main-content min-h-screen flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8">
+    <div class="main-content min-h-screen flex flex-col items-center justify-start">
         <!-- Best Sellers Section -->
         <section class="w-full max-w-7xl mx-auto mt-12 sm:mt-16 lg:mt-20 px-4 sm:px-6 lg:px-8">
         <!-- Section Header with Enhanced Animation -->
@@ -394,9 +394,7 @@
     <!-- Find Us on Instagram Section -->
     <section class="w-full max-w-7xl mx-auto mt-12 sm:mt-16 lg:mt-20 px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-800 mb-6 sm:mb-8 lg:mb-10 tracking-tight">Find Us on Instagram</h2>
-        <button class="border-2 border-gray-400 text-gray-800 font-bold py-4 px-10 sm:py-5 sm:px-12 lg:py-6 lg:px-16 rounded-full hover:bg-gray-100 transition-all duration-300 mb-8 sm:mb-12 lg:mb-16 text-lg sm:text-xl lg:text-2xl transform hover:scale-105">
-            TAKE A LOOK
-        </button>
+        
         
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
             <!-- Instagram Image 1 -->

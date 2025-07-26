@@ -122,13 +122,13 @@ html, body {
     overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
-/* Enhanced Hero Showroom Styles - Dynamic Product Showcase */
+/* Enhanced Hero Video Styles */
 #hero-showroom {
-    background-image: url('https://placehold.co/E0E0E0/333333');
+    background: transparent;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -137,41 +137,200 @@ html, body {
     overflow: hidden;
     transition: var(--transition-smooth);
     margin: 0 auto;
-    max-width: 1400px; /* Added max-width to decrease overall width */
-    border-radius: 0 0 24px 24px; /* Added subtle bottom border radius */
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
+    max-width: 1600px;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-/* Hero content container with better width control */
-#hero-showroom .absolute.inset-0 {
-    max-width: 1200px; /* Constrain the content width */
-    margin: 0 auto;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%; /* Use 90% of available width */
-}
-
-/* Custom styles for the product movement */
-.product-container {
+/* Video Background Styles */
+#hero-video {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    /* Changed to align items to the bottom of the container */
-    align-items: flex-end; 
-    overflow: hidden; /* Hide overflow when products move off screen */
-    padding-bottom: 5vh; /* Adjust this value to fine-tune vertical position */
+    object-fit: cover;
+    z-index: 1;
+    border-radius: 10px;
+    /* Remove video controls completely */
+    pointer-events: none;
 }
 
-.product-item {
-    position: absolute;
-    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
-    opacity: 0; /* Start hidden */
-    max-height: 80%; /* Ensure products fit within the view */
-    max-width: 80%;
-    object-fit: contain;
-    z-index: 5;
+/* Hide video controls on all browsers */
+#hero-video::-webkit-media-controls {
+    display: none !important;
+}
+
+#hero-video::-webkit-media-controls-panel {
+    display: none !important;
+}
+
+#hero-video::-webkit-media-controls-play-button {
+    display: none !important;
+}
+
+#hero-video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+#hero-video::-moz-media-controls {
+    display: none !important;
+}
+
+/* Ensure video covers the entire container */
+#hero-showroom video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: transparent;
+}
+
+/* Remove Three.js container styles since we're not using it anymore */
+#threejs-container {
+    display: none;
+}
+
+#hero-canvas {
+    display: none;
+}
+
+#loading-indicator {
+    display: none;
+}
+
+/* Responsive video adjustments */
+@media (max-width: 1024px) {
+    #hero-showroom {
+        height: 80vh;
+        min-height: 80vh;
+        max-width: 95%;
+        border-radius: 8px;
+    }
+    
+    #hero-video {
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #hero-showroom {
+        height: 70vh;
+        min-height: 70vh;
+        border-radius: 6px;
+        margin-top: 15px;
+        max-width: 100%;
+        margin: 15px 0 0 0;
+    }
+    
+    #hero-video {
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    #hero-showroom {
+        height: 60vh;
+        min-height: 60vh;
+        border-radius: 4px;
+        margin-top: 10px;
+    }
+    
+    #hero-video {
+        border-radius: 4px;
+    }
+}
+
+/* Navigation Dots - Enhanced for 3D */
+.hero-dot {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-dot.active {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    transform: scale(1.4);
+    box-shadow: 
+        0 0 20px rgba(249, 115, 22, 0.8),
+        0 0 40px rgba(249, 115, 22, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(249, 115, 22, 0.9);
+}
+
+.hero-dot:hover:not(.active) {
+    background: rgba(249, 115, 22, 0.6);
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+}
+
+/* Responsive Design - Clean and Simple */
+@media (max-width: 1024px) {
+    .left-product {
+        left: 5%;
+        transform: scale(0.6) translateX(-25%);
+    }
+    
+    .right-product {
+        right: 5%;
+        transform: scale(0.6) translateX(25%);
+    }
+    
+    .product-image-main {
+        max-width: 520px;
+        max-height: 420px;
+    }
+    
+    .product-image-bg {
+        max-width: 320px;
+        max-height: 260px;
+    }
+    
+    .main-product {
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .background-layer {
+        opacity: 0.3;
+        filter: blur(2px) brightness(0.6);
+    }
+    
+    .left-product {
+        left: -2%;
+        transform: scale(0.5) translateX(-40%);
+    }
+    
+    .right-product {
+        right: -2%;
+        transform: scale(0.5) translateX(40%);
+    }
+    
+    .product-image-main {
+        max-width: 420px;
+        max-height: 340px;
+    }
+    
+    .product-image-bg {
+        max-width: 250px;
+        max-height: 200px;
+    }
+    
+    .main-product {
+        transform: scale(1.0);
+    }
+    
+    .hero-dot {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .hero-dot.active {
+        transform: scale(1.2);
+    }
 }
 
 #hero-showroom::before {

@@ -6,6 +6,8 @@
     <title>HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -115,31 +117,34 @@
         </div>
     </div>
 
-    <!-- Hero Showroom Section with Dynamic Product Showcase -->
-    <section id="hero-showroom" class="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black" style="position:relative; margin-top: 20px;border-radius: 10px;">
-        <!-- Product Display Container -->
-        <div id="product-display" class="product-container">
-            <!-- Products will be dynamically loaded here -->
+    <!-- Hero Video Section -->
+    <section id="hero-showroom" class="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black" style="position:relative; margin-top: 20px; border-radius: 10px;">
+        <!-- Video Background -->
+        <div class="absolute inset-0 z-5">
+            <video 
+                id="hero-video"
+                class="w-full h-full object-cover"
+                autoplay 
+                muted 
+                loop 
+                playsinline
+                preload="auto"
+                poster=""
+                style="border-radius: 10px;"
+            >
+                <source src="hero.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            <!-- Subtle overlay for better content visibility if needed -->
+            <div class="absolute inset-0 bg-black bg-opacity-10 pointer-events-none" style="border-radius: 10px;"></div>
         </div>
-        
-        <!-- Optional Overlay Content -->
-        <div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-            <div class="text-center text-white max-w-4xl mx-auto px-4">
-                <h1 class="hero-title text-4xl md:text-6xl lg:text-8xl font-black mb-6 tracking-tight drop-shadow-2xl">
-                    HOT IMPEX
-                </h1>
-                <p class="hero-subtitle text-xl md:text-2xl lg:text-3xl font-medium opacity-90 drop-shadow-lg mb-8">
-                    Premium Product Showcase
-                </p>
-                <div class="flex justify-center space-x-4 mt-8 pointer-events-auto">
-                    <button class="hero-button px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-full hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                        Explore Products
-                    </button>
-                    <button class="hero-button px-8 py-4 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                        Learn More
-                    </button>
-                </div>
-            </div>
+
+        <!-- Optional: Keep navigation dots but hide them by default -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-4 z-20" style="display: none;">
+            <div class="hero-dot active bg-orange-500 w-3 h-3 rounded-full cursor-pointer transition-all duration-300"></div>
+            <div class="hero-dot bg-white/30 w-3 h-3 rounded-full cursor-pointer transition-all duration-300"></div>
+            <div class="hero-dot bg-white/30 w-3 h-3 rounded-full cursor-pointer transition-all duration-300"></div>
         </div>
     </section>
 

@@ -103,49 +103,34 @@ function addFloatingAnimation() {
     });
 }
 
-// Enhanced hero products data
+// Enhanced hero products data for Three.js
 let heroProducts = [
     {
         id: 1,
-        name: "ACTIVE JR",
-        price: "64.00EGP",
-        title: "PREMIUM ACTIVE FORMULA",
-        subtitle: "Premium Active Formula",
-        description: "Revolutionary formula designed for active individuals seeking premium skincare results with cutting-edge ingredients",
-        background: "from-purple-600 via-blue-600 to-indigo-800",
-        accent: "purple"
+        name: "RACING SIM SEAT",
+        image: "racing sim seat_without BG.png",
+        alt: "Racing Sim Seat"
     },
     {
         id: 2,
-        name: "BIO ORIGINAL",
-        price: "119.00EGP",
-        title: "ORGANIC BIO SOLUTION",
-        subtitle: "Organic Bio Solution",
-        description: "Eco-friendly formulation with certified organic ingredients for conscious consumers who value sustainability",
-        background: "from-emerald-500 via-teal-600 to-cyan-700",
-        accent: "emerald"
+        name: "TELESCOPIC SCREEN",
+        image: "screen telescopic_without BG.png",
+        alt: "Telescopic Screen"
     },
     {
         id: 3,
-        name: "BIO PERFORM",
-        price: "99.00EGP",
-        title: "PERFORMANCE ENHANCEMENT",
-        subtitle: "Performance Enhancement",
-        description: "High-performance formula engineered for professionals who demand excellence and visible results",
-        background: "from-orange-500 via-red-500 to-pink-600",
-        accent: "orange"
-    },
-    {
-        id: 4,
-        name: "LIMITED DL",
-        price: "129.00EGP",
-        title: "LIMITED EDITION LUXURY",
-        subtitle: "Limited Edition Luxury",
-        description: "Rare and exclusive formula available for a limited time only - experience true luxury skincare",
-        background: "from-violet-600 via-purple-600 to-fuchsia-700",
-        accent: "violet"
+        name: "INTERACTIVE KIOSKS",
+        image: "kiosks without BG.png",
+        alt: "Interactive Kiosks"
     }
 ];
+
+// Three.js variables
+let scene, camera, renderer, textureLoader;
+let productMeshes = [];
+let currentProductIndex = 0;
+let isAnimating = false;
+let rotationGroup;
 
 // Sample products data
 const products = [
@@ -174,9 +159,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeQuickView();
     initializeScrollAnimations();
     initializeMobileGestures();
-    initializeHeroShowroom();
+    initializeHeroVideo(); // Initialize video hero instead of Three.js
     initStickyNavbar(); // Initialize sticky navbar
-    initProductShowcase(); // Initialize dynamic product showcase
     loadProductsFromStorage();
     
     // Initialize products on main page
@@ -1020,218 +1004,554 @@ function addProduct(productData) {
     return newProduct;
 }
 
-// Enhanced Hero Showroom Functionality - Automotive Style
-function initializeHeroShowroom() {
-    if (!document.getElementById('hero-showroom')) return;
-
-    // Initialize first product
-    updateHeroContent(0);
-
-    // Handle product thumbnail clicks
-    const productThumbs = document.querySelectorAll('.product-thumb');
-    productThumbs.forEach((thumb, index) => {
-        thumb.addEventListener('click', () => {
-            currentHeroProduct = index;
-            updateHeroContent(currentHeroProduct);
-        });
-    });
-
-    // Handle bottom navigation dots
-    const heroDots = document.querySelectorAll('.hero-dot');
-    heroDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            currentHeroProduct = index;
-            updateHeroContent(currentHeroProduct);
-        });
-    });
-
-    // Handle navigation arrows
-    const prevBtn = document.getElementById('prev-product');
-    const nextBtn = document.getElementById('next-product');
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
-            updateHeroContent(currentHeroProduct);
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
-            updateHeroContent(currentHeroProduct);
-        });
-    }
-
-    // Auto-rotate every 8 seconds
-    setInterval(() => {
-        currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
-        updateHeroContent(currentHeroProduct);
-    }, 8000);
-
-    // Handle keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
-            updateHeroContent(currentHeroProduct);
-        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-            e.preventDefault();
-            currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
-            updateHeroContent(currentHeroProduct);
-        }
-    });
-
-    // Handle touch/swipe on mobile
-    let touchStartY = 0;
-    let touchEndY = 0;
+// Three.js Hero Showroom Implementation
+// Video Hero Implementation
+function initializeHeroVideo() {
+    const video = document.getElementById('hero-video');
     
-    const heroSection = document.getElementById('hero-showroom');
-    
-    heroSection.addEventListener('touchstart', (e) => {
-        touchStartY = e.changedTouches[0].screenY;
-    });
-
-    heroSection.addEventListener('touchend', (e) => {
-        touchEndY = e.changedTouches[0].screenY;
-        handleSwipe();
-    });
-
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartY - touchEndY;
-
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                // Swipe up - next product
-                currentHeroProduct = (currentHeroProduct + 1) % heroProducts.length;
-            } else {
-                // Swipe down - previous product
-                currentHeroProduct = currentHeroProduct === 0 ? heroProducts.length - 1 : currentHeroProduct - 1;
+    if (video) {
+        // Ensure video plays automatically and seamlessly
+        video.addEventListener('loadedmetadata', function() {
+            console.log('Hero video loaded successfully');
+        });
+        
+        // Handle video errors gracefully
+        video.addEventListener('error', function(e) {
+            console.error('Hero video failed to load:', e);
+            // Fallback to gradient background if video fails
+            const heroSection = document.getElementById('hero-showroom');
+            if (heroSection) {
+                heroSection.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
             }
-            updateHeroContent(currentHeroProduct);
-        }
-    }
-
-    // Handle scroll indicator click
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    if (scrollIndicator) {
-        scrollIndicator.addEventListener('click', () => {
-            // Smooth scroll to the next section after hero
-            const nextSection = document.querySelector('#hero-showroom').nextElementSibling;
-            if (nextSection) {
-                nextSection.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
+        });
+        
+        // Ensure video loops seamlessly
+        video.addEventListener('ended', function() {
+            video.currentTime = 0;
+            video.play();
+        });
+        
+        // Optimize video playback
+        video.addEventListener('canplaythrough', function() {
+            video.play().catch(function(error) {
+                console.log('Auto-play prevented by browser:', error);
+                // Video will still be visible, just won't auto-play
+            });
+        });
+        
+        // Handle page visibility changes to pause/resume video for performance
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                video.pause();
+            } else {
+                video.play().catch(function(error) {
+                    console.log('Video play prevented:', error);
                 });
             }
         });
-
-        // Add hover effects
-        scrollIndicator.addEventListener('mouseenter', () => {
-            scrollIndicator.style.transform = 'translateX(-50%) scale(1.1)';
-        });
-
-        scrollIndicator.addEventListener('mouseleave', () => {
-            scrollIndicator.style.transform = 'translateX(-50%) scale(1)';
-        });
+        
+        // Ensure video starts muted for autoplay compliance
+        video.muted = true;
+        video.volume = 0;
     }
 }
 
-function updateHeroContent(index) {
-    const product = heroProducts[index];
-    
-    // Update product counter
-    const productCounter = document.getElementById('current-product-num');
-    if (productCounter) {
-        productCounter.textContent = String(index + 1).padStart(2, '0');
-    }
-    
-    // Update text content with smooth transitions
-    const elements = {
-        productName: document.getElementById('hero-product-name'),
-        productSubtitle: document.getElementById('hero-product-subtitle'),
-        productPrice: document.getElementById('hero-product-price')
-    };
+// Legacy function for compatibility - now handled by video
+function initializeHeroShowroom() {
+    // This function is now replaced by initializeHeroVideo()
+    console.log('Hero showroom now using video background');
+    initializeHeroVideo();
+}
 
-    // Animate text changes
-    Object.values(elements).forEach(el => {
-        if (el) {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
+function initProfessionalThreeJS(canvas, container) {
+    // Create scene with professional dark background
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0a0a);
+
+    // Setup camera for optimal product viewing
+    const aspect = container.clientWidth / container.clientHeight;
+    camera = new THREE.PerspectiveCamera(50, aspect, 0.1, 100);
+    camera.position.set(0, 0, 8);
+
+    // Create high-quality renderer
+    renderer = new THREE.WebGLRenderer({ 
+        canvas: canvas, 
+        antialias: true,
+        powerPreference: "high-performance"
+    });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+
+    // Setup professional lighting
+    setupShowcaseLighting();
+
+    // Create texture loader
+    textureLoader = new THREE.TextureLoader();
+
+    // Handle window resize
+    window.addEventListener('resize', onWindowResize);
+
+    // Start render loop
+    animate();
+}
+
+function setupShowcaseLighting() {
+    // Key light for main illumination
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    keyLight.position.set(5, 5, 5);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 2048;
+    keyLight.shadow.mapSize.height = 2048;
+    scene.add(keyLight);
+
+    // Fill light to soften shadows
+    const fillLight = new THREE.DirectionalLight(0x4a9eff, 0.4);
+    fillLight.position.set(-3, 3, 4);
+    scene.add(fillLight);
+
+    // Rim light for edge definition
+    const rimLight = new THREE.DirectionalLight(0xff6b35, 0.6);
+    rimLight.position.set(-5, -2, -5);
+    scene.add(rimLight);
+
+    // Ambient light for overall illumination
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+    scene.add(ambientLight);
+
+    // Environment light for natural feel
+    const envLight = new THREE.HemisphereLight(0x87ceeb, 0x2f4f4f, 0.4);
+    scene.add(envLight);
+}
+
+async function loadAndCreateShowcase() {
+    try {
+        // Load all product textures efficiently
+        const loadPromises = heroProducts.map(loadSingleTexture);
+        await Promise.all(loadPromises);
+
+        // Create the showcase
+        createCleanShowcase();
+        
+        // Hide loading and start rotation
+        hideLoadingIndicator();
+        startAutoRotation();
+        
+    } catch (error) {
+        console.error('Error loading products:', error);
+        hideLoadingIndicator();
+    }
+}
+
+function loadSingleTexture(product) {
+    return new Promise((resolve, reject) => {
+        textureLoader.load(
+            product.image,
+            (texture) => {
+                // Optimize for quality
+                texture.minFilter = THREE.LinearMipmapLinearFilter;
+                texture.magFilter = THREE.LinearFilter;
+                texture.wrapS = THREE.ClampToEdgeWrapping;
+                texture.wrapT = THREE.ClampToEdgeWrapping;
+                texture.generateMipmaps = true;
+                
+                product.texture = texture;
+                resolve(texture);
+            },
+            undefined,
+            reject
+        );
+    });
+}
+
+function createCleanShowcase() {
+    // Main product group
+    productGroup = new THREE.Group();
+    scene.add(productGroup);
+
+    heroProducts.forEach((product, index) => {
+        if (!product.texture) return;
+
+        // Maintain aspect ratio
+        const texture = product.texture;
+        const imageAspect = texture.image.width / texture.image.height;
+        
+        const baseSize = 3;
+        const width = baseSize;
+        const height = baseSize / imageAspect;
+        
+        const geometry = new THREE.PlaneGeometry(width, height);
+        
+        // Clean material for 2D images
+        const material = new THREE.MeshLambertMaterial({
+            map: texture,
+            transparent: true,
+            alphaTest: 0.1,
+            side: THREE.DoubleSide,
+            opacity: index === currentProductIndex ? 1.0 : 0.3
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        
+        // Circular arrangement
+        const angleStep = (Math.PI * 2) / heroProducts.length;
+        const radius = 5;
+        const angle = index * angleStep;
+        
+        mesh.position.x = Math.cos(angle) * radius;
+        mesh.position.z = Math.sin(angle) * radius;
+        mesh.position.y = 0;
+        
+        // Face center
+        mesh.lookAt(0, 0, 0);
+        
+        // Scale for active/inactive
+        const scale = index === currentProductIndex ? 1.3 : 0.8;
+        mesh.scale.set(scale, scale, scale);
+        
+        // Elevate active product
+        if (index === currentProductIndex) {
+            mesh.position.y = 0.2;
         }
+        
+        productMeshes.push(mesh);
+        productGroup.add(mesh);
     });
 
-    setTimeout(() => {
-        // Update content
-        if (elements.productName) elements.productName.textContent = product.name;
-        if (elements.productSubtitle) elements.productSubtitle.textContent = product.subtitle;
-        if (elements.productPrice) elements.productPrice.textContent = product.price;
+    // Add subtle ground plane
+    addGroundPlane();
+}
 
-        // Fade in new content with stagger
-        Object.values(elements).forEach((el, i) => {
-            if (el) {
-                setTimeout(() => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, i * 100);
+function addGroundPlane() {
+    const groundGeometry = new THREE.PlaneGeometry(20, 20);
+    const groundMaterial = new THREE.MeshLambertMaterial({
+        color: 0x222222,
+        transparent: true,
+        opacity: 0.1
+    });
+    
+    const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
+    groundMesh.rotation.x = -Math.PI / 2;
+    groundMesh.position.y = -2;
+    groundMesh.receiveShadow = true;
+    
+    scene.add(groundMesh);
+}
+
+function setupAllNavigation() {
+    // Navigation dots
+    const dots = document.querySelectorAll('.hero-dot');
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            if (!isAnimating) {
+                rotateToProduct(index);
             }
         });
-    }, 300);
-
-    // Update background slides
-    const slides = document.querySelectorAll('.hero-slide');
-    slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
     });
 
-    // Update product images with enhanced animation
-    const images = document.querySelectorAll('.product-image');
-    images.forEach((image, i) => {
-        if (i === index) {
-            image.classList.add('active');
-            image.style.opacity = '1';
-            image.style.transform = 'scale(1)';
-        } else {
-            image.classList.remove('active');
-            image.style.opacity = '0';
-            image.style.transform = 'scale(0.9)';
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+        if (isAnimating) return;
+        
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const newIndex = (currentProductIndex - 1 + heroProducts.length) % heroProducts.length;
+            rotateToProduct(newIndex);
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            const newIndex = (currentProductIndex + 1) % heroProducts.length;
+            rotateToProduct(newIndex);
         }
     });
 
-    // Update thumbnail active states with enhanced styling
-    const thumbs = document.querySelectorAll('.product-thumb');
-    thumbs.forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === index);
+    // Touch/swipe support
+    let touchStartX = 0;
+    const canvas = document.getElementById('hero-canvas');
+    
+    canvas.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
     });
 
-    // Update bottom navigation dots
-    const dots = document.querySelectorAll('.hero-dot');
-    dots.forEach((dot, i) => {
-        if (i === index) {
-            dot.classList.add('active');
-            dot.style.backgroundColor = '#f97316'; // orange-500
-            dot.style.transform = 'scale(1.25)';
-        } else {
-            dot.classList.remove('active');
-            dot.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
-            dot.style.transform = 'scale(1)';
+    canvas.addEventListener('touchend', (e) => {
+        if (isAnimating) return;
+        
+        const touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        const threshold = 50;
+
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) {
+                const newIndex = (currentProductIndex + 1) % heroProducts.length;
+                rotateToProduct(newIndex);
+            } else {
+                const newIndex = (currentProductIndex - 1 + heroProducts.length) % heroProducts.length;
+                rotateToProduct(newIndex);
+            }
         }
     });
+}
 
-    // Update product counter
-    const productNum = document.getElementById('current-product-num');
-    if (productNum) {
-        productNum.textContent = String(index + 1).padStart(2, '0');
+function initThreeJS(canvas, container) {
+    // Create scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a1a); // Dark background to match your design
+
+    // Create camera with better positioning for 2D images
+    const aspect = container.clientWidth / container.clientHeight;
+    camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 1000);
+    camera.position.set(0, 0, 4); // Position camera to view the center product
+
+    // Create renderer optimized for 2D images
+    renderer = new THREE.WebGLRenderer({ 
+        canvas: canvas, 
+        antialias: true,
+        alpha: false 
+    });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Create texture loader
+    textureLoader = new THREE.TextureLoader();
+
+    // Simple lighting for 2D images
+    setupLighting();
+
+    // Handle window resize
+    window.addEventListener('resize', onWindowResize);
+
+    // Start render loop
+    animate();
+}
+
+function setupLighting() {
+    // Simple ambient light - perfect for 2D images
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    scene.add(ambientLight);
+}
+
+async function loadProductTextures() {
+    const loadPromises = heroProducts.map((product, index) => {
+        return new Promise((resolve, reject) => {
+            textureLoader.load(
+                product.image,
+                (texture) => {
+                    texture.minFilter = THREE.LinearFilter;
+                    texture.magFilter = THREE.LinearFilter;
+                    product.texture = texture;
+                    resolve(texture);
+                },
+                undefined,
+                (error) => {
+                    console.error(`Failed to load texture: ${product.image}`, error);
+                    reject(error);
+                }
+            );
+        });
+    });
+
+    try {
+        await Promise.all(loadPromises);
+        console.log('All textures loaded successfully');
+    } catch (error) {
+        console.error('Error loading textures:', error);
     }
+}
 
-    // Add subtle animation to the entire hero section
-    const heroSection = document.getElementById('hero-showroom');
-    if (heroSection) {
-        heroSection.style.transform = 'scale(0.998)';
-        setTimeout(() => {
-            heroSection.style.transform = 'scale(1)';
-        }, 200);
+function createProductCarousel() {
+    // Create container group for all products
+    rotationGroup = new THREE.Group();
+    scene.add(rotationGroup);
+
+    heroProducts.forEach((product, index) => {
+        if (!product.texture) return;
+
+        // Calculate aspect ratio from texture
+        const texture = product.texture;
+        const aspectRatio = texture.image.width / texture.image.height;
+        
+        // Create plane geometry maintaining aspect ratio
+        const baseWidth = 3;
+        const planeWidth = baseWidth;
+        const planeHeight = baseWidth / aspectRatio;
+        
+        const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+        const material = new THREE.MeshBasicMaterial({ 
+            map: texture,
+            transparent: true,
+            alphaTest: 0.1,
+            side: THREE.DoubleSide
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        
+        // Position products in a line (we'll rotate the camera around them)
+        mesh.position.x = (index - 1) * 5; // Spread products horizontally
+        mesh.position.y = 0;
+        mesh.position.z = 0;
+        
+        // All products face the camera initially
+        mesh.rotation.y = 0;
+        
+        // Set initial states
+        if (index === currentProductIndex) {
+            // Main product: larger and fully opaque
+            mesh.scale.set(1.2, 1.2, 1.2);
+            material.opacity = 1.0;
+        } else {
+            // Background products: smaller and semi-transparent
+            mesh.scale.set(0.7, 0.7, 0.7);
+            material.opacity = 0.4;
+        }
+        
+        productMeshes.push(mesh);
+        rotationGroup.add(mesh);
+    });
+
+    // Position camera to look at the main product
+    updateCameraPosition();
+}
+
+function rotateToProduct(targetIndex) {
+    if (isAnimating || targetIndex === currentProductIndex) return;
+
+    isAnimating = true;
+    const prevIndex = currentProductIndex;
+    currentProductIndex = targetIndex;
+
+    // Update navigation dots
+    updateNavigationDots();
+
+    // Animate product transition
+    animateProductTransition(prevIndex, targetIndex).then(() => {
+        isAnimating = false;
+    });
+}
+
+function animateProductTransition(fromIndex, toIndex) {
+    return new Promise((resolve) => {
+        const duration = 1200; // 1.2 seconds
+        const startTime = Date.now();
+
+        function animateFrame() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeProgress = easeInOutCubic(progress);
+
+            // Update all products
+            productMeshes.forEach((mesh, index) => {
+                const material = mesh.material;
+                
+                if (index === toIndex) {
+                    // Animate to main position (larger, more opaque)
+                    const targetScale = 1.2;
+                    const startScale = index === fromIndex ? 1.2 : 0.7;
+                    const currentScale = startScale + (targetScale - startScale) * easeProgress;
+                    mesh.scale.set(currentScale, currentScale, currentScale);
+                    
+                    const startOpacity = index === fromIndex ? 1.0 : 0.4;
+                    material.opacity = startOpacity + (1.0 - startOpacity) * easeProgress;
+                    
+                } else if (index === fromIndex) {
+                    // Animate from main position (smaller, more transparent)
+                    const targetScale = 0.7;
+                    const currentScale = 1.2 - (1.2 - targetScale) * easeProgress;
+                    mesh.scale.set(currentScale, currentScale, currentScale);
+                    
+                    material.opacity = 1.0 - (1.0 - 0.4) * easeProgress;
+                    
+                } else {
+                    // Background products stay the same
+                    mesh.scale.set(0.7, 0.7, 0.7);
+                    material.opacity = 0.4;
+                }
+            });
+
+            // Move camera to focus on the new main product
+            updateCameraPosition(easeProgress, toIndex);
+
+            if (progress < 1) {
+                requestAnimationFrame(animateFrame);
+            } else {
+                resolve();
+            }
+        }
+
+        animateFrame();
+    });
+}
+
+function updateCameraPosition(progress = 1, targetIndex = currentProductIndex) {
+    // Calculate target camera position to focus on the selected product
+    const targetX = (targetIndex - 1) * 5; // Match product positioning
+    const currentX = camera.position.x;
+    
+    if (progress < 1) {
+        // Smooth camera movement during transition
+        camera.position.x = currentX + (targetX - currentX) * progress;
+    } else {
+        camera.position.x = targetX;
+    }
+    
+    // Keep camera at fixed Y and Z for consistent viewing
+    camera.position.y = 0;
+    camera.position.z = 4;
+    
+    // Make camera look at the target product
+    camera.lookAt(targetX, 0, 0);
+}
+
+function updateNavigationDots() {
+    const dots = document.querySelectorAll('.hero-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentProductIndex);
+    });
+}
+
+function startAutoRotation() {
+    setInterval(() => {
+        if (!isAnimating) {
+            const nextIndex = (currentProductIndex + 1) % heroProducts.length;
+            rotateToProduct(nextIndex);
+        }
+    }, 4000); // Rotate every 4 seconds
+}
+
+function hideLoadingIndicator() {
+    const loadingIndicator = document.getElementById('loading-indicator');
+    if (loadingIndicator) {
+        loadingIndicator.classList.add('hidden');
+    }
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    
+    // Render the scene
+    renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+    const container = document.getElementById('threejs-container');
+    if (!container) return;
+
+    const aspect = container.clientWidth / container.clientHeight;
+    camera.aspect = aspect;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+}
+
+function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+}
+
+// Update the main updateHeroContent function to work with Three.js
+function updateHeroContent(index) {
+    if (!isAnimating) {
+        rotateToProduct(index);
     }
 }
 

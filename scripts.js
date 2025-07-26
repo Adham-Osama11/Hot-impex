@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeQuickView();
     initializeScrollAnimations();
     initializeMobileGestures();
-    initializeHeroVideo(); // Initialize video hero instead of Three.js
+    initializeHeroProductShowcase(); // Initialize product showcase instead of video
     initStickyNavbar(); // Initialize sticky navbar
     loadProductsFromStorage();
     
@@ -1004,56 +1004,145 @@ function addProduct(productData) {
     return newProduct;
 }
 
-// Three.js Hero Showroom Implementation
-// Video Hero Implementation
-function initializeHeroVideo() {
-    const video = document.getElementById('hero-video');
+// Hero Product Showcase Implementation
+function initializeHeroProductShowcase() {
+    const products = [
+        {
+            id: 1,
+            title: "Racing Sim Seat",
+            description: "Professional racing simulation seat for ultimate gaming experience",
+            image: "racing sim seat_without BG.png",
+            features: ["Ergonomic design", "Premium materials", "Adjustable settings"]
+        },
+        {
+            id: 2,
+            title: "Mobile Experience",
+            description: "Seamless mobile interface for on-the-go access",
+            image: "kiosks without BG.png",
+            features: ["Responsive design", "Touch optimized", "Offline support"]
+        },
+        {
+            id: 3,
+            title: "Screen Telescopic",
+            description: "Advanced telescopic screen system with crystal clear display",
+            image: "screen telescopic_without BG.png",
+            features: ["4K Resolution", "Auto-adjust", "Smart controls"]
+        }
+    ];
+
+    let currentProductIndex = 1; // Start with second product (Mobile Experience)
+    let autoAdvanceInterval;
     
-    if (video) {
-        // Ensure video plays automatically and seamlessly
-        video.addEventListener('loadedmetadata', function() {
-            console.log('Hero video loaded successfully');
-        });
+    // Get DOM elements
+    const productImage = document.getElementById('product-image');
+    const productTitle = document.getElementById('product-title');
+    const productDescription = document.getElementById('product-description');
+    const productFeatures = document.getElementById('product-features');
+    const cardNumber = document.getElementById('card-number');
+    const progressBar = document.getElementById('progress-bar');
+    const prevButton = document.getElementById('prev-product');
+    const nextButton = document.getElementById('next-product');
+    
+    // Update product display
+    function updateProduct(index) {
+        const product = products[index];
         
-        // Handle video errors gracefully
-        video.addEventListener('error', function(e) {
-            console.error('Hero video failed to load:', e);
-            // Fallback to gradient background if video fails
-            const heroSection = document.getElementById('hero-showroom');
-            if (heroSection) {
-                heroSection.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+        // Add transition effect
+        const card = document.getElementById('active-product-card');
+        card.style.transform = 'scale(0.95) rotateY(10deg)';
+        card.style.opacity = '0.7';
+        
+        setTimeout(() => {
+            // Update content
+            if (productImage) productImage.src = product.image;
+            if (productTitle) productTitle.textContent = product.title;
+            if (productDescription) productDescription.textContent = product.description;
+            if (cardNumber) cardNumber.textContent = `${index + 1}/${products.length}`;
+            
+            // Update features
+            if (productFeatures) {
+                productFeatures.innerHTML = product.features.map(feature => 
+                    `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">${feature}</span>`
+                ).join('');
             }
-        });
-        
-        // Ensure video loops seamlessly
-        video.addEventListener('ended', function() {
-            video.currentTime = 0;
-            video.play();
-        });
-        
-        // Optimize video playback
-        video.addEventListener('canplaythrough', function() {
-            video.play().catch(function(error) {
-                console.log('Auto-play prevented by browser:', error);
-                // Video will still be visible, just won't auto-play
-            });
-        });
-        
-        // Handle page visibility changes to pause/resume video for performance
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                video.pause();
-            } else {
-                video.play().catch(function(error) {
-                    console.log('Video play prevented:', error);
-                });
+            
+            // Update progress bar
+            if (progressBar) {
+                const progressWidth = ((index + 1) / products.length) * 100;
+                progressBar.style.width = `${progressWidth}%`;
             }
-        });
-        
-        // Ensure video starts muted for autoplay compliance
-        video.muted = true;
-        video.volume = 0;
+            
+            // Restore card appearance
+            card.style.transform = 'scale(1) rotateY(0deg)';
+            card.style.opacity = '1';
+        }, 200);
     }
+    
+    // Navigation functions
+    function nextProduct() {
+        currentProductIndex = (currentProductIndex + 1) % products.length;
+        updateProduct(currentProductIndex);
+        resetAutoAdvance();
+    }
+    
+    function prevProduct() {
+        currentProductIndex = (currentProductIndex - 1 + products.length) % products.length;
+        updateProduct(currentProductIndex);
+        resetAutoAdvance();
+    }
+    
+    // Auto-advance functionality
+    function startAutoAdvance() {
+        autoAdvanceInterval = setInterval(nextProduct, 4000); // Change every 4 seconds
+    }
+    
+    function stopAutoAdvance() {
+        if (autoAdvanceInterval) {
+            clearInterval(autoAdvanceInterval);
+            autoAdvanceInterval = null;
+        }
+    }
+    
+    function resetAutoAdvance() {
+        stopAutoAdvance();
+        startAutoAdvance();
+    }
+    
+    // Event listeners
+    if (nextButton) {
+        nextButton.addEventListener('click', nextProduct);
+    }
+    
+    if (prevButton) {
+        prevButton.addEventListener('click', prevProduct);
+    }
+    
+    // Pause auto-advance on hover
+    const heroSection = document.getElementById('hero-showroom');
+    if (heroSection) {
+        heroSection.addEventListener('mouseenter', stopAutoAdvance);
+        heroSection.addEventListener('mouseleave', startAutoAdvance);
+    }
+    
+    // Initialize first product and start auto-advance
+    updateProduct(currentProductIndex);
+    startAutoAdvance();
+    
+    // Handle page visibility changes
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            stopAutoAdvance();
+        } else {
+            startAutoAdvance();
+        }
+    });
+}
+
+// Legacy function for compatibility
+function initializeHeroVideo() {
+    // This function is now replaced by initializeHeroProductShowcase()
+    console.log('Hero now using product showcase instead of video');
+    initializeHeroProductShowcase();
 }
 
 // Legacy function for compatibility - now handled by video

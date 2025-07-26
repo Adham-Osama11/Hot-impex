@@ -34,6 +34,23 @@
     /* Transitions */
     --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     --transition-quick: all 0.2s ease;
+    
+    /* Light Mode Colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Variables */
+html.dark {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --surface-glass: rgba(15, 23, 42, 0.25);
 }
 
 /* ====================================
@@ -53,6 +70,69 @@ html, body {
     overflow-x: hidden;
     scroll-padding-top: 100px;
     transition: background 0.3s ease, color 0.3s ease;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Dark mode body styles */
+html.dark body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+}
+
+/* ====================================
+   DARK MODE NAVIGATION & HEADER
+   ====================================*/
+
+/* Header background */
+html.dark header {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Navigation container */
+html.dark nav .bg-white\/15,
+html.dark nav [class*="bg-white"] {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hot button */
+html.dark .logo {
+    color: var(--text-primary) !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Navigation links */
+html.dark nav a {
+    color: var(--text-primary) !important;
+}
+
+html.dark nav a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Active navigation link */
+html.dark nav a.bg-white\/30 {
+    background: rgba(102, 126, 234, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* Mobile menu toggle */
+html.dark #mobile-menu-toggle {
+    color: var(--text-primary) !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* User and cart icons */
+html.dark .user-icon {
+    fill: var(--text-primary) !important;
+}
+
+html.dark svg {
+    color: var(--text-primary) !important;
 }
 
 /* ====================================
@@ -169,6 +249,11 @@ html, body {
     padding: 4rem 2rem;
 }
 
+/* Dark mode hero section */
+html.dark #hero-showroom {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+}
+
 /* ====================================
    7. PRODUCT CARD STYLES
    ====================================*/
@@ -181,6 +266,17 @@ html, body {
 #active-product-card:hover {
     box-shadow: var(--shadow-3xl);
     transform: scale(1.02);
+}
+
+/* Dark mode product card */
+html.dark #active-product-card {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+html.dark #active-product-card:hover {
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* ====================================
@@ -236,6 +332,39 @@ html, body {
     box-shadow: 0 20px 40px rgba(31, 41, 55, 0.3);
 }
 
+/* Dark mode button styles */
+html.dark .btn-primary-enhanced {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #ffffff;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+html.dark .btn-secondary-enhanced {
+    background: linear-gradient(135deg, #374151 0%, #475569 100%);
+    color: #ffffff;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+/* Navigation button hover states in dark mode */
+html.dark button:hover,
+html.dark .hover\:bg-white\/25:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Product navigation buttons */
+html.dark #prev-product,
+html.dark #next-product {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-primary) !important;
+}
+
+html.dark #prev-product:hover,
+html.dark #next-product:hover {
+    background: rgba(71, 85, 105, 0.8) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
 /* Stats Animation */
 .stat-counter {
     background: linear-gradient(135deg, #1f2937, #374151);
@@ -252,9 +381,185 @@ html, body {
     transform: scale(1.05);
 }
 
+/* Dark mode stats */
+html.dark .stat-counter {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+html.dark .stat-counter:hover {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
 /* ====================================
-   10. UTILITY CLASSES
+   10. THEME TOGGLE & UTILITY CLASSES
    ====================================*/
+
+/* Dark Mode Toggle Button */
+.theme-toggle {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px;
+}
+
+.theme-toggle:hover {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Dark mode active state */
+html.dark .theme-toggle {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .theme-toggle::before {
+    transform: translateX(20px);
+    background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+}
+
+/* Icon positioning */
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.theme-toggle .sun-icon {
+    left: 4px;
+    opacity: 1;
+}
+
+.theme-toggle .moon-icon {
+    right: 4px;
+    opacity: 0;
+}
+
+html.dark .theme-toggle .sun-icon {
+    opacity: 0;
+}
+
+html.dark .theme-toggle .moon-icon {
+    opacity: 1;
+    color: #fbbf24;
+}
+
+/* ====================================
+   DARK MODE TEXT VISIBILITY
+   ====================================*/
+
+/* General text elements */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+    color: var(--text-primary);
+}
+
+html.dark p,
+html.dark span,
+html.dark div {
+    color: var(--text-primary);
+}
+
+/* Navigation text */
+html.dark nav a,
+html.dark nav button {
+    color: var(--text-primary) !important;
+}
+
+/* Product card text */
+html.dark #product-title {
+    color: var(--text-primary);
+}
+
+html.dark #product-description {
+    color: var(--text-secondary);
+}
+
+/* Feature tags in dark mode */
+html.dark #product-features span {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    color: #a5b4fc;
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* Button text visibility */
+html.dark .btn-primary-enhanced,
+html.dark .btn-secondary-enhanced {
+    color: var(--text-primary);
+}
+
+/* Trust badge text */
+html.dark .trust-badge-enhanced {
+    color: #ffffff;
+}
+
+/* General utility for dark mode text */
+html.dark .text-gray-800,
+html.dark .text-gray-900,
+html.dark .text-gray-700,
+html.dark .text-gray-600 {
+    color: var(--text-primary) !important;
+}
+
+html.dark .text-gray-500,
+html.dark .text-gray-400 {
+    color: var(--text-secondary) !important;
+}
+
+/* Card number and labels */
+html.dark #card-number {
+    color: #ffffff;
+    background: linear-gradient(135deg, #374151 0%, #475569 100%);
+}
+
+/* Progress bar and controls text */
+html.dark .text-sm {
+    color: var(--text-secondary);
+}
+
+/* Mobile menu text */
+html.dark #mobile-menu h2,
+html.dark #mobile-menu a,
+html.dark #mobile-menu li {
+    color: var(--text-primary) !important;
+}
+
+/* Utility Classes */
 .shadow-3xl {
     box-shadow: var(--shadow-3xl);
 }
@@ -291,6 +596,21 @@ html, body {
     #active-product-card {
         margin: 1rem 0;
     }
+    
+    /* Theme toggle adjustments for mobile */
+    .theme-toggle {
+        width: 44px;
+        height: 26px;
+    }
+    
+    .theme-toggle::before {
+        width: 18px;
+        height: 18px;
+    }
+    
+    html.dark .theme-toggle::before {
+        transform: translateX(18px);
+    }
 }
 
 @media (max-width: 480px) {
@@ -300,6 +620,21 @@ html, body {
     
     .stat-counter {
         font-size: 1.5rem;
+    }
+    
+    /* Smaller theme toggle for very small screens */
+    .theme-toggle {
+        width: 40px;
+        height: 24px;
+    }
+    
+    .theme-toggle::before {
+        width: 16px;
+        height: 16px;
+    }
+    
+    html.dark .theme-toggle::before {
+        transform: translateX(16px);
     }
 }
 

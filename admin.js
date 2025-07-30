@@ -1,57 +1,243 @@
-// Admin Dashboard JavaScript
-
-// Dark Mode Functionality for Admin Dashboard
-function initializeDarkMode() {
-    const darkModeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    
-    // Check for saved dark mode preference
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    if (isDarkMode) {
-        html.classList.add('dark');
-        updateDarkModeToggle(true);
-    }
-    
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener('click', toggleDarkMode);
-    }
-}
-
-function toggleDarkMode() {
-    const html = document.documentElement;
-    const isDarkMode = html.classList.toggle('dark');
-    
-    localStorage.setItem('darkMode', isDarkMode);
-    updateDarkModeToggle(isDarkMode);
-    
-    // Trigger animation
-    html.style.transition = 'background 0.3s ease, color 0.3s ease';
-    setTimeout(() => {
-        html.style.transition = '';
-    }, 300);
-}
-
-function updateDarkModeToggle(isDarkMode) {
-    const toggle = document.getElementById('theme-toggle');
-    if (toggle) {
-        const sunIcon = toggle.querySelector('.sun-icon');
-        const moonIcon = toggle.querySelector('.moon-icon');
-        
-        if (isDarkMode) {
-            sunIcon.style.opacity = '0';
-            moonIcon.style.opacity = '1';
-        } else {
-            sunIcon.style.opacity = '1';
-            moonIcon.style.opacity = '0';
-        }
-    }
-}
-
-// Initialize dark mode when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    initializeDarkMode();
+    // --- THEME MANAGEMENT ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+
+        const applyTheme = (isDark) => {
+        html.classList.toggle('dark', isDark);
+        updateThemeToggleIcon(isDark);
+        updateChartsTheme(isDark);
+    };    const updateThemeToggleIcon = (isDark) => {
+        if (!themeToggle) return;
+        const icon = themeToggle.querySelector('svg');
+        if (!icon) return;
+
+        if (isDark) {
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>`;
+            themeToggle.setAttribute('title', 'Switch to light mode');
+        } else {
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>`;
+            themeToggle.setAttribute('title', 'Switch to dark mode');
+        }
+    };
+
+    const toggleTheme = () => {
+        const isCurrentlyDark = html.classList.contains('dark');
+        const newIsDark = !isCurrentlyDark;
+        localStorage.setItem('darkMode', newIsDark.toString());
+        applyTheme(newIsDark);
+    };
+
+    const initializeTheme = () => {
+        const savedTheme = localStorage.getItem('darkMode');
+        const isDark = savedTheme !== null ? savedTheme === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(isDark);
+    };
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (localStorage.getItem('darkMode') === null) {
+            applyTheme(e.matches);
+        }
+    });
+
+    // --- MOBILE SIDEBAR ---
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+    const floatingSidebar = document.getElementById('floating-sidebar');
+
+    if (mobileMenuToggle && mobileOverlay && floatingSidebar) {
+        mobileMenuToggle.addEventListener('click', () => {
+            floatingSidebar.classList.toggle('open');
+            mobileOverlay.classList.toggle('hidden');
+            document.body.style.overflow = floatingSidebar.classList.contains('open') ? 'hidden' : '';
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            floatingSidebar.classList.remove('open');
+            mobileOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                floatingSidebar.classList.remove('open');
+                mobileOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    // --- SIDEBAR NAVIGATION ---
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const adminSections = document.querySelectorAll('.admin-section');
+
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const activeClasses = ['text-pink-600', 'dark:text-pink-400', 'bg-gradient-to-r', 'from-pink-100/50', 'to-orange-100/50', 'dark:from-pink-900/30', 'dark:to-orange-900/30', 'font-medium', 'shadow-lg', 'backdrop-blur-sm', 'border', 'border-pink-200/50', 'dark:border-pink-700/50'];
+            const inactiveClasses = ['text-gray-900', 'dark:text-gray-300'];
+
+            sidebarLinks.forEach(l => {
+                l.classList.remove('active', ...activeClasses);
+                l.classList.add(...inactiveClasses);
+            });
+            
+            link.classList.add('active', ...activeClasses);
+            link.classList.remove(...inactiveClasses);
+            
+            adminSections.forEach(section => section.classList.add('hidden'));
+            
+            const targetSectionId = link.getAttribute('data-section') + '-section';
+            const targetElement = document.getElementById(targetSectionId);
+            if (targetElement) {
+                targetElement.classList.remove('hidden');
+            }
+
+            const sectionTitle = link.textContent.trim();
+            const headerTitle = document.querySelector('main h1');
+            if (headerTitle) {
+                headerTitle.textContent = sectionTitle === 'Dashboard' ? 'Dashboard Overview' : sectionTitle + ' Management';
+            }
+
+            if (window.innerWidth < 1024 && floatingSidebar.classList.contains('open')) {
+                floatingSidebar.classList.remove('open');
+                mobileOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // --- UI ANIMATIONS ---
+    const cards = document.querySelectorAll('.admin-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => card.style.transform = 'translateY(-4px) scale(1.02)');
+        card.addEventListener('mouseleave', () => card.style.transform = 'translateY(0) scale(1)');
+    });
+
+    const statsNumbers = document.querySelectorAll('.admin-card .text-3xl');
+    statsNumbers.forEach((stat, index) => {
+        setTimeout(() => {
+            stat.style.opacity = '0';
+            stat.style.transform = 'translateY(20px)';
+            stat.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            requestAnimationFrame(() => {
+                stat.style.opacity = '1';
+                stat.style.transform = 'translateY(0)';
+            });
+        }, index * 150);
+    });
+
+    // --- INITIALIZE EVERYTHING ---
+    initializeTheme();
+    if (typeof Chart !== 'undefined') {
+        initializeCharts();
+    }
 });
 
-// Admin Dashboard specific functionality can be added here
-// For now, just the theme toggle is implemented
+// --- CHART MANAGEMENT ---
+let salesChartInstance = null;
+let categoryChartInstance = null;
+let revenueChartInstance = null;
+
+function getChartOptions(isDark) {
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDark ? '#f3f4f6' : '#374151';
+    return {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } },
+            x: { grid: { display: false }, ticks: { color: textColor } }
+        }
+    };
+}
+
+function getDoughnutChartOptions(isDark) {
+    const textColor = isDark ? '#f3f4f6' : '#374151';
+    return {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding: 20, usePointStyle: true, color: textColor }
+            }
+        }
+    };
+}
+
+function initializeCharts() {
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    const salesCtx = document.getElementById('salesChart');
+    if (salesCtx) {
+        salesChartInstance = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [1200, 1900, 3000, 2500, 2200, 3000, 4500],
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: getChartOptions(isDark)
+        });
+    }
+
+    const categoryCtx = document.getElementById('categoryChart');
+    if (categoryCtx) {
+        categoryChartInstance = new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Active', 'Bio', 'Limited', 'Kids'],
+                datasets: [{
+                    data: [35, 25, 25, 15],
+                    backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(168, 85, 247, 0.8)', 'rgba(249, 115, 22, 0.8)'],
+                    borderWidth: 0
+                }]
+            },
+            options: getDoughnutChartOptions(isDark)
+        });
+    }
+
+    const revenueCtx = document.getElementById('revenueChart');
+    if (revenueCtx) {
+        revenueChartInstance = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [5000, 7500, 6000, 9000, 11000, 10000],
+                    backgroundColor: 'rgba(139, 92, 246, 0.6)',
+                    borderColor: 'rgba(139, 92, 246, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: getChartOptions(isDark)
+        });
+    }
+}
+
+function updateChartsTheme(isDark) {
+    if (salesChartInstance) {
+        salesChartInstance.options = getChartOptions(isDark);
+        salesChartInstance.update();
+    }
+    if (categoryChartInstance) {
+        categoryChartInstance.options = getDoughnutChartOptions(isDark);
+        categoryChartInstance.update();
+    }
+    if (revenueChartInstance) {
+        revenueChartInstance.options = getChartOptions(isDark);
+        revenueChartInstance.update();
+    }
+}

@@ -135,6 +135,16 @@ html.dark svg {
     color: var(--text-primary) !important;
 }
 
+.user-icon {
+    width: 2rem; /* 32px */
+    height: 2rem; /* 32px */
+    transition: transform 0.3s ease;
+}
+
+.user-icon:hover {
+    transform: scale(1.1);
+}
+
 /* ====================================
    4. ANIMATIONS & KEYFRAMES
    ====================================*/

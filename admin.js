@@ -79,15 +79,15 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             
-            const activeClasses = ['text-pink-600', 'dark:text-pink-400', 'bg-gradient-to-r', 'from-pink-100/50', 'to-orange-100/50', 'dark:from-pink-900/30', 'dark:to-orange-900/30', 'font-medium', 'shadow-lg', 'backdrop-blur-sm', 'border', 'border-pink-200/50', 'dark:border-pink-700/50'];
-            const inactiveClasses = ['text-gray-900', 'dark:text-gray-300'];
+            const activeClasses = ['opacity-100'];
+            const inactiveClasses = ['opacity-50'];
 
             sidebarLinks.forEach(l => {
-                l.classList.remove('active', ...activeClasses);
+                l.classList.remove(...activeClasses);
                 l.classList.add(...inactiveClasses);
             });
             
-            link.classList.add('active', ...activeClasses);
+            link.classList.add(...activeClasses);
             link.classList.remove(...inactiveClasses);
             
             adminSections.forEach(section => section.classList.add('hidden'));
@@ -200,7 +200,7 @@ function initializeCharts() {
                 labels: ['Active', 'Bio', 'Limited', 'Kids'],
                 datasets: [{
                     data: [35, 25, 25, 15],
-                    backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(168, 85, 247, 0.8)', 'rgba(249, 115, 22, 0.8)'],
+                    backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(13, 148, 136, 0.8)', 'rgba(249, 115, 22, 0.8)'],
                     borderWidth: 0
                 }]
             },

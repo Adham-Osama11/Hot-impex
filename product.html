@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Product Details - HOT IMPEX</title>
+    <title>4K UHD Generator - HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen bg-gray-50">
+<body class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <nav class="flex flex-col lg:flex-row items-center justify-between space-y-6 lg:space-y-0">
@@ -116,170 +116,393 @@
     </div>
 
     <!-- Breadcrumb -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"  style="margin-top: 100px;">
-        <nav class="flex" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm">
-                <li><a href="index.html" class="text-gray-500 hover:text-blue-600">Home</a></li>
-                <li><span class="text-gray-400">/</span></li>
-                <li><a href="shop.html" class="text-gray-500 hover:text-blue-600">Shop</a></li>
-                <li><span class="text-gray-400">/</span></li>
-                <li><a href="#" class="text-gray-500 hover:text-blue-600">TV Mounts</a></li>
-                <li><span class="text-gray-400">/</span></li>
-                <li><span class="text-gray-800 font-medium">Full Motion Wall Mount</span></li>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" style="margin-top: 120px;">
+        <nav class="flex mb-8" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-3 text-sm bg-white/60 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-white/20">
+                <li><a href="index.html" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">Home</a></li>
+                <li><span class="text-gray-400">•</span></li>
+                <li><a href="shop.html" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">Shop</a></li>
+                <li><span class="text-gray-400">•</span></li>
+                <li><a href="#" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">AV Distribution</a></li>
+                <li><span class="text-gray-400">•</span></li>
+                <li><span class="text-gray-900 font-semibold">4K UHD Generator</span></li>
             </ol>
         </nav>
     </div>
 
     <!-- Main Product Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             <!-- Product Images -->
             <div class="space-y-6">
                 <!-- Main Product Image -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 lg:p-12">
-                    <img id="main-image" src="https://placehold.co/500x400/E0E0E0/808080?text=Full+Motion+Wall+Mount" alt="Full Motion Wall Mount" class="w-full h-auto object-contain product-image">
+                <div class="relative bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 lg:p-12 border border-gray-200 overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 transform translate-x-16 -translate-y-16"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-blue-200 to-cyan-200 rounded-full opacity-20 transform -translate-x-12 translate-y-12"></div>
+                    <img id="main-image" src="Products/Av distribution/4K UHD GENRATOR.jpg" alt="4K UHD Generator" class="relative z-10 w-full h-auto object-contain product-image">
                 </div>
                 
                 <!-- Thumbnail Images -->
-                <div class="grid grid-cols-4 gap-4">
-                    <button class="thumbnail bg-white rounded-xl shadow-md p-4 border-2 border-transparent hover:border-blue-500 transition-all duration-200" onclick="changeImage('https://placehold.co/500x400/E0E0E0/808080?text=Full+Motion+Wall+Mount')">
-                        <img src="https://placehold.co/100x80/E0E0E0/808080?text=Main" alt="Main view" class="w-full h-auto object-contain">
+                <div class="grid grid-cols-3 gap-4">
+                    <button class="thumbnail group bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-4 border-2 border-purple-500 bg-purple-50 hover:border-purple-600 transition-all duration-300 transform hover:scale-105" onclick="changeImage('Products/Av distribution/4K UHD GENRATOR.jpg')">
+                        <img src="Products/Av distribution/4K UHD GENRATOR.jpg" alt="Main view" class="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300">
                     </button>
-                    <button class="thumbnail bg-white rounded-xl shadow-md p-4 border-2 border-transparent hover:border-blue-500 transition-all duration-200" onclick="changeImage('https://placehold.co/500x400/D0D0D0/707070?text=Side+View')">
-                        <img src="https://placehold.co/100x80/D0D0D0/707070?text=Side" alt="Side view" class="w-full h-auto object-contain">
+                    <button class="thumbnail group bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-4 border-2 border-transparent hover:border-purple-500 transition-all duration-300 transform hover:scale-105" onclick="changeImage('Products/Av distribution/4K UHD GENRATOR-2.jpg')">
+                        <img src="Products/Av distribution/4K UHD GENRATOR-2.jpg" alt="Side view" class="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300">
                     </button>
-                    <button class="thumbnail bg-white rounded-xl shadow-md p-4 border-2 border-transparent hover:border-blue-500 transition-all duration-200" onclick="changeImage('https://placehold.co/500x400/C0C0C0/606060?text=Installation')">
-                        <img src="https://placehold.co/100x80/C0C0C0/606060?text=Install" alt="Installation" class="w-full h-auto object-contain">
-                    </button>
-                    <button class="thumbnail bg-white rounded-xl shadow-md p-4 border-2 border-transparent hover:border-blue-500 transition-all duration-200" onclick="changeImage('https://placehold.co/500x400/B0B0B0/505050?text=Dimensions')">
-                        <img src="https://placehold.co/100x80/B0B0B0/505050?text=Dims" alt="Dimensions" class="w-full h-auto object-contain">
+                    <button class="thumbnail bg-white rounded-xl shadow-md p-4 border-2 border-transparent hover:border-blue-500 transition-all duration-200" onclick="changeImage('Products/Av distribution/4K UHD GENRATOR-3.jpg')">
+                        <img src="Products/Av distribution/4K UHD GENRATOR-3.jpg" alt="Detail view" class="w-full h-auto object-contain">
                     </button>
                 </div>
             </div>
 
             <!-- Product Details -->
-            <div class="space-y-6">
+            <div class="space-y-8">
                 <!-- Product Title and Price -->
                 <div>
-                    <span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full mb-4">Best Seller</span>
-                    <h1 class="text-3xl lg:text-4xl font-black text-gray-800 mb-4">Premium Full Motion Wall Mount</h1>
+                    <span class="inline-block bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded-full mb-4">Professional Grade</span>
+                    <h1 class="text-3xl lg:text-4xl font-black text-gray-800 mb-4">4K UHD Test Pattern Generator</h1>
                     <div class="flex items-center space-x-4 mb-6">
-                        <span class="text-3xl lg:text-4xl font-bold text-blue-600">EGP 299.00</span>
-                        <span class="text-xl text-gray-500 line-through">EGP 399.00</span>
-                        <span class="bg-red-100 text-red-800 text-sm font-semibold px-3 py-1 rounded-full">25% OFF</span>
+                        <span class="text-3xl lg:text-4xl font-bold text-blue-600">EGP 2,899.00</span>
+                        <span class="text-xl text-gray-500 line-through">EGP 3,299.00</span>
+                        <span class="bg-red-100 text-red-800 text-sm font-semibold px-3 py-1 rounded-full">12% OFF</span>
+                    </div>
+                </div>
+
+                <!-- Quick Purchase Section -->
+                <div class="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-8 shadow-2xl border border-blue-100">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl mr-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-black text-gray-800">Quick Purchase</h3>
+                        <span class="ml-auto bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            In Stock
+                        </span>
+                    </div>
+                    
+                    <!-- Quantity Selection -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4">Quantity</h4>
+                        <div class="flex items-center space-x-6">
+                            <div class="flex items-center bg-white rounded-2xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all duration-300">
+                                <button id="qty-minus-top" class="quantity-btn flex items-center justify-center w-12 h-12 text-gray-600 hover:bg-blue-500 hover:text-white rounded-l-2xl transition-all duration-300 text-xl font-bold">−</button>
+                                <span id="quantity-top" class="flex items-center justify-center w-16 h-12 text-xl font-black text-gray-800 bg-gray-50">1</span>
+                                <button id="qty-plus-top" class="quantity-btn flex items-center justify-center w-12 h-12 text-gray-600 hover:bg-blue-500 hover:text-white rounded-r-2xl transition-all duration-300 text-xl font-bold">+</button>
+                            </div>
+                            <div class="flex items-center space-x-2 text-sm text-gray-600">
+                                <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="font-semibold">15 available</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="space-y-4">
+                        <button class="group w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-black py-6 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 text-xl transform hover:scale-105 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-700 to-cyan-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="relative z-10 flex items-center justify-center space-x-3">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0H17M7 18h8a2 2 0 002-2V9a2 2 0 00-2-2H7a2 2 0 00-2 2v7a2 2 0 002 2z"></path>
+                                </svg>
+                                <span>Add to Cart - EGP 2,899.00</span>
+                            </div>
+                        </button>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="group flex items-center justify-center space-x-2 border-2 border-purple-500 text-purple-600 font-bold py-4 px-6 rounded-2xl hover:bg-purple-50 transition-all duration-300 text-lg transform hover:scale-105">
+                                <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <span>Wishlist</span>
+                            </button>
+                            
+                            <button class="group flex items-center justify-center space-x-2 border-2 border-green-500 text-green-600 font-bold py-4 px-6 rounded-2xl hover:bg-green-50 transition-all duration-300 text-lg transform hover:scale-105">
+                                <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Quick Info</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Buy Now Button -->
+                        <button class="group w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-black py-6 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 text-xl transform hover:scale-105 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="relative z-10 flex items-center justify-center space-x-3">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <span>Buy Now - Fast Checkout</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Quick Features -->
+                    <div class="mt-8 pt-8 border-t border-gray-200">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-semibold text-gray-700">Free Shipping</span>
+                            </div>
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-semibold text-gray-700">30-Day Return</span>
+                            </div>
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-0.257-0.257A6 6 0 1118 8zM2 8a6 6 0 1012 0A6 6 0 002 8z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-semibold text-gray-700">Warranty</span>
+                            </div>
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-semibold text-gray-700">Expert Support</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Product Rating -->
-                <div class="flex items-center space-x-2 mb-6">
-                    <div class="flex text-yellow-400">
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex text-yellow-400">
+                                <svg class="w-7 h-7 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-7 h-7 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-7 h-7 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-7 h-7 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-7 h-7 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-2xl font-black text-gray-800">4.9</span>
+                                <span class="text-gray-600 text-sm">(43 reviews)</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600">Rated by</div>
+                            <div class="text-lg font-semibold text-purple-600">Professionals</div>
+                        </div>
                     </div>
-                    <span class="text-gray-600">(127 reviews)</span>
                 </div>
 
                 <!-- Product Description -->
-                <div class="prose prose-gray max-w-none">
-                    <p class="text-gray-700 text-lg leading-relaxed">
-                        Premium full-motion TV wall mount designed for TVs 32" to 70". Features smooth articulation with 180° swivel, 15° tilt, and extends up to 16" from wall. Perfect for corner installations and optimal viewing angles.
+                <div class="bg-gradient-to-br from-purple-50 via-white to-pink-50 rounded-2xl p-8 border border-purple-100 shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">About This Product</h3>
+                    </div>
+                    <p class="text-gray-800 text-lg leading-relaxed">
+                        Professional 4K UHD test pattern generator designed for display calibration, video equipment testing, and professional AV installations. Features multiple output formats, comprehensive test patterns, and precise color accuracy for demanding applications.
                     </p>
                 </div>
 
-                <!-- Product Options -->
-                <div class="space-y-6">
-                    <!-- Size Selection -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">TV Size Compatibility</h3>
-                        <div class="grid grid-cols-3 gap-3">
-                            <button class="size-option px-4 py-3 border-2 border-gray-300 rounded-lg text-center hover:border-blue-500 transition-all duration-200" data-size="32-43">32"-43"</button>
-                            <button class="size-option px-4 py-3 border-2 border-blue-500 bg-blue-50 text-blue-700 rounded-lg text-center transition-all duration-200" data-size="44-55">44"-55"</button>
-                            <button class="size-option px-4 py-3 border-2 border-gray-300 rounded-lg text-center hover:border-blue-500 transition-all duration-200" data-size="56-70">56"-70"</button>
+                <!-- Key Features -->
+                <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg border border-gray-200">
+                    <h3 class="text-2xl font-black text-gray-800 mb-8 flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl mr-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        Key Features
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center space-x-3 p-4 rounded-xl hover:bg-emerald-50 transition-colors duration-200 group">
+                            <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-800 font-semibold">4K UHD 3840×2160 @ 60Hz output</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-4 rounded-xl hover:bg-emerald-50 transition-colors duration-200 group">
+                            <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-800 font-semibold">Multiple test patterns & color bars</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-4 rounded-xl hover:bg-emerald-50 transition-colors duration-200 group">
+                            <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-800 font-semibold">HDMI 2.0 & USB-C connectivity</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-4 rounded-xl hover:bg-emerald-50 transition-colors duration-200 group">
+                            <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-800 font-semibold">HDR10 & Dolby Vision support</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-4 rounded-xl hover:bg-emerald-50 transition-colors duration-200 group">
+                            <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-800 font-semibold">Portable & lightweight design</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-4 rounded-xl hover:bg-emerald-50 transition-colors duration-200 group">
+                            <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-800 font-semibold">Professional calibration tools</span>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Quantity Selection -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Quantity</h3>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex items-center border-2 border-gray-300 rounded-lg">
-                                <button id="qty-minus" class="quantity-btn px-4 py-2 text-gray-600 hover:bg-blue-500 hover:text-white rounded-l-lg">-</button>
-                                <span id="quantity" class="px-6 py-2 text-lg font-semibold">1</span>
-                                <button id="qty-plus" class="quantity-btn px-4 py-2 text-gray-600 hover:bg-blue-500 hover:text-white rounded-r-lg">+</button>
+                <!-- Product Options -->
+                <div class="space-y-8">
+                    <!-- Pattern Type Selection -->
+                    <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+                        <h3 class="text-xl font-black text-gray-800 mb-6 flex items-center">
+                            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg mr-3 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                </svg>
                             </div>
-                            <span class="text-sm text-gray-500">In stock (15 available)</span>
+                            Test Pattern Package
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <button class="pattern-option group relative overflow-hidden px-8 py-6 border-2 border-purple-500 bg-gradient-to-br from-purple-50 to-pink-50 text-purple-700 rounded-2xl text-center transition-all duration-300 transform hover:scale-105 shadow-lg" data-pattern="standard">
+                                <div class="relative z-10">
+                                    <div class="font-black text-xl mb-2">Standard Package</div>
+                                    <div class="text-sm text-purple-600 font-semibold">50+ Test Patterns</div>
+                                    <div class="text-xs text-gray-600 mt-2">Essential patterns for basic calibration</div>
+                                </div>
+                                <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                            </button>
+                            <button class="pattern-option group relative overflow-hidden px-8 py-6 border-2 border-gray-300 bg-white rounded-2xl text-center hover:border-purple-500 hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50 transition-all duration-300 transform hover:scale-105 shadow-lg" data-pattern="professional">
+                                <div class="relative z-10">
+                                    <div class="font-black text-xl mb-2">Professional Package</div>
+                                    <div class="text-sm text-gray-600 font-semibold group-hover:text-purple-600">100+ Test Patterns</div>
+                                    <div class="text-xs text-gray-600 mt-2">Complete suite for advanced calibration</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="space-y-4">
-                    <button class="w-full bg-blue-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all duration-300 text-lg transform hover:scale-105">
-                        Add to Cart
-                    </button>
-                    <button class="w-full border-2 border-blue-600 text-blue-600 font-bold py-4 px-8 rounded-xl hover:bg-blue-50 transition-all duration-300 text-lg">
-                        Add to Wishlist
-                    </button>
-                </div>
-
-                <!-- Product Features -->
-                <div class="bg-gray-50 rounded-xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Key Features</h3>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            <span>Full motion with 180° swivel and 15° tilt</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            <span>Supports up to 88 lbs (40 kg)</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            <span>VESA compatible: 200x200 to 600x400mm</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            <span>Easy installation with included hardware</span>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
 
         <!-- Product Tabs -->
-        <div class="mt-16">
-            <div class="border-b border-gray-200">
-                <nav class="flex space-x-8">
-                    <button class="tab-btn py-4 px-2 border-b-2 border-blue-500 text-blue-600 font-medium tab-active" data-tab="description">Description</button>
-                    <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium" data-tab="specifications">Specifications</button>
-                    <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium" data-tab="installation">Installation</button>
-                    <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium" data-tab="reviews">Reviews (127)</button>
+        <div class="mt-20">
+            <div class="bg-gradient-to-r from-white via-gray-50 to-white rounded-t-3xl border-b border-gray-200 shadow-lg">
+                <nav class="flex flex-wrap justify-center md:justify-start space-x-2 md:space-x-8 px-8 py-2">
+                    <button class="tab-btn group relative px-6 py-4 border-b-4 border-purple-500 text-purple-600 font-bold tab-active transition-all duration-300" data-tab="description">
+                        <span class="relative z-10">Description</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-100 to-pink-100 rounded-t-lg opacity-30"></div>
+                    </button>
+                    <button class="tab-btn group relative px-6 py-4 border-b-4 border-transparent text-gray-500 hover:text-purple-600 font-semibold transition-all duration-300 hover:border-purple-300" data-tab="specifications">
+                        <span class="relative z-10">Specifications</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-50 to-pink-50 rounded-t-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                    </button>
+                    <button class="tab-btn group relative px-6 py-4 border-b-4 border-transparent text-gray-500 hover:text-purple-600 font-semibold transition-all duration-300 hover:border-purple-300" data-tab="setup">
+                        <span class="relative z-10">Setup & Usage</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-50 to-pink-50 rounded-t-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                    </button>
+                    <button class="tab-btn group relative px-6 py-4 border-b-4 border-transparent text-gray-500 hover:text-purple-600 font-semibold transition-all duration-300 hover:border-purple-300" data-tab="reviews">
+                        <span class="relative z-10">Reviews (127)</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-50 to-pink-50 rounded-t-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                    </button>
                 </nav>
             </div>
 
             <!-- Tab Content -->
-            <div class="py-8">
+            <div class="bg-gradient-to-br from-white to-gray-50 rounded-b-3xl shadow-2xl p-8 md:p-12">
                 <!-- Description Tab -->
                 <div id="description-tab" class="tab-content">
                     <div class="prose prose-gray max-w-none">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Product Description</h3>
-                        <p class="text-gray-700 leading-relaxed mb-6">
-                            The Premium Full Motion Wall Mount is engineered for optimal TV positioning and viewing experience. This professional-grade mount combines robust construction with smooth articulation mechanisms, allowing you to achieve the perfect viewing angle from any position in your room.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed mb-6">
-                            Featuring a dual-arm design with precision bearings, this mount provides exceptional stability while maintaining smooth operation. The mount extends up to 16 inches from the wall and can be collapsed to just 2.8 inches for a low-profile installation.
-                        </p>
-                        <h4 class="text-xl font-semibold text-gray-800 mb-3">Perfect For:</h4>
-                        <ul class="list-disc list-inside text-gray-700 space-y-2">
-                            <li>Corner TV installations</li>
-                            <li>Rooms with multiple seating areas</li>
-                            <li>Bedrooms and master suites</li>
-                            <li>Living rooms and family rooms</li>
-                            <li>Commercial and office environments</li>
+                        <div class="flex items-center mb-6">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl mr-4 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-3xl font-black text-gray-800">Product Description</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
+                                <p class="text-gray-800 text-lg leading-relaxed">
+                                    The 4K UHD Generator is a professional-grade signal generation device designed for comprehensive testing and calibration of 4K Ultra HD displays, projectors, and video equipment. This advanced tool delivers precise test patterns and video signals up to 4K@60Hz resolution with exceptional accuracy.
+                                </p>
+                            </div>
+                            <p class="text-gray-700 text-lg leading-relaxed">
+                                Essential for AV professionals, system integrators, and technicians, this generator features an extensive library of test patterns including color bars, geometry patterns, color gradients, and custom test sequences. The compact, portable design makes it ideal for both field installations and lab environments.
+                            </p>
+                        </div>
+                        <div class="mt-8 bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
+                            <h4 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                Perfect For:
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors duration-200">
+                                    <svg class="w-6 h-6 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-gray-700 font-medium">Professional AV system integration</span>
+                                </div>
+                                <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors duration-200">
+                                    <svg class="w-6 h-6 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-gray-700 font-medium">Display and projector calibration</span>
+                                </div>
+                                <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors duration-200">
+                                    <svg class="w-6 h-6 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-gray-700 font-medium">Home theater setup optimization</span>
+                                </div>
+                                <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors duration-200">
+                                    <svg class="w-6 h-6 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-gray-700 font-medium">Video wall alignment and testing</span>
+                                </div>
+                                <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-emerald-50 transition-colors duration-200">
+                                    <svg class="w-6 h-6 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-gray-700 font-medium">Quality assurance and certification</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                            <li>Video wall alignment and testing</li>
+                            <li>Quality assurance and certification</li>
                         </ul>
                     </div>
                 </div>
@@ -291,84 +514,84 @@
                             <h3 class="text-2xl font-bold text-gray-800 mb-4">Technical Specifications</h3>
                             <table class="w-full border-collapse">
                                 <tr class="border-b">
-                                    <td class="py-3 font-semibold text-gray-800">TV Size Range</td>
-                                    <td class="py-3 text-gray-700">32" to 70"</td>
+                                    <td class="py-3 font-semibold text-gray-800">Output Resolution</td>
+                                    <td class="py-3 text-gray-700">Up to 4K@60Hz (3840x2160)</td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 font-semibold text-gray-800">Weight Capacity</td>
-                                    <td class="py-3 text-gray-700">88 lbs (40 kg)</td>
+                                    <td class="py-3 font-semibold text-gray-800">HDMI Standard</td>
+                                    <td class="py-3 text-gray-700">HDMI 2.0</td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 font-semibold text-gray-800">VESA Compatibility</td>
-                                    <td class="py-3 text-gray-700">200x200 to 600x400mm</td>
+                                    <td class="py-3 font-semibold text-gray-800">Color Depth</td>
+                                    <td class="py-3 text-gray-700">8/10/12-bit</td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 font-semibold text-gray-800">Extension Range</td>
-                                    <td class="py-3 text-gray-700">2.8" to 16"</td>
+                                    <td class="py-3 font-semibold text-gray-800">Color Space</td>
+                                    <td class="py-3 text-gray-700">Rec.709, Rec.2020, DCI-P3</td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 font-semibold text-gray-800">Swivel Range</td>
-                                    <td class="py-3 text-gray-700">±90° (180° total)</td>
+                                    <td class="py-3 font-semibold text-gray-800">Test Patterns</td>
+                                    <td class="py-3 text-gray-700">100+ built-in patterns</td>
                                 </tr>
                                 <tr class="border-b">
-                                    <td class="py-3 font-semibold text-gray-800">Tilt Range</td>
-                                    <td class="py-3 text-gray-700">+5° to -15°</td>
+                                    <td class="py-3 font-semibold text-gray-800">Power Supply</td>
+                                    <td class="py-3 text-gray-700">12V DC adapter included</td>
                                 </tr>
                             </table>
                         </div>
                         <div>
                             <h3 class="text-2xl font-bold text-gray-800 mb-4">Package Contents</h3>
                             <ul class="space-y-2 text-gray-700">
-                                <li>• Full motion wall mount bracket</li>
-                                <li>• Wall plate with mounting hardware</li>
-                                <li>• TV mounting plate and screws</li>
-                                <li>• Installation manual</li>
-                                <li>• Cable management clips</li>
-                                <li>• Level tool</li>
-                                <li>• All necessary bolts and washers</li>
+                                <li>• 4K UHD Generator unit</li>
+                                <li>• HDMI cable (2 meters)</li>
+                                <li>• 12V DC power adapter</li>
+                                <li>• USB control cable</li>
+                                <li>• Quick start guide</li>
+                                <li>• Test pattern reference manual</li>
+                                <li>• Carrying case</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Installation Tab -->
-                <div id="installation-tab" class="tab-content hidden">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Installation Guide</h3>
+                <!-- Setup & Usage Tab -->
+                <div id="setup-tab" class="tab-content hidden">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Setup & Usage Guide</h3>
                     <div class="space-y-6">
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                             <div class="flex">
-                                <svg class="w-6 h-6 text-yellow-600 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                <svg class="w-6 h-6 text-blue-600 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                                 </svg>
                                 <div>
-                                    <h4 class="font-semibold text-yellow-800">Important Safety Notice</h4>
-                                    <p class="text-yellow-700 mt-1">Always ensure proper wall stud mounting. Professional installation recommended for safety.</p>
+                                    <h4 class="font-semibold text-blue-800">Quick Start</h4>
+                                    <p class="text-blue-700 mt-1">Simply connect power and HDMI cable to start generating test patterns immediately.</p>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Step-by-Step Instructions</h4>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Setup Instructions</h4>
                                 <ol class="list-decimal list-inside space-y-3 text-gray-700">
-                                    <li>Locate wall studs using a stud finder</li>
-                                    <li>Mark mounting hole positions on wall</li>
-                                    <li>Drill pilot holes and install wall plate</li>
-                                    <li>Attach mounting plate to TV back</li>
-                                    <li>Connect TV plate to wall mount</li>
-                                    <li>Test movement and adjust tension</li>
-                                    <li>Organize cables using provided clips</li>
+                                    <li>Connect 12V power adapter to unit</li>
+                                    <li>Connect HDMI cable to output port</li>
+                                    <li>Connect HDMI to your display device</li>
+                                    <li>Power on the generator unit</li>
+                                    <li>Select desired test pattern</li>
+                                    <li>Adjust settings via front panel controls</li>
+                                    <li>Begin calibration or testing process</li>
                                 </ol>
                             </div>
                             <div>
-                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Tools Required</h4>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Common Test Patterns</h4>
                                 <ul class="list-disc list-inside space-y-2 text-gray-700">
-                                    <li>Drill with bits</li>
-                                    <li>Level (included)</li>
-                                    <li>Stud finder</li>
-                                    <li>Screwdriver set</li>
-                                    <li>Measuring tape</li>
-                                    <li>Pencil for marking</li>
+                                    <li>Color bars and gradients</li>
+                                    <li>Geometry and convergence patterns</li>
+                                    <li>White balance and grayscale</li>
+                                    <li>Focus and resolution tests</li>
+                                    <li>Motion and refresh rate patterns</li>
+                                    <li>Custom user-defined patterns</li>
                                 </ul>
                             </div>
                         </div>
@@ -435,58 +658,115 @@
         </div>
 
         <!-- Related Products -->
-        <section class="mt-16">
-            <h2 class="text-3xl font-black text-gray-800 mb-8">Related Products</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section class="mt-20">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-4 sm:gap-0">
+                <div class="relative">
+                    <h2 class="text-4xl sm:text-5xl font-black text-gray-800 tracking-tight relative z-10">
+                        Related Products
+                    </h2>
+                    <!-- Decorative underline -->
+                    <div class="absolute bottom-0 left-0 w-32 h-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transform -skew-x-12"></div>
+                    <!-- Floating accent -->
+                    <div class="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-20 animate-pulse"></div>
+                </div>
+                <a href="shop.html" class="text-purple-600 hover:text-pink-600 flex items-center space-x-2 text-lg sm:text-xl font-semibold group transition-colors duration-300">
+                    <span>VIEW ALL</span>
+                    <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                 <!-- Related Product 1 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div class="relative bg-gradient-to-br from-gray-100 to-gray-200 p-6 h-64">
-                        <div class="flex items-center justify-center h-full">
-                            <img src="https://placehold.co/200x150/B0B0B0/505050?text=Fixed+Mount" alt="Fixed Wall Mount" class="max-w-full max-h-full object-contain">
+                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
+                    <div class="relative bg-gradient-to-br from-purple-50 to-pink-50 p-8 h-72">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
+                        <div class="flex items-center justify-center h-full relative z-10">
+                            <img src="Products/Av distribution/4K HDMI Splitter.jpg" alt="4K HDMI Splitter" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
                         </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-purple-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-semibold text-gray-800 text-lg mb-2">Fixed Wall Mount</h3>
-                        <p class="text-gray-800 font-bold text-lg">EGP 129.00</p>
+                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-purple-600 transition-colors duration-300">4K HDMI Splitter</h3>
+                        <div class="flex items-center justify-between">
+                            <p class="text-purple-600 font-black text-xl">EGP 899.00</p>
+                            <button class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Related Product 2 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div class="relative bg-gradient-to-br from-gray-100 to-gray-200 p-6 h-64">
-                        <div class="flex items-center justify-center h-full">
-                            <img src="https://placehold.co/200x150/A0A0A0/404040?text=Tilt+Mount" alt="Tilt Wall Mount" class="max-w-full max-h-full object-contain">
+                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
+                    <div class="relative bg-gradient-to-br from-emerald-50 to-teal-50 p-8 h-72">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-200 to-teal-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
+                        <div class="flex items-center justify-center h-full relative z-10">
+                            <img src="Products/Av distribution/4K HDMI Matrix.jpg" alt="4K HDMI Matrix" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
                         </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-semibold text-gray-800 text-lg mb-2">Tilt Wall Mount</h3>
-                        <p class="text-gray-800 font-bold text-lg">EGP 199.00</p>
+                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-emerald-600 transition-colors duration-300">4K HDMI Matrix</h3>
+                        <div class="flex items-center justify-between">
+                            <p class="text-emerald-600 font-black text-xl">EGP 1,999.00</p>
+                            <button class="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Related Product 3 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div class="relative bg-gradient-to-br from-gray-100 to-gray-200 p-6 h-64">
-                        <div class="flex items-center justify-center h-full">
-                            <img src="https://placehold.co/200x150/909090?text=TV+Stand" alt="TV Stand" class="max-w-full max-h-full object-contain">
+                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
+                    <div class="relative bg-gradient-to-br from-blue-50 to-cyan-50 p-8 h-72">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-200 to-cyan-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
+                        <div class="flex items-center justify-center h-full relative z-10">
+                            <img src="Products/Av distribution/HDMI EXTENDER.jpg" alt="HDMI Extender" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
                         </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-blue-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-semibold text-gray-800 text-lg mb-2">Universal TV Stand</h3>
-                        <p class="text-gray-800 font-bold text-lg">EGP 249.00</p>
+                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-blue-600 transition-colors duration-300">HDMI Extender Kit</h3>
+                        <div class="flex items-center justify-between">
+                            <p class="text-blue-600 font-black text-xl">EGP 1,249.00</p>
+                            <button class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Related Product 4 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div class="relative bg-gradient-to-br from-gray-100 to-gray-200 p-6 h-64">
-                        <div class="flex items-center justify-center h-full">
-                            <img src="https://placehold.co/200x150/808080?text=Cable+Kit" alt="Cable Management Kit" class="max-w-full max-h-full object-contain">
+                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
+                    <div class="relative bg-gradient-to-br from-orange-50 to-red-50 p-8 h-72">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-200 to-red-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
+                        <div class="flex items-center justify-center h-full relative z-10">
+                            <img src="Products/Av distribution/HDMI SWITCHER.jpg" alt="HDMI Switcher" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
                         </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-orange-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                     <div class="p-6">
-                        <h3 class="font-semibold text-gray-800 text-lg mb-2">Cable Management Kit</h3>
-                        <p class="text-gray-800 font-bold text-lg">EGP 49.00</p>
+                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-orange-600 transition-colors duration-300">HDMI Switcher</h3>
+                        <div class="flex items-center justify-between">
+                            <p class="text-orange-600 font-black text-xl">EGP 649.00</p>
+                            <button class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+                        <p class="text-gray-800 font-bold text-lg">EGP 649.00</p>
                     </div>
                 </div>
             </div>
@@ -539,6 +819,112 @@
     </footer>
 
     <!-- JavaScript -->
+    <script>
+        // Quantity controls functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const qtyMinusTop = document.getElementById('qty-minus-top');
+            const qtyPlusTop = document.getElementById('qty-plus-top');
+            const quantityTop = document.getElementById('quantity-top');
+            
+            let currentQuantity = 1;
+            
+            // Decrease quantity
+            qtyMinusTop.addEventListener('click', function() {
+                if (currentQuantity > 1) {
+                    currentQuantity--;
+                    quantityTop.textContent = currentQuantity;
+                    updateCartButton();
+                }
+            });
+            
+            // Increase quantity
+            qtyPlusTop.addEventListener('click', function() {
+                if (currentQuantity < 15) { // max available
+                    currentQuantity++;
+                    quantityTop.textContent = currentQuantity;
+                    updateCartButton();
+                }
+            });
+            
+            // Update cart button text with total price
+            function updateCartButton() {
+                const basePrice = 2899;
+                const totalPrice = basePrice * currentQuantity;
+                const cartButton = document.querySelector('.group[onclick*="Add to Cart"]') || 
+                                  document.querySelector('button:has-text("Add to Cart")');
+                
+                // Find the cart button by looking for the one with cart text
+                const cartButtons = document.querySelectorAll('button');
+                cartButtons.forEach(button => {
+                    if (button.textContent.includes('Add to Cart')) {
+                        const span = button.querySelector('span');
+                        if (span) {
+                            span.textContent = `Add to Cart - EGP ${totalPrice.toLocaleString()}.00`;
+                        }
+                    }
+                });
+            }
+            
+            // Image switching functionality
+            window.changeImage = function(src) {
+                document.getElementById('main-image').src = src;
+                
+                // Update thumbnail border
+                document.querySelectorAll('.thumbnail').forEach(thumb => {
+                    thumb.classList.remove('border-purple-500', 'bg-purple-50');
+                    thumb.classList.add('border-transparent');
+                });
+                
+                // Add active state to clicked thumbnail
+                event.target.closest('.thumbnail').classList.add('border-purple-500', 'bg-purple-50');
+                event.target.closest('.thumbnail').classList.remove('border-transparent');
+            };
+            
+            // Tab functionality
+            window.showTab = function(tabName) {
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Show selected tab content
+                document.getElementById(tabName + '-tab').classList.remove('hidden');
+                
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('tab-active', 'border-purple-500', 'text-purple-600');
+                    btn.classList.add('border-transparent', 'text-gray-500');
+                });
+                
+                // Add active state to clicked tab
+                event.target.classList.add('tab-active', 'border-purple-500', 'text-purple-600');
+                event.target.classList.remove('border-transparent', 'text-gray-500');
+            };
+            
+            // Add click handlers to tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    showTab(tabName);
+                });
+            });
+            
+            // Pattern selection functionality
+            document.querySelectorAll('.pattern-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active state from all options
+                    document.querySelectorAll('.pattern-option').forEach(opt => {
+                        opt.classList.remove('border-purple-500', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50', 'text-purple-700');
+                        opt.classList.add('border-gray-300', 'bg-white');
+                    });
+                    
+                    // Add active state to clicked option
+                    this.classList.add('border-purple-500', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50', 'text-purple-700');
+                    this.classList.remove('border-gray-300', 'bg-white');
+                });
+            });
+        });
+    </script>
     <script src="scripts.js"></script>
 </body>
 </html>

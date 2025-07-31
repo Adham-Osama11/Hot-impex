@@ -836,25 +836,46 @@ html.dark #mobile-menu li {
     color: var(--text-primary) !important;
 }
 
-/* Utility Classes */
-.shadow-3xl {
-    box-shadow: var(--shadow-3xl);
+/* Trust badge dark mode */
+html.dark .trust-badge {
+    background-color: rgba(253, 224, 71, 0.1) !important;
+    border-color: rgba(253, 224, 71, 0.2) !important;
 }
 
-.parallax-bg {
-    will-change: transform;
-    transition: transform 0.1s ease-out;
+html.dark .trust-badge svg {
+    color: #fde047 !important;
 }
 
-.scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-    z-index: 9999;
-    transition: width 0.1s ease-out;
+html.dark .trust-badge span {
+    color: #fde047 !important;
+}
+
+/* Main heading dark mode */
+html.dark .text-gray-900 {
+    color: var(--text-primary) !important;
+}
+
+html.dark .text-gray-600 {
+    color: var(--text-secondary) !important;
+}
+
+/* Action buttons dark mode */
+html.dark .group.bg-gradient-to-r.from-gray-900.to-gray-800 {
+    background: linear-gradient(to right, #4f46e5, #7c3aed) !important;
+}
+
+html.dark .group.border-2.border-gray-300 {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark .group.border-2.border-gray-300 .text-gray-700 {
+    color: var(--text-primary) !important;
+}
+
+/* Stats dark mode */
+html.dark .border-t.border-gray-200 {
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 /* ====================================

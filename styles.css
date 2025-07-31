@@ -85,22 +85,22 @@ html.dark body {
 
 /* Header background */
 html.dark header {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: none;
 }
 
 /* Navigation container */
 html.dark nav .bg-white\/15,
 html.dark nav [class*="bg-white"] {
-    background: rgba(30, 41, 59, 0.8) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
+    background: transparent !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* Hot button */
 html.dark .logo {
     color: var(--text-primary) !important;
-    background: rgba(30, 41, 59, 0.8) !important;
+    background: transparent !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
@@ -115,14 +115,14 @@ html.dark nav a:hover {
 
 /* Active navigation link */
 html.dark nav a.bg-white\/30 {
-    background: rgba(102, 126, 234, 0.3) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
     color: #ffffff !important;
 }
 
 /* Mobile menu toggle */
 html.dark #mobile-menu-toggle {
     color: var(--text-primary) !important;
-    background: rgba(30, 41, 59, 0.8) !important;
+    background: transparent !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
@@ -131,8 +131,8 @@ html.dark .user-icon {
     fill: var(--text-primary) !important;
 }
 
-html.dark svg {
-    color: var(--text-primary) !important;
+html.dark svg.text-gray-700 {
+    color: var(--text-secondary) !important;
 }
 
 .user-icon {
@@ -350,7 +350,7 @@ html.dark .feature-tag:hover {
     border-radius: 1.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: visible;
+    overflow: hidden;
     cursor: pointer;
     margin: 2rem 1rem;
     isolation: isolate;
@@ -403,20 +403,26 @@ html.dark .feature-tag:hover {
 
 .card__badge {
     position: absolute;
-    top: -0.75rem;
-    right: -0.75rem;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    top: 0.75rem;
+    right: 0.75rem;
+    background-color: #ff4500;
     color: white;
-    font-size: 0.75rem;
-    font-weight: 600;
     padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    transform: rotate(12deg) scale(0);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-    z-index: 3;
+    font-size: 0.875rem;
+    font-weight: bold;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+    transform: translateY(10px) rotate(0deg);
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .card__badge {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
 }
 
 .card:hover .card__badge {
@@ -515,7 +521,7 @@ html.dark .card__description {
 }
 
 html.dark .card__price {
-    color: #a5b4fc !important;
+    color: #a5b4fc;
 }
 
 html.dark .card__image {

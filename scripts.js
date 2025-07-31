@@ -564,8 +564,13 @@ function toggleCart() {
     const cartOverlay = document.getElementById('cart-overlay');
     
     if (cartSidebar && cartOverlay) {
-        cartSidebar.classList.toggle('translate-x-full');
-        cartOverlay.classList.toggle('hidden');
+        if (cartSidebar.classList.contains('translate-x-full')) {
+            cartSidebar.classList.remove('translate-x-full');
+            cartOverlay.classList.remove('hidden');
+        } else {
+            cartSidebar.classList.add('translate-x-full');
+            cartOverlay.classList.add('hidden');
+        }
     }
 }
 

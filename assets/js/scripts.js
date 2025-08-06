@@ -108,19 +108,19 @@ let heroProducts = [
     {
         id: 1,
         name: "RACING SIM SEAT",
-        image: "racing sim seat_without BG.png",
+        image: "assets/images/racing sim seat_without BG.png",
         alt: "Racing Sim Seat"
     },
     {
         id: 2,
         name: "TELESCOPIC SCREEN",
-        image: "screen telescopic_without BG.png",
+        image: "assets/images/screen telescopic_without BG.png",
         alt: "Telescopic Screen"
     },
     {
         id: 3,
         name: "INTERACTIVE KIOSKS",
-        image: "kiosks without BG.png",
+        image: "assets/images/kiosks without BG.png",
         alt: "Interactive Kiosks"
     }
 ];
@@ -1016,21 +1016,21 @@ function initializeHeroProductShowcase() {
             id: 1,
             title: "Racing Sim Seat",
             description: "Professional racing simulation seat for ultimate gaming experience",
-            image: "racing sim seat_without BG.png",
+            image: "assets/images/racing sim seat_without BG.png",
             features: ["Ergonomic design", "Premium materials", "Adjustable settings"]
         },
         {
             id: 2,
             title: "Mobile Experience",
             description: "Seamless mobile interface for on-the-go access",
-            image: "kiosks without BG.png",
+            image: "assets/images/kiosks without BG.png",
             features: ["Responsive design", "Touch optimized", "Offline support"]
         },
         {
             id: 3,
             title: "Screen Telescopic",
             description: "Advanced telescopic screen system with crystal clear display",
-            image: "screen telescopic_without BG.png",
+            image: "assets/images/screen telescopic_without BG.png",
             features: ["4K Resolution", "Auto-adjust", "Smart controls"]
         }
     ];
@@ -1653,9 +1653,9 @@ function updateHeroContent(index) {
 
 // Array of product images for showcase
 const showcaseProducts = [
-    'screen telescopic_without BG.png',
-    'racing sim seat_without BG.png',
-    'kiosks without BG.png'
+    'assets/images/screen telescopic_without BG.png',
+    'assets/images/racing sim seat_without BG.png',
+    'assets/images/kiosks without BG.png'
 ];
 
 let currentIndex = 0;

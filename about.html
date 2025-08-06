@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hot Impex - About Us</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Theme initialization script - must run before body content -->
+    <script>
+        // Check for saved dark mode preference and apply immediately
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        // Store the theme state for immediate icon initialization
+        window.initialDarkMode = isDarkMode;
+    </script>
+</head>
+<body class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+            <nav class="flex flex-col lg:flex-row items-center justify-between space-y-6 lg:space-y-0">
+                <!-- Mobile Header with Hot Button and Menu Toggle -->
+                <div class="flex items-center justify-between w-full lg:w-auto">
+                    <!-- Hot Button Section -->
+                    <div class="flex-shrink-0">
+                        <button class="logo text-gray-800 font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-lg sm:text-xl bg-white/15 backdrop-blur-3xl">
+                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
+                        </button>
+                    </div>
+
+                    <!-- Mobile Menu Toggle Button -->
+                    <button id="mobile-menu-toggle" class="lg:hidden text-gray-800 p-3 rounded-full border border-white/30 shadow-2xl transition-all duration-200 bg-white/15 backdrop-blur-3xl hover:bg-white/25">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Main Navigation Section -->
+                <div id="main-nav" class="w-full lg:w-auto hidden lg:block">
+                    <div class="rounded-full p-3 flex flex-col lg:flex-row items-center border border-white/30 shadow-2xl gap-3 lg:gap-6 w-full lg:w-auto bg-white/15 backdrop-blur-3xl">
+                        <a href="index.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Home</a>
+                        <a href="shop.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Shop</a>
+                        <a href="contact.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Contact Us</a>
+                        <a href="about.html" class="text-gray-800 px-6 py-3 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center border border-white/20 shadow-lg">About Us</a>
+                        
+                        <!-- Dark Mode Toggle -->
+                        <div class="flex items-center justify-center px-6 py-3 w-full lg:w-auto">
+                            <div id="theme-toggle" class="theme-toggle" title="Toggle Dark Mode">
+                                <svg class="sun-icon w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20" style="opacity: 1;">
+                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg class="moon-icon w-5 h-5 text-gray-400 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20" style="opacity: 0;">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </div>
+                            <script>
+                                // Immediately set correct icon opacity
+                                (function() {
+                                    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+                                    const toggle = document.getElementById('theme-toggle');
+                                    if (toggle) {
+                                        const sunIcon = toggle.querySelector('.sun-icon');
+                                        const moonIcon = toggle.querySelector('.moon-icon');
+                                        
+                                        if (isDarkMode) {
+                                            sunIcon.style.opacity = '0';
+                                            moonIcon.style.opacity = '1';
+                                        } else {
+                                            sunIcon.style.opacity = '1';
+                                            moonIcon.style.opacity = '0';
+                                        }
+                                    }
+                                })();
+                            </script>
+                        </div>
+                        
+                        <!-- User Icon with Dropdown -->
+                        <div class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                            <!-- Simple SVG for user icon -->
+                            <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            <!-- Dropdown Arrow -->
+                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+
+                        <!-- Shopping Cart Icon with Count -->
+                        <div id="cart-toggle" class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                            <!-- Simple SVG for shopping bag icon -->
+                            <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.763.746-1.858 1.705L2.26 19.99a2.25 2.25 0 002.24 2.51h15.002a2.25 2.25 0 002.24-2.51l-1.395-11.535A1.875 1.875 0 0018.488 6.75H16.5V6a4.5 4.5 0 10-9 0zM15 6.75V6a3 3 0 10-6 0v.75H15z" clip-rule="evenodd" />
+                            </svg>
+                            <span id="cart-badge" class="bg-orange-500 text-white text-sm font-semibold px-3 py-1 rounded-full" style="display: none;">0</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="main-content min-h-screen flex flex-col items-center justify-center pt-24 sm:pt-32">
+        <section class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 sm:p-12 border dark:border-gray-700">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tight">About Hot Impex</h1>
+                    <p class="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Discover the story behind our passion for delivering premium solutions for the modern lifestyle.</p>
+                </div>
+
+                <div class="space-y-12">
+                    <!-- Our Mission Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div class="order-2 md:order-1">
+                            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h2>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                At Hot Impex, our mission is to provide our customers with the highest quality products that blend cutting-edge technology with elegant design. We are committed to innovation, excellence, and creating value for our customers, partners, and community. We believe in the power of technology to enhance everyday life, and we strive to make it accessible to everyone.
+                            </p>
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <img src="https://placehold.co/600x400/E0E0E0/808080?text=Our+Mission" alt="Our Mission" class="rounded-xl shadow-lg">
+                        </div>
+                    </div>
+
+                    <!-- Our Vision Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <img src="https://placehold.co/600x400/E0E0E0/808080?text=Our+Vision" alt="Our Vision" class="rounded-xl shadow-lg">
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Our Vision</h2>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                We envision a world where technology seamlessly integrates into every aspect of life, making it more connected, efficient, and enjoyable. Our goal is to be at the forefront of this transformation, leading the way with innovative products and solutions that inspire and empower our customers to achieve more.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Meet the Team Section -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">Meet the Team</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <!-- Team Member 1 -->
+                            <div class="text-center">
+                                <img src="https://placehold.co/300x300/E0E0E0/808080?text=Team+Member" alt="Team Member" class="w-48 h-48 mx-auto rounded-full shadow-lg mb-4">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+                                <p class="text-gray-600 dark:text-gray-400">CEO & Founder</p>
+                            </div>
+                            <!-- Team Member 2 -->
+                            <div class="text-center">
+                                <img src="https://placehold.co/300x300/E0E0E0/808080?text=Team+Member" alt="Team Member" class="w-48 h-48 mx-auto rounded-full shadow-lg mb-4">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+                                <p class="text-gray-600 dark:text-gray-400">Chief Technology Officer</p>
+                            </div>
+                            <!-- Team Member 3 -->
+                            <div class="text-center">
+                                <img src="https://placehold.co/300x300/E0E0E0/808080?text=Team+Member" alt="Team Member" class="w-48 h-48 mx-auto rounded-full shadow-lg mb-4">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+                                <p class="text-gray-600 dark:text-gray-400">Head of Design</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 py-16 sm:py-20 lg:py-24 mt-12 sm:mt-16 lg:mt-20 overflow-hidden">
+        <!-- ... (footer content from index.html) ... -->
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -35,6 +35,11 @@
     --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     --transition-quick: all 0.2s ease;
     
+    /* Common Background Colors for Dark Mode */
+    --dark-bg-input: rgba(15, 23, 42, 0.8);
+    --dark-bg-input-focus: rgba(15, 23, 42, 0.9);
+    --dark-bg-header: rgba(15, 23, 42, 0.2);
+    
     /* Light Mode Colors */
     --bg-primary: #ffffff;
     --bg-secondary: #f8fafc;
@@ -82,13 +87,6 @@ html.dark body {
 /* ====================================
    DARK MODE NAVIGATION & HEADER
    ====================================*/
-
-/* Header background */
-html.dark header {
-    background: transparent;
-    backdrop-filter: none;
-    border-bottom: none;
-}
 
 /* Navigation container */
 html.dark nav .bg-white\/15,
@@ -1015,6 +1013,357 @@ button {
 a {
     text-decoration: none;
     color: inherit;
+}
+
+/* ====================================
+   SHOP PAGE DARK MODE STYLES
+   ====================================*/
+
+/* Shop page main content background */
+html.dark .bg-gray-50 {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
+}
+
+/* Sidebar dark mode */
+html.dark .bg-white.rounded-2xl.shadow-lg {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Sidebar text colors */
+html.dark .text-gray-800 {
+    color: var(--text-primary) !important;
+}
+
+html.dark .text-gray-700 {
+    color: var(--text-secondary) !important;
+}
+
+html.dark .text-gray-600 {
+    color: var(--text-secondary) !important;
+}
+
+/* Category filter links */
+html.dark .category-filter {
+    color: var(--text-secondary) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .category-filter:hover {
+    color: #60a5fa !important;
+}
+
+/* Search and sort section */
+html.dark .bg-white.p-4.rounded-2xl.shadow-lg {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Search input */
+html.dark input[type="text"] {
+    background: var(--dark-bg-input) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: var(--text-primary) !important;
+}
+
+html.dark input[type="text"]::placeholder {
+    color: var(--text-secondary) !important;
+}
+
+html.dark input[type="text"]:focus {
+    background: var(--dark-bg-input-focus) !important;
+    border-color: #60a5fa !important;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1) !important;
+}
+
+/* Sort dropdown */
+html.dark select {
+    background: var(--dark-bg-input) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: var(--text-primary) !important;
+}
+
+html.dark select:focus {
+    background: var(--dark-bg-input-focus) !important;
+    border-color: #60a5fa !important;
+}
+
+/* Product cards */
+html.dark .product-card {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark .product-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    transform: translateY(-8px) !important;
+}
+
+/* Product card text */
+html.dark .product-card h3 {
+    color: var(--text-primary) !important;
+}
+
+html.dark .product-card .text-gray-500 {
+    color: var(--text-secondary) !important;
+}
+
+html.dark .product-card .text-gray-800 {
+    color: var(--text-primary) !important;
+}
+
+html.dark .product-card .text-gray-600 {
+    color: var(--text-secondary) !important;
+}
+
+/* Product card badges */
+html.dark .bg-purple-600 {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%) !important;
+}
+
+html.dark .bg-blue-600 {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+}
+
+html.dark .bg-green-500 {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+}
+
+/* Product card action buttons */
+html.dark .product-card button {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+html.dark .product-card button:hover {
+    background: rgba(59, 130, 246, 0.8) !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Price range slider */
+html.dark .slider {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+html.dark .slider::-webkit-slider-thumb {
+    background: #60a5fa !important;
+    border: 2px solid #1e293b !important;
+}
+
+html.dark .slider::-moz-range-thumb {
+    background: #60a5fa !important;
+    border: 2px solid #1e293b !important;
+}
+
+/* Footer dark mode */
+html.dark footer {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark footer .text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+/* Mobile menu dark mode for shop page */
+html.dark #mobile-menu .bg-white\/15 {
+    background: rgba(15, 23, 42, 0.9) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+html.dark #mobile-menu .border-white\/30 {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ====================================
+   CONTACT PAGE DARK MODE STYLES
+   ====================================*/
+
+/* Contact page main container */
+html.dark .main-content {
+    background: transparent !important;
+}
+
+/* Contact form and info container */
+html.dark .bg-white.dark\:bg-gray-900 {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Contact page headings */
+html.dark .text-gray-900.dark\:text-white {
+    color: var(--text-primary) !important;
+}
+
+html.dark .text-gray-600.dark\:text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+html.dark .text-gray-700.dark\:text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+/* Contact info icon containers */
+html.dark .bg-purple-100.dark\:bg-purple-900\/30 {
+    background: rgba(124, 58, 237, 0.2) !important;
+    border: 1px solid rgba(124, 58, 237, 0.3) !important;
+}
+
+html.dark .text-purple-600.dark\:text-purple-400 {
+    color: #a855f7 !important;
+}
+
+/* Social media links */
+html.dark .bg-gray-200\/50.dark\:bg-gray-700\/50 {
+    background: rgba(71, 85, 105, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .text-gray-600.dark\:text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+/* Form inputs */
+html.dark .bg-gray-100.dark\:bg-gray-700 {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: var(--text-primary) !important;
+}
+
+html.dark .border-gray-300.dark\:border-gray-600 {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+html.dark .text-gray-900.dark\:text-white {
+    color: var(--text-primary) !important;
+}
+
+html.dark .placeholder-gray-500.dark\:placeholder-gray-400::placeholder {
+    color: var(--text-secondary) !important;
+}
+
+/* Form labels */
+html.dark .text-gray-700.dark\:text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+/* Form focus states */
+html.dark input:focus,
+html.dark textarea:focus {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border-color: #a855f7 !important;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1) !important;
+}
+
+/* Submit button */
+html.dark .bg-gradient-to-r.from-purple-600.to-pink-600 {
+    background: linear-gradient(to right, #7c3aed, #ec4899) !important;
+}
+
+html.dark .hover\:from-purple-700.hover\:to-pink-700:hover {
+    background: linear-gradient(to right, #6d28d9, #db2777) !important;
+}
+
+/* Footer text in contact page */
+html.dark .text-gray-500.dark\:text-gray-400 {
+    color: var(--text-secondary) !important;
+}
+
+/* ====================================
+   ABOUT US PAGE DARK MODE STYLES
+   ====================================*/
+
+/* About page main container */
+html.dark .bg-white.dark\:bg-gray-900.rounded-2xl {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* About page headings and text */
+html.dark .text-gray-900.dark\:text-white {
+    color: var(--text-primary) !important;
+}
+
+html.dark .text-gray-700.dark\:text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+/* Team member cards (if they have background) */
+html.dark .text-center {
+    color: var(--text-primary) !important;
+}
+
+/* Mission and vision images */
+html.dark img {
+    border-radius: 0.75rem !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ====================================
+   ENHANCED FOOTER DARK MODE
+   ====================================*/
+
+/* Footer gradient background */
+html.dark footer.bg-gradient-to-br {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Footer brand text */
+html.dark footer .bg-gradient-to-r.from-purple-600.to-pink-600 {
+    background: linear-gradient(to right, #a855f7, #ec4899) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+}
+
+/* Footer description text */
+html.dark footer p {
+    color: var(--text-secondary) !important;
+}
+
+/* Footer background patterns */
+html.dark footer .absolute.inset-0.opacity-5 {
+    opacity: 0.02 !important;
+}
+
+/* Footer overlay */
+html.dark footer .bg-gradient-to-t.from-gray-900\/50 {
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent) !important;
+}
+
+/* Contact and About specific header styles */
+html.dark header.bg-white\/20 {
+    background: var(--dark-bg-header) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Contact and About page body background */
+html.dark body.bg-gray-50.dark\:bg-gray-900 {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
+}
+
+/* Enhanced hover states for contact and about pages */
+html.dark .hover\:bg-purple-600:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%) !important;
+}
+
+html.dark .hover\:bg-pink-600:hover {
+    background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%) !important;
+}
+
+html.dark .hover\:bg-blue-600:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+}
+
+html.dark .hover\:bg-blue-700:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
 }
 
 /* ====================================

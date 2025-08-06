@@ -1,0 +1,35 @@
+{
+  "name": "hot-impex-website",
+  "version": "2.0.0",
+  "description": "Professional e-commerce website for HOT IMPEX with admin dashboard",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 3000",
+    "verify": "bash verify-structure.sh",
+    "clean": "echo 'Project already cleaned and organized!'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Adham-Osama11/Hot-impex.git"
+  },
+  "keywords": [
+    "ecommerce",
+    "website",
+    "responsive",
+    "html",
+    "css",
+    "javascript",
+    "tailwind",
+    "admin-dashboard"
+  ],
+  "author": "HOT IMPEX",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

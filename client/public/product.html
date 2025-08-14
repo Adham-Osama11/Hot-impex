@@ -6,6 +6,8 @@
     <title>4K UHD Generator - HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
     <!-- Theme initialization script - must run before body content -->
@@ -60,15 +62,54 @@
                         </div>
                         
                         <!-- User Icon with Dropdown -->
-                        <div class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
-                            <!-- Simple SVG for user icon -->
-                            <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                            </svg>
-                            <!-- Dropdown Arrow -->
-                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
+                        <div class="relative">
+                            <div id="user-dropdown-toggle" class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                                <!-- Simple SVG for user icon -->
+                                <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                                <span id="user-display-name" class="hidden lg:inline text-gray-700">Account</span>
+                                <!-- Dropdown Arrow -->
+                                <svg class="w-5 h-5 text-gray-700 transition-transform duration-200" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            
+                            <!-- User Dropdown Menu -->
+                            <div id="user-dropdown-menu" class="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 py-2 hidden z-50">
+                                <!-- Not Logged In State -->
+                                <div id="user-not-logged-in" class="px-4 py-3 border-b border-gray-200/50">
+                                    <p class="text-sm text-gray-600 mb-3">Sign in to access your account</p>
+                                    <div class="space-y-2">
+                                        <button id="show-login-modal" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                            Sign In
+                                        </button>
+                                        <button id="show-register-modal" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                            Create Account
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Logged In State (Hidden by default) -->
+                                <div id="user-logged-in" class="hidden">
+                                    <div class="px-4 py-3 border-b border-gray-200/50">
+                                        <p class="text-sm font-medium text-gray-900" id="user-welcome">Welcome back!</p>
+                                        <p class="text-sm text-gray-600" id="user-email"></p>
+                                    </div>
+                                    <div class="py-1">
+                                        <a href="profile.html" id="user-profile-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                            <i class="fas fa-user mr-2"></i>My Profile
+                                        </a>
+                                        <a href="#" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                                        </a>
+                                        <hr class="my-1 border-gray-200/50">
+                                        <button id="user-logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/50 transition-colors duration-200">
+                                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Shopping Cart Icon with Count -->
@@ -87,38 +128,56 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="fixed inset-0 z-50 lg:hidden hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-        <div class="fixed top-0 right-0 h-full w-80 bg-white/15 backdrop-blur-3xl shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-white/30">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Menu</h2>
-                    <button id="close-mobile-menu" class="text-gray-800 dark:text-white hover:text-orange-400 transition-colors duration-200 p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <nav class="space-y-6">
-                    <ul class="space-y-4">
-                        <li><a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Home</a></li>
-                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Shop</a></li>
-                        <li><a href="contact.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Contact Us</a></li>
-                        <li><a href="about.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">About Us</a></li>
-                    </ul>
-                    <div class="mt-8 pt-8 border-t border-white/30">
-                        <div class="flex items-center justify-between p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
-                            <span class="text-gray-800 dark:text-white font-medium">Dark Mode</span>
-                            <div id="mobile-theme-toggle" class="theme-toggle">
-                                <svg class="sun-icon w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
-                                </svg>
-                                <svg class="moon-icon w-5 h-5 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                                </svg>
-                            </div>
-                        </div>
+        <div class="absolute inset-0 bg-black/50" id="mobile-menu-backdrop"></div>
+        <div class="relative bg-white/95 backdrop-blur-md min-h-screen w-80 p-6 shadow-2xl">
+            <!-- Mobile Menu Header -->
+            <div class="flex items-center justify-between mb-8">
+                <img src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
+                <button id="mobile-menu-close" class="p-2 rounded-full hover:bg-gray-200/50 transition-colors duration-200">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu Items -->
+            <div class="space-y-4">
+                <a href="index.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Home</a>
+                <a href="shop.html" class="block text-gray-800 px-4 py-3 rounded-lg bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Shop</a>
+                <a href="contact.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Contact Us</a>
+                <a href="about.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">About Us</a>
+                
+                <hr class="my-6 border-gray-300">
+                
+                <!-- Mobile User Section -->
+                <div id="mobile-user-section">
+                    <!-- Not logged in state -->
+                    <div id="mobile-user-not-logged-in" class="space-y-3">
+                        <button id="mobile-show-login-modal" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                            Sign In
+                        </button>
+                        <button id="mobile-show-register-modal" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                            Create Account
+                        </button>
                     </div>
-                </nav>
+                    
+                    <!-- Logged in state (hidden by default) -->
+                    <div id="mobile-user-logged-in" class="hidden space-y-3">
+                        <div class="px-4 py-3 bg-gray-100/50 rounded-lg">
+                            <p class="text-sm font-medium text-gray-900" id="mobile-user-welcome">Welcome back!</p>
+                            <p class="text-sm text-gray-600" id="mobile-user-email"></p>
+                        </div>
+                        <a href="profile.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200">
+                            <i class="fas fa-user mr-2"></i>My Profile
+                        </a>
+                        <a href="#" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200">
+                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                        </a>
+                        <button id="mobile-user-logout" class="w-full text-left text-red-600 px-4 py-3 rounded-lg hover:bg-red-50/50 transition-colors duration-200">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -173,9 +232,9 @@
                 <li><span class="text-gray-400">•</span></li>
                 <li><a href="shop.html" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">Shop</a></li>
                 <li><span class="text-gray-400">•</span></li>
-                <li><a href="#" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">AV Distribution</a></li>
+                <li><a href="#" id="breadcrumb-category" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">Loading...</a></li>
                 <li><span class="text-gray-400">•</span></li>
-                <li><span class="text-gray-900 font-semibold">4K UHD Generator</span></li>
+                <li><span id="breadcrumb-product" class="text-gray-900 font-semibold">Loading...</span></li>
             </ol>
         </nav>
     </div>
@@ -188,20 +247,12 @@
                 <!-- Main Product Image -->
                 <div class="relative bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 border border-gray-200 overflow-hidden">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 transform translate-x-12 -translate-y-12"></div>
-                    <img id="main-image" src="assets/images/Products/Av distribution/4K UHD GENRATOR.jpg" alt="4K UHD Generator" class="relative z-10 w-full h-auto object-contain product-image transition-all duration-300 ease-in-out min-h-[400px]">
+                    <img id="main-image" src="" alt="Product Image" class="relative z-10 w-full h-auto object-contain product-image transition-all duration-300 ease-in-out min-h-[400px]">
                 </div>
                 
                 <!-- Thumbnail Images -->
-                <div class="grid grid-cols-3 gap-4">
-                    <button class="thumbnail active group bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-4 border-2 border-purple-500 bg-purple-50 hover:border-purple-600 transition-all duration-300 transform hover:scale-105 opacity-100" onclick="changeImage('assets/images/Products/Av distribution/4K UHD GENRATOR.jpg', this)">
-                        <img src="assets/images/Products/Av distribution/4K UHD GENRATOR.jpg" alt="Main view" class="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300">
-                    </button>
-                    <button class="thumbnail group bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-4 border-2 border-transparent hover:border-purple-500 transition-all duration-300 transform hover:scale-105 opacity-50 hover:opacity-100" onclick="changeImage('assets/images/Products/Av distribution/4K UHD GENRATOR-2.jpg', this)">
-                        <img src="assets/images/Products/Av distribution/4K UHD GENRATOR-2.jpg" alt="Side view" class="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300">
-                    </button>
-                    <button class="thumbnail group bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-4 border-2 border-transparent hover:border-purple-500 transition-all duration-300 transform hover:scale-105 opacity-50 hover:opacity-100" onclick="changeImage('assets/images/Products/Av distribution/4K UHD GENRATOR-3.jpg', this)">
-                        <img src="assets/images/Products/Av distribution/4K UHD GENRATOR-3.jpg" alt="Detail view" class="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300">
-                    </button>
+                <div id="product-thumbnails" class="grid grid-cols-3 gap-4">
+                    <!-- Thumbnails will be dynamically loaded -->
                 </div>
             </div>
 
@@ -209,13 +260,13 @@
             <div class="lg:col-span-1 space-y-4">
                 <!-- Product Title and Price -->
                 <div>
-                    <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-3">Professional Grade</span>
-                    <h1 class="text-xl lg:text-2xl font-black text-gray-800 mb-3">4K UHD Test Pattern Generator</h1>
+                    <span id="product-badge" class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-3">Loading...</span>
+                    <h1 id="product-title" class="text-xl lg:text-2xl font-black text-gray-800 mb-3">Loading Product...</h1>
                     <div class="flex flex-col space-y-2 mb-4">
-                        <span class="text-xl lg:text-2xl font-bold text-blue-600">EGP 2,899.00</span>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm text-gray-500 line-through">EGP 3,299.00</span>
-                            <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full">12% OFF</span>
+                        <span id="product-price" class="text-xl lg:text-2xl font-bold text-blue-600">EGP 0.00</span>
+                        <div id="product-discount" class="flex items-center space-x-2 hidden">
+                            <span id="original-price" class="text-sm text-gray-500 line-through"></span>
+                            <span id="discount-badge" class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full"></span>
                         </div>
                     </div>
                 </div>
@@ -231,11 +282,11 @@
                             </div>
                             Quick Purchase
                         </h3>
-                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
+                        <span id="stock-status" class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
-                            In Stock
+                            Loading...
                         </span>
                     </div>
                     
@@ -364,8 +415,8 @@
                             </div>
                             <h3 class="text-sm font-bold text-gray-800">About This Product</h3>
                         </div>
-                        <p class="text-gray-800 text-sm leading-relaxed">
-                            Professional 4K UHD test pattern generator for display calibration, video equipment testing, and professional AV installations.
+                        <p id="product-description" class="text-gray-800 text-sm leading-relaxed">
+                            Loading product description...
                         </p>
                     </div>
                 </div>
@@ -379,43 +430,8 @@
                         </div>
                         Key Features
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <div class="flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group">
-                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-gray-800 font-medium text-sm">4K UHD 3840×2160 @ 60Hz output</span>
-                        </div>
-                        <div class="flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group">
-                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-gray-800 font-medium text-sm">Multiple test patterns & color bars</span>
-                        </div>
-                        <div class="flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group">
-                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-gray-800 font-medium text-sm">HDMI 2.0 & USB-C connectivity</span>
-                        </div>
-                        <div class="flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group">
-                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-gray-800 font-medium text-sm">HDR10 & Dolby Vision support</span>
-                        </div>
-                        <div class="flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group">
-                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-gray-800 font-medium text-sm">Portable & lightweight design</span>
-                        </div>
-                        <div class="flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group">
-                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-gray-800 font-medium text-sm">Professional calibration tools</span>
-                        </div>
+                    <div id="product-features" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <!-- Features will be dynamically loaded -->
                     </div>
                 </div>
 
@@ -971,6 +987,348 @@
             });
         });
     </script>
-    <script src="scripts.js"></script>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <!-- Login modal content will be handled by scripts.js -->
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <!-- Register modal content will be handled by scripts.js -->
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="notification-container" class="fixed bottom-4 right-4 z-50"></div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/scripts.js"></script>
+    
+    <!-- Dynamic Product Loading Script -->
+    <script>
+        let currentProduct = null;
+        let currentQuantity = 1;
+
+        // Get product ID from URL parameters
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Fetch product data from API
+        async function fetchProduct(productId) {
+            try {
+                const response = await fetch(`/api/products/${productId}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    return data.data.product;
+                } else {
+                    throw new Error(data.message || 'Product not found');
+                }
+            } catch (error) {
+                console.error('Error fetching product:', error);
+                showError('Failed to load product. Please try again.');
+                return null;
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Populate product data in the UI
+        function populateProductData(product) {
+            currentProduct = product;
+
+            // Update title and meta
+            document.title = `${product.name} - Hot Impex`;
+            
+            // Update breadcrumb
+            document.getElementById('breadcrumb-category').textContent = product.category;
+            document.getElementById('breadcrumb-product').textContent = product.name;
+            
+            // Update product title and badge
+            document.getElementById('product-title').textContent = product.name;
+            
+            // Update badge based on product properties
+            const badge = document.getElementById('product-badge');
+            if (product.featured) {
+                badge.textContent = 'Featured';
+                badge.className = 'inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-3';
+            } else if (product.bestSeller) {
+                badge.textContent = 'Best Seller';
+                badge.className = 'inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-3';
+            } else {
+                badge.textContent = 'Professional Grade';
+                badge.className = 'inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mb-3';
+            }
+
+            // Update price
+            document.getElementById('product-price').textContent = `${product.currency} ${product.price.toLocaleString()}.00`;
+            
+            // Handle discount (if original price exists)
+            const discountSection = document.getElementById('product-discount');
+            if (product.originalPrice && product.originalPrice > product.price) {
+                const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                document.getElementById('original-price').textContent = `${product.currency} ${product.originalPrice.toLocaleString()}.00`;
+                document.getElementById('discount-badge').textContent = `${discountPercent}% OFF`;
+                discountSection.classList.remove('hidden');
+            } else {
+                discountSection.classList.add('hidden');
+            }
+
+            // Update stock status
+            const stockStatus = document.getElementById('stock-status');
+            if (product.inStock) {
+                stockStatus.innerHTML = `
+                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    In Stock
+                `;
+                stockStatus.className = 'bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center';
+            } else {
+                stockStatus.innerHTML = `
+                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm4.293-5.707a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    Out of Stock
+                `;
+                stockStatus.className = 'bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center';
+            }
+
+            // Update description
+            document.getElementById('product-description').textContent = product.description || product.shortDescription || 'No description available.';
+
+            // Update images
+            updateProductImages(product);
+
+            // Update features
+            updateProductFeatures(product);
+
+            // Update cart button
+            updateCartButton();
+        }
+
+        // Update product images
+        function updateProductImages(product) {
+            const mainImage = document.getElementById('main-image');
+            const thumbnailsContainer = document.getElementById('product-thumbnails');
+
+            // Set main image
+            if (product.mainImage) {
+                mainImage.src = product.mainImage;
+                mainImage.alt = product.name;
+            } else if (product.images && product.images.length > 0) {
+                mainImage.src = product.images[0];
+                mainImage.alt = product.name;
+            }
+
+            // Create thumbnails
+            thumbnailsContainer.innerHTML = '';
+            if (product.images && product.images.length > 0) {
+                product.images.forEach((image, index) => {
+                    const button = document.createElement('button');
+                    button.className = `thumbnail group bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-4 border-2 transition-all duration-300 transform hover:scale-105 ${
+                        index === 0 ? 'border-purple-500 bg-purple-50 opacity-100 active' : 'border-transparent opacity-50 hover:opacity-100'
+                    } hover:border-purple-500`;
+                    
+                    button.onclick = () => changeImage(image, button);
+                    
+                    button.innerHTML = `
+                        <img src="${image}" alt="Product view ${index + 1}" class="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300">
+                    `;
+                    
+                    thumbnailsContainer.appendChild(button);
+                });
+            }
+        }
+
+        // Update product features
+        function updateProductFeatures(product) {
+            const featuresContainer = document.getElementById('product-features');
+            featuresContainer.innerHTML = '';
+
+            if (product.features && product.features.length > 0) {
+                product.features.forEach(feature => {
+                    const featureDiv = document.createElement('div');
+                    featureDiv.className = 'flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group';
+                    featureDiv.innerHTML = `
+                        <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-800 font-medium text-sm">${feature}</span>
+                    `;
+                    featuresContainer.appendChild(featureDiv);
+                });
+            } else {
+                // Fallback features if none provided
+                const defaultFeatures = ['High Quality', 'Professional Grade', 'Reliable Performance', 'Easy Installation'];
+                defaultFeatures.forEach(feature => {
+                    const featureDiv = document.createElement('div');
+                    featureDiv.className = 'flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group';
+                    featureDiv.innerHTML = `
+                        <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-800 font-medium text-sm">${feature}</span>
+                    `;
+                    featuresContainer.appendChild(featureDiv);
+                });
+            }
+        }
+
+        // Image switching functionality
+        window.changeImage = function(src, clickedThumbnail) {
+            const mainImage = document.getElementById('main-image');
+            mainImage.style.transform = 'scale(0.95)';
+            mainImage.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                mainImage.src = src;
+                mainImage.style.transform = 'scale(1)';
+                mainImage.style.opacity = '1';
+            }, 150);
+            
+            // Reset all thumbnails
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.classList.remove('border-purple-500', 'bg-purple-50', 'active', 'opacity-100');
+                thumb.classList.add('border-transparent', 'opacity-50');
+            });
+            
+            // Highlight clicked thumbnail
+            if (clickedThumbnail) {
+                clickedThumbnail.classList.remove('border-transparent', 'opacity-50');
+                clickedThumbnail.classList.add('border-purple-500', 'bg-purple-50', 'active', 'opacity-100');
+            }
+        };
+
+        // Update cart button with current price
+        function updateCartButton() {
+            if (!currentProduct) return;
+            
+            const totalPrice = currentProduct.price * currentQuantity;
+            const cartButtons = document.querySelectorAll('button');
+            cartButtons.forEach(button => {
+                if (button.textContent.includes('Add to Cart')) {
+                    const span = button.querySelector('span');
+                    if (span) {
+                        span.textContent = `Add to Cart - ${currentProduct.currency} ${totalPrice.toLocaleString()}.00`;
+                    }
+                }
+            });
+        }
+
+        // Initialize product page
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Product page loaded - checking elements...');
+            
+            // Check if dropdown elements exist
+            const userDropdownToggle = document.getElementById('user-dropdown-toggle');
+            const userDropdownMenu = document.getElementById('user-dropdown-menu');
+            const cartToggle = document.getElementById('cart-toggle');
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            console.log('User dropdown toggle:', !!userDropdownToggle);
+            console.log('User dropdown menu:', !!userDropdownMenu);
+            console.log('Cart toggle:', !!cartToggle);
+            console.log('Cart sidebar:', !!cartSidebar);
+            console.log('Mobile menu toggle:', !!mobileMenuToggle);
+            console.log('Mobile menu:', !!mobileMenu);
+            
+            // Get product ID from URL
+            const productId = getProductIdFromUrl();
+            
+            if (!productId) {
+                showError('No product specified in URL');
+                setTimeout(() => {
+                    window.location.href = 'shop.html';
+                }, 3000);
+                return;
+            }
+
+            // Fetch and display product
+            const product = await fetchProduct(productId);
+            if (product) {
+                populateProductData(product);
+                
+                // Set up quantity controls after product is loaded
+                const qtyMinusTop = document.getElementById('qty-minus-top');
+                const qtyPlusTop = document.getElementById('qty-plus-top');
+                const quantityTop = document.getElementById('quantity-top');
+                
+                // Decrease quantity
+                qtyMinusTop.addEventListener('click', function() {
+                    if (currentQuantity > 1) {
+                        currentQuantity--;
+                        quantityTop.textContent = currentQuantity;
+                        updateCartButton();
+                    }
+                });
+                
+                // Increase quantity
+                qtyPlusTop.addEventListener('click', function() {
+                    if (currentQuantity < 99) {
+                        currentQuantity++;
+                        quantityTop.textContent = currentQuantity;
+                        updateCartButton();
+                    }
+                });
+
+                // Add to cart functionality
+                const addToCartButtons = document.querySelectorAll('button');
+                addToCartButtons.forEach(button => {
+                    if (button.textContent.includes('Add to Cart')) {
+                        button.addEventListener('click', function() {
+                            if (currentProduct && currentProduct.inStock) {
+                                // Use the cart functionality from scripts.js if available
+                                if (window.addToCart) {
+                                    window.addToCart(currentProduct, currentQuantity);
+                                } else {
+                                    console.log('Adding to cart:', {
+                                        product: currentProduct,
+                                        quantity: currentQuantity
+                                    });
+                                    
+                                    // Show success message
+                                    const successDiv = document.createElement('div');
+                                    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
+                                    successDiv.textContent = `${currentProduct.name} added to cart!`;
+                                    document.body.appendChild(successDiv);
+                                    
+                                    setTimeout(() => {
+                                        successDiv.remove();
+                                    }, 3000);
+                                }
+                            } else {
+                                showError('Product is out of stock');
+                            }
+                        });
+                    }
+                });
+            } else {
+                // Redirect to shop if product not found
+                setTimeout(() => {
+                    window.location.href = 'shop.html';
+                }, 3000);
+                return;
+            }
+        });
+    </script>
 </body>
 </html>

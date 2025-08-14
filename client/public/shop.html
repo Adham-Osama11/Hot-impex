@@ -6,8 +6,18 @@
     <title>Shop - HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN -                    <a href="product.html?id=av-002" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="av-distribution" data-name="CVBS to HDMI Converter" data-price="89.99">>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Theme initialization script - must run before body content -->
+    <script>
+        // Check for saved dark mode preference and apply immediately
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
 </head>
 <body class="min-h-screen bg-gray-50">
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
@@ -51,15 +61,54 @@
                         </div>
                         
                         <!-- User Icon with Dropdown -->
-                        <div class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
-                            <!-- Simple SVG for user icon -->
-                            <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                            </svg>
-                            <!-- Dropdown Arrow -->
-                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
+                        <div class="relative">
+                            <div id="user-dropdown-toggle" class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                                <!-- Simple SVG for user icon -->
+                                <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                                <span id="user-display-name" class="hidden lg:inline text-gray-700">Account</span>
+                                <!-- Dropdown Arrow -->
+                                <svg class="w-5 h-5 text-gray-700 transition-transform duration-200" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            
+                            <!-- User Dropdown Menu -->
+                            <div id="user-dropdown-menu" class="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 py-2 hidden z-50">
+                                <!-- Not Logged In State -->
+                                <div id="user-not-logged-in" class="px-4 py-3 border-b border-gray-200/50">
+                                    <p class="text-sm text-gray-600 mb-3">Sign in to access your account</p>
+                                    <div class="space-y-2">
+                                        <button id="show-login-modal" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                            Sign In
+                                        </button>
+                                        <button id="show-register-modal" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                            Create Account
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Logged In State (Hidden by default) -->
+                                <div id="user-logged-in" class="hidden">
+                                    <div class="px-4 py-3 border-b border-gray-200/50">
+                                        <p class="text-sm font-medium text-gray-900" id="user-welcome">Welcome back!</p>
+                                        <p class="text-sm text-gray-600" id="user-email"></p>
+                                    </div>
+                                    <div class="py-1">
+                                        <a href="profile.html" id="user-profile-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                            <i class="fas fa-user mr-2"></i>My Profile
+                                        </a>
+                                        <a href="#" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                                        </a>
+                                        <hr class="my-1 border-gray-200/50">
+                                        <button id="user-logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/50 transition-colors duration-200">
+                                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Shopping Cart Icon with Count -->
@@ -78,37 +127,59 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="fixed inset-0 z-50 lg:hidden hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-        <div class="fixed top-0 right-0 h-full w-80 bg-white/15 backdrop-blur-3xl shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-white/30">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Menu</h2>
-                    <button id="close-mobile-menu" class="text-gray-800 dark:text-white hover:text-orange-400 transition-colors duration-200 p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <nav class="space-y-6">
-                    <ul class="space-y-4">
-                        <li><a href="/index.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Home</a></li>
-                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Shop</a></li>
-                        <li><a href="contact.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Contact Us</a></li>
-                        <li><a href="about.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">About Us</a></li>
-                    </ul>
-                    <div class="mt-8 pt-8 border-t border-white/30">
-                        <div class="flex items-center justify-between p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
-                            <span class="text-gray-800 dark:text-white font-medium">Dark Mode</span>
-                            <div id="mobile-theme-toggle" class="theme-toggle">
-                                <svg class="sun-icon w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
-                                </svg>
-                                <svg class="moon-icon w-5 h-5 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                                </svg>
-                            </div>
-                        </div>
+        <div class="absolute inset-0 bg-black/50" id="mobile-menu-backdrop"></div>
+        <div class="relative bg-white/95 backdrop-blur-md min-h-screen w-80 p-6 shadow-2xl">
+            <!-- Mobile Menu Header -->
+            <div class="flex items-center justify-between mb-8">
+                <img src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
+                <button id="mobile-menu-close" class="p-2 rounded-full hover:bg-gray-200/50 transition-colors duration-200">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu Items -->
+            <div class="space-y-4">
+                <a href="index.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Home</a>
+                <a href="shop.html" class="block text-gray-800 px-4 py-3 rounded-lg bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Shop</a>
+                <a href="contact.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Contact Us</a>
+                <a href="about.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">About Us</a>
+                
+                <hr class="my-6 border-gray-300">
+                
+                <!-- Mobile User Section -->
+                <div id="mobile-user-section">
+                    <!-- Not logged in state -->
+                    <div id="mobile-user-not-logged-in" class="space-y-3">
+                        <button id="mobile-show-login-modal" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                            Sign In
+                        </button>
+                        <button id="mobile-show-register-modal" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                            Create Account
+                        </button>
                     </div>
+                    
+                    <!-- Logged in state (hidden by default) -->
+                    <div id="mobile-user-logged-in" class="hidden space-y-3">
+                        <div class="px-4 py-3 bg-gray-100/50 rounded-lg">
+                            <p class="text-sm font-medium text-gray-900" id="mobile-user-welcome">Welcome back!</p>
+                            <p class="text-sm text-gray-600" id="mobile-user-email"></p>
+                        </div>
+                        <a href="profile.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200">
+                            <i class="fas fa-user mr-2"></i>My Profile
+                        </a>
+                        <a href="#" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200">
+                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                        </a>
+                        <button id="mobile-user-logout" class="w-full text-left text-red-600 px-4 py-3 rounded-lg hover:bg-red-50/50 transition-colors duration-200">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
                 </nav>
             </div>
         </div>
@@ -191,7 +262,7 @@
                 <!-- Products Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="products-grid">
                     <!-- Product Card 1 - 4K UHD Generator -->
-                    <a href="product.html?product=av-001" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="av-distribution" data-name="4K UHD Generator" data-price="299.99">
+                    <a href="product.html?id=av-001" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="av-distribution" data-name="4K UHD Generator" data-price="299.99">
                         <div class="relative h-64">
                             <img src="assets/images/Products/Av distribution/4K UHD GENRATOR.jpg" alt="4K UHD Generator" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -218,7 +289,7 @@
                     </a>
 
                     <!-- Product Card 2 - CVBS to HDMI Converter -->
-                    <a href="product.html?product=av-002" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="av-distribution" data-name="CVBS to HDMI Converter" data-price="89.99">
+                    <a href="product.html?id=av-002" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="av-distribution" data-name="CVBS to HDMI Converter" data-price="89.99">
                         <div class="relative h-64">
                             <img src="assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg" alt="CVBS to HDMI Converter" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -245,7 +316,7 @@
                     </a>
 
                     <!-- Product Card 3 - Premium AUX Cable -->
-                    <a href="product.html?product=cable-001" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="cable" data-name="Premium AUX Cable" data-price="19.99">
+                    <a href="product.html?id=cable-001" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="cable" data-name="Premium AUX Cable" data-price="19.99">
                         <div class="relative h-64">
                             <img src="assets/images/Products/Cable/AUX-CABLE.jpg" alt="Premium AUX Cable" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -272,7 +343,7 @@
                     </a>
 
                     <!-- Product Card 4 - DTECH HDMI Cable -->
-                    <a href="product.html?product=cable-002" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="cable" data-name="DTECH HDMI Cable" data-price="49.99">
+                    <a href="product.html?id=cable-002" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="cable" data-name="DTECH HDMI Cable" data-price="49.99">
                         <div class="relative h-64">
                             <img src="assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg" alt="DTECH HDMI Cable" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -299,7 +370,7 @@
                     </a>
 
                     <!-- Product Card 5 - Ceiling Bracket -->
-                    <a href="product.html?product=ceiling-001" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="ceiling-bracket" data-name="Projector Ceiling Mount" data-price="129.99">
+                    <a href="product.html?id=mount-001" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="ceiling-bracket" data-name="Projector Ceiling Mount" data-price="129.99">
                         <div class="relative h-64">
                             <img src="assets/images/Products/Ceiling bracket/PM4365F CEILING MOUNT.jpg" alt="Projector Ceiling Mount" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -326,7 +397,7 @@
                     </a>
 
                     <!-- Product Card 6 - Racing Simulator Cockpit -->
-                    <a href="product.html?product=gaming-002" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="gaming" data-name="Racing Simulator Cockpit" data-price="1299.99">
+                    <a href="product.html?id=gaming-002" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" data-category="gaming" data-name="Racing Simulator Cockpit" data-price="1299.99">
                         <div class="relative h-64">
                             <img src="assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg" alt="Racing Simulator Cockpit" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -507,8 +578,83 @@
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <!-- Login modal content will be handled by scripts.js -->
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <!-- Register modal content will be handled by scripts.js -->
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="notification-container" class="fixed bottom-4 right-4 z-50"></div>
+
     <!-- JavaScript -->
-    <script src="scripts.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    
+    <!-- Debug Script for Shop Page -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Shop page loaded - checking elements...');
+            
+            // Check if dropdown elements exist
+            const userDropdownToggle = document.getElementById('user-dropdown-toggle');
+            const userDropdownMenu = document.getElementById('user-dropdown-menu');
+            const cartToggle = document.getElementById('cart-toggle');
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            console.log('User dropdown toggle:', !!userDropdownToggle);
+            console.log('User dropdown menu:', !!userDropdownMenu);
+            console.log('Cart toggle:', !!cartToggle);
+            console.log('Cart sidebar:', !!cartSidebar);
+            console.log('Mobile menu toggle:', !!mobileMenuToggle);
+            console.log('Mobile menu:', !!mobileMenu);
+            
+            // Test dropdown manually
+            if (userDropdownToggle && userDropdownMenu) {
+                console.log('Adding manual dropdown test...');
+                userDropdownToggle.addEventListener('click', function(e) {
+                    console.log('Dropdown clicked!');
+                    e.stopPropagation();
+                    const isHidden = userDropdownMenu.classList.contains('hidden');
+                    console.log('Current state hidden:', isHidden);
+                    if (isHidden) {
+                        userDropdownMenu.classList.remove('hidden');
+                        console.log('Showing dropdown');
+                    } else {
+                        userDropdownMenu.classList.add('hidden');
+                        console.log('Hiding dropdown');
+                    }
+                });
+            }
+            
+            // Test cart manually
+            if (cartToggle && cartSidebar) {
+                console.log('Adding manual cart test...');
+                cartToggle.addEventListener('click', function(e) {
+                    console.log('Cart clicked!');
+                    e.stopPropagation();
+                    const isHidden = cartSidebar.classList.contains('translate-x-full');
+                    console.log('Cart hidden:', isHidden);
+                    if (isHidden) {
+                        cartSidebar.classList.remove('translate-x-full');
+                        console.log('Showing cart');
+                    } else {
+                        cartSidebar.classList.add('translate-x-full');
+                        console.log('Hiding cart');
+                    }
+                });
+            }
+        });
+    </script>
     
     <!-- Category Filtering JavaScript -->
     <script>

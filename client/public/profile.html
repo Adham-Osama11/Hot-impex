@@ -20,68 +20,177 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Theme initialization script - must run before body content -->
+    <script>
+        // Check for saved dark mode preference and apply immediately
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
-    <!-- Navigation -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="flex items-center space-x-2">
-                        <img src="assets/images/logos/logo.png" alt="Hot Impex" class="h-10 w-10">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Hot Impex</span>
-                    </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors">Home</a>
-                    <a href="shop.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors">Shop</a>
-                    <a href="about.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors">About</a>
-                    <a href="contact.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors">Contact</a>
-                </div>
-
-                <!-- User Actions -->
-                <div class="flex items-center space-x-4">
-                    <!-- Theme Toggle -->
-                    <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                        <i class="fas fa-sun sun-icon"></i>
-                        <i class="fas fa-moon moon-icon opacity-0"></i>
-                    </button>
-
-                    <!-- User Menu -->
-                    <div class="relative" id="user-menu">
-                        <button id="user-menu-toggle" class="flex items-center space-x-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                            <i class="fas fa-user"></i>
-                            <span class="hidden md:block" id="user-name">Profile</span>
+<body class="min-h-screen">
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+            <nav class="flex flex-col lg:flex-row items-center justify-between space-y-6 lg:space-y-0">
+                <!-- Mobile Header with Hot Button and Menu Toggle -->
+                <div class="flex items-center justify-between w-full lg:w-auto">
+                    <!-- Hot Button Section -->
+                    <div class="flex-shrink-0">
+                        <button class="logo text-gray-800 font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-lg sm:text-xl bg-white/15 backdrop-blur-3xl">
+                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
                         </button>
-                        <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 hidden">
-                            <a href="profile.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg">
-                                <i class="fas fa-user mr-2"></i>Profile
-                            </a>
-                            <button onclick="logout()" class="w-full text-left block px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                            </button>
-                        </div>
                     </div>
 
-                    <!-- Mobile Menu Toggle -->
-                    <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                        <i class="fas fa-bars"></i>
+                    <!-- Mobile Menu Toggle Button -->
+                    <button id="mobile-menu-toggle" class="lg:hidden text-gray-800 p-3 rounded-full border border-white/30 shadow-2xl transition-all duration-200 bg-white/15 backdrop-blur-3xl hover:bg-white/25">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
                     </button>
                 </div>
-            </div>
-        </nav>
+
+                <!-- Main Navigation Section -->
+                <div id="main-nav" class="w-full lg:w-auto hidden lg:block">
+                    <div class="rounded-full p-3 flex flex-col lg:flex-row items-center border border-white/30 shadow-2xl gap-3 lg:gap-6 w-full lg:w-auto bg-white/15 backdrop-blur-3xl">
+                        <a href="index.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Home</a>
+                        <a href="shop.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Shop</a>
+                        <a href="contact.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Contact Us</a>
+                        <a href="about.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">About Us</a>
+                        
+                        <!-- Dark Mode Toggle -->
+                        <div class="flex items-center justify-center px-6 py-3 w-full lg:w-auto">
+                            <div id="theme-toggle" class="theme-toggle" title="Toggle Dark Mode">
+                                <svg class="sun-icon absolute top-1 left-1 w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg class="moon-icon absolute top-1 right-1 w-5 h-5 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- User Icon with Dropdown -->
+                        <div class="relative">
+                            <div id="user-dropdown-toggle" class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                                <!-- Simple SVG for user icon -->
+                                <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                                <span id="user-display-name" class="hidden lg:inline text-gray-700">Profile</span>
+                                <!-- Dropdown Arrow -->
+                                <svg class="w-5 h-5 text-gray-700 transition-transform duration-200" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            
+                            <!-- User Dropdown Menu -->
+                            <div id="user-dropdown-menu" class="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 py-2 hidden z-50">
+                                <!-- Not Logged In State -->
+                                <div id="user-not-logged-in" class="px-4 py-3 border-b border-gray-200/50">
+                                    <p class="text-sm text-gray-600 mb-3">Sign in to access your account</p>
+                                    <div class="space-y-2">
+                                        <button id="show-login-modal" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                            Sign In
+                                        </button>
+                                        <button id="show-register-modal" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                            Create Account
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Logged In State (Hidden by default) -->
+                                <div id="user-logged-in" class="hidden">
+                                    <div class="px-4 py-3 border-b border-gray-200/50">
+                                        <p class="text-sm font-medium text-gray-900" id="user-welcome">Welcome back!</p>
+                                        <p class="text-sm text-gray-600" id="user-email"></p>
+                                    </div>
+                                    <div class="py-1">
+                                        <a href="profile.html" id="user-profile-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                            <i class="fas fa-user mr-2"></i>My Profile
+                                        </a>
+                                        <a href="#" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                                        </a>
+                                        <hr class="my-1 border-gray-200/50">
+                                        <button id="user-logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/50 transition-colors duration-200">
+                                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">My Profile</h1>
-            <p class="text-gray-600 dark:text-gray-400">Manage your account information and preferences</p>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 lg:hidden hidden">
+        <div class="absolute inset-0 bg-black/50" id="mobile-menu-backdrop"></div>
+        <div class="relative bg-white/95 backdrop-blur-md min-h-screen w-80 p-6 shadow-2xl">
+            <!-- Mobile Menu Header -->
+            <div class="flex items-center justify-between mb-8">
+                <img src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
+                <button id="mobile-menu-close" class="p-2 rounded-full hover:bg-gray-200/50 transition-colors duration-200">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu Items -->
+            <div class="space-y-4">
+                <a href="index.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Home</a>
+                <a href="shop.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Shop</a>
+                <a href="contact.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Contact Us</a>
+                <a href="about.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">About Us</a>
+                
+                <hr class="my-6 border-gray-300">
+                
+                <!-- Mobile User Section -->
+                <div id="mobile-user-section">
+                    <!-- Not logged in state -->
+                    <div id="mobile-user-not-logged-in" class="space-y-3">
+                        <button id="mobile-show-login-modal" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                            Sign In
+                        </button>
+                        <button id="mobile-show-register-modal" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                            Create Account
+                        </button>
+                    </div>
+                    
+                    <!-- Logged in state (hidden by default) -->
+                    <div id="mobile-user-logged-in" class="hidden space-y-3">
+                        <div class="px-4 py-3 bg-gray-100/50 rounded-lg">
+                            <p class="text-sm font-medium text-gray-900" id="mobile-user-welcome">Welcome back!</p>
+                            <p class="text-sm text-gray-600" id="mobile-user-email"></p>
+                        </div>
+                        <a href="profile.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200">
+                            <i class="fas fa-user mr-2"></i>My Profile
+                        </a>
+                        <a href="#" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200">
+                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                        </a>
+                        <button id="mobile-user-logout" class="w-full text-left text-red-600 px-4 py-3 rounded-lg hover:bg-red-50/50 transition-colors duration-200">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-8">
+        <div class="container mx-auto px-4">
+            <!-- Page Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">My Profile</h1>
+                <p class="text-gray-600 dark:text-gray-400">Manage your account information and preferences</p>
+            </div>
 
         <!-- Profile Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

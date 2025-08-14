@@ -313,7 +313,8 @@ function updateMobileDarkModeToggle(isDarkMode) {
 function initializeMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
-    const closeMobileMenu = document.getElementById('close-mobile-menu');
+    const closeMobileMenu = document.getElementById('mobile-menu-close') || document.getElementById('close-mobile-menu');
+    const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
     
     if (mobileMenuBtn && mobileMenu) {
         mobileMenuBtn.addEventListener('click', () => {
@@ -324,6 +325,14 @@ function initializeMobileMenu() {
     
     if (closeMobileMenu && mobileMenu) {
         closeMobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+    }
+    
+    // Close menu when clicking backdrop
+    if (mobileMenuBackdrop && mobileMenu) {
+        mobileMenuBackdrop.addEventListener('click', () => {
             mobileMenu.classList.add('hidden');
             document.body.style.overflow = '';
         });

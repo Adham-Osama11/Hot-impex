@@ -1,4 +1,60 @@
-// Hot Impex Website JavaScript - Enhanced Version
+// Hot Impex Website JavaScript - Enhanced Version with API Integration
+
+// API Configuration
+const API_BASE_URL = window.location.origin + '/api';
+
+// API Service Functions
+class APIService {
+    static async request(endpoint, options = {}) {
+        try {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                // Return the server error response instead of throwing a generic error
+                return data;
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    }
+
+    static async getProducts(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        const endpoint = queryString ? `/products?${queryString}` : '/products';
+        return await this.request(endpoint);
+    }
+
+    static async getProduct(id) {
+        return await this.request(`/products/${id}`);
+    }
+
+    static async getCategories() {
+        return await this.request('/products/categories');
+    }
+
+    static async searchProducts(query) {
+        return await this.request(`/products/search/${encodeURIComponent(query)}`);
+    }
+
+    static async getFeaturedProducts() {
+        return await this.getProducts({ featured: 'true', limit: 4 });
+    }
+
+    static async getBestSellers() {
+        return await this.getProducts({ bestSeller: 'true', limit: 4 });
+    }
+}
 
 // Global variables
 let currentProducts = [];
@@ -162,6 +218,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeHeroProductShowcase(); // Initialize product showcase instead of video
     initStickyNavbar(); // Initialize sticky navbar
     loadProductsFromStorage();
+    
+    // Load dynamic content from API
+    loadDynamicContent();
     
     // Initialize products on main page
     if (document.getElementById('featured-products')) {
@@ -1649,6 +1708,164 @@ function updateHeroContent(index) {
     }
 }
 
+// ===== DYNAMIC PRODUCT LOADING =====
+
+// Load products from API and update the page
+async function loadDynamicContent() {
+    try {
+        // Load best sellers for the homepage
+        if (document.querySelector('.best-sellers-grid')) {
+            await loadBestSellers();
+        }
+
+        // Load featured products for hero showcase
+        if (document.getElementById('active-product-card')) {
+            await loadHeroProducts();
+        }
+
+        console.log('Dynamic content loaded successfully');
+    } catch (error) {
+        console.error('Error loading dynamic content:', error);
+        // Fallback to static content if API fails
+    }
+}
+
+// Load best seller products
+async function loadBestSellers() {
+    try {
+        const response = await APIService.getBestSellers();
+        const products = response.data.products;
+        
+        const bestSellersGrid = document.querySelector('.best-sellers-grid');
+        if (!bestSellersGrid) return;
+
+        // Clear existing products (except the structure)
+        const existingCards = bestSellersGrid.querySelectorAll('.card');
+        existingCards.forEach(card => card.parentElement.remove());
+
+        // Add new products from API
+        products.forEach(product => {
+            const productCard = createProductCard(product);
+            bestSellersGrid.appendChild(productCard);
+        });
+
+    } catch (error) {
+        console.error('Error loading best sellers:', error);
+    }
+}
+
+// Load featured products for hero section
+async function loadHeroProducts() {
+    try {
+        const response = await APIService.getFeaturedProducts();
+        const products = response.data.products;
+        
+        if (products.length > 0) {
+            // Update the hero product showcase with real data
+            updateHeroShowcase(products);
+        }
+    } catch (error) {
+        console.error('Error loading hero products:', error);
+    }
+}
+
+// Create a product card element
+function createProductCard(product) {
+    const cardWrapper = document.createElement('a');
+    cardWrapper.href = `product.html?product=${product.id}`;
+    cardWrapper.className = 'block';
+
+    const badge = product.bestSeller ? 'Best Seller' : 
+                  product.featured ? 'Featured' : '';
+
+    cardWrapper.innerHTML = `
+        <div class="card" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-price="${product.price}">
+            <div class="card__shine"></div>
+            <div class="card__glow"></div>
+            <div class="card__content">
+                ${badge ? `<div class="card__badge">${badge}</div>` : ''}
+                <div class="card__image" style="background-image: url('${product.mainImage}'); background-size: cover; background-position: center;"></div>
+                <div class="card__text">
+                    <p class="card__title">${product.name}</p>
+                    <p class="card__description">${product.shortDescription}</p>
+                </div>
+                <div class="card__footer">
+                    <div class="card__price">${product.price}${product.currency}</div>
+                    <div class="card__button add-to-cart">
+                        <svg height="16" width="16" viewBox="0 0 24 24">
+                            <path stroke-width="2" stroke="currentColor" d="M4 12H20M12 4V20" fill="none"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    return cardWrapper;
+}
+
+// Update hero showcase with real product data
+function updateHeroShowcase(products) {
+    // Update the product data for the hero carousel
+    const heroProducts = products.slice(0, 3).map(product => ({
+        title: product.name,
+        description: product.shortDescription,
+        image: product.mainImage,
+        features: product.tags || ['Premium Quality', 'Fast Delivery', 'Best Price']
+    }));
+
+    // Store globally for the carousel
+    window.heroProducts = heroProducts;
+    
+    // Update the active card with the first product
+    if (heroProducts.length > 0) {
+        updateHeroCard(heroProducts[0], 0);
+    }
+}
+
+// Update a single hero card
+function updateHeroCard(product, index) {
+    const cardTitle = document.getElementById('product-title');
+    const cardDescription = document.getElementById('product-description');
+    const cardImage = document.getElementById('product-image');
+    const cardFeatures = document.getElementById('product-features');
+    const cardNumber = document.getElementById('card-number');
+
+    if (cardTitle) cardTitle.textContent = product.title;
+    if (cardDescription) cardDescription.textContent = product.description;
+    if (cardImage) cardImage.src = product.image;
+    if (cardNumber) cardNumber.textContent = `${index + 1}/${window.heroProducts?.length || 3}`;
+    
+    if (cardFeatures) {
+        cardFeatures.innerHTML = '';
+        product.features.forEach(feature => {
+            const tag = document.createElement('span');
+            tag.className = 'feature-tag px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300';
+            tag.textContent = feature;
+            cardFeatures.appendChild(tag);
+        });
+    }
+}
+
+// Enhanced search functionality with API
+async function performSearch(query) {
+    if (!query.trim()) return;
+    
+    try {
+        const response = await APIService.searchProducts(query);
+        const products = response.data.products;
+        
+        // Redirect to shop page with search results
+        const searchParams = new URLSearchParams({ search: query });
+        window.location.href = `shop.html?${searchParams.toString()}`;
+        
+    } catch (error) {
+        console.error('Search error:', error);
+        // Fallback to basic search
+        window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
+    }
+}
+
 // ===== DYNAMIC PRODUCT SHOWCASE FUNCTIONALITY =====
 
 // Array of product images for showcase
@@ -1722,3 +1939,899 @@ window.toggleCart = toggleCart;
 window.closeCartSidebar = closeCartSidebar;
 window.initProductShowcase = initProductShowcase;
 window.displayProduct = displayProduct;
+
+// Authentication System
+class AuthService {
+    static async login(email, password) {
+        const response = await APIService.request('/users/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, password })
+        });
+        
+        console.log('=== AUTH SERVICE LOGIN DEBUG ===');
+        console.log('Full login response:', response);
+        console.log('Response status:', response?.status);
+        console.log('Response data:', response?.data);
+        console.log('Token in response:', response?.data?.token);
+        console.log('User in response:', response?.data?.user);
+        
+        return response;
+    }
+
+    static async register(userData) {
+        return await APIService.request('/users/register', {
+            method: 'POST',
+            body: JSON.stringify(userData)
+        });
+    }
+
+    static async getCurrentUser() {
+        const token = this.getToken();
+        if (!token) return null;
+
+        try {
+            return await APIService.request('/users/profile', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        } catch (error) {
+            this.logout(); // Clear invalid token
+            return null;
+        }
+    }
+
+    static setToken(token) {
+        console.log('=== SET TOKEN DEBUG ===');
+        console.log('Token being set:', token);
+        console.log('Token type:', typeof token);
+        console.log('Token value:', JSON.stringify(token));
+        
+        if (token === undefined || token === null) {
+            console.error('WARNING: Attempting to set undefined/null token!');
+        }
+        
+        localStorage.setItem('hotimpex-token', token);
+        
+        // Verify it was saved correctly
+        const saved = localStorage.getItem('hotimpex-token');
+        console.log('Token after saving:', saved);
+    }
+
+    static getToken() {
+        return localStorage.getItem('hotimpex-token');
+    }
+
+    static logout() {
+        localStorage.removeItem('hotimpex-token');
+        localStorage.removeItem('hotimpex-user');
+        window.location.reload();
+    }
+
+    static setUser(user) {
+        localStorage.setItem('hotimpex-user', JSON.stringify(user));
+    }
+
+    static getUser() {
+        const user = localStorage.getItem('hotimpex-user');
+        return user ? JSON.parse(user) : null;
+    }
+
+    static isLoggedIn() {
+        return !!this.getToken();
+    }
+}
+
+// Authentication UI Management
+class AuthUI {
+    static init() {
+        this.bindEvents();
+        this.updateUI();
+    }
+
+    static bindEvents() {
+        // User dropdown toggle
+        const userDropdownToggle = document.getElementById('user-dropdown-toggle');
+        const userDropdownMenu = document.getElementById('user-dropdown-menu');
+        const userDropdownArrow = document.getElementById('user-dropdown-arrow');
+
+        if (userDropdownToggle && userDropdownMenu) {
+            userDropdownToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isVisible = !userDropdownMenu.classList.contains('hidden');
+                
+                if (isVisible) {
+                    userDropdownMenu.classList.add('hidden');
+                    userDropdownArrow.style.transform = 'rotate(0deg)';
+                } else {
+                    userDropdownMenu.classList.remove('hidden');
+                    userDropdownArrow.style.transform = 'rotate(180deg)';
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                userDropdownMenu.classList.add('hidden');
+                userDropdownArrow.style.transform = 'rotate(0deg)';
+            });
+        }
+
+        // Modal show/hide events
+        this.bindModalEvents();
+        
+        // Form submission events
+        this.bindFormEvents();
+        
+        // Logout event
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                AuthService.logout();
+            });
+        }
+    }
+
+    static bindModalEvents() {
+        // Show modals
+        const showLoginBtn = document.getElementById('show-login-modal');
+        const showRegisterBtn = document.getElementById('show-register-modal');
+        
+        if (showLoginBtn) {
+            showLoginBtn.addEventListener('click', () => this.showLoginModal());
+        }
+        
+        if (showRegisterBtn) {
+            showRegisterBtn.addEventListener('click', () => this.showRegisterModal());
+        }
+
+        // Close modals
+        const closeLoginBtn = document.getElementById('close-login-modal');
+        const closeRegisterBtn = document.getElementById('close-register-modal');
+        
+        if (closeLoginBtn) {
+            closeLoginBtn.addEventListener('click', () => this.hideLoginModal());
+        }
+        
+        if (closeRegisterBtn) {
+            closeRegisterBtn.addEventListener('click', () => this.hideRegisterModal());
+        }
+
+        // Switch between modals
+        const switchToRegister = document.getElementById('switch-to-register');
+        const switchToLogin = document.getElementById('switch-to-login');
+        
+        if (switchToRegister) {
+            switchToRegister.addEventListener('click', () => {
+                this.hideLoginModal();
+                this.showRegisterModal();
+            });
+        }
+        
+        if (switchToLogin) {
+            switchToLogin.addEventListener('click', () => {
+                this.hideRegisterModal();
+                this.showLoginModal();
+            });
+        }
+
+        // Password visibility toggles
+        const toggleLoginPassword = document.getElementById('toggle-login-password');
+        const toggleRegisterPassword = document.getElementById('toggle-register-password');
+        
+        if (toggleLoginPassword) {
+            toggleLoginPassword.addEventListener('click', () => {
+                this.togglePasswordVisibility('login-password');
+            });
+        }
+        
+        if (toggleRegisterPassword) {
+            toggleRegisterPassword.addEventListener('click', () => {
+                this.togglePasswordVisibility('register-password');
+            });
+        }
+
+        // Close modals when clicking outside
+        const loginModal = document.getElementById('login-modal');
+        const registerModal = document.getElementById('register-modal');
+        
+        if (loginModal) {
+            loginModal.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    this.hideLoginModal();
+                }
+            });
+        }
+        
+        if (registerModal) {
+            registerModal.addEventListener('click', (e) => {
+                if (e.target === registerModal) {
+                    this.hideRegisterModal();
+                }
+            });
+        }
+    }
+
+    static bindFormEvents() {
+        // Login form
+        const loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this.handleLogin(e);
+            });
+        }
+
+        // Register form
+        const registerForm = document.getElementById('register-form');
+        if (registerForm) {
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this.handleRegister(e);
+            });
+        }
+    }
+
+    static async handleLogin(e) {
+        const form = e.target;
+        const formData = new FormData(form);
+        const email = formData.get('email');
+        const password = formData.get('password');
+
+        try {
+            this.clearError('login-error');
+            this.setLoading(form, true);
+
+            const response = await AuthService.login(email, password);
+            
+            console.log('Login response:', response);
+            console.log('Token from response:', response?.data?.token);
+            console.log('User from response:', response?.data?.user);
+            
+            if (response.status === 'success') {
+                console.log('Setting token:', response.data.token);
+                AuthService.setToken(response.data.token);
+                AuthService.setUser(response.data.user);
+                
+                // Verify token was saved
+                const savedToken = AuthService.getToken();
+                const savedUser = AuthService.getUser();
+                console.log('Token saved in localStorage:', savedToken);
+                console.log('User saved in localStorage:', savedUser);
+                
+                this.hideLoginModal();
+                this.updateUI();
+                this.showSuccess('Login successful!');
+            } else {
+                console.log('Login failed:', response);
+                this.showError('login-error', response.message || 'Login failed');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            this.showError('login-error', 'Login failed. Please try again.');
+        } finally {
+            this.setLoading(form, false);
+        }
+    }
+
+    static async handleRegister(e) {
+        const form = e.target;
+        const formData = new FormData(form);
+        
+        const userData = {
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            password: formData.get('password')
+        };
+
+        // Client-side validation
+        const validationError = this.validateRegistrationData(userData);
+        if (validationError) {
+            this.showError('register-error', validationError);
+            return;
+        }
+
+        try {
+            this.clearError('register-error');
+            this.setLoading(form, true);
+
+            const response = await AuthService.register(userData);
+            
+            if (response.status === 'success') {
+                this.showSuccess('Account created successfully! Please sign in.', 'register-success');
+                form.reset();
+                setTimeout(() => {
+                    this.hideRegisterModal();
+                    this.showLoginModal();
+                }, 2000);
+            } else {
+                // Handle validation errors more specifically
+                let errorMessage = response.message || 'Registration failed';
+                
+                // If there are validation errors, show them in detail
+                if (response.errors && Array.isArray(response.errors)) {
+                    errorMessage = response.errors.map(error => error.msg || error.message || error).join(', ');
+                }
+                
+                this.showError('register-error', errorMessage);
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            this.showError('register-error', 'Registration failed. Please try again.');
+        } finally {
+            this.setLoading(form, false);
+        }
+    }
+
+    static validateRegistrationData(userData) {
+        // Check required fields
+        if (!userData.firstName || userData.firstName.trim().length === 0) {
+            return 'First name is required';
+        }
+        
+        if (!userData.lastName || userData.lastName.trim().length === 0) {
+            return 'Last name is required';
+        }
+        
+        if (!userData.email || userData.email.trim().length === 0) {
+            return 'Email is required';
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(userData.email)) {
+            return 'Please enter a valid email address';
+        }
+        
+        if (!userData.password || userData.password.length === 0) {
+            return 'Password is required';
+        }
+        
+        // Password validation
+        if (userData.password.length < 6) {
+            return 'Password must be at least 6 characters long';
+        }
+        
+        // Phone validation (if provided)
+        if (userData.phone && userData.phone.trim().length > 0) {
+            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            if (!phoneRegex.test(userData.phone.replace(/\s/g, ''))) {
+                return 'Please enter a valid phone number';
+            }
+        }
+        
+        return null; // No validation errors
+    }
+
+    static updateUI() {
+        const user = AuthService.getUser();
+        const isLoggedIn = AuthService.isLoggedIn();
+
+        // Update user display name
+        const userDisplayName = document.getElementById('user-display-name');
+        if (userDisplayName) {
+            userDisplayName.textContent = isLoggedIn ? `Hi, ${user?.firstName || 'User'}` : 'Account';
+        }
+
+        // Show/hide login states
+        const notLoggedIn = document.getElementById('user-not-logged-in');
+        const loggedIn = document.getElementById('user-logged-in');
+
+        if (notLoggedIn && loggedIn) {
+            if (isLoggedIn) {
+                notLoggedIn.classList.add('hidden');
+                loggedIn.classList.remove('hidden');
+                
+                // Update user info
+                const userWelcome = document.getElementById('user-welcome');
+                const userEmail = document.getElementById('user-email');
+                
+                if (userWelcome && user) {
+                    userWelcome.textContent = `Welcome back, ${user.firstName}!`;
+                }
+                
+                if (userEmail && user) {
+                    userEmail.textContent = user.email;
+                }
+            } else {
+                notLoggedIn.classList.remove('hidden');
+                loggedIn.classList.add('hidden');
+            }
+        }
+    }
+
+    static showLoginModal() {
+        const modal = document.getElementById('login-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    static hideLoginModal() {
+        const modal = document.getElementById('login-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            this.clearError('login-error');
+        }
+    }
+
+    static showRegisterModal() {
+        const modal = document.getElementById('register-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    static hideRegisterModal() {
+        const modal = document.getElementById('register-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            this.clearError('register-error');
+            this.clearSuccess('register-success');
+        }
+    }
+
+    static togglePasswordVisibility(passwordFieldId) {
+        const passwordField = document.getElementById(passwordFieldId);
+        if (passwordField) {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+        }
+    }
+
+    static showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+            errorElement.classList.remove('hidden');
+            errorElement.querySelector('p').textContent = message;
+        }
+    }
+
+    static clearError(elementId) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+            errorElement.classList.add('hidden');
+            errorElement.querySelector('p').textContent = '';
+        }
+    }
+
+    static showSuccess(message, elementId = 'register-success') {
+        const successElement = document.getElementById(elementId);
+        if (successElement) {
+            successElement.classList.remove('hidden');
+            successElement.querySelector('p').textContent = message;
+        }
+    }
+
+    static clearSuccess(elementId) {
+        const successElement = document.getElementById(elementId);
+        if (successElement) {
+            successElement.classList.add('hidden');
+            successElement.querySelector('p').textContent = '';
+        }
+    }
+
+    static setLoading(form, isLoading) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            if (isLoading) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                `;
+            } else {
+                submitBtn.disabled = false;
+                const originalText = form.id === 'login-form' ? 'Sign In' : 'Create Account';
+                submitBtn.textContent = originalText;
+            }
+        }
+    }
+}
+
+// Initialize authentication when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    AuthUI.init();
+});
+
+// Make auth functions globally available
+window.AuthService = AuthService;
+window.AuthUI = AuthUI;
+
+// ===== PROFILE PAGE FUNCTIONALITY =====
+
+// Profile page initialization
+function initializeProfile() {
+    console.log('Initializing profile page...');
+    
+    const token = localStorage.getItem('hotimpex-token');
+    const user = localStorage.getItem('hotimpex-user');
+    
+    console.log('Token exists:', !!token);
+    console.log('User data exists:', !!user);
+    console.log('Full token:', token);
+    console.log('Full user:', user);
+    
+    if (!isUserLoggedIn()) {
+        console.log('User not logged in, redirecting to home page');
+        // Add a delay to show the issue
+        setTimeout(() => {
+            alert('Please log in to access your profile');
+            window.location.href = 'index.html';
+        }, 1000);
+        return;
+    }
+    
+    console.log('User is logged in, loading profile...');
+    loadUserProfile();
+    initializeProfileForm();
+    initializePasswordForm();
+    initializeUserMenu();
+}
+
+// Check if user is logged in
+function isUserLoggedIn() {
+    const token = localStorage.getItem('hotimpex-token');
+    const user = localStorage.getItem('hotimpex-user');
+    return token && user;
+}
+
+// Get current user data
+function getCurrentUser() {
+    const userData = localStorage.getItem('hotimpex-user');
+    return userData ? JSON.parse(userData) : null;
+}
+
+// Load user profile data
+async function loadUserProfile() {
+    try {
+        showLoading();
+        const token = localStorage.getItem('hotimpex-token');
+        
+        console.log('=== PROFILE LOAD DEBUG ===');
+        console.log('Raw token from localStorage:', token);
+        console.log('Token type:', typeof token);
+        console.log('Token length:', token ? token.length : 'null');
+        console.log('Token first 50 chars:', token ? token.substring(0, 50) : 'null');
+        
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+        
+        console.log('Making API request with Authorization header...');
+        const response = await APIService.request('/users/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        console.log('Profile response:', response);
+        
+        if (response.status === 'success') {
+            updateProfileUI(response.data.user);
+            // Update localStorage with fresh data
+            localStorage.setItem('hotimpex-user', JSON.stringify(response.data.user));
+        } else {
+            console.error('Profile load error:', response);
+            showError(response.message || 'Failed to load profile');
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+        showError('Failed to load profile data');
+        // If token is invalid, redirect to login
+        if (error.message?.includes('token') || error.message?.includes('auth')) {
+            logout();
+        }
+    } finally {
+        hideLoading();
+    }
+}
+
+// Update profile UI with user data
+function updateProfileUI(user) {
+    // Profile card
+    const profileInitials = document.getElementById('profile-initials');
+    const profileName = document.getElementById('profile-name');
+    const profileEmail = document.getElementById('profile-email');
+    const memberSince = document.getElementById('member-since');
+    
+    if (profileInitials) {
+        const initials = (user.firstName?.[0] || '') + (user.lastName?.[0] || '');
+        profileInitials.textContent = initials || user.email?.[0]?.toUpperCase() || 'U';
+    }
+    
+    if (profileName) {
+        profileName.textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
+    }
+    
+    if (profileEmail) {
+        profileEmail.textContent = user.email || '';
+    }
+    
+    if (memberSince) {
+        const date = new Date(user.createdAt || user.registeredAt || Date.now());
+        memberSince.textContent = date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long' 
+        });
+    }
+    
+    // Form fields
+    const firstNameInput = document.getElementById('firstName');
+    const lastNameInput = document.getElementById('lastName');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const roleInput = document.getElementById('role');
+    
+    if (firstNameInput) firstNameInput.value = user.firstName || '';
+    if (lastNameInput) lastNameInput.value = user.lastName || '';
+    if (emailInput) emailInput.value = user.email || '';
+    if (phoneInput) phoneInput.value = user.phone || '';
+    if (roleInput) roleInput.value = user.role || 'customer';
+    
+    // Update user menu
+    const userNameSpan = document.getElementById('user-name');
+    if (userNameSpan) {
+        userNameSpan.textContent = user.firstName || 'Profile';
+    }
+}
+
+// Initialize profile form
+function initializeProfileForm() {
+    const form = document.getElementById('profile-form');
+    if (form) {
+        form.addEventListener('submit', handleProfileUpdate);
+    }
+}
+
+// Initialize password form
+function initializePasswordForm() {
+    const form = document.getElementById('password-form');
+    if (form) {
+        form.addEventListener('submit', handlePasswordChange);
+    }
+}
+
+// Initialize user menu dropdown
+function initializeUserMenu() {
+    const userMenuToggle = document.getElementById('user-menu-toggle');
+    const userDropdown = document.getElementById('user-dropdown');
+    
+    if (userMenuToggle && userDropdown) {
+        userMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            userDropdown.classList.add('hidden');
+        });
+    }
+}
+
+// Toggle edit mode
+function toggleEdit() {
+    const editButton = document.getElementById('edit-toggle');
+    const formActions = document.getElementById('form-actions');
+    const inputs = document.querySelectorAll('#profile-form input:not([readonly])');
+    
+    const isEditing = editButton.innerHTML.includes('Cancel');
+    
+    if (isEditing) {
+        cancelEdit();
+    } else {
+        // Enable editing
+        inputs.forEach(input => input.disabled = false);
+        formActions.classList.remove('hidden');
+        editButton.innerHTML = '<i class="fas fa-times mr-2"></i>Cancel Edit';
+        editButton.className = editButton.className.replace('bg-blue-600 hover:bg-blue-700', 'bg-gray-600 hover:bg-gray-700');
+    }
+}
+
+// Cancel edit mode
+function cancelEdit() {
+    const editButton = document.getElementById('edit-toggle');
+    const formActions = document.getElementById('form-actions');
+    const inputs = document.querySelectorAll('#profile-form input:not([readonly])');
+    
+    // Disable editing
+    inputs.forEach(input => input.disabled = true);
+    formActions.classList.add('hidden');
+    editButton.innerHTML = '<i class="fas fa-edit mr-2"></i>Edit Profile';
+    editButton.className = editButton.className.replace('bg-gray-600 hover:bg-gray-700', 'bg-blue-600 hover:bg-blue-700');
+    
+    // Reload user data to reset form
+    const user = getCurrentUser();
+    if (user) {
+        updateProfileUI(user);
+    }
+}
+
+// Handle profile update
+async function handleProfileUpdate(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const profileData = {
+        firstName: formData.get('firstName').trim(),
+        lastName: formData.get('lastName').trim(),
+        phone: formData.get('phone').trim()
+    };
+    
+    // Validate required fields
+    if (!profileData.firstName || !profileData.lastName) {
+        showError('First name and last name are required');
+        return;
+    }
+    
+    // Validate phone if provided
+    if (profileData.phone && !validatePhone(profileData.phone)) {
+        showError('Please enter a valid phone number');
+        return;
+    }
+    
+    try {
+        showLoading();
+        const token = localStorage.getItem('hotimpex-token');
+        
+        const response = await APIService.request('/users/profile', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(profileData)
+        });
+        
+        if (response.status === 'success') {
+            showSuccess('Profile updated successfully!');
+            updateProfileUI(response.data.user);
+            localStorage.setItem('hotimpex-user', JSON.stringify(response.data.user));
+            cancelEdit();
+        } else {
+            showError(response.message || 'Failed to update profile');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        showError('Failed to update profile');
+    } finally {
+        hideLoading();
+    }
+}
+
+// Handle password change
+async function handlePasswordChange(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const passwordData = {
+        currentPassword: formData.get('currentPassword'),
+        newPassword: formData.get('newPassword'),
+        confirmPassword: formData.get('confirmPassword')
+    };
+    
+    // Validate fields
+    if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+        showError('All password fields are required');
+        return;
+    }
+    
+    if (passwordData.newPassword.length < 6) {
+        showError('New password must be at least 6 characters long');
+        return;
+    }
+    
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+        showError('New passwords do not match');
+        return;
+    }
+    
+    try {
+        showLoading();
+        const token = localStorage.getItem('hotimpex-token');
+        
+        const response = await APIService.request('/users/change-password', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                currentPassword: passwordData.currentPassword,
+                newPassword: passwordData.newPassword
+            })
+        });
+        
+        if (response.status === 'success') {
+            showSuccess('Password changed successfully!');
+            document.getElementById('password-form').reset();
+        } else {
+            showError(response.message || 'Failed to change password');
+        }
+    } catch (error) {
+        console.error('Error changing password:', error);
+        showError('Failed to change password');
+    } finally {
+        hideLoading();
+    }
+}
+
+// Validate phone number
+function validatePhone(phone) {
+    // Basic phone validation - allows international formats
+    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+    return phoneRegex.test(phone.trim());
+}
+
+// Show loading overlay
+function showLoading() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.classList.remove('hidden');
+    }
+}
+
+// Hide loading overlay
+function hideLoading() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
+}
+
+// Show error message
+function showError(message) {
+    const container = document.getElementById('message-container');
+    const errorDiv = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+    const successDiv = document.getElementById('success-message');
+    
+    if (container && errorDiv && errorText) {
+        container.classList.remove('hidden');
+        errorDiv.classList.remove('hidden');
+        successDiv.classList.add('hidden');
+        errorText.textContent = message;
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            container.classList.add('hidden');
+        }, 5000);
+    }
+}
+
+// Show success message
+function showSuccess(message) {
+    const container = document.getElementById('message-container');
+    const successDiv = document.getElementById('success-message');
+    const successText = document.getElementById('success-text');
+    const errorDiv = document.getElementById('error-message');
+    
+    if (container && successDiv && successText) {
+        container.classList.remove('hidden');
+        successDiv.classList.remove('hidden');
+        errorDiv.classList.add('hidden');
+        successText.textContent = message;
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            container.classList.add('hidden');
+        }, 5000);
+    }
+}
+
+// Logout function
+function logout() {
+    // Clear stored data
+    localStorage.removeItem('hotimpex-token');
+    localStorage.removeItem('hotimpex-user');
+    
+    // Redirect to home page
+    window.location.href = 'index.html';
+}

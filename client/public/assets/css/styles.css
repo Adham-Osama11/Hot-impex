@@ -1367,5 +1367,23 @@ html.dark .hover\:bg-blue-700:hover {
 }
 
 /* ====================================
+   ANIMATIONS
+   ====================================*/
+@keyframes drift {
+    0%, 100% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateX(30px) translateY(-30px) rotate(5deg);
+    }
+    50% {
+        transform: translateX(-20px) translateY(20px) rotate(-3deg);
+    }
+    75% {
+        transform: translateX(20px) translateY(-10px) rotate(2deg);
+    }
+}
+
+/* ====================================
    END OF CLEAN STYLESHEET
    ====================================*/

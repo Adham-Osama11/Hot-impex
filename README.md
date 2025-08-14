@@ -1,6 +1,23 @@
 # HOT IMPEX - Professional E-commerce Website
 
-A modern, responsive e-commerce website for HOT IMPEX featuring product showcases, dark/light theme support, and professional admin dashboard.
+A modern, responsive e-commerce website for HOT IMPEX featuring product showcases, dark/light theme support, professional admin dashboard, and a complete Node.js backend API.
+
+## 🚀 Features
+
+### Frontend
+- **Responsive Design** - Works on all devices
+- **Dark/Light Theme** - User preference support
+- **Product Catalog** - Professional product showcase
+- **Admin Dashboard** - Complete management interface
+- **Modern UI** - Clean and professional design
+
+### Backend (NEW!)
+- **RESTful API** - Complete product, user, and order management
+- **JWT Authentication** - Secure user sessions
+- **Admin Management** - Full CRUD operations
+- **File-based Database** - Easy deployment with JSON files
+- **Security Features** - Rate limiting, input validation, CORS
+- **Real-time API** - Instant data updates
 
 ## 📁 Project Structure
 
@@ -62,6 +79,33 @@ Hot impex/
 
 ## 📋 Setup Instructions
 
+### Backend + Frontend Setup (Recommended)
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Adham-Osama11/Hot-impex.git
+   cd Hot-impex
+   ```
+
+2. **Install Node.js dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the backend server**
+   ```bash
+   npm start
+   # Or for development with auto-restart
+   npm run dev
+   ```
+
+4. **Access the application**
+   - **Website**: http://localhost:3000
+   - **Admin Panel**: http://localhost:3000/admin
+   - **API Documentation**: http://localhost:3000/api/health
+
+### Frontend Only Setup
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Adham-Osama11/Hot-impex.git
@@ -69,12 +113,52 @@ Hot impex/
    ```
 
 2. **Open the project**
-   - Open `index.html` in your browser for the main website
-   - Open `admin/admin.html` for the admin dashboard
+   - Open `client/public/index.html` in your browser for the main website
+   - Open `client/public/admin/admin.html` for the admin dashboard
 
 3. **Development**
    - No build process required - pure HTML/CSS/JS
    - Edit files directly and refresh browser to see changes
+
+### Available Scripts
+
+```bash
+npm start        # Start the backend server
+npm run dev      # Start server with nodemon (auto-restart)
+npm run client   # Serve frontend files only (Python server)
+npm run server   # Start backend server
+```
+
+## 🔧 API Endpoints
+
+The backend provides a complete RESTful API:
+
+### Products
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get single product
+- `GET /api/products/category/:category` - Get products by category
+- `GET /api/products/search/:query` - Search products
+
+### Users
+- `POST /api/users/register` - Register new user
+- `POST /api/users/login` - User login
+- `GET /api/users/profile` - Get user profile (auth required)
+
+### Orders
+- `POST /api/orders` - Create new order
+- `GET /api/orders` - Get user orders (auth required)
+- `GET /api/orders/:id` - Get single order (auth required)
+
+### Admin (Authentication Required)
+- `GET /api/admin/stats` - Dashboard statistics
+- `GET /api/admin/orders` - All orders management
+- `POST /api/admin/products` - Create product
+- `PUT /api/admin/products/:id` - Update product
+- `DELETE /api/admin/products/:id` - Delete product
+
+### Default Admin Credentials
+- **Email**: admin@hotimpex.com
+- **Password**: password
 
 ## 🎨 Customization
 

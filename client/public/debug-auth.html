@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Auth - Hot Impex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-4">Authentication Debug</h1>
+        
+        <div class="space-y-4">
+            <div>
+                <h3 class="font-semibold">localStorage Status:</h3>
+                <p id="storage-status"></p>
+            </div>
+            
+            <div>
+                <h3 class="font-semibold">Actions:</h3>
+                <button onclick="testLogin()" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Test Login</button>
+                <button onclick="testProfile()" class="bg-green-500 text-white px-4 py-2 rounded mr-2">Test Profile</button>
+                <button onclick="clearStorage()" class="bg-red-500 text-white px-4 py-2 rounded">Clear Storage</button>
+            </div>
+            
+            <div>
+                <h3 class="font-semibold">Results:</h3>
+                <pre id="results" class="bg-gray-100 p-4 rounded mt-2"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/scripts.js"></script>
+    <script>
+        function updateStatus() {
+            const token = localStorage.getItem('hotimpex-token');
+            const user = localStorage.getItem('hotimpex-user');
+            
+            document.getElementById('storage-status').innerHTML = `
+                Token: ${token ? 'EXISTS (' + token.substring(0, 20) + '...)' : 'MISSING'}<br>
+                User: ${user ? 'EXISTS' : 'MISSING'}<br>
+                Is Logged In: ${isUserLoggedIn() ? 'TRUE' : 'FALSE'}
+            `;
+        }
+        
+        async function testLogin() {
+            try {
+                const response = await fetch('/api/users/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'john.doe@example.com',
+                        password: 'newsecurepass456'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+                
+                if (data.status === 'success') {
+                    localStorage.setItem('hotimpex-token', data.data.token);
+                    localStorage.setItem('hotimpex-user', JSON.stringify(data.data.user));
+                    updateStatus();
+                }
+            } catch (error) {
+                document.getElementById('results').textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function testProfile() {
+            try {
+                const token = localStorage.getItem('hotimpex-token');
+                if (!token) {
+                    document.getElementById('results').textContent = 'No token found. Please login first.';
+                    return;
+                }
+                
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('results').textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('hotimpex-token');
+            localStorage.removeItem('hotimpex-user');
+            updateStatus();
+            document.getElementById('results').textContent = 'Storage cleared.';
+        }
+        
+        // Update status on load
+        updateStatus();
+    </script>
+</body>
+</html>

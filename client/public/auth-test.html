@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test</title>
+</head>
+<body>
+    <h1>Authentication Test</h1>
+    <div id="status"></div>
+    <script>
+        const token = localStorage.getItem('hotimpex-token');
+        const user = localStorage.getItem('hotimpex-user');
+        
+        document.getElementById('status').innerHTML = `
+            <p>Token exists: ${!!token}</p>
+            <p>Token value: ${token ? token.substring(0, 20) + '...' : 'None'}</p>
+            <p>User exists: ${!!user}</p>
+            <p>User data: ${user || 'None'}</p>
+        `;
+    </script>
+</body>
+</html>

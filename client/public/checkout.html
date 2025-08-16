@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - HOT IMPEX</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Theme initialization script -->
+    <script>
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+            <nav class="flex flex-col lg:flex-row items-center justify-between space-y-6 lg:space-y-0">
+                <!-- Mobile Header with Hot Button and Menu Toggle -->
+                <div class="flex items-center justify-between w-full lg:w-auto">
+                    <!-- Hot Button Section -->
+                    <div class="flex-shrink-0">
+                        <button class="logo text-gray-800 font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-lg sm:text-xl bg-white/15 backdrop-blur-3xl">
+                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
+                        </button>
+                    </div>
+
+                    <!-- Mobile Menu Toggle Button -->
+                    <button id="mobile-menu-toggle" class="lg:hidden text-gray-800 p-3 rounded-full border border-white/30 shadow-2xl transition-all duration-200 bg-white/15 backdrop-blur-3xl hover:bg-white/25">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Main Navigation Section -->
+                <div id="main-nav" class="w-full lg:w-auto hidden lg:block">
+                    <div class="rounded-full p-3 flex flex-col lg:flex-row items-center border border-white/30 shadow-2xl gap-3 lg:gap-6 w-full lg:w-auto bg-white/15 backdrop-blur-3xl">
+                        <a href="index.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Home</a>
+                        <a href="shop.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Shop</a>
+                        <a href="contact.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Contact Us</a>
+                        <a href="about.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">About Us</a>
+                        
+                        <!-- Dark Mode Toggle -->
+                        <div class="flex items-center justify-center px-6 py-3 w-full lg:w-auto">
+                            <div id="theme-toggle" class="theme-toggle" title="Toggle Dark Mode">
+                                <svg class="sun-icon absolute top-1 left-1 w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg class="moon-icon absolute top-1 right-1 w-5 h-5 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- User Icon with Dropdown -->
+                        <div class="relative">
+                            <div id="user-dropdown-toggle" class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                                <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                                <span id="user-display-name" class="hidden lg:inline text-gray-700">Account</span>
+                                <svg class="w-5 h-5 text-gray-700 transition-transform duration-200" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Shopping Cart Icon -->
+                        <div class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                            <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.763.746-1.858 1.705L2.26 19.99a2.25 2.25 0 002.24 2.51h15.002a2.25 2.25 0 002.24-2.51l-1.395-11.535A1.875 1.875 0 0018.488 6.75H16.5V6a4.5 4.5 0 10-9 0zM15 6.75V6a3 3 0 10-6 0v.75H15z" clip-rule="evenodd" />
+                            </svg>
+                            <span id="cart-badge" class="bg-orange-500 text-white text-sm font-semibold px-3 py-1 rounded-full" style="display: none;">0</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 lg:hidden hidden">
+        <div class="absolute inset-0 bg-black/50" id="mobile-menu-backdrop"></div>
+        <div class="relative bg-white/95 backdrop-blur-md min-h-screen w-80 p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-8">
+                <img src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
+                <button id="mobile-menu-close" class="p-2 rounded-full hover:bg-gray-200/50 transition-colors duration-200">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="index.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Home</a>
+                <a href="shop.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Shop</a>
+                <a href="contact.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">Contact Us</a>
+                <a href="about.html" class="block text-gray-800 px-4 py-3 rounded-lg hover:bg-gray-200/50 transition-colors duration-200 text-lg font-medium">About Us</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" style="margin-top: 120px;">
+        <nav class="flex mb-8" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-3 text-sm bg-white/60 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-white/20">
+                <li><a href="index.html" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">Home</a></li>
+                <li><span class="text-gray-400">•</span></li>
+                <li><a href="shop.html" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-200">Shop</a></li>
+                <li><span class="text-gray-400">•</span></li>
+                <li><span class="text-gray-900 font-semibold">Checkout</span></li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Main Checkout Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-black text-gray-800 tracking-tight mb-4">
+                Checkout
+            </h1>
+            <div class="w-32 h-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mx-auto"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Side - Checkout Form -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Shipping Information -->
+                <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 border border-gray-200">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl mr-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Shipping Information</h2>
+                    </div>
+
+                    <form id="checkout-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required 
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required 
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
+                            <input type="email" id="email" name="email" required 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                        </div>
+
+                        <div>
+                            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                        </div>
+
+                        <div>
+                            <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">Street Address *</label>
+                            <input type="text" id="address" name="address" required 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label for="city" class="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                                <input type="text" id="city" name="city" required 
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                            </div>
+                            <div>
+                                <label for="state" class="block text-sm font-semibold text-gray-700 mb-2">State/Province *</label>
+                                <input type="text" id="state" name="state" required 
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                            </div>
+                            <div>
+                                <label for="zipCode" class="block text-sm font-semibold text-gray-700 mb-2">ZIP Code *</label>
+                                <input type="text" id="zipCode" name="zipCode" required 
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="country" class="block text-sm font-semibold text-gray-700 mb-2">Country *</label>
+                            <select id="country" name="country" required 
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm">
+                                <option value="">Select Country</option>
+                                <option value="EG">Egypt</option>
+                                <option value="SA">Saudi Arabia</option>
+                                <option value="AE">United Arab Emirates</option>
+                                <option value="JO">Jordan</option>
+                                <option value="LB">Lebanon</option>
+                                <option value="SY">Syria</option>
+                                <option value="IQ">Iraq</option>
+                                <option value="KW">Kuwait</option>
+                                <option value="QA">Qatar</option>
+                                <option value="BH">Bahrain</option>
+                                <option value="OM">Oman</option>
+                                <option value="YE">Yemen</option>
+                                <option value="PS">Palestine</option>
+                                <option value="MA">Morocco</option>
+                                <option value="TN">Tunisia</option>
+                                <option value="DZ">Algeria</option>
+                                <option value="LY">Libya</option>
+                                <option value="SD">Sudan</option>
+                                <option value="SO">Somalia</option>
+                                <option value="DJ">Djibouti</option>
+                                <option value="KM">Comoros</option>
+                                <option value="MR">Mauritania</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="notes" class="block text-sm font-semibold text-gray-700 mb-2">Order Notes (Optional)</label>
+                            <textarea id="notes" name="notes" rows="3" 
+                                      class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                                      placeholder="Any special instructions for your order..."></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 border border-gray-200">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl mr-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Payment Method</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Credit Card Option -->
+                            <label class="payment-option cursor-pointer">
+                                <input type="radio" name="paymentMethod" value="card" class="sr-only" checked>
+                                <div class="payment-card border-2 border-purple-500 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 transition-all duration-300 hover:shadow-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-gray-800">Credit/Debit Card</h3>
+                                            <p class="text-sm text-gray-600">Visa, Mastercard, etc.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Cash on Delivery Option -->
+                            <label class="payment-option cursor-pointer">
+                                <input type="radio" name="paymentMethod" value="cod" class="sr-only">
+                                <div class="payment-card border-2 border-gray-300 bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:border-purple-500 hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-gray-800">Cash on Delivery</h3>
+                                            <p class="text-sm text-gray-600">Pay when you receive</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Credit Card Form (initially visible) -->
+                        <div id="card-form" class="card-details space-y-4 bg-gray-50 rounded-xl p-6">
+                            <div>
+                                <label for="cardNumber" class="block text-sm font-semibold text-gray-700 mb-2">Card Number *</label>
+                                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" 
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="cardExpiry" class="block text-sm font-semibold text-gray-700 mb-2">Expiry Date *</label>
+                                    <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" 
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                                </div>
+                                <div>
+                                    <label for="cardCVV" class="block text-sm font-semibold text-gray-700 mb-2">CVV *</label>
+                                    <input type="text" id="cardCVV" name="cardCVV" placeholder="123" 
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="cardName" class="block text-sm font-semibold text-gray-700 mb-2">Cardholder Name *</label>
+                                <input type="text" id="cardName" name="cardName" placeholder="John Doe" 
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                            </div>
+                        </div>
+
+                        <!-- Cash on Delivery Info (initially hidden) -->
+                        <div id="cod-info" class="card-details hidden bg-green-50 rounded-xl p-6">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-bold text-green-800">Cash on Delivery Selected</h4>
+                                    <p class="text-sm text-green-600">You will pay when your order is delivered to your address.</p>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 border border-green-200">
+                                <h5 class="font-semibold text-gray-800 mb-2">Important Notes:</h5>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Please have exact change ready</li>
+                                    <li>• Delivery fee may apply</li>
+                                    <li>• Orders may take 2-5 business days</li>
+                                    <li>• Payment is required upon delivery</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 border border-gray-200 sticky top-32">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl mr-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Order Summary</h2>
+                    </div>
+
+                    <!-- Cart Items -->
+                    <div id="checkout-cart-items" class="space-y-4 mb-6">
+                        <!-- Cart items will be populated by JavaScript -->
+                        <div class="text-center text-gray-500 py-8">
+                            <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <p class="text-lg font-semibold">Your cart is empty</p>
+                            <p class="text-sm mt-2">Add items to see them here.</p>
+                            <a href="shop.html" class="inline-block mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                                Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Order Totals -->
+                    <div id="order-totals" class="space-y-3 border-t border-gray-200 pt-6 hidden">
+                        <div class="flex justify-between text-gray-700">
+                            <span>Subtotal:</span>
+                            <span id="checkout-subtotal">0 EGP</span>
+                        </div>
+                        <div class="flex justify-between text-gray-700">
+                            <span>Shipping:</span>
+                            <span id="checkout-shipping">Free</span>
+                        </div>
+                        <div class="flex justify-between text-gray-700">
+                            <span>Tax:</span>
+                            <span id="checkout-tax">0 EGP</span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-3">
+                            <div class="flex justify-between text-xl font-bold text-gray-800">
+                                <span>Total:</span>
+                                <span id="checkout-total">0 EGP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Place Order Button -->
+                    <button id="place-order-btn" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 font-bold text-lg mt-6 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Place Order</span>
+                        </div>
+                    </button>
+
+                    <!-- Security Info -->
+                    <div class="mt-6 bg-green-50 rounded-xl p-4 border border-green-200">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            <span class="font-semibold text-green-800">Secure Checkout</span>
+                        </div>
+                        <p class="text-sm text-green-600">Your payment information is encrypted and secure. We never store your payment details.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform scale-95 transition-transform duration-300">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Order Placed Successfully!</h3>
+                <p class="text-gray-600 mb-6">Thank you for your order. You will receive a confirmation email shortly.</p>
+                <div class="space-y-3">
+                    <p class="text-sm text-gray-500">Order Number: <span id="order-number" class="font-semibold text-gray-800">#12345</span></p>
+                    <div class="flex space-x-3">
+                        <button onclick="closeSuccessModal()" class="flex-1 bg-gray-200 text-gray-800 py-3 px-6 rounded-xl hover:bg-gray-300 transition-colors duration-300 font-semibold">
+                            Continue Shopping
+                        </button>
+                        <button onclick="window.location.href='index.html'" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 font-semibold">
+                            Go Home
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full bg-gray-800 text-gray-300 py-10 sm:py-12 lg:py-16 mt-12 sm:mt-16 lg:mt-20">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 text-center md:text-left">
+            <div class="flex flex-col items-center md:items-start">
+                <img src="assets/images/logos/logo-light.svg" alt="Hot Impex Logo" class="h-12 w-40 mb-4">
+                <p class="text-gray-400 max-w-md">Professional AV solutions and high-quality electronics for businesses and consumers.</p>
+            </div>
+            <div class="flex flex-col items-center md:items-start space-y-3">
+                <h4 class="text-lg font-semibold text-white">Quick Links</h4>
+                <a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200">Home</a>
+                <a href="shop.html" class="text-gray-400 hover:text-white transition-colors duration-200">Shop</a>
+                <a href="about.html" class="text-gray-400 hover:text-white transition-colors duration-200">About</a>
+                <a href="contact.html" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
+            </div>
+            <div class="flex flex-col items-center md:items-start space-y-3">
+                <h4 class="text-lg font-semibold text-white">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>&copy; 2025 Hot Impex. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/scripts.js"></script>
+    <script>
+        // API Configuration
+        const API_BASE_URL = window.location.origin + '/api';
+
+        // API Service Functions
+        class APIService {
+            static async request(endpoint, options = {}) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers
+                        },
+                        ...options
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        return data;
+                    }
+                    
+                    return data;
+                } catch (error) {
+                    console.error('API Error:', error);
+                    throw error;
+                }
+            }
+
+            static async getUserProfile() {
+                const user = JSON.parse(localStorage.getItem('hotimpex_user') || '{}');
+                if (user.id) {
+                    return await this.request(`/users/${user.id}`);
+                }
+                return null;
+            }
+
+            static async createOrder(orderData) {
+                return await this.request('/orders', {
+                    method: 'POST',
+                    body: JSON.stringify(orderData)
+                });
+            }
+
+            static async getProduct(id) {
+                return await this.request(`/products/${id}`);
+            }
+        }
+
+        // Checkout page specific JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            loadCheckoutCart();
+            setupPaymentMethodToggle();
+            setupFormValidation();
+            setupMobileMenu();
+            setupThemeToggle();
+        });
+
+        // Load user data and pre-fill form
+        async function loadUserData() {
+            try {
+                const userProfile = await APIService.getUserProfile();
+                if (userProfile && userProfile.success) {
+                    const user = userProfile.data;
+                    
+                    // Pre-fill form with user data
+                    document.getElementById('firstName').value = user.firstName || '';
+                    document.getElementById('lastName').value = user.lastName || '';
+                    document.getElementById('email').value = user.email || '';
+                    document.getElementById('phone').value = user.phone || '';
+                    
+                    // If user has saved address
+                    if (user.address) {
+                        document.getElementById('address').value = user.address.street || '';
+                        document.getElementById('city').value = user.address.city || '';
+                        document.getElementById('state').value = user.address.state || '';
+                        document.getElementById('zipCode').value = user.address.zipCode || '';
+                        document.getElementById('country').value = user.address.country || '';
+                    }
+                }
+            } catch (error) {
+                console.log('No user logged in or error fetching user data:', error);
+            }
+        }
+
+        // Load cart items for checkout with product details from API
+        async function loadCheckoutCart() {
+            const cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            const cartItemsContainer = document.getElementById('checkout-cart-items');
+            const orderTotals = document.getElementById('order-totals');
+            const placeOrderBtn = document.getElementById('place-order-btn');
+
+            if (cart.length === 0) {
+                placeOrderBtn.disabled = true;
+                orderTotals.classList.add('hidden');
+                return;
+            }
+
+            // Show order totals
+            orderTotals.classList.remove('hidden');
+            placeOrderBtn.disabled = false;
+
+            // Clear existing items
+            cartItemsContainer.innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <div class="animate-spin w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p>Loading cart items...</p>
+                </div>
+            `;
+
+            let subtotal = 0;
+            const cartItemsHTML = [];
+
+            // Fetch product details for each cart item
+            for (const item of cart) {
+                try {
+                    const productResponse = await APIService.getProduct(item.id);
+                    let productData = item; // fallback to cart data
+                    
+                    if (productResponse && productResponse.success) {
+                        productData = {
+                            ...productResponse.data,
+                            quantity: item.quantity
+                        };
+                    }
+
+                    const itemTotal = productData.price * productData.quantity;
+                    subtotal += itemTotal;
+
+                    const cartItemHTML = `
+                        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
+                            <img src="${productData.image || productData.images?.[0] || 'assets/images/placeholder.jpg'}" 
+                                 alt="${productData.name}" 
+                                 class="w-16 h-16 object-cover rounded-lg">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800 text-sm">${productData.name}</h4>
+                                <p class="text-gray-600 text-xs">Qty: ${productData.quantity}</p>
+                                <p class="text-gray-500 text-xs">Unit: ${productData.price.toLocaleString()} EGP</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-purple-600">${itemTotal.toLocaleString()} EGP</p>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsHTML.push(cartItemHTML);
+                } catch (error) {
+                    console.error('Error fetching product details:', error);
+                    // Use cart data as fallback
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+
+                    const cartItemHTML = `
+                        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
+                            <img src="${item.image || 'assets/images/placeholder.jpg'}" 
+                                 alt="${item.name}" 
+                                 class="w-16 h-16 object-cover rounded-lg">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800 text-sm">${item.name}</h4>
+                                <p class="text-gray-600 text-xs">Qty: ${item.quantity}</p>
+                                <p class="text-gray-500 text-xs">Unit: ${item.price.toLocaleString()} EGP</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-purple-600">${itemTotal.toLocaleString()} EGP</p>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsHTML.push(cartItemHTML);
+                }
+            }
+
+            // Update cart items display
+            cartItemsContainer.innerHTML = cartItemsHTML.join('');
+
+            // Calculate totals
+            const shipping = subtotal > 1000 ? 0 : 50; // Free shipping for orders over 1000 EGP
+            const tax = Math.round(subtotal * 0.14); // 14% tax
+            const total = subtotal + shipping + tax;
+
+            document.getElementById('checkout-subtotal').textContent = `${subtotal.toLocaleString()} EGP`;
+            document.getElementById('checkout-shipping').textContent = shipping === 0 ? 'Free' : `${shipping.toLocaleString()} EGP`;
+            document.getElementById('checkout-tax').textContent = `${tax.toLocaleString()} EGP`;
+            document.getElementById('checkout-total').textContent = `${total.toLocaleString()} EGP`;
+        }
+
+        // Setup payment method toggle
+        function setupPaymentMethodToggle() {
+            const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]');
+            const cardForm = document.getElementById('card-form');
+            const codInfo = document.getElementById('cod-info');
+
+            paymentOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    // Update visual selection
+                    document.querySelectorAll('.payment-card').forEach(card => {
+                        card.classList.remove('border-purple-500', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50');
+                        card.classList.add('border-gray-300', 'bg-white');
+                    });
+
+                    const selectedCard = this.closest('.payment-option').querySelector('.payment-card');
+                    selectedCard.classList.remove('border-gray-300', 'bg-white');
+                    selectedCard.classList.add('border-purple-500', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50');
+
+                    // Show/hide forms
+                    if (this.value === 'card') {
+                        cardForm.classList.remove('hidden');
+                        codInfo.classList.add('hidden');
+                    } else {
+                        cardForm.classList.add('hidden');
+                        codInfo.classList.remove('hidden');
+                    }
+                });
+            });
+        }
+
+        // Setup form validation
+        function setupFormValidation() {
+            const form = document.getElementById('checkout-form');
+            const placeOrderBtn = document.getElementById('place-order-btn');
+
+            placeOrderBtn.addEventListener('click', function() {
+                if (validateForm()) {
+                    processOrder();
+                }
+            });
+
+            // Real-time validation
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                field.addEventListener('blur', validateField);
+                field.addEventListener('input', clearFieldError);
+            });
+        }
+
+        function validateForm() {
+            const form = document.getElementById('checkout-form');
+            const formData = new FormData(form);
+            let isValid = true;
+
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(error => error.remove());
+            document.querySelectorAll('.border-red-500').forEach(field => {
+                field.classList.remove('border-red-500');
+                field.classList.add('border-gray-300');
+            });
+
+            // Validate required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    showFieldError(field, 'This field is required');
+                    isValid = false;
+                }
+            });
+
+            // Validate email
+            const email = document.getElementById('email');
+            if (email.value && !isValidEmail(email.value)) {
+                showFieldError(email, 'Please enter a valid email address');
+                isValid = false;
+            }
+
+            // Validate phone
+            const phone = document.getElementById('phone');
+            if (phone.value && !isValidPhone(phone.value)) {
+                showFieldError(phone, 'Please enter a valid phone number');
+                isValid = false;
+            }
+
+            // Validate payment method specific fields
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            if (paymentMethod === 'card') {
+                isValid = validateCardFields() && isValid;
+            }
+
+            return isValid;
+        }
+
+        function validateCardFields() {
+            let isValid = true;
+            const cardNumber = document.getElementById('cardNumber');
+            const cardExpiry = document.getElementById('cardExpiry');
+            const cardCVV = document.getElementById('cardCVV');
+            const cardName = document.getElementById('cardName');
+
+            if (!cardNumber.value.replace(/\s/g, '').match(/^\d{16}$/)) {
+                showFieldError(cardNumber, 'Please enter a valid 16-digit card number');
+                isValid = false;
+            }
+
+            if (!cardExpiry.value.match(/^(0[1-9]|1[0-2])\/\d{2}$/)) {
+                showFieldError(cardExpiry, 'Please enter expiry date in MM/YY format');
+                isValid = false;
+            }
+
+            if (!cardCVV.value.match(/^\d{3,4}$/)) {
+                showFieldError(cardCVV, 'Please enter a valid CVV');
+                isValid = false;
+            }
+
+            if (!cardName.value.trim()) {
+                showFieldError(cardName, 'Please enter the cardholder name');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function validateField(event) {
+            const field = event.target;
+            clearFieldError(field);
+
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                showFieldError(field, 'This field is required');
+                return false;
+            }
+
+            if (field.type === 'email' && field.value && !isValidEmail(field.value)) {
+                showFieldError(field, 'Please enter a valid email address');
+                return false;
+            }
+
+            if (field.type === 'tel' && field.value && !isValidPhone(field.value)) {
+                showFieldError(field, 'Please enter a valid phone number');
+                return false;
+            }
+
+            return true;
+        }
+
+        function showFieldError(field, message) {
+            field.classList.remove('border-gray-300');
+            field.classList.add('border-red-500');
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message text-red-500 text-sm mt-1';
+            errorDiv.textContent = message;
+            
+            field.parentNode.insertBefore(errorDiv, field.nextSibling);
+        }
+
+        function clearFieldError(field) {
+            field.classList.remove('border-red-500');
+            field.classList.add('border-gray-300');
+            
+            const errorMessage = field.parentNode.querySelector('.error-message');
+            if (errorMessage) {
+                errorMessage.remove();
+            }
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function isValidPhone(phone) {
+            return /^[\+]?[1-9][\d]{0,15}$/.test(phone.replace(/[\s\-\(\)]/g, ''));
+        }
+
+        function processOrder() {
+            const placeOrderBtn = document.getElementById('place-order-btn');
+            const originalText = placeOrderBtn.innerHTML;
+            
+            // Show loading state
+            placeOrderBtn.innerHTML = `
+                <div class="flex items-center justify-center space-x-2">
+                    <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Processing...</span>
+                </div>
+            `;
+            placeOrderBtn.disabled = true;
+
+            // Collect order data
+            const form = document.getElementById('checkout-form');
+            const formData = new FormData(form);
+            const cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            const user = JSON.parse(localStorage.getItem('hotimpex_user') || '{}');
+            
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 1000 ? 0 : 50;
+            const tax = Math.round(subtotal * 0.14);
+            const total = subtotal + shipping + tax;
+
+            const orderData = {
+                userId: user.id || null,
+                customerInfo: {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone')
+                },
+                shippingAddress: {
+                    street: formData.get('address'),
+                    city: formData.get('city'),
+                    state: formData.get('state'),
+                    zipCode: formData.get('zipCode'),
+                    country: formData.get('country')
+                },
+                items: cart.map(item => ({
+                    productId: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: item.image
+                })),
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+                subtotal: subtotal,
+                shipping: shipping,
+                tax: tax,
+                total: total,
+                notes: formData.get('notes') || '',
+                status: 'pending'
+            };
+
+            // Submit order to API
+            APIService.createOrder(orderData)
+                .then(response => {
+                    if (response && response.success) {
+                        // Generate order number
+                        const orderNumber = response.data.orderNumber || '#HOT' + Date.now();
+                        document.getElementById('order-number').textContent = orderNumber;
+                        
+                        // Clear cart
+                        localStorage.removeItem('hotimpex_cart');
+                        
+                        // Show success modal
+                        showSuccessModal();
+                        
+                        // Reset button
+                        placeOrderBtn.innerHTML = originalText;
+                        placeOrderBtn.disabled = false;
+                    } else {
+                        throw new Error(response.message || 'Failed to create order');
+                    }
+                })
+                .catch(error => {
+                    console.error('Order creation failed:', error);
+                    
+                    // Show error message
+                    alert('Failed to place order. Please try again.');
+                    
+                    // Reset button
+                    placeOrderBtn.innerHTML = originalText;
+                    placeOrderBtn.disabled = false;
+                });
+        }
+
+        function showSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.querySelector('.bg-white').classList.remove('scale-95');
+            modal.querySelector('.bg-white').classList.add('scale-100');
+        }
+
+        function closeSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.querySelector('.bg-white').classList.remove('scale-100');
+            modal.querySelector('.bg-white').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                window.location.href = 'shop.html';
+            }, 300);
+        }
+
+        // Setup mobile menu
+        function setupMobileMenu() {
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.remove('hidden');
+                });
+            }
+
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            }
+
+            if (mobileMenuBackdrop) {
+                mobileMenuBackdrop.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            }
+        }
+
+        // Setup theme toggle
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                    const isDark = document.documentElement.classList.contains('dark');
+                    localStorage.setItem('darkMode', isDark);
+                });
+            }
+        }
+
+        // Update cart badge
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            const cartBadge = document.getElementById('cart-badge');
+            
+            if (cart.length > 0) {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = 'inline-block';
+            } else {
+                cartBadge.style.display = 'none';
+            }
+        }
+
+        // Update cart badge on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartBadge();
+        });
+
+        // Format card number input
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardNumberInput = document.getElementById('cardNumber');
+            if (cardNumberInput) {
+                cardNumberInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                    let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                    this.value = formattedValue;
+                });
+            }
+
+            const cardExpiryInput = document.getElementById('cardExpiry');
+            if (cardExpiryInput) {
+                cardExpiryInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\D/g, '');
+                    if (value.length >= 2) {
+                        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                    }
+                    this.value = value;
+                });
+            }
+
+            const cardCVVInput = document.getElementById('cardCVV');
+            if (cardCVVInput) {
+                cardCVVInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/\D/g, '').substring(0, 4);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

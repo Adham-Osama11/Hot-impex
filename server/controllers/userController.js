@@ -148,11 +148,25 @@ const loginUser = async (req, res) => {
 };
 
 // @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
+// @route   GET /api/users/profile OR GET /api/users/:id
+// @access  Private for profile, Public for ID lookup
 const getUserProfile = async (req, res) => {
     try {
-        const user = await hybridDb.findUserById(req.user.id);
+        let userId;
+        
+        // If there's a user ID in params, use that; otherwise use authenticated user
+        if (req.params.id) {
+            userId = req.params.id;
+        } else if (req.user) {
+            userId = req.user.id;
+        } else {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Authentication required'
+            });
+        }
+
+        const user = await hybridDb.findUserById(userId);
         if (!user) {
             return res.status(404).json({
                 status: 'error',
@@ -162,17 +176,17 @@ const getUserProfile = async (req, res) => {
 
         res.status(200).json({
             status: 'success',
+            success: true,
             data: {
-                user: {
-                    id: user._id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    phone: user.phone,
-                    role: user.role,
-                    createdAt: user.createdAt,
-                    lastLoginAt: user.lastLoginAt
-                }
+                id: user._id || user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+                role: user.role,
+                address: user.address,
+                createdAt: user.createdAt,
+                lastLoginAt: user.lastLoginAt
             }
         });
     } catch (error) {

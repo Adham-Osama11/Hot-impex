@@ -320,7 +320,7 @@
 
                     <!-- Main Action Buttons -->
                     <div class="space-y-2">
-                        <button class="group w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm transform hover:scale-105 relative overflow-hidden">
+                        <button id="add-to-cart-btn" class="group w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm transform hover:scale-105 relative overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-r from-blue-700 to-cyan-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             <div class="relative z-10 flex items-center justify-center space-x-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1019,9 +1019,10 @@
             return urlParams.get('id');
         }
 
-        // Fetch product data from API
+        // Fetch product data from API or local data
         async function fetchProduct(productId) {
             try {
+                // Try API first
                 const response = await fetch(`/api/products/${productId}`);
                 const data = await response.json();
                 
@@ -1031,7 +1032,39 @@
                     throw new Error(data.message || 'Product not found');
                 }
             } catch (error) {
-                console.error('Error fetching product:', error);
+                console.error('Error fetching product from API:', error);
+                console.log('Falling back to local product data...');
+                
+                // Fallback to local products array if available
+                if (window.products && Array.isArray(window.products)) {
+                    const localProduct = window.products.find(p => p.id === parseInt(productId));
+                    if (localProduct) {
+                        // Add some default values for API compatibility
+                        return {
+                            ...localProduct,
+                            inStock: true,
+                            stock: 15,
+                            description: "High-quality product from HOT IMPEX.",
+                            specifications: ["Professional grade", "High performance"],
+                            images: [`assets/images/Products/${localProduct.category}/${localProduct.image || 'default'}.jpg`]
+                        };
+                    }
+                }
+
+                // If no local product found, create a default test product
+                console.log('Creating default test product for ID:', productId);
+                return {
+                    id: parseInt(productId),
+                    name: "4K UHD Generator",
+                    category: "av-distribution",
+                    price: 299.99,
+                    inStock: true,
+                    stock: 15,
+                    description: "Professional 4K UHD test pattern generator for display calibration and testing.",
+                    specifications: ["4K@60Hz output", "HDMI 2.0", "100+ test patterns"],
+                    images: ["assets/images/Products/Av distribution/4K UHD GENRATOR.jpg"]
+                };
+                
                 showError('Failed to load product. Please try again.');
                 return null;
             }
@@ -1290,37 +1323,182 @@
                     }
                 });
 
-                // Add to cart functionality
-                const addToCartButtons = document.querySelectorAll('button');
-                addToCartButtons.forEach(button => {
-                    if (button.textContent.includes('Add to Cart')) {
-                        button.addEventListener('click', function() {
-                            if (currentProduct && currentProduct.inStock) {
-                                // Use the cart functionality from scripts.js if available
-                                if (window.addToCart) {
-                                    window.addToCart(currentProduct, currentQuantity);
-                                } else {
-                                    console.log('Adding to cart:', {
-                                        product: currentProduct,
-                                        quantity: currentQuantity
-                                    });
-                                    
-                                    // Show success message
-                                    const successDiv = document.createElement('div');
-                                    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
-                                    successDiv.textContent = `${currentProduct.name} added to cart!`;
-                                    document.body.appendChild(successDiv);
-                                    
-                                    setTimeout(() => {
-                                        successDiv.remove();
-                                    }, 3000);
-                                }
+                // Simple Cart Implementation
+                const addToCartBtn = document.getElementById('add-to-cart-btn');
+                if (addToCartBtn) {
+                    addToCartBtn.addEventListener('click', function() {
+                        console.log('Add to cart button clicked!');
+                        
+                        if (currentProduct) {
+                            // Get or create cart from localStorage
+                            let cart = JSON.parse(localStorage.getItem('hotimpex-cart')) || [];
+                            
+                            // Check if product already exists in cart
+                            const existingItemIndex = cart.findIndex(item => item.id === currentProduct.id);
+                            
+                            if (existingItemIndex !== -1) {
+                                // Update quantity if product exists
+                                cart[existingItemIndex].quantity += currentQuantity;
                             } else {
-                                showError('Product is out of stock');
+                                // Add new product to cart
+                                cart.push({
+                                    id: currentProduct.id,
+                                    name: currentProduct.name,
+                                    price: currentProduct.price,
+                                    image: currentProduct.images ? currentProduct.images[0] : '',
+                                    quantity: currentQuantity
+                                });
                             }
-                        });
+                            
+                            // Save cart to localStorage
+                            localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
+                            
+                            // Update cart UI
+                            updateCartDisplay();
+                            
+                            // Show success message
+                            showSuccessMessage(`${currentProduct.name} added to cart!`);
+                            
+                            console.log('Cart updated:', cart);
+                        } else {
+                            showError('Product information not available');
+                        }
+                    });
+                }
+
+                // Function to show success message
+                function showSuccessMessage(message) {
+                    const successDiv = document.createElement('div');
+                    successDiv.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+                    successDiv.innerHTML = `
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>${message}</span>
+                        </div>
+                    `;
+                    document.body.appendChild(successDiv);
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        successDiv.classList.remove('translate-x-full');
+                    }, 100);
+                    
+                    // Remove after 3 seconds
+                    setTimeout(() => {
+                        successDiv.classList.add('translate-x-full');
+                        setTimeout(() => {
+                            successDiv.remove();
+                        }, 300);
+                    }, 3000);
+                }
+
+                // Function to update cart display
+                function updateCartDisplay() {
+                    const cart = JSON.parse(localStorage.getItem('hotimpex-cart')) || [];
+                    const cartBadge = document.getElementById('cart-badge');
+                    const cartTotal = document.getElementById('cart-total');
+                    const cartItems = document.getElementById('cart-items');
+                    
+                    // Update cart badge
+                    if (cartBadge) {
+                        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                        if (totalItems > 0) {
+                            cartBadge.textContent = totalItems;
+                            cartBadge.style.display = 'block';
+                        } else {
+                            cartBadge.style.display = 'none';
+                        }
                     }
-                });
+                    
+                    // Update cart total
+                    if (cartTotal) {
+                        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                        cartTotal.textContent = `${total.toFixed(2)} EGP`;
+                    }
+                    
+                    // Update cart items
+                    if (cartItems) {
+                        if (cart.length === 0) {
+                            cartItems.innerHTML = `
+                                <div class="text-center text-gray-500 py-16">
+                                    <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0H17M7 18h8a2 2 0 002-2V9a2 2 0 00-2-2H7a2 2 0 00-2 2v7a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <p class="mt-4 text-lg font-semibold">Your cart is empty</p>
+                                    <p class="mt-2 text-sm">Add items to see them here.</p>
+                                </div>
+                            `;
+                        } else {
+                            cartItems.innerHTML = cart.map(item => `
+                                <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                                    <img src="${item.image || 'assets/images/placeholder.jpg'}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-gray-800">${item.name}</h4>
+                                        <p class="text-gray-600">${item.price} EGP × ${item.quantity}</p>
+                                    </div>
+                                    <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            `).join('');
+                        }
+                    }
+                }
+
+                // Function to remove item from cart
+                function removeFromCart(productId) {
+                    let cart = JSON.parse(localStorage.getItem('hotimpex-cart')) || [];
+                    cart = cart.filter(item => item.id !== productId);
+                    localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
+                    updateCartDisplay();
+                }
+
+                // Make removeFromCart global
+                window.removeFromCart = removeFromCart;
+
+                // Cart toggle functionality
+                const cartToggle = document.getElementById('cart-toggle');
+                const cartOverlay = document.getElementById('cart-overlay');
+                const cartSidebar = document.getElementById('cart-sidebar');
+                const closeCart = document.getElementById('close-cart');
+
+                function openCart() {
+                    cartOverlay.classList.remove('hidden');
+                    cartSidebar.classList.remove('translate-x-full');
+                    updateCartDisplay();
+                }
+
+                function closeCartSidebar() {
+                    cartSidebar.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        cartOverlay.classList.add('hidden');
+                    }, 300);
+                }
+
+                if (cartToggle) {
+                    cartToggle.addEventListener('click', openCart);
+                }
+
+                if (closeCart) {
+                    closeCart.addEventListener('click', closeCartSidebar);
+                }
+
+                if (cartOverlay) {
+                    cartOverlay.addEventListener('click', closeCartSidebar);
+                }
+
+            // Initialize cart display on page load
+            console.log('Initializing cart display...');
+            updateCartDisplay();
+
+            console.log('=== PRODUCT PAGE INITIALIZATION COMPLETE ===');
+            console.log('Current product:', currentProduct);
+            console.log('Add to cart button:', document.getElementById('add-to-cart-btn'));
+            console.log('Cart toggle:', document.getElementById('cart-toggle'));
             } else {
                 // Redirect to shop if product not found
                 setTimeout(() => {

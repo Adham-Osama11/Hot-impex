@@ -58,7 +58,7 @@ class APIService {
 
 // Global variables
 let currentProducts = [];
-let cart = [];
+let cart = []; // Initialize cart as empty array
 let isSearchVisible = false;
 let currentHeroProduct = 0;
 let autoSlideInterval;
@@ -190,28 +190,33 @@ let rotationGroup;
 
 // Sample products data
 const products = [
-    { id: 1, name: "Active JR", category: "active", price: 64, originalPrice: 80, image: "Product+1" },
-    { id: 2, name: "Bio Original", category: "bio", price: 119, image: "Product+2" },
-    { id: 3, name: "Bio Perform", category: "bio", price: 99, originalPrice: 119, image: "Product+3" },
-    { id: 4, name: "Limited DL", category: "limited", price: 129, image: "Product+4" },
-    { id: 5, name: "Active Pro", category: "active", price: 89, image: "Product+5" },
-    { id: 6, name: "Bio Essential", category: "bio", price: 159, image: "Product+6" },
-    { id: 7, name: "Kids Special", category: "kids", price: 45, image: "Product+7" },
-    { id: 8, name: "Artisanal Blend", category: "artisanal", price: 199, image: "Product+8" },
-    { id: 9, name: "Protein Max", category: "active", price: 75, image: "Product+9" },
-    { id: 10, name: "Vitamin Complex", category: "bio", price: 69, image: "Product+10" },
-    { id: 11, name: "Energy Boost", category: "active", price: 85, image: "Product+11" },
-    { id: 12, name: "Omega Plus", category: "bio", price: 95, image: "Product+12" }
+    { id: 1, name: "CVBS/S-Video to HDMI Converter", category: "av-distribution", price: 89.99, image: "CVBS or S-video to HDMI converter" },
+    { id: 2, name: "Premium AUX Cable", category: "cable", price: 19.99, image: "AUX-CABLE" },
+    { id: 3, name: "DTECH High Speed HDMI Cable", category: "cable", price: 49.99, image: "DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0" },
+    { id: 4, name: "LRS02-BS Premium Racing Simulator Cockpit", category: "gaming", price: 1299.99, image: "LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer" },
+    { id: 5, name: "4K UHD Generator", category: "av-distribution", price: 299.99, image: "4K UHD GENRATOR" },
+    { id: 6, name: "DVI-D to HDMI Adapter", category: "av-distribution", price: 25.99, image: "Dvi-d Male (24 1 Pin) to HDMI Female Adapter" },
+    { id: 7, name: "DisplayPort to HDMI Cable", category: "cable", price: 35.99, image: "HOT DisplayPort to HDMI Cable" },
+    { id: 8, name: "Ethernet Cable Cat6", category: "cable", price: 15.99, image: "Ethernet Cable Cat6 Lan Cable UTP RJ45 Network Cable 2m & 3m Patch Cord for Laptop Router RJ45 Network Cable" }
 ];
+
+// Make products globally available
+window.products = products;
 
 // Initialize the website
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== HOT IMPEX INITIALIZATION START ===');
+    
     initializeDarkMode();
     initializeMobileMenu();
     initializeCarousel();
     initializeProductCards();
     initializeSearch();
+    
+    console.log('Initializing cart...');
     initializeCart();
+    console.log('Cart initialized. Current cart:', cart);
+    
     initializeQuickView();
     initializeScrollAnimations();
     initializeMobileGestures();
@@ -236,6 +241,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('product-gallery')) {
         initializeProductPage();
     }
+    
+    console.log('=== HOT IMPEX INITIALIZATION COMPLETE ===');
+    console.log('Products available:', products.length);
+    console.log('Cart functions available:', {
+        addToCart: typeof window.addToCart,
+        removeFromCart: typeof window.removeFromCart,
+        toggleCart: typeof window.toggleCart
+    });
 });
 
 // Dark Mode Functionality
@@ -570,6 +583,11 @@ function hideHeroSearchSuggestions() {
 
 // Cart Functionality
 function initializeCart() {
+    // Ensure cart array is initialized
+    if (!Array.isArray(cart)) {
+        cart = [];
+    }
+    
     loadCartFromStorage();
     updateCartUI();
     
@@ -579,28 +597,54 @@ function initializeCart() {
     const cartOverlay = document.getElementById('cart-overlay');
     
     if (cartToggle) {
-        cartToggle.addEventListener('click', toggleCart);
+        cartToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleCart();
+        });
     }
     
     if (closeCart) {
-        closeCart.addEventListener('click', closeCartSidebar);
+        closeCart.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeCartSidebar();
+        });
     }
     
     if (cartOverlay) {
-        cartOverlay.addEventListener('click', closeCartSidebar);
+        cartOverlay.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeCartSidebar();
+        });
     }
+    
+    console.log('Cart initialized with', cart.length, 'items');
 }
 
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
+function addToCart(productId, quantity = 1) {
+    // Ensure productId is a number
+    const id = parseInt(productId);
+    const qty = parseInt(quantity) || 1;
+    console.log('Adding product to cart:', id, 'quantity:', qty);
     
-    const existingItem = cart.find(item => item.id === productId);
+    const product = products.find(p => p.id === id);
+    if (!product) {
+        console.error('Product not found:', id);
+        return;
+    }
+    
+    // Ensure cart is initialized
+    if (!Array.isArray(cart)) {
+        cart = [];
+    }
+    
+    const existingItem = cart.find(item => item.id === id);
     
     if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += qty;
+        console.log('Updated quantity for product:', id, 'to', existingItem.quantity);
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({ ...product, quantity: qty });
+        console.log('Added new product to cart:', id, 'with quantity:', qty);
     }
     
     saveCartToStorage();
@@ -609,17 +653,39 @@ function addToCart(productId) {
 }
 
 function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
+    // Ensure productId is a number
+    const id = parseInt(productId);
+    console.log('Removing product from cart:', id);
+    
+    // Ensure cart is initialized
+    if (!Array.isArray(cart)) {
+        cart = [];
+        return;
+    }
+    
+    cart = cart.filter(item => item.id !== id);
     saveCartToStorage();
     updateCartUI();
+    showCartNotification('Product removed from cart!');
 }
 
 function updateCartQuantity(productId, quantity) {
-    const item = cart.find(item => item.id === productId);
+    // Ensure productId is a number and quantity is positive
+    const id = parseInt(productId);
+    const newQuantity = parseInt(quantity);
+    console.log('Updating cart quantity for product:', id, 'to', newQuantity);
+    
+    // Ensure cart is initialized
+    if (!Array.isArray(cart)) {
+        cart = [];
+        return;
+    }
+    
+    const item = cart.find(item => item.id === id);
     if (item) {
-        item.quantity = Math.max(0, quantity);
+        item.quantity = Math.max(0, newQuantity);
         if (item.quantity === 0) {
-            removeFromCart(productId);
+            removeFromCart(id);
         } else {
             saveCartToStorage();
             updateCartUI();
@@ -631,14 +697,30 @@ function toggleCart() {
     const cartSidebar = document.getElementById('cart-sidebar');
     const cartOverlay = document.getElementById('cart-overlay');
     
-    if (cartSidebar && cartOverlay) {
-        if (cartSidebar.classList.contains('translate-x-full')) {
+    console.log('Toggle cart called');
+    console.log('Cart sidebar:', cartSidebar);
+    console.log('Cart overlay:', cartOverlay);
+    
+    if (cartSidebar) {
+        const isHidden = cartSidebar.classList.contains('translate-x-full');
+        
+        if (isHidden) {
+            // Show cart
             cartSidebar.classList.remove('translate-x-full');
-            cartOverlay.classList.remove('hidden');
+            if (cartOverlay) {
+                cartOverlay.classList.remove('hidden');
+            }
+            console.log('Cart opened');
         } else {
+            // Hide cart
             cartSidebar.classList.add('translate-x-full');
-            cartOverlay.classList.add('hidden');
+            if (cartOverlay) {
+                cartOverlay.classList.add('hidden');
+            }
+            console.log('Cart closed');
         }
+    } else {
+        console.error('Cart sidebar element not found');
     }
 }
 
@@ -646,8 +728,13 @@ function closeCartSidebar() {
     const cartSidebar = document.getElementById('cart-sidebar');
     const cartOverlay = document.getElementById('cart-overlay');
     
-    if (cartSidebar && cartOverlay) {
+    console.log('Close cart called');
+    
+    if (cartSidebar) {
         cartSidebar.classList.add('translate-x-full');
+    }
+    
+    if (cartOverlay) {
         cartOverlay.classList.add('hidden');
     }
 }
@@ -658,22 +745,35 @@ function updateCartUI() {
     const cartTotal = document.getElementById('cart-total');
     const cartCount = document.getElementById('cart-count');
     
+    console.log('Updating cart UI. Cart contents:', cart);
+    
+    // Ensure cart is an array
+    if (!Array.isArray(cart)) {
+        cart = [];
+    }
+    
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
+    console.log('Total items:', totalItems, 'Total price:', totalPrice);
+    
+    // Update cart badge
     if (cartBadge) {
         cartBadge.textContent = totalItems;
         cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
     }
     
+    // Update cart count
     if (cartCount) {
         cartCount.textContent = totalItems;
     }
     
+    // Update cart total
     if (cartTotal) {
-        cartTotal.textContent = `${totalPrice}EGP`;
+        cartTotal.textContent = `${totalPrice} EGP`;
     }
     
+    // Update cart items display
     if (cartItems) {
         if (cart.length === 0) {
             cartItems.innerHTML = '<div class="text-center text-gray-500 py-8">Your cart is empty</div>';
@@ -684,17 +784,17 @@ function updateCartUI() {
                          alt="${item.name}" class="w-15 h-15 rounded-lg object-cover">
                     <div class="flex-1">
                         <h4 class="font-medium text-gray-900 dark:text-white">${item.name}</h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">${item.price}EGP each</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${item.price} EGP each</p>
                         <div class="flex items-center space-x-2 mt-1">
                             <button onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})" 
-                                    class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm">-</button>
+                                    class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500">-</button>
                             <span class="text-sm font-medium">${item.quantity}</span>
                             <button onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})" 
-                                    class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm">+</button>
+                                    class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500">+</button>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="font-medium text-gray-900 dark:text-white">${item.price * item.quantity}EGP</p>
+                        <p class="font-medium text-gray-900 dark:text-white">${item.price * item.quantity} EGP</p>
                         <button onclick="removeFromCart(${item.id})" 
                                 class="text-red-500 hover:text-red-700 text-sm">Remove</button>
                     </div>
@@ -1020,17 +1120,29 @@ function viewProduct(productId) {
 }
 
 function saveCartToStorage() {
-    localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
+    try {
+        console.log('Saving cart to storage:', cart);
+        localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
+    } catch (error) {
+        console.error('Error saving cart to storage:', error);
+    }
 }
 
 function loadCartFromStorage() {
     const saved = localStorage.getItem('hotimpex-cart');
+    console.log('Loading cart from storage:', saved);
+    
     if (saved) {
         try {
-            cart = JSON.parse(saved);
+            const parsed = JSON.parse(saved);
+            cart = Array.isArray(parsed) ? parsed : [];
+            console.log('Cart loaded successfully:', cart);
         } catch (e) {
+            console.error('Error parsing cart from storage:', e);
             cart = [];
         }
+    } else {
+        cart = [];
     }
 }
 
@@ -2844,3 +2956,37 @@ function logout() {
     // Redirect to home page
     window.location.href = 'index.html';
 }
+
+// Make cart functions globally accessible for HTML onclick events
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.updateCartQuantity = updateCartQuantity;
+window.toggleCart = toggleCart;
+window.openQuickView = openQuickView;
+window.viewProduct = viewProduct;
+
+// Make cart and products accessible for debugging
+window.getCart = () => cart;
+window.getProducts = () => products;
+window.cart = cart;
+window.products = products;
+
+window.clearCart = () => {
+    cart = [];
+    saveCartToStorage();
+    updateCartUI();
+    console.log('Cart cleared');
+};
+
+// Debug function to test cart
+window.testCart = () => {
+    console.log('Testing cart functionality...');
+    console.log('Current cart:', cart);
+    console.log('Available products:', products);
+    
+    // Add first product
+    if (products.length > 0) {
+        addToCart(products[0].id);
+        console.log('Added product:', products[0].name);
+    }
+};

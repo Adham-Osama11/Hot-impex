@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8">
+    <h1 class="text-2xl font-bold mb-4">Cart Functionality Test</h1>
+    
+    <div class="mb-4">
+        <button id="test-add-to-cart" class="bg-blue-500 text-white px-4 py-2 rounded">Add Test Product to Cart</button>
+        <button id="show-cart" class="bg-green-500 text-white px-4 py-2 rounded ml-2">Show Cart</button>
+        <button id="clear-cart" class="bg-red-500 text-white px-4 py-2 rounded ml-2">Clear Cart</button>
+    </div>
+    
+    <div id="cart-display" class="mt-4 p-4 border rounded"></div>
+
+    <script>
+        // Test product
+        const testProduct = {
+            id: 1,
+            name: "Test Product",
+            price: 99.99,
+            image: "test.jpg",
+            quantity: 1
+        };
+
+        // Add to cart function
+        function addToCart(product) {
+            let cart = JSON.parse(localStorage.getItem('hotimpex-cart')) || [];
+            
+            const existingItemIndex = cart.findIndex(item => item.id === product.id);
+            
+            if (existingItemIndex !== -1) {
+                cart[existingItemIndex].quantity += product.quantity;
+            } else {
+                cart.push(product);
+            }
+            
+            localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
+            showCart();
+        }
+
+        // Show cart function
+        function showCart() {
+            const cart = JSON.parse(localStorage.getItem('hotimpex-cart')) || [];
+            const display = document.getElementById('cart-display');
+            
+            if (cart.length === 0) {
+                display.innerHTML = '<p>Cart is empty</p>';
+            } else {
+                display.innerHTML = '<h3>Cart Contents:</h3>' + 
+                    cart.map(item => `
+                        <div class="border-b py-2">
+                            <strong>${item.name}</strong> - ${item.price} EGP x ${item.quantity}
+                        </div>
+                    `).join('');
+            }
+        }
+
+        // Clear cart function
+        function clearCart() {
+            localStorage.removeItem('hotimpex-cart');
+            showCart();
+        }
+
+        // Event listeners
+        document.getElementById('test-add-to-cart').addEventListener('click', () => {
+            addToCart(testProduct);
+            alert('Product added to cart!');
+        });
+
+        document.getElementById('show-cart').addEventListener('click', showCart);
+        document.getElementById('clear-cart').addEventListener('click', clearCart);
+
+        // Show cart on load
+        showCart();
+    </script>
+</body>
+</html>

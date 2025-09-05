@@ -888,7 +888,7 @@ function updateCartUI() {
                             <button class="decrease-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
                                 <span class="font-bold">−</span>
                             </button>
-                            <span class="text-sm font-medium w-8 text-center">${item.quantity}</span>
+                            <span class="text-sm font-bold w-8 text-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-md">${item.quantity}</span>
                             <button class="increase-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
                                 <span class="font-bold">+</span>
                             </button>

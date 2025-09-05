@@ -188,20 +188,107 @@ let currentProductIndex = 0;
 let isAnimating = false;
 let rotationGroup;
 
-// Sample products data
+// Sample products data - Updated to match database products
 const products = [
-    { id: 1, name: "CVBS/S-Video to HDMI Converter", category: "av-distribution", price: 89.99, image: "CVBS or S-video to HDMI converter" },
-    { id: 2, name: "Premium AUX Cable", category: "cable", price: 19.99, image: "AUX-CABLE" },
-    { id: 3, name: "DTECH High Speed HDMI Cable", category: "cable", price: 49.99, image: "DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0" },
-    { id: 4, name: "LRS02-BS Premium Racing Simulator Cockpit", category: "gaming", price: 1299.99, image: "LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer" },
-    { id: 5, name: "4K UHD Generator", category: "av-distribution", price: 299.99, image: "4K UHD GENRATOR" },
-    { id: 6, name: "DVI-D to HDMI Adapter", category: "av-distribution", price: 25.99, image: "Dvi-d Male (24 1 Pin) to HDMI Female Adapter" },
-    { id: 7, name: "DisplayPort to HDMI Cable", category: "cable", price: 35.99, image: "HOT DisplayPort to HDMI Cable" },
-    { id: 8, name: "Ethernet Cable Cat6", category: "cable", price: 15.99, image: "Ethernet Cable Cat6 Lan Cable UTP RJ45 Network Cable 2m & 3m Patch Cord for Laptop Router RJ45 Network Cable" }
+    { 
+        id: "av-002", 
+        name: "CVBS/S-Video to HDMI Converter", 
+        category: "AV Distribution",
+        categorySlug: "av-distribution", 
+        price: 89.99,
+        currency: "EGP",
+        inStock: true,
+        bestSeller: true,
+        description: "Convert legacy CVBS or S-Video signals to modern HDMI output with superior quality",
+        shortDescription: "Legacy to HDMI signal converter",
+        image: "CVBS or S-video to HDMI converter",
+        mainImage: "assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg",
+        images: ["assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg"]
+    },
+    { 
+        id: "cable-001", 
+        name: "Premium AUX Cable", 
+        category: "Cable",
+        categorySlug: "cable", 
+        price: 19.99,
+        currency: "EGP",
+        inStock: true,
+        bestSeller: true,
+        description: "High-quality 3.5mm AUX cable for crystal clear audio transmission",
+        shortDescription: "Premium 3.5mm AUX audio cable",
+        image: "AUX-CABLE",
+        mainImage: "assets/images/Products/Cable/AUX-CABLE.jpg",
+        images: ["assets/images/Products/Cable/AUX-CABLE.jpg"]
+    },
+    { 
+        id: "cable-002", 
+        name: "DTECH High Speed HDMI Cable", 
+        category: "Cable",
+        categorySlug: "cable", 
+        price: 49.99,
+        currency: "EGP",
+        inStock: true,
+        bestSeller: true,
+        description: "Premium HDMI cable supporting 4K UHD, 3D, and 2160p for computers, TVs, and monitors",
+        shortDescription: "High-speed 4K HDMI cable",
+        image: "DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0",
+        mainImage: "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
+        images: ["assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg"]
+    },
+    { 
+        id: "gaming-002", 
+        name: "LRS02-BS Premium Racing Simulator Cockpit", 
+        category: "Gaming",
+        categorySlug: "gaming", 
+        price: 1299.99,
+        currency: "EGP",
+        inStock: true,
+        bestSeller: true,
+        description: "Premium racing simulator cockpit seat - professional grade product designed for serious sim racers",
+        shortDescription: "Premium racing simulator cockpit",
+        image: "LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer",
+        mainImage: "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
+        images: ["assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg"]
+    },
+    { 
+        id: "av-001", 
+        name: "4K UHD Generator", 
+        category: "AV Distribution",
+        categorySlug: "av-distribution", 
+        price: 299.99,
+        currency: "EGP",
+        inStock: true,
+        featured: true,
+        description: "High-performance 4K UHD signal generator for professional audio-visual applications",
+        shortDescription: "Professional 4K UHD signal generator",
+        image: "4K UHD GENRATOR",
+        mainImage: "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
+        images: ["assets/images/Products/Av distribution/4K UHD GENRATOR.jpg"]
+    },
+    { 
+        id: "av-003", 
+        name: "DVI-D to HDMI Adapter", 
+        category: "AV Distribution",
+        categorySlug: "av-distribution", 
+        price: 29.99,
+        currency: "EGP",
+        inStock: true,
+        description: "High-quality DVI-D Male (24+1 Pin) to HDMI Female adapter for seamless connectivity",
+        shortDescription: "DVI-D to HDMI adapter",
+        image: "Dvi-d Male (24 1 Pin) to HDMI Female Adapter",
+        mainImage: "assets/images/Products/Av distribution/Dvi-d Male (24 1 Pin) to HDMI Female Adapter.jpg",
+        images: ["assets/images/Products/Av distribution/Dvi-d Male (24 1 Pin) to HDMI Female Adapter.jpg"]
+    }
 ];
 
 // Make products globally available
 window.products = products;
+
+// Make cart functions globally available
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.updateCartQuantity = updateCartQuantity;
+window.toggleCart = toggleCart;
 
 // Initialize the website
 document.addEventListener('DOMContentLoaded', function() {
@@ -621,30 +708,27 @@ function initializeCart() {
 }
 
 function addToCart(productId, quantity = 1) {
-    // Ensure productId is a number
-    const id = parseInt(productId);
     const qty = parseInt(quantity) || 1;
-    console.log('Adding product to cart:', id, 'quantity:', qty);
+    console.log('Adding product to cart:', productId, 'quantity:', qty);
     
-    const product = products.find(p => p.id === id);
+    const product = products.find(p => String(p.id) === String(productId));
     if (!product) {
-        console.error('Product not found:', id);
+        console.error('Product not found:', productId);
         return;
     }
     
-    // Ensure cart is initialized
     if (!Array.isArray(cart)) {
         cart = [];
     }
     
-    const existingItem = cart.find(item => item.id === id);
+    const existingItem = cart.find(item => String(item.id) === String(product.id));
     
     if (existingItem) {
         existingItem.quantity += qty;
-        console.log('Updated quantity for product:', id, 'to', existingItem.quantity);
+        console.log('Updated quantity for product:', product.id, 'to', existingItem.quantity);
     } else {
         cart.push({ ...product, quantity: qty });
-        console.log('Added new product to cart:', id, 'with quantity:', qty);
+        console.log('Added new product to cart:', product.id, 'with quantity:', qty);
     }
     
     saveCartToStorage();
@@ -653,40 +737,47 @@ function addToCart(productId, quantity = 1) {
 }
 
 function removeFromCart(productId) {
-    // Ensure productId is a number
-    const id = parseInt(productId);
-    console.log('Removing product from cart:', id);
+    console.log('Removing product from cart:', productId, typeof productId);
     
-    // Ensure cart is initialized
     if (!Array.isArray(cart)) {
         cart = [];
         return;
     }
     
-    cart = cart.filter(item => item.id !== id);
-    saveCartToStorage();
-    updateCartUI();
-    showCartNotification('Product removed from cart!');
+    // Find and remove the item
+    const originalLength = cart.length;
+    cart = cart.filter(item => {
+        const itemIdStr = String(item.id);
+        const targetIdStr = String(productId);
+        return itemIdStr !== targetIdStr;
+    });
+    
+    const removed = cart.length < originalLength;
+    console.log('Removal successful:', removed, 'Cart length:', cart.length);
+    
+    if (removed) {
+        saveCartToStorage();
+        updateCartUI();
+        showCartNotification('Product removed from cart!');
+    }
 }
 
 function updateCartQuantity(productId, quantity) {
-    // Ensure productId is a number and quantity is positive
-    const id = parseInt(productId);
-    const newQuantity = parseInt(quantity);
-    console.log('Updating cart quantity for product:', id, 'to', newQuantity);
+    console.log('Updating cart quantity for product:', productId, 'to:', quantity);
     
-    // Ensure cart is initialized
+    const newQuantity = parseInt(quantity) || 0;
     if (!Array.isArray(cart)) {
         cart = [];
         return;
     }
     
-    const item = cart.find(item => item.id === id);
+    const item = cart.find(item => String(item.id) === String(productId));
+    
     if (item) {
-        item.quantity = Math.max(0, newQuantity);
-        if (item.quantity === 0) {
-            removeFromCart(id);
+        if (newQuantity <= 0) {
+            removeFromCart(productId);
         } else {
+            item.quantity = newQuantity;
             saveCartToStorage();
             updateCartUI();
         }
@@ -770,37 +861,95 @@ function updateCartUI() {
     
     // Update cart total
     if (cartTotal) {
-        cartTotal.textContent = `${totalPrice} EGP`;
+        cartTotal.textContent = `${totalPrice.toFixed(2)} EGP`;
     }
     
     // Update cart items display
     if (cartItems) {
         if (cart.length === 0) {
-            cartItems.innerHTML = '<div class="text-center text-gray-500 py-8">Your cart is empty</div>';
+            cartItems.innerHTML = `
+                <div class="text-center text-gray-500 dark:text-gray-400 py-16">
+                    <svg class="w-24 h-24 mx-auto text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <p class="mt-4 text-lg font-semibold">Your cart is empty</p>
+                    <p class="mt-2 text-sm">Add items to see them here.</p>
+                </div>
+            `;
         } else {
             cartItems.innerHTML = cart.map(item => `
-                <div class="flex items-center space-x-3 p-3 border-b border-gray-200 dark:border-gray-600">
-                    <img src="https://placehold.co/60x60/E0E0E0/808080?text=${item.image}" 
-                         alt="${item.name}" class="w-15 h-15 rounded-lg object-cover">
+                <div class="flex items-center space-x-3 p-3 border-b border-gray-200 dark:border-gray-600" data-item-id="${item.id}">
+                    <img src="${item.mainImage || item.image || 'assets/images/Products/placeholder.jpg'}" 
+                         alt="${item.name}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
                     <div class="flex-1">
                         <h4 class="font-medium text-gray-900 dark:text-white">${item.name}</h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">${item.price} EGP each</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${parseFloat(item.price).toFixed(2)} EGP each</p>
                         <div class="flex items-center space-x-2 mt-1">
-                            <button onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})" 
-                                    class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500">-</button>
-                            <span class="text-sm font-medium">${item.quantity}</span>
-                            <button onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})" 
-                                    class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500">+</button>
+                            <button class="decrease-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                                <span class="font-bold">−</span>
+                            </button>
+                            <span class="text-sm font-medium w-8 text-center">${item.quantity}</span>
+                            <button class="increase-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                                <span class="font-bold">+</span>
+                            </button>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="font-medium text-gray-900 dark:text-white">${item.price * item.quantity} EGP</p>
-                        <button onclick="removeFromCart(${item.id})" 
-                                class="text-red-500 hover:text-red-700 text-sm">Remove</button>
+                        <p class="font-medium text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(2)} EGP</p>
+                        <button class="remove-item text-red-500 hover:text-red-700 text-sm font-medium transition-colors">
+                            Remove
+                        </button>
                     </div>
                 </div>
             `).join('');
+            
+            // Add event listeners for cart buttons
+            setupCartEventListeners();
         }
+    }
+}
+
+function setupCartEventListeners() {
+    const cartItems = document.getElementById('cart-items');
+    if (!cartItems) return;
+    
+    // Remove old listeners
+    cartItems.removeEventListener('click', handleCartButtonClick);
+    
+    // Add new listener
+    cartItems.addEventListener('click', handleCartButtonClick);
+}
+
+function handleCartButtonClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const button = e.target.closest('button');
+    if (!button) return;
+    
+    const cartItem = button.closest('[data-item-id]');
+    if (!cartItem) return;
+    
+    const itemId = cartItem.dataset.itemId;
+    console.log('Cart button clicked for item:', itemId, 'Button class:', button.className);
+    
+    if (button.classList.contains('decrease-qty')) {
+        const currentItem = cart.find(item => String(item.id) === String(itemId));
+        if (currentItem) {
+            const newQty = currentItem.quantity - 1;
+            if (newQty <= 0) {
+                removeFromCart(itemId);
+            } else {
+                updateCartQuantity(itemId, newQty);
+            }
+        }
+    } else if (button.classList.contains('increase-qty')) {
+        const currentItem = cart.find(item => String(item.id) === String(itemId));
+        if (currentItem) {
+            updateCartQuantity(itemId, currentItem.quantity + 1);
+        }
+    } else if (button.classList.contains('remove-item')) {
+        removeFromCart(itemId);
     }
 }
 
@@ -1115,8 +1264,8 @@ function viewProduct(productId) {
     // Close search if open
     closeSearchBar();
     
-    // Navigate to product page (in a real app, this would be routing)
-    window.location.href = `product.html?id=${productId}`;
+    // Navigate to product page (use 'product' parameter for consistency)
+    window.location.href = `product.html?product=${productId}`;
 }
 
 function saveCartToStorage() {
@@ -1165,11 +1314,13 @@ function loadProductsFromStorage() {
 
 // Product management for admin
 function getProductById(id) {
-    return products.find(p => p.id === parseInt(id));
+    // Handle both string and numeric IDs
+    return products.find(p => p.id === id || p.id === parseInt(id));
 }
 
 function updateProduct(id, updatedData) {
-    const index = products.findIndex(p => p.id === parseInt(id));
+    // Handle both string and numeric IDs
+    const index = products.findIndex(p => p.id === id || p.id === parseInt(id));
     if (index !== -1) {
         products[index] = { ...products[index], ...updatedData };
         saveProductsToStorage();

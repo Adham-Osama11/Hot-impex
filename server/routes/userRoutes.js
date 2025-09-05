@@ -28,9 +28,6 @@ router.post('/login', [
 // @route   GET /api/users/profile
 router.get('/profile', auth, getUserProfile);
 
-// @route   GET /api/users/:id
-router.get('/:id', getUserProfile);
-
 // @route   PUT /api/users/profile
 router.put('/profile', auth, updateUserProfile);
 

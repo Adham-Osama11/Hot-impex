@@ -21,40 +21,40 @@
 </head>
 <body class="min-h-screen bg-gray-50">
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
-        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            <nav class="flex flex-col lg:flex-row items-center justify-between space-y-6 lg:space-y-0">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6">
+            <nav class="flex items-center justify-between h-16">
                 <!-- Mobile Header with Hot Button and Menu Toggle -->
-                <div class="flex items-center justify-between w-full lg:w-auto">
+                <div class="flex items-center justify-between w-full lg:w-auto lg:flex-shrink-0">
                     <!-- Hot Button Section -->
                     <div class="flex-shrink-0">
-                        <button class="logo text-gray-800 font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-lg sm:text-xl bg-white/15 backdrop-blur-3xl">
-                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-32">
+                        <button class="logo text-gray-800 font-bold py-3 px-6 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-xl lg:text-xl bg-white/15 backdrop-blur-3xl">
+                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-28 lg:h-12 lg:w-32">
                         </button>
                     </div>
 
                     <!-- Mobile Menu Toggle Button -->
                     <button id="mobile-menu-toggle" class="lg:hidden text-gray-800 p-3 rounded-full border border-white/30 shadow-2xl transition-all duration-200 bg-white/15 backdrop-blur-3xl hover:bg-white/25">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
                 </div>
 
                 <!-- Main Navigation Section -->
-                <div id="main-nav" class="w-full lg:w-auto hidden lg:block">
-                    <div class="rounded-full p-3 flex flex-col lg:flex-row items-center border border-white/30 shadow-2xl gap-3 lg:gap-6 w-full lg:w-auto bg-white/15 backdrop-blur-3xl">
-                        <a href="/index.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Home</a>
-                        <a href="#" class="text-gray-800 px-6 py-3 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center border border-white/20 shadow-lg">Shop</a>
-                        <a href="contact.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">Contact Us</a>
-                        <a href="about.html" class="text-gray-800 px-6 py-3 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium w-full lg:w-auto text-center">About Us</a>
+                <div id="main-nav" class="hidden lg:flex items-center">
+                    <div class="rounded-full p-3 flex items-center border border-white/30 shadow-2xl gap-2 bg-white/15 backdrop-blur-3xl">
+                        <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Home</a>
+                        <a href="#" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">Shop</a>
+                        <a href="contact.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Contact Us</a>
+                        <a href="about.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">About Us</a>
                         
                         <!-- Dark Mode Toggle -->
-                        <div class="flex items-center justify-center px-6 py-3 w-full lg:w-auto">
+                        <div class="flex items-center justify-center px-4 py-2.5">
                             <div id="theme-toggle" class="theme-toggle" title="Toggle Dark Mode">
-                                <svg class="sun-icon absolute top-1 left-1 w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="sun-icon absolute top-1 left-1 w-4 h-4 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
                                 </svg>
-                                <svg class="moon-icon absolute top-1 right-1 w-5 h-5 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="moon-icon absolute top-1 right-1 w-4 h-4 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                                 </svg>
                             </div>
@@ -62,14 +62,14 @@
                         
                         <!-- User Icon with Dropdown -->
                         <div class="relative">
-                            <div id="user-dropdown-toggle" class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                            <div id="user-dropdown-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
                                 <!-- Simple SVG for user icon -->
-                                <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                                <svg class="user-icon w-4 h-4" viewBox="0 0 24 24" fill="#374151">
                                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                                 </svg>
-                                <span id="user-display-name" class="hidden lg:inline text-gray-700">Account</span>
+                                <span id="user-display-name" class="hidden lg:inline text-gray-700 text-base">Account</span>
                                 <!-- Dropdown Arrow -->
-                                <svg class="w-5 h-5 text-gray-700 transition-transform duration-200" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="w-3.5 h-3.5 text-gray-700 transition-transform duration-200" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </div>
@@ -97,27 +97,37 @@
                                     </div>
                                     <div class="py-1">
                                         <a href="profile.html" id="user-profile-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
-                                            <i class="fas fa-user mr-2"></i>My Profile
+                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                            Profile
                                         </a>
                                         <a href="#" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
-                                            <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
+                                            </svg>
+                                            My Orders
                                         </a>
-                                        <hr class="my-1 border-gray-200/50">
-                                        <button id="user-logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/50 transition-colors duration-200">
-                                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                                        </button>
+                                        <div class="border-t border-gray-200/50 mt-2 pt-2">
+                                            <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/50 transition-colors duration-200">
+                                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                                </svg>
+                                                Sign Out
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Shopping Cart Icon with Count -->
-                        <div id="cart-toggle" class="flex items-center justify-center space-x-2 px-6 py-3 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium w-full lg:w-auto">
+                        <div id="cart-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
                             <!-- Simple SVG for shopping bag icon -->
-                            <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
+                            <svg class="user-icon w-4 h-4" viewBox="0 0 24 24" fill="#374151">
                                 <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.763.746-1.858 1.705L2.26 19.99a2.25 2.25 0 002.24 2.51h15.002a2.25 2.25 0 002.24-2.51l-1.395-11.535A1.875 1.875 0 0018.488 6.75H16.5V6a4.5 4.5 0 10-9 0zM15 6.75V6a3 3 0 10-6 0v.75H15z" clip-rule="evenodd" />
                             </svg>
-                            <span id="cart-badge" class="bg-orange-500 text-white text-sm font-semibold px-3 py-1 rounded-full" style="display: none;">0</span>
+                            <span id="cart-badge" class="bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full" style="display: none;">0</span>
                         </div>
                     </div>
                 </div>
@@ -598,63 +608,87 @@
     <!-- JavaScript -->
     <script src="assets/js/scripts.js"></script>
     
-    <!-- Debug Script for Shop Page -->
+    <!-- Shop Page Debug Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Shop page loaded - checking elements...');
+            console.log('=== CART DEBUG INFO ===');
             
-            // Check if dropdown elements exist
-            const userDropdownToggle = document.getElementById('user-dropdown-toggle');
-            const userDropdownMenu = document.getElementById('user-dropdown-menu');
-            const cartToggle = document.getElementById('cart-toggle');
-            const cartSidebar = document.getElementById('cart-sidebar');
-            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            console.log('User dropdown toggle:', !!userDropdownToggle);
-            console.log('User dropdown menu:', !!userDropdownMenu);
-            console.log('Cart toggle:', !!cartToggle);
-            console.log('Cart sidebar:', !!cartSidebar);
-            console.log('Mobile menu toggle:', !!mobileMenuToggle);
-            console.log('Mobile menu:', !!mobileMenu);
-            
-            // Test dropdown manually
-            if (userDropdownToggle && userDropdownMenu) {
-                console.log('Adding manual dropdown test...');
-                userDropdownToggle.addEventListener('click', function(e) {
-                    console.log('Dropdown clicked!');
-                    e.stopPropagation();
-                    const isHidden = userDropdownMenu.classList.contains('hidden');
-                    console.log('Current state hidden:', isHidden);
-                    if (isHidden) {
-                        userDropdownMenu.classList.remove('hidden');
-                        console.log('Showing dropdown');
-                    } else {
-                        userDropdownMenu.classList.add('hidden');
-                        console.log('Hiding dropdown');
+            // Wait a bit to ensure all scripts are loaded
+            setTimeout(() => {
+                const cartToggle = document.getElementById('cart-toggle');
+                const cartSidebar = document.getElementById('cart-sidebar');
+                const cartOverlay = document.getElementById('cart-overlay');
+                
+                console.log('Cart toggle element:', cartToggle);
+                console.log('Cart sidebar element:', cartSidebar);
+                console.log('Cart overlay element:', cartOverlay);
+                console.log('toggleCart function available:', typeof window.toggleCart);
+                
+                // Check if scripts.js cart initialization worked
+                if (cartToggle) {
+                    // Remove any existing listeners to avoid duplicates
+                    const newCartToggle = cartToggle.cloneNode(true);
+                    cartToggle.parentNode.replaceChild(newCartToggle, cartToggle);
+                    
+                    console.log('Adding fresh cart toggle listener');
+                    newCartToggle.addEventListener('click', function(e) {
+                        console.log('Cart toggle clicked!');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (cartSidebar && cartOverlay) {
+                            const isHidden = cartSidebar.classList.contains('translate-x-full');
+                            console.log('Cart currently hidden:', isHidden);
+                            
+                            if (isHidden) {
+                                // Show cart
+                                cartSidebar.classList.remove('translate-x-full');
+                                cartOverlay.classList.remove('hidden');
+                                console.log('Showing cart');
+                            } else {
+                                // Hide cart
+                                cartSidebar.classList.add('translate-x-full');
+                                cartOverlay.classList.add('hidden');
+                                console.log('Hiding cart');
+                            }
+                        } else {
+                            console.error('Cart elements not found!');
+                        }
+                    });
+                    
+                    // Add close cart functionality
+                    const closeCart = document.getElementById('close-cart');
+                    if (closeCart) {
+                        closeCart.addEventListener('click', function(e) {
+                            console.log('Close cart clicked!');
+                            e.preventDefault();
+                            if (cartSidebar && cartOverlay) {
+                                cartSidebar.classList.add('translate-x-full');
+                                cartOverlay.classList.add('hidden');
+                            }
+                        });
                     }
-                });
-            }
-            
-            // Test cart manually
-            if (cartToggle && cartSidebar) {
-                console.log('Adding manual cart test...');
-                cartToggle.addEventListener('click', function(e) {
-                    console.log('Cart clicked!');
-                    e.stopPropagation();
-                    const isHidden = cartSidebar.classList.contains('translate-x-full');
-                    console.log('Cart hidden:', isHidden);
-                    if (isHidden) {
-                        cartSidebar.classList.remove('translate-x-full');
-                        console.log('Showing cart');
-                    } else {
-                        cartSidebar.classList.add('translate-x-full');
-                        console.log('Hiding cart');
+                    
+                    // Add overlay click to close
+                    if (cartOverlay) {
+                        cartOverlay.addEventListener('click', function(e) {
+                            console.log('Overlay clicked!');
+                            e.preventDefault();
+                            if (cartSidebar) {
+                                cartSidebar.classList.add('translate-x-full');
+                                cartOverlay.classList.add('hidden');
+                            }
+                        });
                     }
-                });
-            }
+                    
+                } else {
+                    console.error('Cart toggle element not found!');
+                }
+            }, 500);
         });
     </script>
+    
+
     
     <!-- Category Filtering JavaScript -->
     <script>

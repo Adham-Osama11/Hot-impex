@@ -17,18 +17,13 @@ const createOrder = async (req, res) => {
         }
 
         const orderData = {
-            userId: req.body.userId || req.user?.id,
+            userId: req.user?.id,
             customerInfo: req.body.customerInfo,
             items: req.body.items,
             shippingAddress: req.body.shippingAddress,
             billingAddress: req.body.billingAddress || req.body.shippingAddress,
             paymentMethod: req.body.paymentMethod,
-            subtotal: req.body.subtotal,
-            shipping: req.body.shipping,
-            tax: req.body.tax,
-            total: req.body.total,
-            notes: req.body.notes || '',
-            status: req.body.status || 'pending'
+            notes: req.body.notes || ''
         };
 
         // Validate order data
@@ -42,68 +37,46 @@ const createOrder = async (req, res) => {
         }
 
         // Verify products exist and calculate total
-        let calculatedSubtotal = 0;
+        let totalAmount = 0;
         const verifiedItems = [];
 
         for (const item of orderData.items) {
-            // For checkout, items might already have product data
-            let product;
-            if (item.productId) {
-                product = await hybridDb.findProductById(item.productId);
-                if (!product) {
-                    return res.status(404).json({
-                        status: 'error',
-                        message: `Product with ID ${item.productId} not found`
-                    });
-                }
-            } else {
-                // Use the product data from the request
-                product = {
-                    name: item.name,
-                    price: item.price,
-                    inStock: true // Assume in stock for guest orders
-                };
+            const product = await hybridDb.findProductById(item.productId);
+            if (!product) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: `Product with ID ${item.productId} not found`
+                });
             }
 
-            if (product.inStock === false) {
+            if (!product.inStock) {
                 return res.status(400).json({
                     status: 'error',
                     message: `Product ${product.name} is out of stock`
                 });
             }
 
-            const itemTotal = (item.price || product.price) * item.quantity;
-            calculatedSubtotal += itemTotal;
+            const itemTotal = product.price * item.quantity;
+            totalAmount += itemTotal;
 
             verifiedItems.push({
-                productId: item.productId || null,
-                productName: item.name || product.name,
-                price: item.price || product.price,
+                productId: item.productId,
+                productName: product.name,
+                price: product.price,
                 quantity: item.quantity,
-                total: itemTotal,
-                image: item.image || product.image || product.images?.[0]
-            });
-        }
-
-        // Verify totals match
-        if (Math.abs(calculatedSubtotal - orderData.subtotal) > 1) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Order total mismatch'
+                total: itemTotal
             });
         }
 
         orderData.items = verifiedItems;
-        orderData.orderNumber = `HOT${Date.now()}${Math.floor(Math.random() * 1000)}`;
+        orderData.totalAmount = totalAmount;
 
         const order = await hybridDb.createOrder(orderData);
 
         res.status(201).json({
             status: 'success',
-            success: true,
             data: {
-                order: new Order(order).toJSON(),
-                orderNumber: orderData.orderNumber
+                order: new Order(order).toJSON()
             }
         });
     } catch (error) {

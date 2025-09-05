@@ -1,15 +1,10 @@
 class Order {
     constructor(data) {
         this.id = data.id;
-        this.orderNumber = data.orderNumber;
         this.userId = data.userId;
         this.customerInfo = data.customerInfo || {};
         this.items = data.items || [];
-        this.subtotal = data.subtotal || 0;
-        this.shipping = data.shipping || 0;
-        this.tax = data.tax || 0;
-        this.total = data.total || 0;
-        this.totalAmount = data.totalAmount || data.total || 0; // Backward compatibility
+        this.totalAmount = data.totalAmount || 0;
         this.currency = data.currency || 'EGP';
         this.status = data.status || 'pending';
         this.paymentMethod = data.paymentMethod;

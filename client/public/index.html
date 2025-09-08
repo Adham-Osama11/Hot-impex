@@ -860,7 +860,7 @@
                     <span class="text-lg font-semibold text-gray-800 dark:text-white">Subtotal:</span>
                     <span id="cart-total" class="text-2xl font-bold text-purple-600 dark:text-purple-400">0 EGP</span>
                 </div>
-                <button class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 font-bold text-lg">
+                <button id="checkout-btn" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 font-bold text-lg">
                     Proceed to Checkout
                 </button>
             </div>
@@ -888,5 +888,81 @@
 
     <!-- JavaScript -->
     <script src="assets/js/scripts.js"></script>
+    <script>
+        // Checkout functionality
+        function proceedToCheckout() {
+            console.log('proceedToCheckout function called!');
+            
+            // Simple test - just navigate directly
+            alert('Function is working! About to navigate to checkout.html');
+            window.location.href = 'checkout.html';
+        }
+        
+        // Function to show notifications (fallback if not available in scripts.js)
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+            
+            // Set colors based on type
+            switch(type) {
+                case 'success':
+                    notification.className += ' bg-green-500 text-white';
+                    break;
+                case 'warning':
+                    notification.className += ' bg-yellow-500 text-white';
+                    break;
+                case 'error':
+                    notification.className += ' bg-red-500 text-white';
+                    break;
+                default:
+                    notification.className += ' bg-blue-500 text-white';
+            }
+            
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add event listener for checkout button after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up checkout button');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            if (checkoutBtn) {
+                console.log('Checkout button found, adding event listener');
+                checkoutBtn.addEventListener('click', function(e) {
+                    console.log('Checkout button clicked!');
+                    e.preventDefault();
+                    proceedToCheckout();
+                });
+            } else {
+                console.log('Checkout button not found!');
+            }
+        });
+    </script>
 </body>
 </html>

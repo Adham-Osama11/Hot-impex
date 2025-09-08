@@ -925,6 +925,19 @@ function updateCartUI() {
         cartTotal.textContent = `${totalPrice.toFixed(2)} EGP`;
     }
     
+    // Update checkout button state
+    const checkoutButton = document.getElementById('checkout-btn');
+    if (checkoutButton) {
+        if (cart.length === 0) {
+            // Don't disable the button, just change appearance
+            checkoutButton.classList.add('opacity-50');
+            checkoutButton.classList.remove('hover:from-purple-700', 'hover:to-pink-700', 'hover:scale-105');
+        } else {
+            checkoutButton.classList.remove('opacity-50');
+            checkoutButton.classList.add('hover:from-purple-700', 'hover:to-pink-700', 'hover:scale-105');
+        }
+    }
+
     // Update cart items display
     if (cartItems) {
         if (cart.length === 0) {

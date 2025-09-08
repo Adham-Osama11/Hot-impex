@@ -5,7 +5,7 @@ This document outlines the clean, modular structure of the HOT IMPEX admin dashb
 ## Directory Structure
 
 ```
-client/public/assets/js/admin/
+public/assets/js/admin/
 ├── app.js          # Main application controller
 ├── api.js          # API client for backend communication
 ├── charts.js       # Chart management (Chart.js integration)

@@ -23,41 +23,53 @@ A modern, responsive e-commerce website for HOT IMPEX featuring product showcase
 
 ```
 Hot impex/
-├── 📁 admin/                    # Admin dashboard
-│   └── admin.html              # Admin panel interface
-├── 📁 assets/                   # Static assets
-│   ├── 📁 css/                 # Stylesheets
-│   │   ├── admin-styles.css    # Admin panel styles
-│   │   └── styles.css          # Main website styles
-│   ├── 📁 js/                  # JavaScript files
-│   │   ├── admin.js           # Admin panel functionality
-│   │   └── scripts.js         # Main website scripts
-│   └── 📁 images/             # Image assets
-│       ├── 📁 logos/          # Logo files
-│       │   ├── logo.png
-│       │   ├── logo-dark.svg
-│       │   └── logo-light.svg
-│       ├── 📁 partners/       # Partner logos
-│       │   ├── carrefour-png
-│       │   ├── ET_Logo.png
-│       │   ├── mercedes.png
-│       │   ├── Samsung_Logo.png
-│       │   └── suncity.jpg
-│       ├── 📁 Products/       # Product images
-│       │   ├── 📁 Av distribution/
-│       │   ├── 📁 Cable/
-│       │   ├── 📁 Ceiling bracket/
-│       │   └── 📁 Gaming/
-│       ├── kiosks without BG.png
-│       ├── racing sim seat_without BG.png
-│       └── screen telescopic_without BG.png
-├── about.html                  # About page
-├── contact.html               # Contact page
-├── index.html                 # Homepage
-├── product.html               # Product details page
-├── products.json              # Product data
-├── shop.html                  # Shop/catalog page
-└── tailwind.config.js         # Tailwind CSS configuration
+├── 📁 public/                   # Frontend assets and pages
+│   ├── 📁 admin/               # Admin dashboard
+│   │   └── admin.html          # Admin panel interface
+│   ├── 📁 assets/              # Static assets
+│   │   ├── 📁 css/             # Stylesheets
+│   │   │   ├── admin-styles.css # Admin panel styles
+│   │   │   └── styles.css      # Main website styles
+│   │   ├── 📁 js/              # JavaScript files
+│   │   │   ├── admin.js        # Admin panel functionality
+│   │   │   └── scripts.js      # Main website scripts
+│   │   └── 📁 images/          # Image assets
+│   │       ├── 📁 logos/       # Logo files
+│   │       ├── 📁 partners/    # Partner logos
+│   │       ├── 📁 Products/    # Product images
+│   │       └── *.png           # Other images
+│   ├── about.html              # About page
+│   ├── contact.html            # Contact page
+│   ├── checkout.html           # Checkout page
+│   ├── index.html              # Homepage
+│   ├── product.html            # Product details page
+│   ├── profile.html            # User profile page
+│   └── shop.html               # Shop/catalog page
+├── 📁 server/                  # Backend API
+│   ├── 📁 config/              # Configuration files
+│   ├── 📁 controllers/         # Route controllers
+│   ├── 📁 middleware/          # Express middleware
+│   ├── 📁 models/              # Data models
+│   ├── 📁 routes/              # API routes
+│   ├── 📁 services/            # Business logic
+│   ├── 📁 utils/               # Utility functions
+│   └── server.js               # Main server file
+├── 📁 database/                # JSON database files
+│   ├── orders.json            # Order data
+│   ├── products.json          # Product data
+│   └── users.json             # User data
+├── 📁 docs/                    # Documentation
+│   ├── DEVELOPMENT.md         # Development guide
+│   └── MONGODB_SETUP.md       # MongoDB setup guide
+├── 📁 scripts/                 # Utility scripts
+│   ├── setup-mongodb.sh      # MongoDB setup script
+│   ├── test-api.sh           # API testing script
+│   └── verify-structure.sh    # Structure verification
+├── 📁 tests/                   # Test files
+│   └── test-cart-functionality.html
+├── package.json               # Dependencies and scripts
+├── tailwind.config.js         # Tailwind CSS configuration
+└── README.md                  # This file
 ```
 
 ## 🚀 Features
@@ -113,8 +125,8 @@ Hot impex/
    ```
 
 2. **Open the project**
-   - Open `client/public/index.html` in your browser for the main website
-   - Open `client/public/admin/admin.html` for the admin dashboard
+   - Open `public/index.html` in your browser for the main website
+   - Open `public/admin/admin.html` for the admin dashboard
 
 3. **Development**
    - No build process required - pure HTML/CSS/JS

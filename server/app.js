@@ -60,8 +60,8 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-// Serve static files from client/public directory
-app.use(express.static(path.join(__dirname, '../client/public')));
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, '../public')));
 
 // API Routes
 app.use('/api/products', productRoutes);
@@ -81,27 +81,27 @@ app.get('/api/health', (req, res) => {
 
 // Serve client routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/public/index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.get('/shop', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/public/shop.html'));
+    res.sendFile(path.join(__dirname, '../public/shop.html'));
 });
 
 app.get('/product', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/public/product.html'));
+    res.sendFile(path.join(__dirname, '../public/product.html'));
 });
 
 app.get('/about', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/public/about.html'));
+    res.sendFile(path.join(__dirname, '../public/about.html'));
 });
 
 app.get('/contact', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/public/contact.html'));
+    res.sendFile(path.join(__dirname, '../public/contact.html'));
 });
 
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/public/admin/admin.html'));
+    res.sendFile(path.join(__dirname, '../public/admin/admin.html'));
 });
 
 // Error handling middleware

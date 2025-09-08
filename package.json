@@ -6,10 +6,12 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
-    "client": "python3 -m http.server 8000",
+    "client": "cd public && python3 -m http.server 8000",
     "server": "node server/server.js",
-    "verify": "bash verify-structure.sh",
-    "clean": "echo 'Project already cleaned and organized!'"
+    "verify": "bash scripts/verify-structure.sh",
+    "setup-db": "bash scripts/setup-mongodb.sh",
+    "test-api": "bash scripts/test-api.sh",
+    "clean": "echo 'Project structure is clean and organized!'"
   },
   "repository": {
     "type": "git",

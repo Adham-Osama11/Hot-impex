@@ -18,7 +18,7 @@
         }
     </script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+<body class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100"></div>
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6">
@@ -27,9 +27,9 @@
                 <div class="flex items-center justify-between w-full lg:w-auto lg:flex-shrink-0">
                     <!-- Hot Button Section -->
                     <div class="flex-shrink-0">
-                        <a href="index.html" class="logo text-gray-800 font-bold py-3 px-6 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-xl lg:text-xl bg-white/15 backdrop-blur-3xl">
+                        <button class="logo text-gray-800 font-bold py-3 px-6 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-xl lg:text-xl bg-white/15 backdrop-blur-3xl">
                             <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-28 lg:h-12 lg:w-32">
-                        </a>
+                        </button>
                     </div>
 
                     <!-- Mobile Menu Toggle Button -->
@@ -385,7 +385,7 @@
 
             <!-- Right Side - Order Summary -->
             <div class="lg:col-span-1">
-                <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 border border-gray-200 sticky top-32">
+                <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 border border-gray-200 lg:sticky lg:top-32">
                     <div class="flex items-center mb-6">
                         <div class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl mr-4 flex items-center justify-center">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -522,30 +522,192 @@
 
     <!-- JavaScript -->
     <script src="assets/js/scripts.js"></script>
+    
+    <!-- Simple CSS fix for scroll -->
+    <style>
+        /* Prevent horizontal scroll */
+        html, body {
+            overflow-x: hidden;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Fix sticky positioning */
+        .lg\:sticky {
+            position: sticky;
+        }
+        
+        /* Disable sticky on mobile */
+        @media (max-width: 1023px) {
+            .lg\:sticky {
+                position: static !important;
+            }
+        }
+    </style>
+    
     <script>
         // Checkout page specific JavaScript
         document.addEventListener('DOMContentLoaded', function() {
             loadCheckoutCart();
+            loadUserData();
             setupPaymentMethodToggle();
             setupFormValidation();
             setupMobileMenu();
             setupThemeToggle();
+            updateCartUI();
         });
 
-        // Load cart items for checkout
+        // Load user data and prefill form
+        async function loadUserData() {
+            try {
+                const user = AuthService.getUser();
+                const token = AuthService.getToken();
+                
+                console.log('Loading user data for checkout...');
+                console.log('Local user data:', user);
+                console.log('Token available:', !!token);
+                
+                if (token && user) {
+                    // Try to get fresh user data from server
+                    try {
+                        const freshUserData = await AuthService.getCurrentUser();
+                        console.log('Fresh user data from server:', freshUserData);
+                        
+                        if (freshUserData && freshUserData.data && freshUserData.data.user) {
+                            prefillUserForm(freshUserData.data.user);
+                        } else if (user) {
+                            // Fallback to cached user data
+                            prefillUserForm(user);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching fresh user data:', error);
+                        // Fallback to cached user data
+                        if (user) {
+                            prefillUserForm(user);
+                        }
+                    }
+                } else {
+                    console.log('No user logged in, form will remain empty');
+                }
+            } catch (error) {
+                console.error('Error in loadUserData:', error);
+            }
+        }
+
+        // Prefill form with user data
+        function prefillUserForm(user) {
+            console.log('Prefilling form with user data:', user);
+            
+            try {
+                // Basic user information
+                if (user.firstName) {
+                    const firstNameField = document.getElementById('firstName');
+                    if (firstNameField) firstNameField.value = user.firstName;
+                }
+                
+                if (user.lastName) {
+                    const lastNameField = document.getElementById('lastName');
+                    if (lastNameField) lastNameField.value = user.lastName;
+                }
+                
+                if (user.email) {
+                    const emailField = document.getElementById('email');
+                    if (emailField) emailField.value = user.email;
+                }
+                
+                if (user.phone) {
+                    const phoneField = document.getElementById('phone');
+                    if (phoneField) phoneField.value = user.phone;
+                }
+                
+                // Address information
+                if (user.address) {
+                    const addressField = document.getElementById('address');
+                    if (addressField) addressField.value = user.address;
+                }
+                
+                if (user.city) {
+                    const cityField = document.getElementById('city');
+                    if (cityField) cityField.value = user.city;
+                }
+                
+                if (user.state) {
+                    const stateField = document.getElementById('state');
+                    if (stateField) stateField.value = user.state;
+                }
+                
+                if (user.zipCode) {
+                    const zipField = document.getElementById('zipCode');
+                    if (zipField) zipField.value = user.zipCode;
+                }
+                
+                if (user.country) {
+                    const countryField = document.getElementById('country');
+                    if (countryField) countryField.value = user.country;
+                }
+                
+                console.log('Form prefilled successfully');
+                
+                // Show a notification that data was loaded
+                showNotification('Your profile information has been loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error prefilling form:', error);
+            }
+        }
+        // Enhanced cart loading for checkout
         function loadCheckoutCart() {
-            const cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            console.log('Loading checkout cart...');
+            
+            // Try both possible cart key formats
+            let cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
+            if (cart.length === 0) {
+                cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            }
+            
             const cartItemsContainer = document.getElementById('checkout-cart-items');
             const orderTotals = document.getElementById('order-totals');
             const placeOrderBtn = document.getElementById('place-order-btn');
 
+            console.log('Cart data:', cart);
+            console.log('Cart length:', cart.length);
+            
+            // Debug each cart item
+            cart.forEach((item, index) => {
+                console.log(`Cart item ${index}:`, item);
+                console.log('Item properties:', {
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: item.image
+                });
+            });
+
             if (cart.length === 0) {
                 placeOrderBtn.disabled = true;
                 orderTotals.classList.add('hidden');
+                
+                // Show empty cart message
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <p class="text-lg font-semibold">Your cart is empty</p>
+                        <p class="text-sm mt-2">Add items to see them here.</p>
+                        <a href="shop.html" class="inline-block mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                            Continue Shopping
+                        </a>
+                    </div>
+                `;
                 return;
             }
 
-            // Show order totals
+            // Show order totals and enable place order button
             orderTotals.classList.remove('hidden');
             placeOrderBtn.disabled = false;
 
@@ -554,35 +716,121 @@
 
             let subtotal = 0;
 
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
+            cart.forEach((item, index) => {
+                // Ensure we have valid data
+                const itemPrice = parseFloat(item.price) || 0;
+                const itemQuantity = parseInt(item.quantity) || 1;
+                const itemTotal = itemPrice * itemQuantity;
                 subtotal += itemTotal;
+                
+                console.log(`Processing item ${index}:`, {
+                    name: item.name,
+                    price: itemPrice,
+                    quantity: itemQuantity,
+                    total: itemTotal,
+                    image: item.image,
+                    mainImage: item.mainImage
+                });
 
+                // Determine the correct image to use
+                const imageUrl = item.mainImage || item.image || 'assets/images/placeholder.jpg';
+                console.log(`Using image URL for ${item.name}:`, imageUrl);
+                // Handle image error - create a fallback with better styling
+                const imgError = "this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkgzMlYzMkgyMlYyMloiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTM0IDI0SzQyVjMySDM0VjI0WiIgZmlsbD0iIzlDQTNBRiIvPgo8cGF0aCBkPSJNMjIgMzRIMzJWNDJIMjJWMzRaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik0zNCAzNEg0MlY0MkgzNFYzNFoiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+'; this.style.objectFit='contain';";
+                
                 const cartItemHTML = `
-                    <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl">
-                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-purple-300 transition-colors duration-200">
+                        <div class="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg border border-gray-200 overflow-hidden">
+                            <img src="${imageUrl}" 
+                                 alt="${item.name || 'Product'}" 
+                                 class="w-full h-full object-cover"
+                                 onerror="${imgError}"
+                                 loading="lazy">
+                        </div>
                         <div class="flex-1">
-                            <h4 class="font-semibold text-gray-800 text-sm">${item.name}</h4>
-                            <p class="text-gray-600 text-xs">Qty: ${item.quantity}</p>
+                            <h4 class="font-semibold text-gray-800 text-sm line-clamp-2">${item.name || 'Unknown Product'}</h4>
+                            <p class="text-gray-600 text-xs">Qty: ${itemQuantity}</p>
+                            <p class="text-purple-600 text-xs font-medium">${itemPrice.toLocaleString()} EGP each</p>
                         </div>
                         <div class="text-right">
                             <p class="font-bold text-purple-600">${itemTotal.toLocaleString()} EGP</p>
+                            <button onclick="removeFromCheckoutCart(${index})" class="text-red-500 hover:text-red-700 text-xs mt-1 transition-colors duration-200">
+                                Remove
+                            </button>
                         </div>
                     </div>
                 `;
                 cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHTML);
             });
 
-            // Update totals
-            const shipping = 0; // Free shipping
+            // Calculate and update totals
+            const shipping = subtotal >= 1000 ? 0 : 50; // Free shipping over 1000 EGP
             const tax = Math.round(subtotal * 0.14); // 14% tax
             const total = subtotal + shipping + tax;
+
+            console.log('Cart totals:', { subtotal, shipping, tax, total });
 
             document.getElementById('checkout-subtotal').textContent = `${subtotal.toLocaleString()} EGP`;
             document.getElementById('checkout-shipping').textContent = shipping === 0 ? 'Free' : `${shipping.toLocaleString()} EGP`;
             document.getElementById('checkout-tax').textContent = `${tax.toLocaleString()} EGP`;
             document.getElementById('checkout-total').textContent = `${total.toLocaleString()} EGP`;
+
+            // Update cart badge in header
+            updateCartUI();
+            
+            console.log('Cart loaded successfully with', cart.length, 'items');
         }
+
+        // Remove item from checkout cart
+        function removeFromCheckoutCart(index) {
+            // Try both possible cart key formats
+            let cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
+            if (cart.length === 0) {
+                cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            }
+            
+            if (index >= 0 && index < cart.length) {
+                cart.splice(index, 1);
+                // Update both possible cart keys to ensure consistency
+                localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
+                localStorage.setItem('hotimpex_cart', JSON.stringify(cart));
+                loadCheckoutCart(); // Reload the cart display
+                showNotification('Item removed from cart', 'info');
+            }
+        }
+
+        // Test function to add sample items to cart (for debugging)
+        function addTestCartItems() {
+            const testItems = [
+                {
+                    id: 'test-1',
+                    name: '4K UHD Generator Test Item',
+                    price: 2500,
+                    quantity: 1,
+                    image: '4K UHD Generator',
+                    mainImage: 'assets/images/Products/Av distribution/4K UHD GENRATOR.jpg'
+                },
+                {
+                    id: 'test-2', 
+                    name: 'HDMI Cable Test Item',
+                    price: 150,
+                    quantity: 2,
+                    image: 'HDMI Cable',
+                    mainImage: 'assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg'
+                }
+            ];
+            
+            // Store in both possible cart key formats for compatibility
+            localStorage.setItem('hotimpex-cart', JSON.stringify(testItems));
+            localStorage.setItem('hotimpex_cart', JSON.stringify(testItems));
+            loadCheckoutCart();
+            showNotification('Test items added to cart', 'info');
+            console.log('Test items added:', testItems);
+        }
+
+        // Add this to window for testing in console
+        window.addTestCartItems = addTestCartItems;
+        window.loadCheckoutCart = loadCheckoutCart;
 
         // Setup payment method toggle
         function setupPaymentMethodToggle() {
@@ -774,22 +1022,157 @@
             `;
             placeOrderBtn.disabled = true;
 
-            // Simulate order processing
-            setTimeout(() => {
-                // Generate order number
-                const orderNumber = '#HOT' + Date.now();
-                document.getElementById('order-number').textContent = orderNumber;
-                
-                // Clear cart
-                localStorage.removeItem('hotimpex_cart');
-                
-                // Show success modal
-                showSuccessModal();
-                
-                // Reset button
-                placeOrderBtn.innerHTML = originalText;
-                placeOrderBtn.disabled = false;
+            // Collect order data
+            const form = document.getElementById('checkout-form');
+            const formData = new FormData(form);
+            // Try both possible cart key formats
+            let cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
+            if (cart.length === 0) {
+                cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            }
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const user = AuthService.getUser();
+            
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal >= 1000 ? 0 : 50;
+            const tax = Math.round(subtotal * 0.14);
+            const total = subtotal + shipping + tax;
+
+            const orderData = {
+                // Customer information
+                customer: {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    userId: user ? user._id : null
+                },
+                // Shipping address
+                shippingAddress: {
+                    address: formData.get('address'),
+                    city: formData.get('city'),
+                    state: formData.get('state'),
+                    zipCode: formData.get('zipCode'),
+                    country: formData.get('country')
+                },
+                // Order items
+                items: cart.map(item => ({
+                    productId: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: item.image
+                })),
+                // Payment information
+                payment: {
+                    method: paymentMethod,
+                    subtotal: subtotal,
+                    shipping: shipping,
+                    tax: tax,
+                    total: total
+                },
+                // Additional information
+                notes: formData.get('notes') || '',
+                orderDate: new Date().toISOString()
+            };
+
+            console.log('Order data:', orderData);
+
+            // Simulate order processing (replace with actual API call)
+            setTimeout(async () => {
+                try {
+                    // Here you would typically send the order to your backend
+                    const response = await submitOrder(orderData);
+                    
+                    if (response.success) {
+                        // Generate order number
+                        const orderNumber = response.orderNumber || '#HOT' + Date.now();
+                        document.getElementById('order-number').textContent = orderNumber;
+                        
+                        // Clear cart from both possible keys
+                        localStorage.removeItem('hotimpex-cart');
+                        localStorage.removeItem('hotimpex_cart');
+                        
+                        // Update user profile if they're logged in and profile data changed
+                        if (user) {
+                            await updateUserProfile(orderData.customer, orderData.shippingAddress);
+                        }
+                        
+                        // Show success modal
+                        showSuccessModal();
+                        
+                        showNotification('Order placed successfully!', 'success');
+                    } else {
+                        throw new Error(response.message || 'Order processing failed');
+                    }
+                } catch (error) {
+                    console.error('Order processing error:', error);
+                    showNotification('Failed to process order. Please try again.', 'error');
+                    
+                    // Reset button on error
+                    placeOrderBtn.innerHTML = originalText;
+                    placeOrderBtn.disabled = false;
+                }
             }, 2000);
+        }
+
+        // Submit order to backend (placeholder function)
+        async function submitOrder(orderData) {
+            try {
+                // This would be replaced with actual API call
+                // const response = await APIService.request('/orders', {
+                //     method: 'POST',
+                //     body: JSON.stringify(orderData)
+                // });
+                
+                // For now, simulate success
+                return {
+                    success: true,
+                    orderNumber: '#HOT' + Date.now(),
+                    message: 'Order placed successfully'
+                };
+            } catch (error) {
+                console.error('API Error submitting order:', error);
+                return {
+                    success: false,
+                    message: error.message || 'Failed to submit order'
+                };
+            }
+        }
+
+        // Update user profile with latest information
+        async function updateUserProfile(customerData, addressData) {
+            try {
+                const user = AuthService.getUser();
+                if (!user) return;
+
+                const updatedUser = {
+                    ...user,
+                    firstName: customerData.firstName,
+                    lastName: customerData.lastName,
+                    phone: customerData.phone,
+                    address: addressData.address,
+                    city: addressData.city,
+                    state: addressData.state,
+                    zipCode: addressData.zipCode,
+                    country: addressData.country
+                };
+
+                // Update local storage
+                AuthService.setUser(updatedUser);
+                
+                // Here you would also send the update to the backend
+                // await APIService.request('/users/profile', {
+                //     method: 'PUT',
+                //     body: JSON.stringify(updatedUser),
+                //     headers: { 'Authorization': `Bearer ${AuthService.getToken()}` }
+                // });
+                
+                console.log('User profile updated with order information');
+            } catch (error) {
+                console.error('Error updating user profile:', error);
+            }
         }
 
         function showSuccessModal() {
@@ -876,6 +1259,81 @@
                 });
             }
         });
+
+        // Notification system
+        function showNotification(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('notification-container');
+            if (!container) return;
+
+            const notification = document.createElement('div');
+            notification.className = `notification bg-white border-l-4 rounded-lg shadow-lg p-4 mb-4 transform translate-x-full transition-transform duration-300 ${getNotificationColors(type)}`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        ${getNotificationIcon(type)}
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-800">${message}</p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Auto remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        function getNotificationColors(type) {
+            switch (type) {
+                case 'success': return 'border-green-500';
+                case 'error': return 'border-red-500';
+                case 'warning': return 'border-yellow-500';
+                default: return 'border-blue-500';
+            }
+        }
+
+        function getNotificationIcon(type) {
+            const iconClass = "w-5 h-5";
+            switch (type) {
+                case 'success':
+                    return `<svg class="${iconClass} text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>`;
+                case 'error':
+                    return `<svg class="${iconClass} text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>`;
+                case 'warning':
+                    return `<svg class="${iconClass} text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>`;
+                default:
+                    return `<svg class="${iconClass} text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>`;
+            }
+        }
     </script>
 
     <!-- Cart Sidebar -->
@@ -913,7 +1371,7 @@
                     <span class="text-lg font-semibold text-gray-800 dark:text-white">Subtotal:</span>
                     <span id="cart-total" class="text-2xl font-bold text-purple-600 dark:text-purple-400">0 EGP</span>
                 </div>
-                <button class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 font-bold text-lg">
+                <button onclick="window.location.href='checkout.html'" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 font-bold text-lg">
                     Proceed to Checkout
                 </button>
             </div>

@@ -891,10 +891,24 @@
     <script>
         // Checkout functionality
         function proceedToCheckout() {
-            console.log('proceedToCheckout function called!');
+            // Check if cart has items
+            const cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
             
-            // Simple test - just navigate directly
-            alert('Function is working! About to navigate to checkout.html');
+            if (cart.length === 0) {
+                // Show notification that cart is empty
+                showNotification('Your cart is empty. Add some items before checkout.', 'warning');
+                return;
+            }
+            
+            // Close cart sidebar
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartOverlay = document.getElementById('cart-overlay');
+            if (cartSidebar && cartOverlay) {
+                cartSidebar.classList.add('translate-x-full');
+                cartOverlay.classList.add('hidden');
+            }
+            
+            // Navigate to checkout page
             window.location.href = 'checkout.html';
         }
         
@@ -950,17 +964,12 @@
         
         // Add event listener for checkout button after page loads
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, setting up checkout button');
             const checkoutBtn = document.getElementById('checkout-btn');
             if (checkoutBtn) {
-                console.log('Checkout button found, adding event listener');
                 checkoutBtn.addEventListener('click', function(e) {
-                    console.log('Checkout button clicked!');
                     e.preventDefault();
                     proceedToCheckout();
                 });
-            } else {
-                console.log('Checkout button not found!');
             }
         });
     </script>

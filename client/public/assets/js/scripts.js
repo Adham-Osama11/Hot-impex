@@ -289,6 +289,7 @@ window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.updateCartQuantity = updateCartQuantity;
 window.toggleCart = toggleCart;
+window.reinitializeCartEventListeners = reinitializeCartEventListeners;
 
 // Initialize the website
 document.addEventListener('DOMContentLoaded', function() {
@@ -679,32 +680,88 @@ function initializeCart() {
     updateCartUI();
     
     const cartToggle = document.getElementById('cart-toggle');
+    const desktopCartToggle = document.getElementById('desktop-cart-toggle');
     const cartSidebar = document.getElementById('cart-sidebar');
     const closeCart = document.getElementById('close-cart');
     const cartOverlay = document.getElementById('cart-overlay');
     
-    if (cartToggle) {
-        cartToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleCart();
-        });
-    }
+    // Add event listeners to all cart toggle elements
+    [cartToggle, desktopCartToggle].forEach(toggle => {
+        if (toggle) {
+            toggle.addEventListener('click', handleCartToggleClick);
+        }
+    });
     
     if (closeCart) {
-        closeCart.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeCartSidebar();
-        });
+        closeCart.addEventListener('click', handleCloseCartClick);
     }
     
     if (cartOverlay) {
-        cartOverlay.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeCartSidebar();
-        });
+        cartOverlay.addEventListener('click', handleCartOverlayClick);
     }
     
     console.log('Cart initialized with', cart.length, 'items');
+}
+
+// Function to reinitialize cart event listeners - can be called from any page
+function reinitializeCartEventListeners() {
+    console.log('Reinitializing cart event listeners...');
+    
+    const cartToggle = document.getElementById('cart-toggle');
+    const desktopCartToggle = document.getElementById('desktop-cart-toggle');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const closeCart = document.getElementById('close-cart');
+    const cartOverlay = document.getElementById('cart-overlay');
+    
+    console.log('Found elements:', {
+        cartToggle: !!cartToggle,
+        desktopCartToggle: !!desktopCartToggle,
+        cartSidebar: !!cartSidebar,
+        closeCart: !!closeCart,
+        cartOverlay: !!cartOverlay
+    });
+    
+    // Add event listeners to all cart toggle elements
+    [cartToggle, desktopCartToggle].forEach(toggle => {
+        if (toggle) {
+            // Remove existing listeners first
+            toggle.removeEventListener('click', handleCartToggleClick);
+            // Add new listener
+            toggle.addEventListener('click', handleCartToggleClick);
+            console.log('Added cart toggle listener to:', toggle.id);
+        }
+    });
+    
+    if (closeCart) {
+        closeCart.removeEventListener('click', handleCloseCartClick);
+        closeCart.addEventListener('click', handleCloseCartClick);
+        console.log('Added close cart listener');
+    }
+    
+    if (cartOverlay) {
+        cartOverlay.removeEventListener('click', handleCartOverlayClick);
+        cartOverlay.addEventListener('click', handleCartOverlayClick);
+        console.log('Added cart overlay listener');
+    }
+}
+
+// Event handler functions to avoid duplicate listeners
+function handleCartToggleClick(e) {
+    e.preventDefault();
+    console.log('Cart toggle clicked via event handler');
+    toggleCart();
+}
+
+function handleCloseCartClick(e) {
+    e.preventDefault();
+    console.log('Close cart clicked via event handler');
+    closeCartSidebar();
+}
+
+function handleCartOverlayClick(e) {
+    e.preventDefault();
+    console.log('Cart overlay clicked via event handler');
+    closeCartSidebar();
 }
 
 function addToCart(productId, quantity = 1) {
@@ -832,6 +889,8 @@ function closeCartSidebar() {
 
 function updateCartUI() {
     const cartBadge = document.getElementById('cart-badge');
+    const desktopCartBadge = document.getElementById('desktop-cart-badge');
+    const mobileCartBadge = document.getElementById('mobile-cart-badge');
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
     const cartCount = document.getElementById('cart-count');
@@ -848,11 +907,13 @@ function updateCartUI() {
     
     console.log('Total items:', totalItems, 'Total price:', totalPrice);
     
-    // Update cart badge
-    if (cartBadge) {
-        cartBadge.textContent = totalItems;
-        cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
-    }
+    // Update all cart badges
+    [cartBadge, desktopCartBadge, mobileCartBadge].forEach(badge => {
+        if (badge) {
+            badge.textContent = totalItems;
+            badge.style.display = totalItems > 0 ? 'block' : 'none';
+        }
+    });
     
     // Update cart count
     if (cartCount) {

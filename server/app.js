@@ -23,7 +23,8 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https:"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https:"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-hashes'", "https:"],
+            scriptSrcAttr: ["'unsafe-inline'"],
             imgSrc: ["'self'", "data:", "https:"],
             connectSrc: ["'self'"],
             fontSrc: ["'self'", "https:"],
@@ -102,6 +103,15 @@ app.get('/contact', (req, res) => {
 
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/admin/admin.html'));
+});
+
+// Handle favicon.ico requests to prevent 404 errors
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/favicon.ico'), (err) => {
+        if (err) {
+            res.status(204).end(); // No Content if file doesn't exist
+        }
+    });
 });
 
 // Error handling middleware

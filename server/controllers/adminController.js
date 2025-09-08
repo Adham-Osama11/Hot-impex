@@ -460,10 +460,13 @@ const updateUser = async (req, res) => {
 // @access  Private (Admin only)
 const deleteUser = async (req, res) => {
     try {
-        const usersData = await hybridDb.getUsers();
-        const userIndex = usersData.users.findIndex(u => u.id === req.params.id);
+        const userId = req.params.id;
         
-        if (userIndex === -1) {
+        // Check if user exists first
+        const usersData = await hybridDb.getUsers();
+        const user = usersData.users.find(u => u.id === userId);
+        
+        if (!user) {
             return res.status(404).json({
                 status: 'error',
                 message: 'User not found'
@@ -471,15 +474,15 @@ const deleteUser = async (req, res) => {
         }
 
         // Don't allow deletion of admin users
-        if (usersData.users[userIndex].role === 'admin') {
+        if (user.role === 'admin') {
             return res.status(403).json({
                 status: 'error',
                 message: 'Cannot delete admin users'
             });
         }
 
-        usersData.users.splice(userIndex, 1);
-        await hybridDb.saveUsers(usersData);
+        // Use the proper deleteUser method from hybridDb
+        await hybridDb.deleteUser(userId);
 
         res.status(200).json({
             status: 'success',

@@ -19,8 +19,20 @@
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="../assets/css/admin-styles.css">
+    <link rel="stylesheet" href="styles.css    <!-- JavaScript -->
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Admin Dashboard Scripts (Modular Structure) -->
+    <script src="../assets/js/admin/utils.js"></script>
+    <script src="../assets/js/admin/api.js"></script>
+    <script src="../assets/js/admin/charts.js"></script>
+    <script src="../assets/js/admin/ui.js"></script>
+    <script src="../assets/js/admin/dashboard.js"></script>
+    <script src="../assets/js/admin/products.js"></script>
+    <script src="../assets/js/admin/orders.js"></script>
+    <script src="../assets/js/admin/users.js"></script>
+    <script src="../assets/js/admin/app.js"></script> <link rel="stylesheet" href="../assets/css/admin-styles.css">
     <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -143,7 +155,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Total Sales</p>
-                                <p class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">$12,426</p>
+                                <p class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent" data-stat="total-sales">$12,426</p>
                                 <p class="text-sm text-green-600 dark:text-green-400 mt-2 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -164,7 +176,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Total Orders</p>
-                                <p class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">1,429</p>
+                                <p class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent" data-stat="total-orders">1,429</p>
                                 <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -185,7 +197,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Products</p>
-                                <p class="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-500 bg-clip-text text-transparent">8</p>
+                                <p class="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-500 bg-clip-text text-transparent" data-stat="total-products">8</p>
                                 <p class="text-sm text-teal-600 dark:text-teal-400 mt-2">4 categories</p>
                             </div>
                             <div class="w-16 h-16 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-2xl flex items-center justify-center shadow-lg">
@@ -201,7 +213,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Customers</p>
-                                <p class="text-3xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">2,847</p>
+                                <p class="text-3xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent" data-stat="total-customers">2,847</p>
                                 <p class="text-sm text-orange-600 dark:text-orange-400 mt-2 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -303,7 +315,7 @@
                             <h2 class="text-3xl font-bold">Product Management</h2>
                             <p class="text-gray-700 dark:text-gray-400">Manage your product catalog and inventory</p>
                         </div>
-                        <button class="bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
+                        <button onclick="showAddProductModal()" class="bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
@@ -553,44 +565,83 @@
         </div>
     </main>
 
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="admin-card rounded-2xl shadow-2xl border border-white/30 dark:border-gray-700/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="modalTitle" class="text-2xl font-bold">Add New Product</h3>
+                    <button onclick="closeProductModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="productForm" class="space-y-6">
+                    <input type="hidden" id="productId" name="id">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="productName" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Product Name</label>
+                            <input type="text" id="productName" name="name" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                        </div>
+                        
+                        <div>
+                            <label for="productCategory" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Category</label>
+                            <select id="productCategory" name="category" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                                <option value="">Select Category</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Av distribution">AV Distribution</option>
+                                <option value="Cable">Cable</option>
+                                <option value="Ceiling bracket">Ceiling Bracket</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="productPrice" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Price ($)</label>
+                            <input type="number" id="productPrice" name="price" step="0.01" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                        </div>
+                        
+                        <div>
+                            <label for="productStock" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Stock Quantity</label>
+                            <input type="number" id="productStock" name="stock" min="0" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="productDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Description</label>
+                        <textarea id="productDescription" name="description" rows="4" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="productImages" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Image URLs (one per line)</label>
+                        <textarea id="productImages" name="images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" onclick="closeProductModal()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">
+                            <span id="submitButtonText">Add Product</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <!-- Chart.js for Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom Scripts -->
     <script src="../assets/js/admin.js"></script>
-    
-    <!-- Admin Dashboard Scripts -->
-    <script>
-        // Enhanced animations and interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add hover effects to cards
-            const cards = document.querySelectorAll('.admin-card');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-4px) scale(1.02)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                });
-            });
 
-            // Animate stats on load
-            const statsNumbers = document.querySelectorAll('.admin-card .text-3xl');
-            statsNumbers.forEach((stat, index) => {
-                setTimeout(() => {
-                    stat.style.opacity = '0';
-                    stat.style.transform = 'translateY(20px)';
-                    stat.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                    
-                    requestAnimationFrame(() => {
-                        stat.style.opacity = '1';
-                        stat.style.transform = 'translateY(0)';
-                    });
-                }, index * 150);
-            });
-        });
-    </script>
 </body>
 </html>

@@ -236,6 +236,19 @@ class MongoService {
         }
     }
 
+    async deleteUser(id) {
+        try {
+            const user = await User.findByIdAndDelete(id);
+            if (!user) {
+                return null;
+            }
+            return user;
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            throw error;
+        }
+    }
+
     // Order methods
     async createOrder(orderData) {
         try {
@@ -318,6 +331,24 @@ class MongoService {
             return await order.save();
         } catch (error) {
             console.error('Error updating order status:', error);
+            throw error;
+        }
+    }
+
+    async updateOrder(orderId, updateData) {
+        try {
+            const order = await Order.findByIdAndUpdate(
+                orderId,
+                { ...updateData, updatedAt: new Date() },
+                { new: true, runValidators: true }
+            ).populate('user', 'firstName lastName email');
+            
+            if (!order) {
+                return null;
+            }
+            return order;
+        } catch (error) {
+            console.error('Error updating order:', error);
             throw error;
         }
     }

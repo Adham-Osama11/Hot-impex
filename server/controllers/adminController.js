@@ -8,70 +8,14 @@ const Order = require('../models/Order');
 // @access  Private (Admin only)
 const getDashboardStats = async (req, res) => {
     try {
-        const [productsData, usersData, ordersData] = await Promise.all([
-            hybridDb.getProducts(),
-            hybridDb.getUsers(),
-            hybridDb.getOrders()
-        ]);
-
-        const totalProducts = productsData.products.length;
-        const totalUsers = usersData.users.filter(user => user.role === 'customer').length;
-        const totalOrders = ordersData.orders.length;
+        const stats = await hybridDb.getDashboardStats();
         
-        // Calculate revenue
-        const totalRevenue = ordersData.orders
-            .filter(order => order.status === 'delivered')
-            .reduce((sum, order) => sum + order.totalAmount, 0);
-
-        // Recent orders (last 30 days)
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        
-        const recentOrders = ordersData.orders.filter(order => 
-            new Date(order.createdAt) > thirtyDaysAgo
-        );
-
-        // Order status distribution
-        const orderStatusStats = ordersData.orders.reduce((acc, order) => {
-            acc[order.status] = (acc[order.status] || 0) + 1;
-            return acc;
-        }, {});
-
-        // Top selling products
-        const productSales = {};
-        ordersData.orders.forEach(order => {
-            order.items.forEach(item => {
-                productSales[item.productId] = (productSales[item.productId] || 0) + item.quantity;
-            });
-        });
-
-        const topProducts = Object.entries(productSales)
-            .sort(([,a], [,b]) => b - a)
-            .slice(0, 5)
-            .map(([productId, sales]) => {
-                const product = productsData.products.find(p => p.id === productId);
-                return {
-                    productId,
-                    productName: product?.name || 'Unknown Product',
-                    sales
-                };
-            });
-
         res.status(200).json({
             status: 'success',
-            data: {
-                stats: {
-                    totalProducts,
-                    totalUsers,
-                    totalOrders,
-                    totalRevenue,
-                    recentOrdersCount: recentOrders.length,
-                    orderStatusStats,
-                    topProducts
-                }
-            }
+            data: stats
         });
     } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error fetching dashboard stats',
@@ -87,30 +31,12 @@ const getAllOrders = async (req, res) => {
     try {
         const { status, limit, page = 1 } = req.query;
         
-        const ordersData = await hybridDb.getOrders();
-        let orders = ordersData.orders;
-
-        // Filter by status
-        if (status) {
-            orders = orders.filter(order => order.status === status);
-        }
-
-        // Sort by creation date (newest first)
-        orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-        // Pagination
-        const startIndex = (page - 1) * (limit || 20);
-        const endIndex = limit ? startIndex + parseInt(limit) : orders.length;
-        const paginatedOrders = orders.slice(startIndex, endIndex);
+        const options = { status, limit, page };
+        const result = await hybridDb.getAllOrders(options);
 
         res.status(200).json({
             status: 'success',
-            results: paginatedOrders.length,
-            total: orders.length,
-            page: parseInt(page),
-            data: {
-                orders: paginatedOrders
-            }
+            data: result
         });
     } catch (error) {
         res.status(500).json({
@@ -128,33 +54,12 @@ const getAllUsers = async (req, res) => {
     try {
         const { role, limit, page = 1 } = req.query;
         
-        const usersData = await hybridDb.getUsers();
-        let users = usersData.users;
-
-        // Filter by role
-        if (role) {
-            users = users.filter(user => user.role === role);
-        }
-
-        // Sort by creation date (newest first)
-        users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-        // Pagination
-        const startIndex = (page - 1) * (limit || 20);
-        const endIndex = limit ? startIndex + parseInt(limit) : users.length;
-        const paginatedUsers = users.slice(startIndex, endIndex);
-
-        // Remove password from response
-        const safeUsers = paginatedUsers.map(user => new User(user).toPublic());
+        const options = { role, limit, page };
+        const result = await hybridDb.getAllUsers(options);
 
         res.status(200).json({
             status: 'success',
-            results: safeUsers.length,
-            total: users.length,
-            page: parseInt(page),
-            data: {
-                users: safeUsers
-            }
+            data: result
         });
     } catch (error) {
         res.status(500).json({
@@ -307,11 +212,225 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+// @desc    Get order by ID
+// @route   GET /api/admin/orders/:id
+// @access  Private (Admin only)
+const getOrderById = async (req, res) => {
+    try {
+        const ordersData = await hybridDb.getOrders();
+        const order = ordersData.orders.find(o => o.id === req.params.id);
+        
+        if (!order) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Order not found'
+            });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                order
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching order',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Update order status
+// @route   PUT /api/admin/orders/:id/status
+// @access  Private (Admin only)
+const updateOrderStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+        
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Invalid status'
+            });
+        }
+
+        const ordersData = await hybridDb.getOrders();
+        const orderIndex = ordersData.orders.findIndex(o => o.id === req.params.id);
+        
+        if (orderIndex === -1) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Order not found'
+            });
+        }
+
+        ordersData.orders[orderIndex].status = status;
+        ordersData.orders[orderIndex].updatedAt = new Date().toISOString();
+        
+        await hybridDb.saveOrders(ordersData);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                order: ordersData.orders[orderIndex]
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error updating order status',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Get user by ID
+// @route   GET /api/admin/users/:id
+// @access  Private (Admin only)
+const getUserById = async (req, res) => {
+    try {
+        const usersData = await hybridDb.getUsers();
+        const user = usersData.users.find(u => u.id === req.params.id);
+        
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        // Remove password from response
+        const safeUser = new User(user).toPublic();
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user: safeUser
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching user',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Delete user
+// @route   DELETE /api/admin/users/:id
+// @access  Private (Admin only)
+const deleteUser = async (req, res) => {
+    try {
+        const usersData = await hybridDb.getUsers();
+        const userIndex = usersData.users.findIndex(u => u.id === req.params.id);
+        
+        if (userIndex === -1) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        // Don't allow deletion of admin users
+        if (usersData.users[userIndex].role === 'admin') {
+            return res.status(403).json({
+                status: 'error',
+                message: 'Cannot delete admin users'
+            });
+        }
+
+        usersData.users.splice(userIndex, 1);
+        await hybridDb.saveUsers(usersData);
+
+        res.status(200).json({
+            status: 'success',
+            message: 'User deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error deleting user',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Get admin settings
+// @route   GET /api/admin/settings
+// @access  Private (Admin only)
+const getSettings = async (req, res) => {
+    try {
+        // Default settings - in a real app, this would come from a database
+        const settings = {
+            storeName: 'HOT IMPEX',
+            storeEmail: 'contact@hotimpex.com',
+            currency: 'USD',
+            timezone: 'UTC',
+            notifications: {
+                emailOnNewOrder: true,
+                emailOnNewCustomer: false,
+                emailOnLowStock: true
+            },
+            maintenance: {
+                enabled: false,
+                message: 'We are currently performing maintenance. Please check back later.'
+            }
+        };
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                settings
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching settings',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Update admin settings
+// @route   PUT /api/admin/settings
+// @access  Private (Admin only)
+const updateSettings = async (req, res) => {
+    try {
+        // In a real app, you would validate and save these to a database
+        const updatedSettings = req.body;
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                settings: updatedSettings
+            },
+            message: 'Settings updated successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error updating settings',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getDashboardStats,
     getAllOrders,
+    getOrderById,
+    updateOrderStatus,
     getAllUsers,
+    getUserById,
+    deleteUser,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getSettings,
+    updateSettings
 };

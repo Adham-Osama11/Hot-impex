@@ -165,6 +165,36 @@ class HybridDatabaseService {
         }
     }
 
+    async getOrders() {
+        if (this.useMongoDb) {
+            // For MongoDB, we need to format the response to match file service
+            const result = await this.getAllOrders({ limit: 1000 });
+            return { orders: result.orders || result };
+        } else {
+            return await fileService.getOrders();
+        }
+    }
+
+    async getUsers() {
+        if (this.useMongoDb) {
+            // For MongoDB, we need to format the response to match file service
+            const result = await this.getAllUsers({ limit: 1000 });
+            return { users: result.users || result };
+        } else {
+            return await fileService.getUsers();
+        }
+    }
+
+    async getProducts() {
+        if (this.useMongoDb) {
+            // For MongoDB, we need to format the response to match file service
+            const result = await this.getAllProducts({ limit: 1000 });
+            return { products: result.products || result };
+        } else {
+            return await fileService.getProducts();
+        }
+    }
+
     async findOrderById(id) {
         if (this.useMongoDb) {
             return await mongoService.findOrderById(id);
@@ -210,6 +240,111 @@ class HybridDatabaseService {
                     completed: ordersData.orders.filter(o => o.status === 'delivered').length 
                 }
             };
+        }
+    }
+
+    // Additional admin methods for CRUD operations
+    async getAllUsers() {
+        if (this.useMongoDb) {
+            return await mongoService.getAllUsers();
+        } else {
+            const data = await fileService.getUsers();
+            return data.users;
+        }
+    }
+
+    async getAllOrders() {
+        if (this.useMongoDb) {
+            return await mongoService.getAllOrders();
+        } else {
+            const data = await fileService.getOrders();
+            return data.orders;
+        }
+    }
+
+    async updateOrder(orderId, updateData) {
+        if (this.useMongoDb) {
+            return await mongoService.updateOrder(orderId, updateData);
+        } else {
+            const data = await fileService.getOrders();
+            const orderIndex = data.orders.findIndex(order => order.id === orderId);
+            if (orderIndex === -1) {
+                throw new Error('Order not found');
+            }
+            
+            data.orders[orderIndex] = { ...data.orders[orderIndex], ...updateData };
+            await fileService.saveOrders(data);
+            return data.orders[orderIndex];
+        }
+    }
+
+    async deleteUser(userId) {
+        if (this.useMongoDb) {
+            return await mongoService.deleteUser(userId);
+        } else {
+            const data = await fileService.getUsers();
+            const userIndex = data.users.findIndex(user => user.id === userId);
+            if (userIndex === -1) {
+                throw new Error('User not found');
+            }
+            
+            const deletedUser = data.users.splice(userIndex, 1)[0];
+            await fileService.saveUsers(data);
+            return deletedUser;
+        }
+    }
+
+    async createProduct(productData) {
+        if (this.useMongoDb) {
+            return await mongoService.createProduct(productData);
+        } else {
+            const data = await fileService.getProducts();
+            const newProduct = {
+                id: Date.now().toString(),
+                ...productData,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            data.products.push(newProduct);
+            await fileService.saveProducts(data);
+            return newProduct;
+        }
+    }
+
+    async updateProduct(productId, updateData) {
+        if (this.useMongoDb) {
+            return await mongoService.updateProduct(productId, updateData);
+        } else {
+            const data = await fileService.getProducts();
+            const productIndex = data.products.findIndex(product => product.id === productId);
+            if (productIndex === -1) {
+                throw new Error('Product not found');
+            }
+            
+            data.products[productIndex] = { 
+                ...data.products[productIndex], 
+                ...updateData,
+                updatedAt: new Date().toISOString()
+            };
+            await fileService.saveProducts(data);
+            return data.products[productIndex];
+        }
+    }
+
+    async deleteProduct(productId) {
+        if (this.useMongoDb) {
+            return await mongoService.deleteProduct(productId);
+        } else {
+            const data = await fileService.getProducts();
+            const productIndex = data.products.findIndex(product => product.id === productId);
+            if (productIndex === -1) {
+                throw new Error('Product not found');
+            }
+            
+            const deletedProduct = data.products.splice(productIndex, 1)[0];
+            await fileService.saveProducts(data);
+            return deletedProduct;
         }
     }
 

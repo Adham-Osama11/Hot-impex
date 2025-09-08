@@ -5,6 +5,8 @@ const {
     getAllOrders,
     getAllUsers,
     getUserById,
+    createUser,
+    updateUser,
     deleteUser,
     updateOrderStatus,
     getOrderById,
@@ -36,6 +38,12 @@ router.get('/users', getAllUsers);
 
 // @route   GET /api/admin/users/:id
 router.get('/users/:id', getUserById);
+
+// @route   POST /api/admin/users
+router.post('/users', createUser);
+
+// @route   PUT /api/admin/users/:id
+router.put('/users/:id', updateUser);
 
 // @route   DELETE /api/admin/users/:id
 router.delete('/users/:id', deleteUser);

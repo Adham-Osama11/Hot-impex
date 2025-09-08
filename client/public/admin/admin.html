@@ -19,7 +19,8 @@
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css    <!-- JavaScript -->
+    <link rel="stylesheet" href="../assets/css/admin-styles.css">
+        <!-- JavaScript -->
     <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -325,8 +326,8 @@
 
                     <!-- Products Table -->
                     <div class="overflow-x-auto glass-effect rounded-xl border border-white/20 dark:border-gray-700/20">
-                        <table class="w-full text-sm text-left text-gray-800 dark:text-gray-300">
-                            <thead class="text-xs text-gray-900 uppercase dark:text-gray-400 bg-white/10 dark:bg-gray-800/10">
+                        <table class="w-full text-sm text-left admin-table">
+                            <thead class="text-xs uppercase bg-white/10 dark:bg-gray-800/10">
                                 <tr>
                                     <th scope="col" class="px-6 py-4">Product Name</th>
                                     <th scope="col" class="px-6 py-4">Category</th>
@@ -387,8 +388,8 @@
 
                     <!-- Orders Table -->
                     <div class="overflow-x-auto glass-effect rounded-xl border border-white/20 dark:border-gray-700/20">
-                        <table class="w-full text-sm text-left text-gray-800 dark:text-gray-300">
-                            <thead class="text-xs text-gray-900 uppercase dark:text-gray-400 bg-white/10 dark:bg-gray-800/10">
+                        <table class="w-full text-sm text-left admin-table">
+                            <thead class="text-xs uppercase bg-white/10 dark:bg-gray-800/10">
                                 <tr>
                                     <th scope="col" class="px-6 py-4">Order ID</th>
                                     <th scope="col" class="px-6 py-4">Customer</th>
@@ -449,7 +450,7 @@
                             <h2 class="text-3xl font-bold">Customer Management</h2>
                             <p class="text-gray-700 dark:text-gray-400">Manage your customer base</p>
                         </div>
-                        <button class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
+                        <button onclick="showAddUserModal()" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                             </svg>
@@ -459,8 +460,8 @@
 
                     <!-- Customers Table -->
                     <div class="overflow-x-auto glass-effect rounded-xl border border-white/20 dark:border-gray-700/20">
-                        <table class="w-full text-sm text-left text-gray-800 dark:text-gray-300">
-                            <thead class="text-xs text-gray-900 uppercase dark:text-gray-400 bg-white/10 dark:bg-gray-800/10">
+                        <table class="w-full text-sm text-left admin-table">
+                            <thead class="text-xs uppercase bg-white/10 dark:bg-gray-800/10">
                                 <tr>
                                     <th scope="col" class="px-6 py-4">Name</th>
                                     <th scope="col" class="px-6 py-4">Email</th>
@@ -632,6 +633,99 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="admin-card rounded-2xl shadow-2xl border border-white/30 dark:border-gray-700/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="userModalTitle" class="text-2xl font-bold">Add New Customer</h3>
+                    <button onclick="closeUserModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="userForm" class="space-y-6">
+                    <input type="hidden" id="userId" name="id">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="userFirstName" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">First Name</label>
+                            <input type="text" id="userFirstName" name="firstName" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
+                        </div>
+                        
+                        <div>
+                            <label for="userLastName" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Last Name</label>
+                            <input type="text" id="userLastName" name="lastName" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="userEmail" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Email Address</label>
+                        <input type="email" id="userEmail" name="email" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
+                    </div>
+                    
+                    <div>
+                        <label for="userPhone" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Phone Number</label>
+                        <input type="tel" id="userPhone" name="phone" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
+                    </div>
+                    
+                    <div id="passwordSection" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="userPassword" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Password</label>
+                            <input type="password" id="userPassword" name="password" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Minimum 6 characters (leave blank to keep current)</p>
+                        </div>
+                        
+                        <div>
+                            <label for="userPasswordConfirm" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Confirm Password</label>
+                            <input type="password" id="userPasswordConfirm" name="passwordConfirm" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" onclick="closeUserModal()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">
+                            <span id="userSubmitButtonText">Add Customer</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div id="userDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="admin-card rounded-2xl shadow-2xl border border-white/30 dark:border-gray-700/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold">Customer Details</h3>
+                    <button onclick="closeUserDetailsModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div id="userDetailsContent" class="space-y-6">
+                    <!-- User details will be populated here -->
+                </div>
+                
+                <div class="flex justify-end space-x-4 mt-8">
+                    <button onclick="closeUserDetailsModal()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        Close
+                    </button>
+                    <button onclick="editUserFromDetails()" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">
+                        Edit Customer
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -320,6 +320,141 @@ const getUserById = async (req, res) => {
     }
 };
 
+// @desc    Create new user (Admin)
+// @route   POST /api/admin/users
+// @access  Private (Admin only)
+const createUser = async (req, res) => {
+    try {
+        const { firstName, lastName, email, password, phone } = req.body;
+
+        // Validate required fields
+        if (!firstName || !lastName || !email || !password) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'First name, last name, email, and password are required'
+            });
+        }
+
+        // Check if user already exists
+        const existingUser = await hybridDb.findUserByEmail(email);
+        if (existingUser) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'User already exists with this email'
+            });
+        }
+
+        // Create user data
+        const userData = {
+            firstName,
+            lastName,
+            email,
+            password,
+            phone: phone || '',
+            role: 'customer',
+            isActive: true,
+            createdAt: new Date()
+        };
+
+        // Create user
+        const newUser = await hybridDb.createUser(userData);
+
+        res.status(201).json({
+            status: 'success',
+            data: {
+                user: {
+                    id: newUser._id || newUser.id,
+                    firstName: newUser.firstName,
+                    lastName: newUser.lastName,
+                    email: newUser.email,
+                    phone: newUser.phone,
+                    role: newUser.role,
+                    isActive: newUser.isActive,
+                    createdAt: newUser.createdAt
+                }
+            },
+            message: 'User created successfully'
+        });
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error creating user',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Update user (Admin)
+// @route   PUT /api/admin/users/:id
+// @access  Private (Admin only)
+const updateUser = async (req, res) => {
+    try {
+        const { firstName, lastName, email, phone, password } = req.body;
+        const userId = req.params.id;
+
+        // Get current user
+        const currentUser = await hybridDb.getUserById(userId);
+        if (!currentUser) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        // Check if email is being changed and if new email already exists
+        if (email && email !== currentUser.email) {
+            const existingUser = await hybridDb.findUserByEmail(email);
+            if (existingUser && (existingUser._id || existingUser.id) !== userId) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Email already exists'
+                });
+            }
+        }
+
+        // Prepare update data
+        const updateData = {
+            firstName: firstName || currentUser.firstName,
+            lastName: lastName || currentUser.lastName,
+            email: email || currentUser.email,
+            phone: phone || currentUser.phone
+        };
+
+        // Add password only if provided
+        if (password) {
+            updateData.password = password;
+        }
+
+        // Update user
+        const updatedUser = await hybridDb.updateUser(userId, updateData);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user: {
+                    id: updatedUser._id || updatedUser.id,
+                    firstName: updatedUser.firstName,
+                    lastName: updatedUser.lastName,
+                    email: updatedUser.email,
+                    phone: updatedUser.phone,
+                    role: updatedUser.role,
+                    isActive: updatedUser.isActive,
+                    createdAt: updatedUser.createdAt
+                }
+            },
+            message: 'User updated successfully'
+        });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error updating user',
+            error: error.message
+        });
+    }
+};
+
 // @desc    Delete user
 // @route   DELETE /api/admin/users/:id
 // @access  Private (Admin only)
@@ -427,6 +562,8 @@ module.exports = {
     updateOrderStatus,
     getAllUsers,
     getUserById,
+    createUser,
+    updateUser,
     deleteUser,
     createProduct,
     updateProduct,

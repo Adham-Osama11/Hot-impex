@@ -18,11 +18,23 @@ class ChartManager {
             return;
         }
 
+        // Ensure chartManager instance exists
+        if (!window.chartManager) {
+            window.chartManager = new ChartManager();
+        }
+
         const isDark = document.documentElement.classList.contains('dark');
+        
+        // Destroy existing charts if they exist
+        ChartManager.destroyAllCharts();
         
         // Initialize sales chart
         const salesCtx = document.getElementById('salesChart');
         if (salesCtx) {
+            // Reset canvas dimensions
+            salesCtx.style.width = '';
+            salesCtx.style.height = '';
+            
             window.chartManager.salesChartInstance = new Chart(salesCtx, {
                 type: 'line',
                 data: {
@@ -43,6 +55,10 @@ class ChartManager {
         // Initialize category chart
         const categoryCtx = document.getElementById('categoryChart');
         if (categoryCtx) {
+            // Reset canvas dimensions
+            categoryCtx.style.width = '';
+            categoryCtx.style.height = '';
+            
             window.chartManager.categoryChartInstance = new Chart(categoryCtx, {
                 type: 'doughnut',
                 data: {
@@ -65,6 +81,10 @@ class ChartManager {
         // Initialize revenue chart
         const revenueCtx = document.getElementById('revenueChart');
         if (revenueCtx) {
+            // Reset canvas dimensions
+            revenueCtx.style.width = '';
+            revenueCtx.style.height = '';
+            
             window.chartManager.revenueChartInstance = new Chart(revenueCtx, {
                 type: 'bar',
                 data: {
@@ -83,30 +103,59 @@ class ChartManager {
     }
 
     /**
-     * Update charts with real data
-     * @param {object} stats - Statistics data
+     * Destroy all existing charts
      */
-    static updateChartsWithData(stats) {
-        // Update sales chart with order status data
-        if (window.chartManager.salesChartInstance && stats.orderStatusStats) {
-            const orderData = Object.entries(stats.orderStatusStats);
-            window.chartManager.salesChartInstance.data.labels = orderData.map(([status]) => 
-                status.charAt(0).toUpperCase() + status.slice(1)
-            );
-            window.chartManager.salesChartInstance.data.datasets[0].data = orderData.map(([, count]) => count);
-            window.chartManager.salesChartInstance.update();
+    static destroyAllCharts() {
+        if (window.chartManager) {
+            if (window.chartManager.salesChartInstance) {
+                window.chartManager.salesChartInstance.destroy();
+                window.chartManager.salesChartInstance = null;
+            }
+            if (window.chartManager.categoryChartInstance) {
+                window.chartManager.categoryChartInstance.destroy();
+                window.chartManager.categoryChartInstance = null;
+            }
+            if (window.chartManager.revenueChartInstance) {
+                window.chartManager.revenueChartInstance.destroy();
+                window.chartManager.revenueChartInstance = null;
+            }
+        }
+    }
+
+    /**
+     * Update charts with real data
+     * @param {object} data - Statistics data with nested structure
+     */
+    static updateChartsWithData(data) {
+        // Extract data from nested structure
+        const orders = data.orders || {};
+        const products = data.products || {};
+        
+        // Update sales chart with recent sales data (mock data since we don't have time series)
+        if (window.chartManager && window.chartManager.salesChartInstance) {
+            // Generate mock weekly data based on total revenue
+            const totalRevenue = orders.totalRevenue || 0;
+            const dailyAverage = totalRevenue / 30; // Assume 30 days
+            const mockWeeklyData = [
+                Math.round(dailyAverage * 0.8),
+                Math.round(dailyAverage * 1.2),
+                Math.round(dailyAverage * 1.5),
+                Math.round(dailyAverage * 1.1),
+                Math.round(dailyAverage * 0.9),
+                Math.round(dailyAverage * 1.3),
+                Math.round(dailyAverage * 1.6)
+            ];
+            
+            window.chartManager.salesChartInstance.data.datasets[0].data = mockWeeklyData;
+            window.chartManager.salesChartInstance.update('none'); // Disable animation to prevent resize issues
         }
 
-        // Update category chart with top products
-        if (window.chartManager.categoryChartInstance && stats.topProducts) {
-            const topProducts = stats.topProducts.slice(0, 5);
-            window.chartManager.categoryChartInstance.data.labels = topProducts.map(product => 
-                product.productName.length > 15 ? 
-                product.productName.substring(0, 15) + '...' : 
-                product.productName
-            );
-            window.chartManager.categoryChartInstance.data.datasets[0].data = topProducts.map(product => product.sales);
-            window.chartManager.categoryChartInstance.update();
+        // Update category chart with product categories
+        if (window.chartManager && window.chartManager.categoryChartInstance && products.categories) {
+            const categories = products.categories || [];
+            window.chartManager.categoryChartInstance.data.labels = categories.map(cat => cat._id);
+            window.chartManager.categoryChartInstance.data.datasets[0].data = categories.map(cat => cat.count);
+            window.chartManager.categoryChartInstance.update('none'); // Disable animation to prevent resize issues
         }
     }
 
@@ -140,7 +189,9 @@ class ChartManager {
         
         return {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 2,
+            resizeDelay: 200,
             plugins: { 
                 legend: { 
                     display: false 
@@ -163,6 +214,12 @@ class ChartManager {
                     grid: { display: false }, 
                     ticks: { color: textColor }
                 }
+            },
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10
+                }
             }
         };
     }
@@ -177,7 +234,9 @@ class ChartManager {
         
         return {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 1,
+            resizeDelay: 200,
             plugins: {
                 legend: {
                     position: 'bottom',
@@ -194,6 +253,12 @@ class ChartManager {
                     backgroundColor: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
                     titleColor: textColor,
                     bodyColor: textColor
+                }
+            },
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10
                 }
             }
         };

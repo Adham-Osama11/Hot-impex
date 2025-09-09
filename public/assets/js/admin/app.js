@@ -23,6 +23,7 @@ class AdminApp {
             // Initialize managers
             this.managers.theme = new ThemeManager();
             this.managers.sidebar = new SidebarManager();
+            this.managers.userProfile = new UserProfileManager(this.api);
             
             // Initialize controllers
             this.controllers.dashboard = new DashboardController(this.api);
@@ -49,6 +50,10 @@ class AdminApp {
             await this.controllers.dashboard.loadData();
             
             this.isInitialized = true;
+            
+            // Make app globally available for testing
+            window.adminApp = this;
+            
             console.log('Admin Dashboard initialized successfully');
             
         } catch (error) {

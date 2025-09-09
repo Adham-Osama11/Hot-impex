@@ -651,6 +651,38 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+// @desc    Get current admin profile
+// @route   GET /api/admin/profile
+// @access  Private (Admin only)
+const getCurrentAdmin = async (req, res) => {
+    try {
+        // For now, return a mock admin user since authentication is disabled
+        // In a real implementation, this would come from req.user after authentication
+        const adminUser = {
+            id: 'admin-001',
+            firstName: 'Adham',
+            lastName: 'Osama',
+            email: 'admin@hotimpex.com',
+            role: 'admin',
+            avatar: null,
+            joinedDate: '2024-01-01',
+            lastLogin: new Date().toISOString()
+        };
+
+        res.status(200).json({
+            status: 'success',
+            data: adminUser
+        });
+    } catch (error) {
+        console.error('Error fetching admin profile:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching admin profile',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getDashboardStats,
     getAllOrders,
@@ -666,5 +698,6 @@ module.exports = {
     updateProduct,
     deleteProduct,
     getSettings,
-    updateSettings
+    updateSettings,
+    getCurrentAdmin
 };

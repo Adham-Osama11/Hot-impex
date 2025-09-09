@@ -15,7 +15,8 @@ const {
     updateProduct,
     deleteProduct,
     getSettings,
-    updateSettings
+    updateSettings,
+    getCurrentAdmin
 } = require('../controllers/adminController');
 // const { adminAuth } = require('../middleware/auth');
 
@@ -24,6 +25,9 @@ const {
 
 // @route   GET /api/admin/stats
 router.get('/stats', getDashboardStats);
+
+// @route   GET /api/admin/profile
+router.get('/profile', getCurrentAdmin);
 
 // @route   GET /api/admin/orders
 router.get('/orders', getAllOrders);

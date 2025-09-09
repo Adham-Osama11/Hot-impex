@@ -296,6 +296,126 @@ class SidebarManager {
     }
 }
 
+/**
+ * User Profile Manager
+ * Handles admin user profile display and updates
+ */
+class UserProfileManager {
+    constructor(api) {
+        this.api = api;
+        this.profileContainer = null;
+        this.currentUser = null;
+        this.initialize();
+    }
+
+    /**
+     * Initialize profile manager
+     */
+    initialize() {
+        // Wait for DOM to be fully loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                this.findProfileElements();
+                this.loadUserProfile();
+            });
+        } else {
+            this.findProfileElements();
+            this.loadUserProfile();
+        }
+    }
+
+    /**
+     * Find profile elements in the DOM
+     */
+    findProfileElements() {
+        // Use specific IDs for reliable targeting
+        this.avatarElement = document.getElementById('admin-avatar');
+        this.nameElement = document.getElementById('admin-name');
+        this.emailElement = document.getElementById('admin-email');
+    }
+
+    /**
+     * Load current admin user profile
+     */
+    async loadUserProfile() {
+        try {
+            const response = await this.api.getCurrentAdmin();
+            if (response.status === 'success') {
+                this.currentUser = response.data;
+                this.updateProfileDisplay();
+            }
+        } catch (error) {
+            console.error('Error loading user profile:', error);
+            // Fall back to default display if API fails
+            this.displayDefaultProfile();
+        }
+    }
+
+    /**
+     * Update profile display with current user data
+     */
+    updateProfileDisplay() {
+        if (!this.currentUser) return;
+
+        if (this.avatarElement) {
+            // Update avatar - use first letter of first name
+            const initial = this.currentUser.firstName ? this.currentUser.firstName.charAt(0).toUpperCase() : 'A';
+            this.avatarElement.textContent = initial;
+        }
+
+        if (this.nameElement) {
+            const fullName = `${this.currentUser.firstName || ''} ${this.currentUser.lastName || ''}`.trim();
+            this.nameElement.textContent = fullName || 'Admin User';
+        }
+
+        if (this.emailElement) {
+            this.emailElement.textContent = this.currentUser.email || 'admin@hotimpex.com';
+        }
+
+        // Visual indicator that profile was updated
+        if (this.avatarElement && this.avatarElement.parentElement) {
+            this.avatarElement.parentElement.style.border = '2px solid #10b981';
+            setTimeout(() => {
+                if (this.avatarElement && this.avatarElement.parentElement) {
+                    this.avatarElement.parentElement.style.border = '';
+                }
+            }, 1000);
+        }
+    }
+
+    /**
+     * Display default profile when API is unavailable
+     */
+    displayDefaultProfile() {
+        if (this.avatarElement) {
+            this.avatarElement.textContent = 'A';
+        }
+
+        if (this.nameElement) {
+            this.nameElement.textContent = 'Admin User';
+        }
+
+        if (this.emailElement) {
+            this.emailElement.textContent = 'admin@hotimpex.com';
+        }
+    }
+
+    /**
+     * Get current user data
+     */
+    getCurrentUser() {
+        return this.currentUser;
+    }
+
+    /**
+     * Refresh profile data
+     */
+    async refresh() {
+        await this.loadUserProfile();
+    }
+}
+
 // Export classes
 window.ThemeManager = ThemeManager;
 window.SidebarManager = SidebarManager;
+window.UserProfileManager = UserProfileManager;

@@ -48,6 +48,11 @@ class AdminAPI {
         return this.request('/stats');
     }
 
+    // Admin Profile
+    async getCurrentAdmin() {
+        return this.request('/profile');
+    }
+
     // Orders Management
     async getAllOrders(params = {}) {
         const queryString = new URLSearchParams(params).toString();

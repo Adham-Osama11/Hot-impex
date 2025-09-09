@@ -19,9 +19,15 @@ class DashboardController {
     async loadData() {
         try {
             UIHelpers.showLoadingState('dashboard');
-            const statsData = await this.api.getDashboardStats();
-            this.updateStats(statsData.data.stats);
-            ChartManager.updateChartsWithData(statsData.data.stats);
+            const response = await this.api.getDashboardStats();
+            
+            if (response.status === 'success' && response.data) {
+                this.updateStats(response.data);
+                ChartManager.updateChartsWithData(response.data);
+            } else {
+                throw new Error('Invalid response format');
+            }
+            
             UIHelpers.hideLoadingState();
         } catch (error) {
             console.error('Failed to load dashboard data:', error);
@@ -31,55 +37,76 @@ class DashboardController {
 
     /**
      * Update dashboard statistics
-     * @param {object} stats - Statistics data
+     * @param {object} data - Statistics data with nested structure
      */
-    updateStats(stats) {
+    updateStats(data) {
+        // Extract data from the nested structure
+        const orders = data.orders || {};
+        const products = data.products || {};
+        const users = data.users || {};
+        
+        // Update total sales (revenue)
         if (this.statsElements.totalSales) {
-            this.statsElements.totalSales.textContent = `$${stats.totalRevenue.toLocaleString()}`;
+            const totalRevenue = orders.totalRevenue || 0;
+            this.statsElements.totalSales.textContent = `$${totalRevenue.toLocaleString()}`;
         }
+        
+        // Update total orders
         if (this.statsElements.totalOrders) {
-            this.statsElements.totalOrders.textContent = stats.totalOrders.toLocaleString();
+            const totalOrders = orders.total || 0;
+            this.statsElements.totalOrders.textContent = totalOrders.toLocaleString();
         }
+        
+        // Update total products
         if (this.statsElements.totalProducts) {
-            this.statsElements.totalProducts.textContent = stats.totalProducts.toLocaleString();
+            const totalProducts = products.total || 0;
+            this.statsElements.totalProducts.textContent = totalProducts.toLocaleString();
         }
+        
+        // Update total customers
         if (this.statsElements.totalCustomers) {
-            this.statsElements.totalCustomers.textContent = stats.totalUsers.toLocaleString();
+            const totalUsers = users.total || 0;
+            this.statsElements.totalCustomers.textContent = totalUsers.toLocaleString();
         }
 
-        this.updateRecentActivities(stats);
+        this.updateRecentActivities(data);
     }
 
     /**
      * Update recent activities section
-     * @param {object} stats - Statistics data
+     * @param {object} data - Statistics data with nested structure
      */
-    updateRecentActivities(stats) {
+    updateRecentActivities(data) {
         const activitiesContainer = document.querySelector('#recent-activities');
         if (!activitiesContainer) return;
+
+        // Extract data from nested structure
+        const orders = data.orders || {};
+        const products = data.products || {};
+        const users = data.users || {};
 
         const activities = [
             {
                 type: 'order',
-                message: `${stats.recentOrdersCount} new orders in the last 30 days`,
+                message: `${orders.monthlyOrders || 0} new orders in the last 30 days`,
                 time: 'Recent',
-                value: `+$${stats.totalRevenue.toLocaleString()}`,
+                value: `+$${(orders.totalRevenue || 0).toLocaleString()}`,
                 icon: 'check',
                 color: 'green'
             },
             {
                 type: 'products',
-                message: `${stats.totalProducts} products in catalog`,
+                message: `${products.total || 0} products in catalog`,
                 time: 'Current',
-                value: `${stats.topProducts?.length || 0} top sellers`,
+                value: `${products.featured || 0} featured`,
                 icon: 'package',
                 color: 'blue'
             },
             {
                 type: 'customers',
-                message: `${stats.totalUsers} registered customers`,
+                message: `${users.total || 0} registered customers`,
                 time: 'Total',
-                value: 'Growing',
+                value: `${users.recentSignups || 0} new this month`,
                 icon: 'users',
                 color: 'purple'
             }

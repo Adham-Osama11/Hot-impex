@@ -30,7 +30,14 @@
         "Multiple Outputs",
         "Compact Design"
       ],
-      "tags": ["4K", "UHD", "Generator", "Professional", "AV"]
+      "tags": [
+        "4K",
+        "UHD",
+        "Generator",
+        "Professional",
+        "AV"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "av-002",
@@ -60,7 +67,14 @@
         "Easy Setup",
         "Compact Size"
       ],
-      "tags": ["CVBS", "S-Video", "HDMI", "Converter", "Legacy"]
+      "tags": [
+        "CVBS",
+        "S-Video",
+        "HDMI",
+        "Converter",
+        "Legacy"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "av-003",
@@ -90,7 +104,13 @@
         "Durable Build",
         "Plug & Play"
       ],
-      "tags": ["DVI-D", "HDMI", "Adapter", "Connector"]
+      "tags": [
+        "DVI-D",
+        "HDMI",
+        "Adapter",
+        "Connector"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "cable-001",
@@ -120,7 +140,13 @@
         "Universal Compatibility",
         "Tangle-Free Design"
       ],
-      "tags": ["AUX", "Audio", "Cable", "3.5mm"]
+      "tags": [
+        "AUX",
+        "Audio",
+        "Cable",
+        "3.5mm"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "cable-002",
@@ -155,7 +181,15 @@
         "Multiple Lengths",
         "Premium Build Quality"
       ],
-      "tags": ["HDMI", "4K", "UHD", "3D", "High-Speed", "DTECH"]
+      "tags": [
+        "HDMI",
+        "4K",
+        "UHD",
+        "3D",
+        "High-Speed",
+        "DTECH"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "cable-003",
@@ -186,7 +220,14 @@
         "Reliable Connection",
         "Multiple Lengths"
       ],
-      "tags": ["Cat6", "Ethernet", "LAN", "RJ45", "Network"]
+      "tags": [
+        "Cat6",
+        "Ethernet",
+        "LAN",
+        "RJ45",
+        "Network"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "cable-004",
@@ -218,7 +259,14 @@
         "Plug & Play",
         "Durable Construction"
       ],
-      "tags": ["DisplayPort", "HDMI", "Cable", "4K", "HOT"]
+      "tags": [
+        "DisplayPort",
+        "HDMI",
+        "Cable",
+        "4K",
+        "HOT"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "mount-001",
@@ -251,7 +299,15 @@
         "Easy Installation",
         "Universal Compatibility"
       ],
-      "tags": ["Ceiling", "Mount", "TV", "32-60 inch", "LED", "LCD"]
+      "tags": [
+        "Ceiling",
+        "Mount",
+        "TV",
+        "32-60 inch",
+        "LED",
+        "LCD"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "mount-002",
@@ -284,7 +340,15 @@
         "Fixed Positioning",
         "Professional Grade"
       ],
-      "tags": ["Heavy-Duty", "Ceiling", "Mount", "55-120 inch", "Fixed", "Professional"]
+      "tags": [
+        "Heavy-Duty",
+        "Ceiling",
+        "Mount",
+        "55-120 inch",
+        "Fixed",
+        "Professional"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "mount-003",
@@ -315,7 +379,14 @@
         "Durable Construction",
         "Easy Installation"
       ],
-      "tags": ["PM4365F", "Professional", "Ceiling", "Mount", "Commercial"]
+      "tags": [
+        "PM4365F",
+        "Professional",
+        "Ceiling",
+        "Mount",
+        "Commercial"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "gaming-001",
@@ -346,7 +417,15 @@
         "Professional Grade",
         "Easy Installation"
       ],
-      "tags": ["Racing", "Simulator", "Gear Shifter", "Mount", "LRS01-GR", "Gaming"]
+      "tags": [
+        "Racing",
+        "Simulator",
+        "Gear Shifter",
+        "Mount",
+        "LRS01-GR",
+        "Gaming"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "gaming-002",
@@ -379,7 +458,16 @@
         "Serious Sim Racing",
         "Ergonomic Design"
       ],
-      "tags": ["Racing", "Simulator", "Cockpit", "Premium", "LRS02-BS", "Professional", "Gaming"]
+      "tags": [
+        "Racing",
+        "Simulator",
+        "Cockpit",
+        "Premium",
+        "LRS02-BS",
+        "Professional",
+        "Gaming"
+      ],
+      "stockQuantity": 0
     },
     {
       "id": "gaming-003",
@@ -412,7 +500,16 @@
         "Professional Racing Setup",
         "Immersive Experience"
       ],
-      "tags": ["Racing", "Simulator", "Triple Monitor", "Mount", "LRS02-SR02", "Gaming", "Immersive"]
+      "tags": [
+        "Racing",
+        "Simulator",
+        "Triple Monitor",
+        "Mount",
+        "LRS02-SR02",
+        "Gaming",
+        "Immersive"
+      ],
+      "stockQuantity": 0
     }
   ],
   "categories": [

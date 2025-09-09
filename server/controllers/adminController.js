@@ -122,9 +122,11 @@ const createProduct = async (req, res) => {
 
         // Transform stockQuantity to stock for frontend compatibility
         const productObj = newProduct.toObject ? newProduct.toObject() : { ...newProduct };
+        const stockQuantity = productObj.stockQuantity !== undefined ? productObj.stockQuantity : 0;
         const responseProduct = {
             ...productObj,
-            stock: productObj.stockQuantity !== undefined ? productObj.stockQuantity : productObj.stock
+            stock: stockQuantity,
+            stockQuantity: stockQuantity
         };
 
         res.status(201).json({
@@ -192,9 +194,11 @@ const updateProduct = async (req, res) => {
 
         // Transform stockQuantity to stock for frontend compatibility
         const productObj = updatedProduct.toObject ? updatedProduct.toObject() : { ...updatedProduct };
+        const stockQuantity = productObj.stockQuantity !== undefined ? productObj.stockQuantity : 0;
         const responseProduct = {
             ...productObj,
-            stock: productObj.stockQuantity !== undefined ? productObj.stockQuantity : productObj.stock
+            stock: stockQuantity,
+            stockQuantity: stockQuantity
         };
 
         res.status(200).json({
@@ -610,9 +614,14 @@ const getAllProducts = async (req, res) => {
         const transformedProducts = (result.products || result).map(product => {
             // Convert MongoDB document to plain object to avoid issues
             const productObj = product.toObject ? product.toObject() : { ...product };
+            
+            // Ensure backward compatibility: if no stockQuantity exists, default to 0
+            const stockQuantity = productObj.stockQuantity !== undefined ? productObj.stockQuantity : 0;
+            
             return {
                 ...productObj,
-                stock: productObj.stockQuantity !== undefined ? productObj.stockQuantity : productObj.stock
+                stock: stockQuantity,
+                stockQuantity: stockQuantity  // Also include stockQuantity for consistency
             };
         });
 

@@ -9,6 +9,7 @@ class Product {
         this.price = data.price;
         this.currency = data.currency || 'EGP';
         this.inStock = data.inStock !== undefined ? data.inStock : true;
+        this.stockQuantity = data.stockQuantity !== undefined ? data.stockQuantity : 0;
         this.featured = data.featured || false;
         this.bestSeller = data.bestSeller || false;
         this.images = data.images || [];
@@ -35,6 +36,10 @@ class Product {
 
         if (!data.price || data.price <= 0) {
             errors.push('Product price must be greater than 0');
+        }
+
+        if (data.stockQuantity !== undefined && data.stockQuantity < 0) {
+            errors.push('Stock quantity cannot be negative');
         }
 
         if (!data.description || data.description.trim().length === 0) {
@@ -69,6 +74,7 @@ class Product {
             price: this.price,
             currency: this.currency,
             inStock: this.inStock,
+            stockQuantity: this.stockQuantity,
             featured: this.featured,
             bestSeller: this.bestSeller,
             images: this.images,

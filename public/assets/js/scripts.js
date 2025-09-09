@@ -71,12 +71,18 @@ class APIService {
         const token = AuthService.getToken();
         if (!token) throw new Error('User not authenticated');
         
+        console.log('APIService.addToCart called with:', { productId, quantity, productData });
+        
+        const requestBody = { productId, quantity, productData };
+        console.log('Request body:', JSON.stringify(requestBody));
+        
         return await this.request('/users/cart', {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ productId, quantity, productData })
+            body: JSON.stringify(requestBody)
         });
     }
 
@@ -177,8 +183,19 @@ class CartService {
     }
 
     static async addToCart(productId, quantity = 1) {
+        console.log('CartService.addToCart called with:', { productId, quantity });
+        console.log('User logged in?', AuthService.isLoggedIn());
+        console.log('Token:', AuthService.getToken());
+        
         if (!AuthService.isLoggedIn()) {
+            console.log('User not logged in, using guest cart');
             return this.addToGuestCart(productId, quantity);
+        }
+
+        if (!productId) {
+            console.error('ProductId is missing!');
+            showCartNotification('Error: Product ID is missing');
+            return false;
         }
 
         try {
@@ -209,7 +226,10 @@ class CartService {
                 }
             }
 
+            console.log('Making API call to add to cart with:', { productId, quantity, productData });
             const response = await APIService.addToCart(productId, quantity, productData);
+            console.log('API response:', response);
+            
             if (response.status === 'success') {
                 cart = response.data.cart || [];
                 this.updateCartUI();
@@ -219,7 +239,16 @@ class CartService {
             }
         } catch (error) {
             console.error('Error adding to cart:', error);
-            showCartNotification('Failed to add item to cart');
+            console.error('Error details:', error.message);
+            
+            // If it's an authentication error, try guest cart instead
+            if (error.message.includes('401') || error.message.includes('unauthorized') || error.message.includes('token')) {
+                console.log('Authentication error, falling back to guest cart');
+                AuthService.logout(); // Clear invalid token
+                return this.addToGuestCart(productId, quantity);
+            }
+            
+            showCartNotification('Failed to add item to cart: ' + error.message);
             return false;
         }
     }
@@ -1116,12 +1145,23 @@ function handleCartOverlayClick(e) {
 
 function addToCart(productId, quantity = 1) {
     const qty = parseInt(quantity) || 1;
-    console.log('Adding product to cart:', productId, 'quantity:', qty);
+    console.log('Global addToCart function called with:', { productId, quantity: qty });
     
+    if (!productId) {
+        console.error('ProductId is missing in global addToCart function!');
+        showCartNotification('Error: Product not found');
+        return;
+    }
+    
+    console.log('Calling CartService.addToCart...');
     CartService.addToCart(productId, qty).then(success => {
+        console.log('CartService.addToCart result:', success);
         if (success) {
             showCartNotification('Product added to cart!');
         }
+    }).catch(error => {
+        console.error('Error in global addToCart:', error);
+        showCartNotification('Failed to add item to cart');
     });
 }
 

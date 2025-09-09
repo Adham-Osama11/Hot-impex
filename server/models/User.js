@@ -12,6 +12,7 @@ class User {
         this.isActive = data.isActive !== undefined ? data.isActive : true;
         this.address = data.address || {};
         this.preferences = data.preferences || {};
+        this.cart = data.cart || [];
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
         this.lastLoginAt = data.lastLoginAt;
@@ -92,6 +93,75 @@ class User {
             createdAt: this.createdAt,
             lastLoginAt: this.lastLoginAt
         };
+    }
+
+    // Cart management methods
+    addToCart(productId, quantity = 1, productData = {}) {
+        if (!this.cart) this.cart = [];
+        
+        const existingItem = this.cart.find(item => item.productId === productId);
+        
+        if (existingItem) {
+            existingItem.quantity += quantity;
+            existingItem.updatedAt = new Date().toISOString();
+        } else {
+            this.cart.push({
+                productId,
+                quantity,
+                productData, // Store product name, price, image for quick access
+                addedAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+        }
+        
+        this.updatedAt = new Date().toISOString();
+        return this.cart;
+    }
+
+    removeFromCart(productId) {
+        if (!this.cart) return [];
+        
+        this.cart = this.cart.filter(item => item.productId !== productId);
+        this.updatedAt = new Date().toISOString();
+        return this.cart;
+    }
+
+    updateCartItemQuantity(productId, quantity) {
+        if (!this.cart) return [];
+        
+        const item = this.cart.find(item => item.productId === productId);
+        if (item) {
+            if (quantity <= 0) {
+                return this.removeFromCart(productId);
+            } else {
+                item.quantity = quantity;
+                item.updatedAt = new Date().toISOString();
+                this.updatedAt = new Date().toISOString();
+            }
+        }
+        
+        return this.cart;
+    }
+
+    clearCart() {
+        this.cart = [];
+        this.updatedAt = new Date().toISOString();
+        return this.cart;
+    }
+
+    getCartTotal() {
+        if (!this.cart) return { total: 0, count: 0 };
+        
+        let total = 0;
+        let count = 0;
+        
+        this.cart.forEach(item => {
+            const price = parseFloat(item.productData.price) || 0;
+            total += price * item.quantity;
+            count += item.quantity;
+        });
+        
+        return { total: total.toFixed(2), count };
     }
 }
 

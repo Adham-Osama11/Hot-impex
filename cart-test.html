@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Test - Hot Impex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Cart System Test</h1>
+        
+        <!-- User Status -->
+        <div class="bg-white p-4 rounded-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">User Status</h2>
+            <div id="user-status" class="text-gray-600">Checking...</div>
+            <div class="mt-4">
+                <button id="login-test" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Test Login</button>
+                <button id="logout-test" class="bg-red-500 text-white px-4 py-2 rounded">Test Logout</button>
+            </div>
+        </div>
+        
+        <!-- Cart Actions -->
+        <div class="bg-white p-4 rounded-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Cart Actions</h2>
+            <div class="space-y-2">
+                <button id="add-item-1" class="bg-green-500 text-white px-4 py-2 rounded mr-2">Add Triple Monitor Mount</button>
+                <button id="add-item-2" class="bg-green-500 text-white px-4 py-2 rounded mr-2">Add Racing Simulator Cockpit</button>
+                <button id="clear-cart" class="bg-red-500 text-white px-4 py-2 rounded">Clear Cart</button>
+            </div>
+        </div>
+        
+        <!-- Cart Display -->
+        <div class="bg-white p-4 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Cart Contents</h2>
+            <div id="cart-display" class="text-gray-600">Loading...</div>
+        </div>
+    </div>
+
+    <script src="public/assets/js/scripts.js"></script>
+    <script>
+        // Test script
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Cart test page loaded');
+            
+            // Update user status
+            function updateUserStatus() {
+                const userStatusEl = document.getElementById('user-status');
+                const isLoggedIn = AuthService.isLoggedIn();
+                const user = AuthService.getUser();
+                
+                if (isLoggedIn && user) {
+                    userStatusEl.innerHTML = `
+                        <div class="text-green-600">
+                            ✅ Logged in as: ${user.firstName} ${user.lastName} (${user.email})
+                            <br>Role: ${user.role}
+                        </div>
+                    `;
+                } else {
+                    userStatusEl.innerHTML = '<div class="text-red-600">❌ Not logged in (using guest cart)</div>';
+                }
+            }
+            
+            // Update cart display
+            function updateCartDisplay() {
+                const cartDisplayEl = document.getElementById('cart-display');
+                const cartTotal = CartService.getCartTotal();
+                
+                if (cart.length === 0) {
+                    cartDisplayEl.innerHTML = '<div class="text-gray-500">Cart is empty</div>';
+                } else {
+                    cartDisplayEl.innerHTML = `
+                        <div class="space-y-2">
+                            ${cart.map(item => {
+                                const productData = item.productData || item;
+                                return `
+                                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                        <span>${productData.name}</span>
+                                        <span>Qty: ${item.quantity} | Price: ${productData.price} ${productData.currency || 'EGP'}</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                            <div class="font-bold pt-2 border-t">
+                                Total: ${cartTotal.total} | Items: ${cartTotal.count}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Test login
+            document.getElementById('login-test').addEventListener('click', async () => {
+                try {
+                    const response = await AuthService.login('admin@hotimpex.com', 'admin123');
+                    if (response.status === 'success') {
+                        AuthService.setToken(response.data.token);
+                        AuthService.setUser(response.data.user);
+                        await CartService.migrateGuestCartToUser();
+                        updateUserStatus();
+                        updateCartDisplay();
+                        alert('Logged in successfully!');
+                    } else {
+                        alert('Login failed: ' + response.message);
+                    }
+                } catch (error) {
+                    alert('Login error: ' + error.message);
+                }
+            });
+            
+            // Test logout
+            document.getElementById('logout-test').addEventListener('click', () => {
+                AuthService.logout();
+            });
+            
+            // Add test products
+            document.getElementById('add-item-1').addEventListener('click', async () => {
+                const success = await CartService.addToCart('gaming-003', 1);
+                if (success) {
+                    updateCartDisplay();
+                    alert('LRS02-SR02 Triple Monitor Mount added to cart!');
+                } else {
+                    alert('Failed to add product to cart');
+                }
+            });
+            
+            document.getElementById('add-item-2').addEventListener('click', async () => {
+                const success = await CartService.addToCart('gaming-002', 1);
+                if (success) {
+                    updateCartDisplay();
+                    alert('LRS02-BS Premium Racing Simulator Cockpit added to cart!');
+                } else {
+                    alert('Failed to add product to cart');
+                }
+            });
+            
+            // Clear cart
+            document.getElementById('clear-cart').addEventListener('click', async () => {
+                const success = await CartService.clearCart();
+                if (success) {
+                    updateCartDisplay();
+                    alert('Cart cleared!');
+                }
+            });
+            
+            // Initial load
+            CartService.loadUserCart().then(() => {
+                updateUserStatus();
+                updateCartDisplay();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -6,7 +6,12 @@ const {
     loginUser,
     getUserProfile,
     updateUserProfile,
-    changePassword
+    changePassword,
+    getUserCart,
+    addToUserCart,
+    updateCartItem,
+    removeFromUserCart,
+    clearUserCart
 } = require('../controllers/userController');
 const { auth } = require('../middleware/auth');
 
@@ -33,5 +38,27 @@ router.put('/profile', auth, updateUserProfile);
 
 // @route   PUT /api/users/change-password
 router.put('/change-password', auth, changePassword);
+
+// Cart Routes
+// @route   GET /api/users/cart
+router.get('/cart', auth, getUserCart);
+
+// @route   POST /api/users/cart
+router.post('/cart', auth, [
+    body('productId').notEmpty().withMessage('Product ID is required'),
+    body('quantity').optional().isInt({ min: 1 }).withMessage('Quantity must be a positive integer'),
+    body('productData').optional().isObject().withMessage('Product data must be an object')
+], addToUserCart);
+
+// @route   PUT /api/users/cart/:productId
+router.put('/cart/:productId', auth, [
+    body('quantity').isInt({ min: 1 }).withMessage('Quantity must be a positive integer')
+], updateCartItem);
+
+// @route   DELETE /api/users/cart/:productId
+router.delete('/cart/:productId', auth, removeFromUserCart);
+
+// @route   DELETE /api/users/cart
+router.delete('/cart', auth, clearUserCart);
 
 module.exports = router;

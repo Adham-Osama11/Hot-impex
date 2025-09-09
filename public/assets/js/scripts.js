@@ -54,6 +54,353 @@ class APIService {
     static async getBestSellers() {
         return await this.getProducts({ bestSeller: 'true', limit: 4 });
     }
+
+    // Cart API methods
+    static async getCart() {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        return await this.request('/users/cart', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+
+    static async addToCart(productId, quantity = 1, productData = {}) {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        return await this.request('/users/cart', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ productId, quantity, productData })
+        });
+    }
+
+    static async updateCartItem(productId, quantity) {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        return await this.request(`/users/cart/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ quantity })
+        });
+    }
+
+    static async removeFromCart(productId) {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        return await this.request(`/users/cart/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+
+    static async clearCart() {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        return await this.request('/users/cart', {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+}
+
+// Cart Service - Handles user-specific cart operations
+class CartService {
+    static async loadUserCart() {
+        if (!AuthService.isLoggedIn()) {
+            return this.loadGuestCart();
+        }
+
+        try {
+            const response = await APIService.getCart();
+            if (response.status === 'success') {
+                cart = response.data.cart || [];
+                this.updateCartUI();
+                return cart;
+            }
+        } catch (error) {
+            console.error('Error loading user cart:', error);
+            // Fallback to guest cart
+            return this.loadGuestCart();
+        }
+    }
+
+    static loadGuestCart() {
+        // For non-logged in users, use localStorage but make it temporary
+        const saved = localStorage.getItem('hotimpex-guest-cart');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                cart = Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                console.error('Error parsing guest cart:', e);
+                cart = [];
+            }
+        } else {
+            cart = [];
+        }
+        this.updateCartUI();
+        return cart;
+    }
+
+    static async saveUserCart() {
+        if (!AuthService.isLoggedIn()) {
+            return this.saveGuestCart();
+        }
+
+        // For logged-in users, cart is automatically saved on server
+        // No need to manually save
+        return true;
+    }
+
+    static saveGuestCart() {
+        // Save guest cart to temporary localStorage
+        try {
+            localStorage.setItem('hotimpex-guest-cart', JSON.stringify(cart));
+        } catch (error) {
+            console.error('Error saving guest cart:', error);
+        }
+    }
+
+    static async addToCart(productId, quantity = 1) {
+        if (!AuthService.isLoggedIn()) {
+            return this.addToGuestCart(productId, quantity);
+        }
+
+        try {
+            // Get product data from API first
+            let productData = {};
+            try {
+                const productResponse = await APIService.getProduct(productId);
+                if (productResponse.status === 'success') {
+                    const product = productResponse.data.product;
+                    productData = {
+                        name: product.name,
+                        price: product.price,
+                        image: product.mainImage || product.image,
+                        currency: product.currency || 'EGP'
+                    };
+                }
+            } catch (productError) {
+                console.warn('Could not fetch product data:', productError);
+                // Try to get from local products array as fallback
+                const product = getProductById(productId);
+                if (product) {
+                    productData = {
+                        name: product.name,
+                        price: product.price,
+                        image: product.mainImage || product.image,
+                        currency: product.currency || 'EGP'
+                    };
+                }
+            }
+
+            const response = await APIService.addToCart(productId, quantity, productData);
+            if (response.status === 'success') {
+                cart = response.data.cart || [];
+                this.updateCartUI();
+                return true;
+            } else {
+                throw new Error(response.message || 'Failed to add to cart');
+            }
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            showCartNotification('Failed to add item to cart');
+            return false;
+        }
+    }
+
+    static async addToGuestCart(productId, quantity = 1) {
+        const existingItem = cart.find(item => item.productId === productId);
+        
+        // Try to get product data from API first, then fallback to local array
+        let product = null;
+        try {
+            const productResponse = await APIService.getProduct(productId);
+            if (productResponse.status === 'success') {
+                product = productResponse.data.product;
+            }
+        } catch (error) {
+            console.warn('Could not fetch product from API:', error);
+            product = getProductById(productId);
+        }
+        
+        if (!product) {
+            showCartNotification('Product not found');
+            return false;
+        }
+
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({
+                productId,
+                quantity,
+                productData: {
+                    name: product.name,
+                    price: product.price,
+                    image: product.mainImage || product.image,
+                    currency: product.currency || 'EGP'
+                }
+            });
+        }
+
+        this.saveGuestCart();
+        this.updateCartUI();
+        return true;
+    }
+
+    static async removeFromCart(productId) {
+        if (!AuthService.isLoggedIn()) {
+            return this.removeFromGuestCart(productId);
+        }
+
+        try {
+            const response = await APIService.removeFromCart(productId);
+            if (response.status === 'success') {
+                cart = response.data.cart || [];
+                this.updateCartUI();
+                return true;
+            } else {
+                throw new Error(response.message || 'Failed to remove from cart');
+            }
+        } catch (error) {
+            console.error('Error removing from cart:', error);
+            showCartNotification('Failed to remove item from cart');
+            return false;
+        }
+    }
+
+    static removeFromGuestCart(productId) {
+        cart = cart.filter(item => item.productId !== productId);
+        this.saveGuestCart();
+        this.updateCartUI();
+        return true;
+    }
+
+    static async updateCartQuantity(productId, quantity) {
+        if (quantity <= 0) {
+            return this.removeFromCart(productId);
+        }
+
+        if (!AuthService.isLoggedIn()) {
+            return this.updateGuestCartQuantity(productId, quantity);
+        }
+
+        try {
+            const response = await APIService.updateCartItem(productId, quantity);
+            if (response.status === 'success') {
+                cart = response.data.cart || [];
+                this.updateCartUI();
+                return true;
+            } else {
+                throw new Error(response.message || 'Failed to update cart');
+            }
+        } catch (error) {
+            console.error('Error updating cart:', error);
+            showCartNotification('Failed to update cart');
+            return false;
+        }
+    }
+
+    static updateGuestCartQuantity(productId, quantity) {
+        const item = cart.find(item => item.productId === productId);
+        if (item) {
+            item.quantity = quantity;
+            this.saveGuestCart();
+            this.updateCartUI();
+            return true;
+        }
+        return false;
+    }
+
+    static async clearCart() {
+        if (!AuthService.isLoggedIn()) {
+            cart = [];
+            this.saveGuestCart();
+            this.updateCartUI();
+            return true;
+        }
+
+        try {
+            const response = await APIService.clearCart();
+            if (response.status === 'success') {
+                cart = [];
+                this.updateCartUI();
+                return true;
+            } else {
+                throw new Error(response.message || 'Failed to clear cart');
+            }
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+            return false;
+        }
+    }
+
+    static async migrateGuestCartToUser() {
+        if (!AuthService.isLoggedIn() || cart.length === 0) {
+            return true;
+        }
+
+        try {
+            // Add each guest cart item to user cart
+            for (const item of cart) {
+                await APIService.addToCart(item.productId, item.quantity, item.productData);
+            }
+
+            // Clear guest cart after migration
+            localStorage.removeItem('hotimpex-guest-cart');
+            
+            // Load the updated user cart
+            await this.loadUserCart();
+            
+            return true;
+        } catch (error) {
+            console.error('Error migrating guest cart:', error);
+            return false;
+        }
+    }
+
+    static updateCartUI() {
+        // Update cart count in header
+        const cartCountElements = document.querySelectorAll('.cart-count');
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        
+        cartCountElements.forEach(element => {
+            element.textContent = totalItems;
+            element.style.display = totalItems > 0 ? 'inline' : 'none';
+        });
+
+        // Update cart sidebar if open
+        updateCartUI();
+    }
+
+    static getCartTotal() {
+        let total = 0;
+        let count = 0;
+        
+        cart.forEach(item => {
+            const price = parseFloat(item.productData?.price) || 0;
+            total += price * item.quantity;
+            count += item.quantity;
+        });
+        
+        return { total: total.toFixed(2), count };
+    }
 }
 
 // Global variables
@@ -322,7 +669,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize shop page if present
     if (document.getElementById('products-grid')) {
+        console.log('Products grid found, initializing shop page...');
         initializeShopPage();
+    } else {
+        console.log('No products grid found on this page');
     }
     
     // Initialize product page if present
@@ -676,8 +1026,8 @@ function initializeCart() {
         cart = [];
     }
     
-    loadCartFromStorage();
-    updateCartUI();
+    // Load cart based on user login status
+    CartService.loadUserCart();
     
     const cartToggle = document.getElementById('cart-toggle');
     const desktopCartToggle = document.getElementById('desktop-cart-toggle');
@@ -768,77 +1118,28 @@ function addToCart(productId, quantity = 1) {
     const qty = parseInt(quantity) || 1;
     console.log('Adding product to cart:', productId, 'quantity:', qty);
     
-    const product = products.find(p => String(p.id) === String(productId));
-    if (!product) {
-        console.error('Product not found:', productId);
-        return;
-    }
-    
-    if (!Array.isArray(cart)) {
-        cart = [];
-    }
-    
-    const existingItem = cart.find(item => String(item.id) === String(product.id));
-    
-    if (existingItem) {
-        existingItem.quantity += qty;
-        console.log('Updated quantity for product:', product.id, 'to', existingItem.quantity);
-    } else {
-        cart.push({ ...product, quantity: qty });
-        console.log('Added new product to cart:', product.id, 'with quantity:', qty);
-    }
-    
-    saveCartToStorage();
-    updateCartUI();
-    showCartNotification('Product added to cart!');
+    CartService.addToCart(productId, qty).then(success => {
+        if (success) {
+            showCartNotification('Product added to cart!');
+        }
+    });
 }
 
 function removeFromCart(productId) {
-    console.log('Removing product from cart:', productId, typeof productId);
+    console.log('Removing product from cart:', productId);
     
-    if (!Array.isArray(cart)) {
-        cart = [];
-        return;
-    }
-    
-    // Find and remove the item
-    const originalLength = cart.length;
-    cart = cart.filter(item => {
-        const itemIdStr = String(item.id);
-        const targetIdStr = String(productId);
-        return itemIdStr !== targetIdStr;
+    CartService.removeFromCart(productId).then(success => {
+        if (success) {
+            showCartNotification('Product removed from cart!');
+        }
     });
-    
-    const removed = cart.length < originalLength;
-    console.log('Removal successful:', removed, 'Cart length:', cart.length);
-    
-    if (removed) {
-        saveCartToStorage();
-        updateCartUI();
-        showCartNotification('Product removed from cart!');
-    }
 }
 
 function updateCartQuantity(productId, quantity) {
     console.log('Updating cart quantity for product:', productId, 'to:', quantity);
     
     const newQuantity = parseInt(quantity) || 0;
-    if (!Array.isArray(cart)) {
-        cart = [];
-        return;
-    }
-    
-    const item = cart.find(item => String(item.id) === String(productId));
-    
-    if (item) {
-        if (newQuantity <= 0) {
-            removeFromCart(productId);
-        } else {
-            item.quantity = newQuantity;
-            saveCartToStorage();
-            updateCartUI();
-        }
-    }
+    CartService.updateCartQuantity(productId, newQuantity);
 }
 
 function toggleCart() {
@@ -901,9 +1202,12 @@ function updateCartUI() {
     if (!Array.isArray(cart)) {
         cart = [];
     }
-    
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const totalPrice = cart.reduce((sum, item) => {
+        const price = parseFloat(item.productData?.price || item.price || 0);
+        return sum + (price * (item.quantity || 0));
+    }, 0);
     
     console.log('Total items:', totalItems, 'Total price:', totalPrice);
     
@@ -922,7 +1226,8 @@ function updateCartUI() {
     
     // Update cart total
     if (cartTotal) {
-        cartTotal.textContent = `${totalPrice.toFixed(2)} EGP`;
+        const currency = cart[0]?.productData?.currency || 'EGP';
+        cartTotal.textContent = `${totalPrice.toFixed(2)} ${currency}`;
     }
     
     // Update checkout button state
@@ -951,13 +1256,19 @@ function updateCartUI() {
                 </div>
             `;
         } else {
-            cartItems.innerHTML = cart.map(item => `
-                <div class="flex items-center space-x-3 p-3 border-b border-gray-200 dark:border-gray-600" data-item-id="${item.id}">
-                    <img src="${item.mainImage || item.image || 'assets/images/Products/placeholder.jpg'}" 
-                         alt="${item.name}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
+            cartItems.innerHTML = cart.map(item => {
+                const productData = item.productData || item;
+                const productId = item.productId || item.id;
+                const itemPrice = parseFloat(productData.price || 0);
+                const currency = productData.currency || 'EGP';
+                
+                return `
+                <div class="flex items-center space-x-3 p-3 border-b border-gray-200 dark:border-gray-600" data-item-id="${productId}">
+                    <img src="${productData.image || productData.mainImage || 'assets/images/Products/placeholder.jpg'}" 
+                         alt="${productData.name}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
                     <div class="flex-1">
-                        <h4 class="font-medium text-gray-900 dark:text-white">${item.name}</h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">${parseFloat(item.price).toFixed(2)} EGP each</p>
+                        <h4 class="font-medium text-gray-900 dark:text-white">${productData.name}</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${itemPrice.toFixed(2)} ${currency} each</p>
                         <div class="flex items-center space-x-2 mt-1">
                             <button class="decrease-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
                                 <span class="font-bold">−</span>
@@ -969,13 +1280,14 @@ function updateCartUI() {
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="font-medium text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(2)} EGP</p>
+                        <p class="font-medium text-gray-900 dark:text-white">${(itemPrice * item.quantity).toFixed(2)} ${currency}</p>
                         <button class="remove-item text-red-500 hover:text-red-700 text-sm font-medium transition-colors">
                             Remove
                         </button>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
             
             // Add event listeners for cart buttons
             setupCartEventListeners();
@@ -1219,69 +1531,352 @@ function displayFeaturedProducts() {
 }
 
 // Shop Page Functions
-function initializeShopPage() {
-    const categoryButtons = document.querySelectorAll('.category-btn');
+async function initializeShopPage() {
+    console.log('Initializing shop page...');
+    console.log('Products grid element:', document.getElementById('products-grid'));
+    console.log('Loading state element:', document.getElementById('loading-state'));
+    
+    // Show loading state
+    showShopLoading();
+    console.log('Loading state shown');
+    
+    try {
+        // Load products from database
+        await loadShopProducts();
+        
+        // Initialize category filters
+        initializeShopFilters();
+        
+        // Handle URL parameters (category, search)
+        handleShopURLParams();
+        
+    } catch (error) {
+        console.error('Error initializing shop page:', error);
+        showShopError('Failed to load products. Please refresh the page.');
+    }
+}
+
+async function loadShopProducts() {
+    try {
+        console.log('Starting to load products from API...');
+        const response = await APIService.getProducts({ limit: 100 });
+        console.log('API response:', response);
+        
+        if (response.status === 'success') {
+            // Store products globally for filtering
+            window.shopProducts = response.data.products || [];
+            console.log('Loaded products from database:', window.shopProducts.length);
+            
+            // Display all products initially
+            displayShopProducts(window.shopProducts);
+            
+            // Update category filters with actual categories
+            updateCategoryFilters(window.shopProducts);
+            
+        } else {
+            console.error('API response was not successful:', response);
+            throw new Error(response.message || 'Failed to load products');
+        }
+    } catch (error) {
+        console.error('Error loading products:', error);
+        
+        // Fallback to static products if API fails
+        console.log('Falling back to static products...');
+        window.shopProducts = products || [];
+        displayShopProducts(window.shopProducts);
+        updateCategoryFilters(window.shopProducts);
+    }
+}
+
+function initializeShopFilters() {
+    const categoryButtons = document.querySelectorAll('.category-btn, .category-filter');
+    const searchInput = document.getElementById('search-input');
     
     categoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
             const category = btn.dataset.category;
             filterProductsByCategory(category);
             
             // Update active button
-            categoryButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            categoryButtons.forEach(b => {
+                b.classList.remove('active', 'font-bold', 'text-blue-600');
+                b.classList.add('text-gray-600');
+            });
+            btn.classList.add('active', 'font-bold', 'text-blue-600');
+            btn.classList.remove('text-gray-600');
+            
+            // Update URL
+            updateShopURL({ category });
         });
     });
     
-    // Display all products initially
-    displayShopProducts(products);
+    // Search functionality
+    if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = e.target.value.trim();
+                filterProducts(null, searchTerm);
+                updateShopURL({ search: searchTerm });
+            }, 300); // Debounce search
+        });
+    }
 }
 
-function filterProductsByCategory(category) {
-    const filteredProducts = category === 'all' ? 
-        products : 
-        products.filter(product => product.category === category);
+function handleShopURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+    const search = urlParams.get('search');
     
+    if (search) {
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.value = search;
+        }
+        filterProducts(category, search);
+    } else if (category) {
+        filterProductsByCategory(category);
+        
+        // Update active category button
+        const categoryBtn = document.querySelector(`[data-category="${category}"]`);
+        if (categoryBtn) {
+            document.querySelectorAll('.category-btn, .category-filter').forEach(b => {
+                b.classList.remove('active', 'font-bold', 'text-blue-600');
+                b.classList.add('text-gray-600');
+            });
+            categoryBtn.classList.add('active', 'font-bold', 'text-blue-600');
+            categoryBtn.classList.remove('text-gray-600');
+        }
+    } else {
+        // Show all products
+        displayShopProducts(window.shopProducts || []);
+    }
+}
+
+function updateShopURL(params) {
+    const url = new URL(window.location);
+    
+    if (params.category) {
+        url.searchParams.set('category', params.category);
+    }
+    
+    if (params.search !== undefined) {
+        if (params.search) {
+            url.searchParams.set('search', params.search);
+        } else {
+            url.searchParams.delete('search');
+        }
+    }
+    
+    window.history.pushState({}, '', url);
+}
+
+function updateCategoryFilters(products) {
+    // Get unique categories from products
+    const categories = [...new Set(products.map(p => p.categorySlug || p.category).filter(Boolean))];
+    console.log('Available categories:', categories);
+    
+    // You can dynamically update category filters here if needed
+    // For now, we'll keep the existing static categories
+}
+
+function filterProducts(category = null, searchTerm = '') {
+    const products = window.shopProducts || [];
+    
+    let filteredProducts = products;
+    
+    // Filter by category
+    if (category && category !== 'all') {
+        filteredProducts = filteredProducts.filter(product => 
+            product.categorySlug === category || 
+            product.category === category ||
+            product.categorySlug === category.toLowerCase() ||
+            product.category === category.toLowerCase()
+        );
+    }
+    
+    // Filter by search term
+    if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filteredProducts = filteredProducts.filter(product =>
+            product.name.toLowerCase().includes(term) ||
+            (product.description && product.description.toLowerCase().includes(term)) ||
+            (product.shortDescription && product.shortDescription.toLowerCase().includes(term)) ||
+            (product.tags && product.tags.some(tag => tag.toLowerCase().includes(term)))
+        );
+    }
+    
+    console.log(`Filtered products: ${filteredProducts.length} of ${products.length}`);
     displayShopProducts(filteredProducts);
 }
 
-function displayShopProducts(productsToShow) {
+function filterProductsByCategory(category) {
+    filterProducts(category, '');
+}
+
+function showShopLoading() {
+    const loadingState = document.getElementById('loading-state');
+    const productsGrid = document.getElementById('products-grid');
+    
+    if (loadingState) {
+        loadingState.style.display = 'flex';
+    }
+    
+    if (productsGrid) {
+        productsGrid.classList.add('hidden');
+        productsGrid.innerHTML = '';
+    }
+}
+
+function showShopError(message) {
     const container = document.getElementById('products-grid');
     if (!container) return;
     
-    container.innerHTML = productsToShow.map(product => `
-        <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300" 
-             data-product-id="${product.id}">
-            <div class="relative">
-                <img src="https://placehold.co/300x300/E0E0E0/808080?text=${product.image}" 
-                     alt="${product.name}" 
-                     class="w-full h-48 object-cover">
-                ${product.originalPrice ? '<span class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">Sale</span>' : ''}
-            </div>
-            <div class="p-6">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">${product.name}</h3>
-                <p class="text-gray-600 dark:text-gray-300 capitalize mb-3">${product.category}</p>
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        ${product.originalPrice ? 
-                            `<span class="text-sm text-gray-500 line-through">${product.originalPrice}EGP</span><br>` : ''
-                        }
-                        <span class="text-2xl font-bold text-blue-600">${product.price}EGP</span>
-                    </div>
-                </div>
-                <div class="flex space-x-2">
-                    <button onclick="addToCart(${product.id})" 
-                            class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                        Add to Cart
-                    </button>
-                    <button onclick="openQuickView(${product.id})" 
-                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        Quick View
-                    </button>
-                </div>
+    container.innerHTML = `
+        <div class="col-span-full flex items-center justify-center py-20">
+            <div class="text-center">
+                <div class="text-red-500 text-6xl mb-4">⚠️</div>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">${message}</p>
+                <button onclick="location.reload()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    Try Again
+                </button>
             </div>
         </div>
-    `).join('');
+    `;
+}
+
+function displayShopProducts(productsToShow) {
+    console.log('displayShopProducts called with:', productsToShow?.length, 'products');
+    const container = document.getElementById('products-grid');
+    const loadingState = document.getElementById('loading-state');
+    
+    if (!container) {
+        console.error('Products grid container not found!');
+        return;
+    }
+
+    // Hide loading state if it exists
+    if (loadingState) {
+        loadingState.style.display = 'none';
+        console.log('Loading state hidden');
+    }
+
+    // Show products grid
+    container.classList.remove('hidden');
+    console.log('Products grid shown');
+    
+    if (!productsToShow || productsToShow.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full flex items-center justify-center py-20">
+                <div class="text-center">
+                    <div class="text-gray-400 text-6xl mb-4">📦</div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">No products found</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Try adjusting your search or filter criteria.</p>
+                </div>
+            </div>
+        `;
+        console.log('No products to display');
+        return;
+    }
+    
+    container.innerHTML = productsToShow.map(product => {
+        const productPrice = parseFloat(product.price) || 0;
+        const originalPrice = product.originalPrice ? parseFloat(product.originalPrice) : null;
+        const currency = product.currency || 'EGP';
+        const isOnSale = originalPrice && originalPrice > productPrice;
+        
+        // Handle image URL
+        let imageUrl = product.mainImage || product.image;
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+            imageUrl = `assets/images/Products/${imageUrl}`;
+        }
+        if (!imageUrl) {
+            imageUrl = 'assets/images/placeholder.jpg';
+        }
+        
+        return `
+            <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
+               data-product-id="${product.id}" 
+               data-category="${product.categorySlug || product.category}" 
+               data-name="${product.name}" 
+               data-price="${productPrice}">
+                <div class="relative h-64">
+                    <img src="${imageUrl}" 
+                         alt="${product.name}" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                         onerror="this.src='assets/images/placeholder.jpg'">
+                    
+                    <!-- Product Badges -->
+                    ${isOnSale ? '<span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SALE</span>' : ''}
+                    ${product.featured ? '<span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>' : ''}
+                    ${product.bestSeller ? '<span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">BEST SELLER</span>' : ''}
+                    
+                    <!-- Hover Actions -->
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', 1);" 
+                                class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
+                                title="Add to Cart">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </button>
+                        <button onclick="event.preventDefault(); event.stopPropagation(); openQuickView('${product.id}');" 
+                                class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
+                                title="Quick View">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <h3 class="font-semibold text-gray-800 dark:text-white text-lg mb-2 truncate">${product.name}</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 capitalize">${product.category || 'Product'}</p>
+                    
+                    <!-- Rating -->
+                    ${product.rating ? `
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-yellow-400">
+                                ${Array.from({length: 5}, (_, i) => 
+                                    `<svg class="w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>`
+                                ).join('')}
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-400 ml-1 text-sm">${product.rating}</span>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Price -->
+                    <div class="flex justify-between items-center">
+                        <div>
+                            ${isOnSale ? `<span class="text-sm text-gray-500 dark:text-gray-400 line-through">${originalPrice} ${currency}</span><br>` : ''}
+                            <span class="text-gray-800 dark:text-white font-bold text-xl">${productPrice.toFixed(2)} ${currency}</span>
+                        </div>
+                        
+                        <!-- Stock Status -->
+                        ${product.inStock !== undefined ? `
+                            <span class="text-xs px-2 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${product.inStock ? 'In Stock' : 'Out of Stock'}
+                            </span>
+                        ` : ''}
+                    </div>
+                </div>
+            </a>
+        `;
+    }).join('');
+    
+    // Add click event listeners for add to cart buttons
+    container.querySelectorAll('button[onclick*="addToCart"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
 }
 
 // Product Page Functions
@@ -1343,30 +1938,15 @@ function viewProduct(productId) {
 }
 
 function saveCartToStorage() {
-    try {
-        console.log('Saving cart to storage:', cart);
-        localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
-    } catch (error) {
-        console.error('Error saving cart to storage:', error);
-    }
+    // This function is now handled by CartService
+    // Keep for backward compatibility but delegate to CartService
+    CartService.saveUserCart();
 }
 
 function loadCartFromStorage() {
-    const saved = localStorage.getItem('hotimpex-cart');
-    console.log('Loading cart from storage:', saved);
-    
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            cart = Array.isArray(parsed) ? parsed : [];
-            console.log('Cart loaded successfully:', cart);
-        } catch (e) {
-            console.error('Error parsing cart from storage:', e);
-            cart = [];
-        }
-    } else {
-        cart = [];
-    }
+    // This function is now handled by CartService
+    // Keep for backward compatibility but delegate to CartService
+    CartService.loadUserCart();
 }
 
 function saveProductsToStorage() {
@@ -2335,6 +2915,9 @@ class AuthService {
     static logout() {
         localStorage.removeItem('hotimpex-token');
         localStorage.removeItem('hotimpex-user');
+        // Clear user cart and load guest cart
+        cart = [];
+        CartService.loadGuestCart();
         window.location.reload();
     }
 
@@ -2540,6 +3123,9 @@ class AuthUI {
             if (response.status === 'success') {
                 AuthService.setToken(response.data.token);
                 AuthService.setUser(response.data.user);
+                
+                // Migrate guest cart to user cart
+                await CartService.migrateGuestCartToUser();
                 
                 this.hideLoginModal();
                 this.updateUI();
@@ -3200,10 +3786,9 @@ window.cart = cart;
 window.products = products;
 
 window.clearCart = () => {
-    cart = [];
-    saveCartToStorage();
-    updateCartUI();
-    console.log('Cart cleared');
+    CartService.clearCart().then(() => {
+        console.log('Cart cleared');
+    });
 };
 
 // Debug function to test cart
@@ -3218,3 +3803,6 @@ window.testCart = () => {
         console.log('Added product:', products[0].name);
     }
 };
+
+// Make CartService globally available
+window.CartService = CartService;

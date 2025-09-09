@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Shop Page</title>
+    <style>
+        #console-output {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+        }
+        .loading-test {
+            padding: 20px;
+            margin: 20px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Debug Shop Page</h1>
+    
+    <div class="loading-test">
+        <h2>Loading Test</h2>
+        <div id="loading-state" class="flex justify-center items-center py-16">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading products...</p>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 hidden" id="products-grid">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <div id="console-output">Console Output:\n</div>
+
+    <script>
+        // Intercept console.log
+        const originalLog = console.log;
+        const originalError = console.error;
+        const output = document.getElementById('console-output');
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            output.textContent += '[LOG] ' + args.join(' ') + '\n';
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            output.textContent += '[ERROR] ' + args.join(' ') + '\n';
+        };
+    </script>
+
+    <!-- Load the main scripts -->
+    <script src="assets/js/scripts.js"></script>
+
+    <script>
+        // Test the shop initialization
+        console.log('Testing shop initialization...');
+        console.log('Products grid element:', document.getElementById('products-grid'));
+        console.log('Loading state element:', document.getElementById('loading-state'));
+        
+        // Test API directly
+        console.log('Testing API directly...');
+        fetch('/api/products?limit=5')
+            .then(response => {
+                console.log('API Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('API Response data:', data);
+                if (data.status === 'success') {
+                    console.log('Found', data.data.products.length, 'products');
+                    
+                    // Hide loading and show products
+                    const loading = document.getElementById('loading-state');
+                    const grid = document.getElementById('products-grid');
+                    
+                    if (loading) {
+                        loading.style.display = 'none';
+                        console.log('Loading hidden');
+                    }
+                    
+                    if (grid) {
+                        grid.classList.remove('hidden');
+                        grid.innerHTML = '<div>Found ' + data.data.products.length + ' products!</div>';
+                        console.log('Products displayed');
+                    }
+                } else {
+                    console.error('API returned error:', data);
+                }
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+            });
+        
+        // Try to manually call the initialization
+        if (typeof initializeShopPage === 'function') {
+            console.log('Calling initializeShopPage manually...');
+            initializeShopPage().catch(error => {
+                console.error('Manual initialization failed:', error);
+            });
+        } else {
+            console.error('initializeShopPage function not found!');
+        }
+    </script>
+</body>
+</html>

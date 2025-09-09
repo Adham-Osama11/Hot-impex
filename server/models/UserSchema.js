@@ -85,7 +85,33 @@ const userSchema = new mongoose.Schema({
     },
     lockUntil: {
         type: Date
-    }
+    },
+    cart: [{
+        productId: {
+            type: String,
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            min: 1,
+            default: 1
+        },
+        productData: {
+            name: String,
+            price: Number,
+            image: String,
+            currency: String
+        },
+        addedAt: {
+            type: Date,
+            default: Date.now
+        },
+        updatedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 }, {
     timestamps: true,
     toJSON: {
@@ -185,6 +211,71 @@ userSchema.statics.getStats = function() {
             }
         }
     ]);
+};
+
+// Cart management methods
+userSchema.methods.addToCart = function(productId, quantity = 1, productData = {}) {
+    if (!this.cart) this.cart = [];
+    
+    const existingItem = this.cart.find(item => item.productId === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += quantity;
+        existingItem.updatedAt = new Date();
+    } else {
+        this.cart.push({
+            productId,
+            quantity,
+            productData,
+            addedAt: new Date(),
+            updatedAt: new Date()
+        });
+    }
+    
+    return this.cart;
+};
+
+userSchema.methods.removeFromCart = function(productId) {
+    if (!this.cart) return [];
+    
+    this.cart = this.cart.filter(item => item.productId !== productId);
+    return this.cart;
+};
+
+userSchema.methods.updateCartItemQuantity = function(productId, quantity) {
+    if (!this.cart) return [];
+    
+    const item = this.cart.find(item => item.productId === productId);
+    if (item) {
+        if (quantity <= 0) {
+            return this.removeFromCart(productId);
+        } else {
+            item.quantity = quantity;
+            item.updatedAt = new Date();
+        }
+    }
+    
+    return this.cart;
+};
+
+userSchema.methods.clearCart = function() {
+    this.cart = [];
+    return this.cart;
+};
+
+userSchema.methods.getCartTotal = function() {
+    if (!this.cart) return { total: 0, count: 0 };
+    
+    let total = 0;
+    let count = 0;
+    
+    this.cart.forEach(item => {
+        const price = parseFloat(item.productData.price) || 0;
+        total += price * item.quantity;
+        count += item.quantity;
+    });
+    
+    return { total: total.toFixed(2), count };
 };
 
 module.exports = mongoose.model('User', userSchema);

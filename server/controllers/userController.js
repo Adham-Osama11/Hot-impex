@@ -309,10 +309,249 @@ const changePassword = async (req, res) => {
     }
 };
 
+// @desc    Get user cart
+// @route   GET /api/users/cart
+// @access  Private
+const getUserCart = async (req, res) => {
+    try {
+        const user = await hybridDb.findUserById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        const cart = user.cart || [];
+        const cartTotal = user.getCartTotal();
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                cart,
+                total: cartTotal.total,
+                count: cartTotal.count
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching cart',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Add item to cart
+// @route   POST /api/users/cart
+// @access  Private
+const addToUserCart = async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Validation errors',
+                errors: errors.array()
+            });
+        }
+
+        const { productId, quantity = 1, productData = {} } = req.body;
+
+        const user = await hybridDb.findUserById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        // Verify product exists (optional, but recommended)
+        try {
+            const product = await hybridDb.getProductById(productId);
+            if (!product) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'Product not found'
+                });
+            }
+            
+            // If productData is not provided, use product info
+            if (!productData.name) {
+                productData.name = product.name;
+                productData.price = product.price;
+                productData.image = product.mainImage;
+                productData.currency = product.currency;
+            }
+        } catch (productError) {
+            // If we can't verify the product, continue with provided data
+            console.warn('Could not verify product:', productError.message);
+        }
+
+        user.addToCart(productId, quantity, productData);
+        await hybridDb.updateUser(req.user.id, { 
+            cart: user.cart,
+            updatedAt: new Date()
+        });
+
+        const cartTotal = user.getCartTotal();
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Item added to cart',
+            data: {
+                cart: user.cart,
+                total: cartTotal.total,
+                count: cartTotal.count
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error adding item to cart',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Update cart item quantity
+// @route   PUT /api/users/cart/:productId
+// @access  Private
+const updateCartItem = async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Validation errors',
+                errors: errors.array()
+            });
+        }
+
+        const { productId } = req.params;
+        const { quantity } = req.body;
+
+        const user = await hybridDb.findUserById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        user.updateCartItemQuantity(productId, quantity);
+        await hybridDb.updateUser(req.user.id, { 
+            cart: user.cart,
+            updatedAt: new Date()
+        });
+
+        const cartTotal = user.getCartTotal();
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Cart item updated',
+            data: {
+                cart: user.cart,
+                total: cartTotal.total,
+                count: cartTotal.count
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error updating cart item',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Remove item from cart
+// @route   DELETE /api/users/cart/:productId
+// @access  Private
+const removeFromUserCart = async (req, res) => {
+    try {
+        const { productId } = req.params;
+
+        const user = await hybridDb.findUserById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        user.removeFromCart(productId);
+        await hybridDb.updateUser(req.user.id, { 
+            cart: user.cart,
+            updatedAt: new Date()
+        });
+
+        const cartTotal = user.getCartTotal();
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Item removed from cart',
+            data: {
+                cart: user.cart,
+                total: cartTotal.total,
+                count: cartTotal.count
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error removing item from cart',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Clear user cart
+// @route   DELETE /api/users/cart
+// @access  Private
+const clearUserCart = async (req, res) => {
+    try {
+        const user = await hybridDb.findUserById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found'
+            });
+        }
+
+        user.clearCart();
+        await hybridDb.updateUser(req.user.id, { 
+            cart: user.cart,
+            updatedAt: new Date()
+        });
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Cart cleared',
+            data: {
+                cart: [],
+                total: '0.00',
+                count: 0
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error clearing cart',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
     getUserProfile,
     updateUserProfile,
-    changePassword
+    changePassword,
+    getUserCart,
+    addToUserCart,
+    updateCartItem,
+    removeFromUserCart,
+    clearUserCart
 };

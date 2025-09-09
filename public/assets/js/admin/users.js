@@ -15,7 +15,7 @@ class UsersController {
     async loadData() {
         try {
             UIHelpers.showLoadingState('users');
-            const usersData = await this.api.getAllUsers({ role: 'customer', limit: 50 });
+            const usersData = await this.api.getAllUsers({ limit: 100 }); // Load all users, not just customers
             this.currentUsers = usersData.data.users;
             this.updateTable(this.currentUsers);
             UIHelpers.hideLoadingState();
@@ -35,10 +35,19 @@ class UsersController {
 
         tableBody.innerHTML = users.map(user => {
             const fullName = user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'N/A';
+            const role = user.role || 'customer';
+            const roleColor = role === 'admin' ? 'text-purple-600 dark:text-purple-400' : 'text-blue-600 dark:text-blue-400';
+            const roleBg = role === 'admin' ? 'bg-purple-100 dark:bg-purple-900/20' : 'bg-blue-100 dark:bg-blue-900/20';
+            
             return `
                 <tr class="border-b border-white/10 dark:border-gray-700/50 hover:bg-white/5 dark:hover:bg-gray-800/20">
                     <td class="px-6 py-4 font-medium">${fullName}</td>
                     <td class="px-6 py-4">${user.email || 'N/A'}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${roleColor} ${roleBg}">
+                            ${role.charAt(0).toUpperCase() + role.slice(1)}
+                        </span>
+                    </td>
                     <td class="px-6 py-4">$${(user.totalSpent || 0).toFixed(2)}</td>
                     <td class="px-6 py-4">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td>
                     <td class="px-6 py-4 text-right space-x-2">
@@ -84,10 +93,13 @@ class UsersController {
         }
 
         // Reset form for new user
-        document.getElementById('userModalTitle').textContent = 'Add New Customer';
-        document.getElementById('userSubmitButtonText').textContent = 'Add Customer';
+        document.getElementById('userModalTitle').textContent = 'Add New User';
+        document.getElementById('userSubmitButtonText').textContent = 'Add User';
         document.getElementById('userForm').reset();
         document.getElementById('userId').value = '';
+        
+        // Set default role to customer
+        document.getElementById('userRole').value = 'customer';
         
         // Show password fields for new users
         document.getElementById('passwordSection').style.display = 'grid';
@@ -113,13 +125,18 @@ class UsersController {
         }
 
         // Populate the modal with user data
-        document.getElementById('userModalTitle').textContent = 'Edit Customer';
-        document.getElementById('userSubmitButtonText').textContent = 'Update Customer';
+        const userRole = user.role || 'customer';
+        const modalTitle = userRole === 'admin' ? 'Edit Admin' : 'Edit User';
+        const buttonText = userRole === 'admin' ? 'Update Admin' : 'Update User';
+        
+        document.getElementById('userModalTitle').textContent = modalTitle;
+        document.getElementById('userSubmitButtonText').textContent = buttonText;
         document.getElementById('userId').value = user.id || user._id;
         document.getElementById('userFirstName').value = user.firstName || '';
         document.getElementById('userLastName').value = user.lastName || '';
         document.getElementById('userEmail').value = user.email || '';
         document.getElementById('userPhone').value = user.phone || '';
+        document.getElementById('userRole').value = userRole;
         
         // Hide password requirement for editing (optional password change)
         document.getElementById('passwordSection').style.display = 'grid';
@@ -188,7 +205,7 @@ class UsersController {
             
             // For new users, password is required
             if (!userId && !password) {
-                NotificationManager.showError('Password is required for new customers');
+                NotificationManager.showError('Password is required for new users');
                 return;
             }
             
@@ -202,7 +219,8 @@ class UsersController {
                 firstName: formData.get('firstName').trim(),
                 lastName: formData.get('lastName').trim(),
                 email: formData.get('email').trim(),
-                phone: formData.get('phone').trim()
+                phone: formData.get('phone').trim(),
+                role: formData.get('role') || 'customer'
             };
             
             // Add password only if provided
@@ -225,20 +243,14 @@ class UsersController {
             try {
                 if (userId) {
                     // Update existing user
-                    await this.api.request(`/users/${userId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(userData)
-                    });
-                    NotificationManager.showSuccess('Customer updated successfully!');
+                    await this.api.updateUser(userId, userData);
+                    const userType = userData.role === 'admin' ? 'Admin' : 'User';
+                    NotificationManager.showSuccess(`${userType} updated successfully!`);
                 } else {
                     // Create new user
-                    await this.api.request('/users', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(userData)
-                    });
-                    NotificationManager.showSuccess('Customer added successfully!');
+                    await this.api.createUser(userData);
+                    const userType = userData.role === 'admin' ? 'Admin' : 'User';
+                    NotificationManager.showSuccess(`${userType} added successfully!`);
                 }
                 
                 this.closeUserModal();

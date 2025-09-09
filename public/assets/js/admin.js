@@ -722,22 +722,31 @@ function updateUsersTable(users) {
 
         if (!Array.isArray(users)) {
             console.warn('Users data is not an array:', users);
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-black dark:text-white">No users data available</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-black dark:text-white">No users data available</td></tr>';
             return;
         }
 
         if (users.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-black dark:text-white">No users found</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-black dark:text-white">No users found</td></tr>';
             return;
         }
 
         tableBody.innerHTML = users.map(user => {
             try {
                 const fullName = user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'N/A';
+                const role = user.role || 'customer';
+                const roleColor = role === 'admin' ? 'text-purple-600 dark:text-purple-400' : 'text-blue-600 dark:text-blue-400';
+                const roleBg = role === 'admin' ? 'bg-purple-100 dark:bg-purple-900/20' : 'bg-blue-100 dark:bg-blue-900/20';
+                
                 return `
                     <tr class="border-b border-white/10 dark:border-gray-700/50 hover:bg-white/5 dark:hover:bg-gray-800/20">
                         <td class="px-6 py-4 font-medium">${fullName}</td>
                         <td class="px-6 py-4">${user.email || 'N/A'}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-medium ${roleColor} ${roleBg}">
+                                ${role.charAt(0).toUpperCase() + role.slice(1)}
+                            </span>
+                        </td>
                         <td class="px-6 py-4">$${(user.totalSpent || 0).toFixed(2)}</td>
                         <td class="px-6 py-4">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td>
                         <td class="px-6 py-4 text-right space-x-2">
@@ -748,7 +757,7 @@ function updateUsersTable(users) {
                 `;
             } catch (rowError) {
                 console.warn('Error rendering user row:', rowError, user);
-                return '<tr><td colspan="5" class="text-center py-2 text-red-500">Error displaying user</td></tr>';
+                return '<tr><td colspan="6" class="text-center py-2 text-red-500">Error displaying user</td></tr>';
             }
         }).join('');
     } catch (error) {
@@ -1316,10 +1325,13 @@ async function deleteUser(userId) {
 // User Modal Functions
 function showAddUserModal() {
     // Reset form for new user
-    document.getElementById('userModalTitle').textContent = 'Add New Customer';
-    document.getElementById('userSubmitButtonText').textContent = 'Add Customer';
+    document.getElementById('userModalTitle').textContent = 'Add New User';
+    document.getElementById('userSubmitButtonText').textContent = 'Add User';
     document.getElementById('userForm').reset();
     document.getElementById('userId').value = '';
+    
+    // Set default role to customer
+    document.getElementById('userRole').value = 'customer';
     
     // Show password fields for new users
     document.getElementById('passwordSection').style.display = 'grid';
@@ -1332,13 +1344,18 @@ function showAddUserModal() {
 
 function showEditUserModal(user) {
     // Populate the modal with user data
-    document.getElementById('userModalTitle').textContent = 'Edit Customer';
-    document.getElementById('userSubmitButtonText').textContent = 'Update Customer';
+    const userRole = user.role || 'customer';
+    const modalTitle = userRole === 'admin' ? 'Edit Admin' : 'Edit User';
+    const buttonText = userRole === 'admin' ? 'Update Admin' : 'Update User';
+    
+    document.getElementById('userModalTitle').textContent = modalTitle;
+    document.getElementById('userSubmitButtonText').textContent = buttonText;
     document.getElementById('userId').value = user.id || user._id;
     document.getElementById('userFirstName').value = user.firstName || '';
     document.getElementById('userLastName').value = user.lastName || '';
     document.getElementById('userEmail').value = user.email || '';
     document.getElementById('userPhone').value = user.phone || '';
+    document.getElementById('userRole').value = userRole;
     
     // Hide password fields for editing (optional password change)
     document.getElementById('passwordSection').style.display = 'grid';

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { adminAuth } = require('../middleware/auth');
 const {
     getDashboardStats,
     getAllOrders,
@@ -27,7 +28,7 @@ const {
 router.get('/stats', getDashboardStats);
 
 // @route   GET /api/admin/profile
-router.get('/profile', getCurrentAdmin);
+router.get('/profile', adminAuth, getCurrentAdmin);
 
 // @route   GET /api/admin/orders
 router.get('/orders', getAllOrders);

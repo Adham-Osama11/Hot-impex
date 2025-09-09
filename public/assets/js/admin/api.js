@@ -80,6 +80,20 @@ class AdminAPI {
         return this.request(`/users/${userId}`);
     }
 
+    async createUser(userData) {
+        return this.request('/users', {
+            method: 'POST',
+            body: JSON.stringify(userData)
+        });
+    }
+
+    async updateUser(userId, userData) {
+        return this.request(`/users/${userId}`, {
+            method: 'PUT',
+            body: JSON.stringify(userData)
+        });
+    }
+
     async deleteUser(userId) {
         return this.request(`/users/${userId}`, {
             method: 'DELETE'

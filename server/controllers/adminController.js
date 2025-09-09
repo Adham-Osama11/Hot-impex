@@ -359,13 +359,22 @@ const getUserById = async (req, res) => {
 // @access  Private (Admin only)
 const createUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, phone } = req.body;
+        const { firstName, lastName, email, password, phone, role } = req.body;
 
         // Validate required fields
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({
                 status: 'error',
                 message: 'First name, last name, email, and password are required'
+            });
+        }
+
+        // Validate role
+        const validRoles = ['customer', 'admin'];
+        if (role && !validRoles.includes(role)) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Role must be either customer or admin'
             });
         }
 
@@ -385,7 +394,7 @@ const createUser = async (req, res) => {
             email,
             password,
             phone: phone || '',
-            role: 'customer',
+            role: role || 'customer',
             isActive: true,
             createdAt: new Date()
         };
@@ -424,67 +433,32 @@ const createUser = async (req, res) => {
 // @access  Private (Admin only)
 const updateUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, phone, password } = req.body;
-        const userId = req.params.id;
-
-        // Get current user
-        const currentUser = await hybridDb.getUserById(userId);
-        if (!currentUser) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'User not found'
+        const { id } = req.params;
+        
+        // Get current user to check if the update is valid
+        const allUsersResult = await hybridDb.getAllUsers();
+        // Handle both MongoDB format (object with users array) and file format (array)
+        const usersList = allUsersResult.users || allUsersResult;
+        const existingUser = usersList.find(user => user._id === id || user.id === id);
+        if (!existingUser) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'User not found' 
             });
         }
-
-        // Check if email is being changed and if new email already exists
-        if (email && email !== currentUser.email) {
-            const existingUser = await hybridDb.findUserByEmail(email);
-            if (existingUser && (existingUser._id || existingUser.id) !== userId) {
-                return res.status(400).json({
-                    status: 'error',
-                    message: 'Email already exists'
-                });
-            }
-        }
-
-        // Prepare update data
-        const updateData = {
-            firstName: firstName || currentUser.firstName,
-            lastName: lastName || currentUser.lastName,
-            email: email || currentUser.email,
-            phone: phone || currentUser.phone
-        };
-
-        // Add password only if provided
-        if (password) {
-            updateData.password = password;
-        }
-
-        // Update user
-        const updatedUser = await hybridDb.updateUser(userId, updateData);
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                user: {
-                    id: updatedUser._id || updatedUser.id,
-                    firstName: updatedUser.firstName,
-                    lastName: updatedUser.lastName,
-                    email: updatedUser.email,
-                    phone: updatedUser.phone,
-                    role: updatedUser.role,
-                    isActive: updatedUser.isActive,
-                    createdAt: updatedUser.createdAt
-                }
-            },
-            message: 'User updated successfully'
+        
+        const updatedUser = await hybridDb.updateUser(id, req.body);
+        res.json({ 
+            success: true, 
+            message: 'User updated successfully',
+            data: updatedUser 
         });
     } catch (error) {
         console.error('Error updating user:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Error updating user',
-            error: error.message
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to update user',
+            error: error.message 
         });
     }
 };

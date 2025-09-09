@@ -92,12 +92,12 @@
                     Orders
                 </a>
 
-                <!-- Customers -->
+                <!-- Users -->
                 <a href="#" class="sidebar-link group flex items-center px-4 py-3 text-white font-medium rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 shadow-lg transition-all duration-200 opacity-50 hover:opacity-100 hover:bg-white/20 hover:backdrop-blur-sm hover:scale-105" data-section="customers">
                     <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.121-1.274-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.121-1.274.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
-                    Customers
+                    Users
                 </a>
 
                 <!-- Settings -->
@@ -368,14 +368,14 @@
                 <div class="admin-card rounded-2xl shadow-xl p-8 border border-white/30 dark:border-gray-700/30">
                     <div class="flex justify-between items-center mb-8">
                         <div>
-                            <h2 class="text-3xl font-bold">Customer Management</h2>
-                            <p class="text-gray-700 dark:text-gray-400">Manage your customer base</p>
+                            <h2 class="text-3xl font-bold">User Management</h2>
+                            <p class="text-gray-700 dark:text-gray-400">Manage customers and administrators</p>
                         </div>
                         <button onclick="showAddUserModal()" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                             </svg>
-                            <span>Add Customer</span>
+                            <span>Add User</span>
                         </button>
                     </div>
 
@@ -386,6 +386,7 @@
                                 <tr>
                                     <th scope="col" class="px-6 py-4">Name</th>
                                     <th scope="col" class="px-6 py-4">Email</th>
+                                    <th scope="col" class="px-6 py-4">Role</th>
                                     <th scope="col" class="px-6 py-4">Total Spent</th>
                                     <th scope="col" class="px-6 py-4">Joined Date</th>
                                     <th scope="col" class="px-6 py-4 text-right">Actions</th>
@@ -393,12 +394,12 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                                    <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                                         <div class="flex flex-col items-center">
                                             <svg class="w-12 h-12 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.121-1.274-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.121-1.274.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                             </svg>
-                                            <p>Loading customers...</p>
+                                            <p>Loading users...</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -549,7 +550,7 @@
         <div class="admin-card rounded-2xl shadow-2xl border border-white/30 dark:border-gray-700/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 id="userModalTitle" class="text-2xl font-bold">Add New Customer</h3>
+                    <h3 id="userModalTitle" class="text-2xl font-bold">Add New User</h3>
                     <button onclick="closeUserModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -582,6 +583,15 @@
                         <input type="tel" id="userPhone" name="phone" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                     </div>
                     
+                    <div>
+                        <label for="userRole" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Role</label>
+                        <select id="userRole" name="role" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Admins have access to the admin dashboard</p>
+                    </div>
+                    
                     <div id="passwordSection" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="userPassword" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Password</label>
@@ -600,7 +610,7 @@
                             Cancel
                         </button>
                         <button type="submit" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">
-                            <span id="userSubmitButtonText">Add Customer</span>
+                            <span id="userSubmitButtonText">Add User</span>
                         </button>
                     </div>
                 </form>
@@ -613,7 +623,7 @@
         <div class="admin-card rounded-2xl shadow-2xl border border-white/30 dark:border-gray-700/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold">Customer Details</h3>
+                    <h3 class="text-2xl font-bold">User Details</h3>
                     <button onclick="closeUserDetailsModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -630,7 +640,7 @@
                         Close
                     </button>
                     <button onclick="editUserFromDetails()" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">
-                        Edit Customer
+                        Edit User
                     </button>
                 </div>
             </div>

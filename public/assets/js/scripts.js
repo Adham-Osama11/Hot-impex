@@ -2701,31 +2701,54 @@ function createProductCard(product) {
     cardWrapper.href = `product.html?product=${product.id}`;
     cardWrapper.className = 'block';
 
+    // Check if product is in stock
+    const isInStock = product.inStock && product.isAvailable && (product.stockQuantity > 0);
+    
     const badge = product.bestSeller ? 'Best Seller' : 
                   product.featured ? 'Featured' : '';
+    
+    // Add out of stock badge if needed
+    const stockBadge = !isInStock ? 'Out of Stock' : '';
+
+    // Add disabled styling if out of stock
+    const disabledClass = !isInStock ? 'opacity-60 cursor-not-allowed' : '';
+    const disabledOverlay = !isInStock ? '<div class="absolute inset-0 bg-gray-900 bg-opacity-30 flex items-center justify-center"><span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">Out of Stock</span></div>' : '';
 
     cardWrapper.innerHTML = `
-        <div class="card" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-price="${product.price}">
-            <div class="card__shine"></div>
-            <div class="card__glow"></div>
+        <div class="card ${disabledClass}" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-price="${product.price}" data-in-stock="${isInStock}">
+            <div class="card__shine ${!isInStock ? 'opacity-30' : ''}"></div>
+            <div class="card__glow ${!isInStock ? 'opacity-30' : ''}"></div>
             <div class="card__content">
                 ${badge ? `<div class="card__badge">${badge}</div>` : ''}
-                <div class="card__image" style="background-image: url('${product.mainImage}'); background-size: cover; background-position: center;"></div>
+                ${stockBadge ? `<div class="card__badge bg-red-600">${stockBadge}</div>` : ''}
+                <div class="card__image relative" style="background-image: url('${product.mainImage}'); background-size: cover; background-position: center;">
+                    ${disabledOverlay}
+                </div>
                 <div class="card__text">
                     <p class="card__title">${product.name}</p>
                     <p class="card__description">${product.shortDescription}</p>
+                    ${!isInStock && product.stockQuantity !== undefined ? `<p class="text-red-600 text-sm font-medium">Stock: ${product.stockQuantity}</p>` : ''}
                 </div>
                 <div class="card__footer">
                     <div class="card__price">${product.price}${product.currency}</div>
-                    <div class="card__button add-to-cart">
-                        <svg height="16" width="16" viewBox="0 0 24 24">
-                            <path stroke-width="2" stroke="currentColor" d="M4 12H20M12 4V20" fill="none"></path>
-                        </svg>
+                    <div class="card__button add-to-cart ${!isInStock ? 'opacity-50 cursor-not-allowed bg-gray-400' : ''}" ${!isInStock ? 'data-disabled="true"' : ''}>
+                        ${isInStock ? 
+                            '<svg height="16" width="16" viewBox="0 0 24 24"><path stroke-width="2" stroke="currentColor" d="M4 12H20M12 4V20" fill="none"></path></svg>' :
+                            '<svg height="16" width="16" viewBox="0 0 24 24"><path stroke-width="2" stroke="currentColor" d="M6 18L18 6M6 6l12 12" fill="none"></path></svg>'
+                        }
                     </div>
                 </div>
             </div>
         </div>
     `;
+
+    // Disable click for out of stock products
+    if (!isInStock) {
+        cardWrapper.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('This product is currently out of stock.');
+        });
+    }
 
     return cardWrapper;
 }

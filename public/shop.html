@@ -502,14 +502,24 @@
                                         grid.appendChild(card);
                                     });
                                 } else {
-                                    // Simple fallback
-                                    grid.innerHTML = products.map(product => `
-                                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden p-6">
-                                            <h3 class="font-semibold text-gray-800 text-lg mb-2">${product.name}</h3>
-                                            <p class="text-gray-500 text-sm mb-4">${product.category}</p>
-                                            <p class="text-gray-800 font-bold text-xl">${product.price} ${product.currency}</p>
-                                        </div>
-                                    `).join('');
+                                    // Simple fallback with stock handling
+                                    grid.innerHTML = products.map(product => {
+                                        const isInStock = product.inStock && product.isAvailable && (product.stockQuantity > 0);
+                                        const disabledClass = !isInStock ? 'opacity-60 cursor-not-allowed' : '';
+                                        const stockBadge = !isInStock ? '<div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</div>' : '';
+                                        const stockInfo = !isInStock && product.stockQuantity !== undefined ? `<p class="text-red-600 text-sm font-medium mt-2">Stock: ${product.stockQuantity}</p>` : '';
+                                        
+                                        return `
+                                            <div class="bg-white rounded-2xl shadow-lg overflow-hidden p-6 relative ${disabledClass}" data-in-stock="${isInStock}">
+                                                ${stockBadge}
+                                                <h3 class="font-semibold text-gray-800 text-lg mb-2">${product.name}</h3>
+                                                <p class="text-gray-500 text-sm mb-4">${product.category}</p>
+                                                <p class="text-gray-800 font-bold text-xl">${product.price} ${product.currency}</p>
+                                                ${stockInfo}
+                                                ${!isInStock ? '<p class="text-red-600 text-sm mt-2">Currently unavailable</p>' : ''}
+                                            </div>
+                                        `;
+                                    }).join('');
                                 }
                                 console.log('Products displayed successfully!');
                             } else {

@@ -100,29 +100,34 @@ const createProduct = async (req, res) => {
                 .replace(/^-|-$/g, '');
         }
 
-        const productsData = await hybridDb.getProducts();
-        
-        // Check if product ID already exists
-        const existingProduct = productsData.products.find(p => p.id === productData.id);
-        if (existingProduct) {
+                // Generate short description if not provided but description exists
+        if (!productData.shortDescription && productData.description) {
+            productData.shortDescription = productData.description.length > 150 
+                ? productData.description.substring(0, 150) + '...'
+                : productData.description;
+        }
+
+        // Add timestamps
+        productData.createdAt = new Date().toISOString();
+        productData.updatedAt = new Date().toISOString();
+
+        // Use the proper createProduct method from hybridDb
+        const newProduct = await hybridDb.createProduct(productData);
+
+        res.status(201).json({
+            status: 'success',
+            data: {
+                product: newProduct
+            }
+        });
+    } catch (error) {
+        if (error.message && error.message.includes('duplicate') || error.message.includes('already exists')) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Product with this ID already exists'
             });
         }
-
-        const product = new Product(productData);
-        productsData.products.push(product.toJSON());
         
-        await hybridDb.saveProducts(productsData);
-
-        res.status(201).json({
-            status: 'success',
-            data: {
-                product: product.toJSON()
-            }
-        });
-    } catch (error) {
         res.status(500).json({
             status: 'error',
             message: 'Error creating product',
@@ -136,25 +141,18 @@ const createProduct = async (req, res) => {
 // @access  Private (Admin only)
 const updateProduct = async (req, res) => {
     try {
-        const productsData = await hybridDb.getProducts();
-        const productIndex = productsData.products.findIndex(p => p.id === req.params.id);
-        
-        if (productIndex === -1) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Product not found'
-            });
+        const productId = req.params.id;
+        const updateData = req.body;
+
+        // Generate short description if not provided but description exists
+        if (!updateData.shortDescription && updateData.description) {
+            updateData.shortDescription = updateData.description.length > 150 
+                ? updateData.description.substring(0, 150) + '...'
+                : updateData.description;
         }
 
-        // Update product data
-        const updatedProductData = {
-            ...productsData.products[productIndex],
-            ...req.body,
-            updatedAt: new Date().toISOString()
-        };
-
         // Validate updated data
-        const validation = Product.validate(updatedProductData);
+        const validation = Product.validate(updateData);
         if (!validation.isValid) {
             return res.status(400).json({
                 status: 'error',
@@ -163,16 +161,30 @@ const updateProduct = async (req, res) => {
             });
         }
 
-        productsData.products[productIndex] = updatedProductData;
-        await hybridDb.saveProducts(productsData);
+        // Use the proper updateProduct method from hybridDb
+        const updatedProduct = await hybridDb.updateProduct(productId, updateData);
+
+        if (!updatedProduct) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Product not found'
+            });
+        }
 
         res.status(200).json({
             status: 'success',
             data: {
-                product: updatedProductData
+                product: updatedProduct
             }
         });
     } catch (error) {
+        if (error.message === 'Product not found') {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Product not found'
+            });
+        }
+        
         res.status(500).json({
             status: 'error',
             message: 'Error updating product',
@@ -186,24 +198,16 @@ const updateProduct = async (req, res) => {
 // @access  Private (Admin only)
 const deleteProduct = async (req, res) => {
     try {
-        const productsData = await hybridDb.getProducts();
-        const productIndex = productsData.products.findIndex(p => p.id === req.params.id);
-        
-        if (productIndex === -1) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Product not found'
-            });
-        }
-
-        productsData.products.splice(productIndex, 1);
-        await hybridDb.saveProducts(productsData);
+        const productId = req.params.id;
+        const result = await hybridDb.deleteProduct(productId);
 
         res.status(200).json({
             status: 'success',
-            message: 'Product deleted successfully'
+            message: 'Product deleted successfully',
+            data: result
         });
     } catch (error) {
+        console.error('Error deleting product:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error deleting product',
@@ -558,6 +562,50 @@ const updateSettings = async (req, res) => {
     }
 };
 
+// @desc    Get all products for admin
+// @route   GET /api/admin/products
+// @access  Admin
+const getAllProducts = async (req, res) => {
+    try {
+        const { category, search, limit, page = 1, sortBy, sortOrder } = req.query;
+        
+        const options = {
+            category,
+            search,
+            limit: limit ? parseInt(limit) : 1000, // Default to large limit for admin
+            page: parseInt(page),
+            sortBy,
+            sortOrder
+        };
+
+        const result = await hybridDb.getAllProducts(options);
+
+        // Set no-cache headers to ensure fresh data
+        res.set({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+
+        res.status(200).json({
+            status: 'success',
+            results: result.products ? result.products.length : result.length,
+            total: result.total || result.length,
+            page: result.page || 1,
+            totalPages: result.totalPages || 1,
+            data: {
+                products: result.products || result
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching products',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getDashboardStats,
     getAllOrders,
@@ -568,6 +616,7 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
+    getAllProducts,
     createProduct,
     updateProduct,
     deleteProduct,

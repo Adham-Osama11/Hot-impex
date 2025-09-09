@@ -10,6 +10,7 @@ const {
     deleteUser,
     updateOrderStatus,
     getOrderById,
+    getAllProducts,
     createProduct,
     updateProduct,
     deleteProduct,
@@ -47,6 +48,9 @@ router.put('/users/:id', updateUser);
 
 // @route   DELETE /api/admin/users/:id
 router.delete('/users/:id', deleteUser);
+
+// @route   GET /api/admin/products
+router.get('/products', getAllProducts);
 
 // @route   POST /api/admin/products
 router.post('/products', createProduct);

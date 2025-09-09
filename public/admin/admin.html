@@ -582,7 +582,7 @@
                     </button>
                 </div>
                 
-                <form id="productForm" class="space-y-6">
+                <form id="productForm" class="space-y-6" onsubmit="return false;">
                     <input type="hidden" id="productId" name="id">
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -615,6 +615,12 @@
                             <label for="productStock" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Stock Quantity</label>
                             <input type="number" id="productStock" name="stock" min="0" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
                         </div>
+                    </div>
+                    
+                    <div>
+                        <label for="productShortDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Short Description</label>
+                        <textarea id="productShortDescription" name="shortDescription" rows="2" placeholder="Brief product summary (150 characters max)" maxlength="150" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Used for product previews and search results</p>
                     </div>
                     
                     <div>
@@ -736,6 +742,29 @@
     <!-- JavaScript -->
     <!-- Chart.js for Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Auto-populate short description -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const descriptionField = document.getElementById('productDescription');
+            const shortDescriptionField = document.getElementById('productShortDescription');
+            
+            if (descriptionField && shortDescriptionField) {
+                descriptionField.addEventListener('input', function() {
+                    // Only auto-populate if short description is empty
+                    if (!shortDescriptionField.value.trim()) {
+                        const description = this.value.trim();
+                        if (description) {
+                            const shortDesc = description.length > 150 
+                                ? description.substring(0, 150) + '...'
+                                : description;
+                            shortDescriptionField.value = shortDesc;
+                        }
+                    }
+                });
+            }
+        });
+    </script>
     
     <!-- Custom Scripts -->
     <script src="../assets/js/admin.js"></script>

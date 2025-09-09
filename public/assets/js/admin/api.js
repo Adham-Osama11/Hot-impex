@@ -83,7 +83,12 @@ class AdminAPI {
 
     // Products Management
     async getProducts() {
-        const response = await fetch('/api/products');
+        const response = await fetch('/api/admin/products', {
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
         return response.json();
     }
 

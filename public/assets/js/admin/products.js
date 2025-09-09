@@ -15,12 +15,22 @@ class ProductsController {
      * Initialize event listeners
      */
     initializeEventListeners() {
-        document.addEventListener('DOMContentLoaded', () => {
+        // Add immediate event listener if DOM is already loaded
+        const attachListener = () => {
             const productForm = document.getElementById('productForm');
             if (productForm) {
+                console.log('Attaching submit listener to productForm');
                 productForm.addEventListener('submit', (e) => this.handleProductSubmit(e));
+            } else {
+                console.log('productForm not found');
             }
-        });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', attachListener);
+        } else {
+            attachListener();
+        }
     }
 
     /**
@@ -100,6 +110,7 @@ class ProductsController {
             document.getElementById('productCategory').value = product.category;
             document.getElementById('productPrice').value = product.price;
             document.getElementById('productStock').value = product.stock || '';
+            document.getElementById('productShortDescription').value = product.shortDescription || '';
             document.getElementById('productDescription').value = product.description || '';
             document.getElementById('productImages').value = product.images ? product.images.join('\\n') : '';
             
@@ -132,7 +143,9 @@ class ProductsController {
      * @param {Event} e - Form submit event
      */
     async handleProductSubmit(e) {
+        console.log('handleProductSubmit called', e);
         e.preventDefault();
+        e.stopPropagation();
         
         const formData = new FormData(e.target);
         const productData = {
@@ -140,6 +153,7 @@ class ProductsController {
             category: formData.get('category'),
             price: parseFloat(formData.get('price')),
             stock: parseInt(formData.get('stock')) || 0,
+            shortDescription: formData.get('shortDescription'),
             description: formData.get('description'),
             images: formData.get('images') ? 
                 formData.get('images').split('\\n').filter(img => img.trim()) : []

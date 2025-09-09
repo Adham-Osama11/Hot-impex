@@ -499,6 +499,12 @@
                                     grid.innerHTML = '';
                                     products.forEach(product => {
                                         const card = window.createProductCard(product);
+                                        // Ensure the card has the necessary data attributes for filtering
+                                        const normalizedCategory = product.category ? product.category.toLowerCase().replace(/\s+/g, '-') : 'uncategorized';
+                                        card.classList.add('product-card');
+                                        card.setAttribute('data-category', normalizedCategory);
+                                        card.setAttribute('data-name', product.name || '');
+                                        card.setAttribute('data-price', product.price || 0);
                                         grid.appendChild(card);
                                     });
                                 } else {
@@ -509,8 +515,15 @@
                                         const stockBadge = !isInStock ? '<div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</div>' : '';
                                         const stockInfo = !isInStock && product.stockQuantity !== undefined ? `<p class="text-red-600 text-sm font-medium mt-2">Stock: ${product.stockQuantity}</p>` : '';
                                         
+                                        // Normalize category for filtering
+                                        const normalizedCategory = product.category ? product.category.toLowerCase().replace(/\s+/g, '-') : 'uncategorized';
+                                        
                                         return `
-                                            <div class="bg-white rounded-2xl shadow-lg overflow-hidden p-6 relative ${disabledClass}" data-in-stock="${isInStock}">
+                                            <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden p-6 relative ${disabledClass}" 
+                                                 data-in-stock="${isInStock}"
+                                                 data-category="${normalizedCategory}"
+                                                 data-name="${product.name || ''}"
+                                                 data-price="${product.price || 0}">
                                                 ${stockBadge}
                                                 <h3 class="font-semibold text-gray-800 text-lg mb-2">${product.name}</h3>
                                                 <p class="text-gray-500 text-sm mb-4">${product.category}</p>
@@ -522,6 +535,11 @@
                                     }).join('');
                                 }
                                 console.log('Products displayed successfully!');
+                                
+                                // Initialize category filtering after products are loaded
+                                setTimeout(() => {
+                                    initializeCategoryFiltering();
+                                }, 100);
                             } else {
                                 grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">No products found.</p></div>';
                             }
@@ -620,13 +638,51 @@
     
     <!-- Category Filtering JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // Global function to initialize category filtering
+        function initializeCategoryFiltering() {
             const categoryFilters = document.querySelectorAll('.category-filter');
-            const productCards = document.querySelectorAll('.product-card');
-            const productsGrid = document.getElementById('products-grid');
             const searchInput = document.querySelector('input[placeholder="Search for products..."]');
+            const sortSelect = document.querySelector('select');
+            const productsGrid = document.getElementById('products-grid');
+
+            function getProductCards() {
+                return document.querySelectorAll('.product-card');
+            }
+
+            function sortProducts(sortType) {
+                const productCards = Array.from(getProductCards());
+                const grid = document.getElementById('products-grid');
+                
+                productCards.sort((a, b) => {
+                    const priceA = parseFloat(a.getAttribute('data-price')) || 0;
+                    const priceB = parseFloat(b.getAttribute('data-price')) || 0;
+                    const nameA = (a.getAttribute('data-name') || '').toLowerCase();
+                    const nameB = (b.getAttribute('data-name') || '').toLowerCase();
+                    
+                    switch(sortType) {
+                        case 'Price: Low to High':
+                            return priceA - priceB;
+                        case 'Price: High to Low':
+                            return priceB - priceA;
+                        case 'Newest Arrivals':
+                            // For now, sort by name as we don't have creation dates
+                            return nameB.localeCompare(nameA);
+                        case 'Sort by: Featured':
+                        default:
+                            // Default sorting by name
+                            return nameA.localeCompare(nameB);
+                    }
+                });
+                
+                // Re-append sorted cards to grid
+                productCards.forEach(card => {
+                    grid.appendChild(card);
+                });
+            }
 
             function filterProducts(selectedCategory, searchTerm = '') {
+                console.log('Filtering products:', selectedCategory, searchTerm);
+                
                 // Update active filter link
                 categoryFilters.forEach(f => {
                     if (f.getAttribute('data-category') === selectedCategory) {
@@ -639,32 +695,41 @@
                 });
 
                 const lowerCaseSearchTerm = searchTerm.toLowerCase();
+                const productCards = getProductCards();
+                
+                console.log('Found product cards:', productCards.length);
 
                 // Filter products
                 let visibleCount = 0;
                 productCards.forEach(card => {
                     const cardCategory = card.getAttribute('data-category');
-                    const cardName = card.getAttribute('data-name').toLowerCase();
+                    const cardName = (card.getAttribute('data-name') || '').toLowerCase();
                     
                     const categoryMatch = selectedCategory === 'all' || cardCategory === selectedCategory;
-                    const searchMatch = cardName.includes(lowerCaseSearchTerm);
+                    const searchMatch = !searchTerm || cardName.includes(lowerCaseSearchTerm);
+
+                    console.log('Card:', cardName, 'Category:', cardCategory, 'Match:', categoryMatch && searchMatch);
 
                     // Animate filtering
-                    card.style.opacity = '0';
-                    card.style.transform = 'scale(0.9)';
-                    setTimeout(() => {
-                        if (categoryMatch && searchMatch) {
-                            card.style.display = 'block';
-                            setTimeout(() => {
-                                card.style.opacity = '1';
-                                card.style.transform = 'scale(1)';
-                            }, 10);
-                            visibleCount++;
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    }, 200);
+                    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    
+                    if (categoryMatch && searchMatch) {
+                        card.style.display = 'block';
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                        visibleCount++;
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.9)';
+                        setTimeout(() => {
+                            if (!categoryMatch || !searchMatch) {
+                                card.style.display = 'none';
+                            }
+                        }, 300);
+                    }
                 });
+
+                console.log('Visible products:', visibleCount);
 
                 // Show/hide no results message
                 setTimeout(() => {
@@ -685,9 +750,10 @@
                             `;
                             productsGrid.appendChild(noResultsMessage);
                         }
+                        noResultsMessage.style.display = 'block';
                     } else {
                         if (noResultsMessage) {
-                            noResultsMessage.remove();
+                            noResultsMessage.style.display = 'none';
                         }
                     }
                 }, 400);
@@ -704,26 +770,59 @@
                 filterProducts(selectedCategory, searchTerm);
             }
 
+            // Add event listeners to category filters
             categoryFilters.forEach(filter => {
                 filter.addEventListener('click', function(e) {
                     e.preventDefault();
                     const selectedCategory = this.getAttribute('data-category');
                     
+                    console.log('Category filter clicked:', selectedCategory);
+                    
                     // Update URL without reloading page
                     const url = new URL(window.location);
-                    url.searchParams.set('category', selectedCategory);
+                    if (selectedCategory === 'all') {
+                        url.searchParams.delete('category');
+                    } else {
+                        url.searchParams.set('category', selectedCategory);
+                    }
                     window.history.pushState({path: url.href}, '', url.href);
                     
                     filterProducts(selectedCategory, searchInput ? searchInput.value : '');
                 });
             });
 
+            // Add search input listener
             if (searchInput) {
-                searchInput.addEventListener('input', handleFilterChange);
+                searchInput.addEventListener('input', function() {
+                    const selectedCategory = document.querySelector('.category-filter.font-bold')?.getAttribute('data-category') || getSelectedCategory();
+                    filterProducts(selectedCategory, this.value);
+                });
+            }
+
+            // Add sort dropdown listener
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    console.log('Sort changed to:', this.value);
+                    sortProducts(this.value);
+                });
             }
 
             // Initial filter on page load
-            filterProducts(getSelectedCategory());
+            const initialCategory = getSelectedCategory();
+            console.log('Initial category:', initialCategory);
+            filterProducts(initialCategory);
+        }
+
+        // Initialize category filtering when DOM is loaded (fallback)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit to see if products are already loaded
+            setTimeout(() => {
+                const productCards = document.querySelectorAll('.product-card');
+                if (productCards.length > 0) {
+                    console.log('Products already loaded, initializing filtering');
+                    initializeCategoryFiltering();
+                }
+            }, 500);
         });
     </script>
 </body>

@@ -2495,6 +2495,30 @@ class AuthUI {
                 }
             });
         }
+
+        // Admin panel link security
+        const adminLink = document.getElementById('admin-panel-link');
+        if (adminLink) {
+            adminLink.addEventListener('click', (e) => {
+                e.preventDefault(); // Always prevent default navigation
+                
+                const user = AuthService.getUser();
+                const token = AuthService.getToken();
+                
+                if (!user || !token) {
+                    alert('Please log in to access the admin panel.');
+                    return false;
+                }
+                
+                if (!this.isAdmin(user)) {
+                    alert('You do not have permission to access the admin panel.');
+                    return false;
+                }
+                
+                // Navigate to admin page with token in URL
+                window.location.href = `admin/admin.html?token=${encodeURIComponent(token)}`;
+            });
+        }
     }
 
     static bindFormEvents() {
@@ -2680,11 +2704,31 @@ class AuthUI {
                 if (userEmail && user) {
                     userEmail.textContent = user.email;
                 }
+
+                // Show/hide admin link based on user role
+                this.updateAdminLinkVisibility(user);
             } else {
                 notLoggedIn.classList.remove('hidden');
                 loggedIn.classList.add('hidden');
             }
         }
+    }
+
+    static updateAdminLinkVisibility(user) {
+        const adminLink = document.getElementById('admin-panel-link');
+        if (adminLink) {
+            // Show admin link only if user role is 'admin'
+            if (user && this.isAdmin(user)) {
+                adminLink.classList.remove('hidden');
+            } else {
+                adminLink.classList.add('hidden');
+            }
+        }
+    }
+
+    static isAdmin(user) {
+        if (!user || !user.role) return false;
+        return user.role === 'admin' || user.role === 'administrator';
     }
 
     static showLoginModal() {
@@ -2791,6 +2835,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // Make auth functions globally available
 window.AuthService = AuthService;
 window.AuthUI = AuthUI;
+
+// Helper function to check if current user is admin
+window.isCurrentUserAdmin = function() {
+    const user = AuthService.getUser();
+    return AuthUI.isAdmin(user);
+};
 
 // ===== PROFILE PAGE FUNCTIONALITY =====
 
@@ -2922,6 +2972,9 @@ function updateProfileUI(user) {
     if (emailInput) emailInput.value = user.email || '';
     if (phoneInput) phoneInput.value = user.phone || '';
     if (roleInput) roleInput.value = user.role || 'customer';
+    
+    // Update admin link visibility
+    AuthUI.updateAdminLinkVisibility(user);
     
     // Update user menu
     const userNameSpan = document.getElementById('user-name');

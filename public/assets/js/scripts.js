@@ -2294,13 +2294,6 @@ class AuthService {
             body: JSON.stringify({ email, password })
         });
         
-        console.log('=== AUTH SERVICE LOGIN DEBUG ===');
-        console.log('Full login response:', response);
-        console.log('Response status:', response?.status);
-        console.log('Response data:', response?.data);
-        console.log('Token in response:', response?.data?.token);
-        console.log('User in response:', response?.data?.user);
-        
         return response;
     }
 
@@ -2328,20 +2321,11 @@ class AuthService {
     }
 
     static setToken(token) {
-        console.log('=== SET TOKEN DEBUG ===');
-        console.log('Token being set:', token);
-        console.log('Token type:', typeof token);
-        console.log('Token value:', JSON.stringify(token));
-        
         if (token === undefined || token === null) {
             console.error('WARNING: Attempting to set undefined/null token!');
         }
         
         localStorage.setItem('hotimpex-token', token);
-        
-        // Verify it was saved correctly
-        const saved = localStorage.getItem('hotimpex-token');
-        console.log('Token after saving:', saved);
     }
 
     static getToken() {
@@ -2553,26 +2537,14 @@ class AuthUI {
 
             const response = await AuthService.login(email, password);
             
-            console.log('Login response:', response);
-            console.log('Token from response:', response?.data?.token);
-            console.log('User from response:', response?.data?.user);
-            
             if (response.status === 'success') {
-                console.log('Setting token:', response.data.token);
                 AuthService.setToken(response.data.token);
                 AuthService.setUser(response.data.user);
-                
-                // Verify token was saved
-                const savedToken = AuthService.getToken();
-                const savedUser = AuthService.getUser();
-                console.log('Token saved in localStorage:', savedToken);
-                console.log('User saved in localStorage:', savedUser);
                 
                 this.hideLoginModal();
                 this.updateUI();
                 this.showSuccess('Login successful!');
             } else {
-                console.log('Login failed:', response);
                 this.showError('login-error', response.message || 'Login failed');
             }
         } catch (error) {
@@ -2846,19 +2818,7 @@ window.isCurrentUserAdmin = function() {
 
 // Profile page initialization
 function initializeProfile() {
-    console.log('Initializing profile page...');
-    
-    const token = localStorage.getItem('hotimpex-token');
-    const user = localStorage.getItem('hotimpex-user');
-    
-    console.log('Token exists:', !!token);
-    console.log('User data exists:', !!user);
-    console.log('Full token:', token);
-    console.log('Full user:', user);
-    
     if (!isUserLoggedIn()) {
-        console.log('User not logged in, redirecting to home page');
-        // Add a delay to show the issue
         setTimeout(() => {
             alert('Please log in to access your profile');
             window.location.href = 'index.html';
@@ -2866,7 +2826,6 @@ function initializeProfile() {
         return;
     }
     
-    console.log('User is logged in, loading profile...');
     loadUserProfile();
     initializeProfileForm();
     initializePasswordForm();
@@ -2892,24 +2851,15 @@ async function loadUserProfile() {
         showLoading();
         const token = localStorage.getItem('hotimpex-token');
         
-        console.log('=== PROFILE LOAD DEBUG ===');
-        console.log('Raw token from localStorage:', token);
-        console.log('Token type:', typeof token);
-        console.log('Token length:', token ? token.length : 'null');
-        console.log('Token first 50 chars:', token ? token.substring(0, 50) : 'null');
-        
         if (!token) {
             throw new Error('No authentication token found');
         }
         
-        console.log('Making API request with Authorization header...');
         const response = await APIService.request('/users/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
-        console.log('Profile response:', response);
         
         if (response.status === 'success') {
             updateProfileUI(response.data.user);

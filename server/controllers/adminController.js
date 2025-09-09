@@ -107,6 +107,12 @@ const createProduct = async (req, res) => {
                 : productData.description;
         }
 
+        // Map frontend 'stock' field to database 'stockQuantity' field
+        if (productData.stock !== undefined) {
+            productData.stockQuantity = productData.stock;
+            delete productData.stock;
+        }
+
         // Add timestamps
         productData.createdAt = new Date().toISOString();
         productData.updatedAt = new Date().toISOString();
@@ -114,10 +120,17 @@ const createProduct = async (req, res) => {
         // Use the proper createProduct method from hybridDb
         const newProduct = await hybridDb.createProduct(productData);
 
+        // Transform stockQuantity to stock for frontend compatibility
+        const productObj = newProduct.toObject ? newProduct.toObject() : { ...newProduct };
+        const responseProduct = {
+            ...productObj,
+            stock: productObj.stockQuantity !== undefined ? productObj.stockQuantity : productObj.stock
+        };
+
         res.status(201).json({
             status: 'success',
             data: {
-                product: newProduct
+                product: responseProduct
             }
         });
     } catch (error) {
@@ -151,6 +164,12 @@ const updateProduct = async (req, res) => {
                 : updateData.description;
         }
 
+        // Map frontend 'stock' field to database 'stockQuantity' field
+        if (updateData.stock !== undefined) {
+            updateData.stockQuantity = updateData.stock;
+            delete updateData.stock;
+        }
+
         // Validate updated data
         const validation = Product.validate(updateData);
         if (!validation.isValid) {
@@ -171,10 +190,17 @@ const updateProduct = async (req, res) => {
             });
         }
 
+        // Transform stockQuantity to stock for frontend compatibility
+        const productObj = updatedProduct.toObject ? updatedProduct.toObject() : { ...updatedProduct };
+        const responseProduct = {
+            ...productObj,
+            stock: productObj.stockQuantity !== undefined ? productObj.stockQuantity : productObj.stock
+        };
+
         res.status(200).json({
             status: 'success',
             data: {
-                product: updatedProduct
+                product: responseProduct
             }
         });
     } catch (error) {
@@ -580,6 +606,16 @@ const getAllProducts = async (req, res) => {
 
         const result = await hybridDb.getAllProducts(options);
 
+        // Transform stockQuantity to stock for frontend compatibility
+        const transformedProducts = (result.products || result).map(product => {
+            // Convert MongoDB document to plain object to avoid issues
+            const productObj = product.toObject ? product.toObject() : { ...product };
+            return {
+                ...productObj,
+                stock: productObj.stockQuantity !== undefined ? productObj.stockQuantity : productObj.stock
+            };
+        });
+
         // Set no-cache headers to ensure fresh data
         res.set({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -589,12 +625,12 @@ const getAllProducts = async (req, res) => {
 
         res.status(200).json({
             status: 'success',
-            results: result.products ? result.products.length : result.length,
-            total: result.total || result.length,
+            results: transformedProducts.length,
+            total: result.total || transformedProducts.length,
             page: result.page || 1,
             totalPages: result.totalPages || 1,
             data: {
-                products: result.products || result
+                products: transformedProducts
             }
         });
     } catch (error) {

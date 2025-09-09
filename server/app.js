@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 
 // Import routes
 const productRoutes = require('./routes/productRoutes');
@@ -14,6 +15,7 @@ const adminRoutes = require('./routes/adminRoutes');
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
 const notFound = require('./middleware/notFound');
+const adminPageProtection = require('./middleware/adminPageProtection');
 
 const app = express();
 
@@ -47,6 +49,7 @@ app.use('/api/', limiter);
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
 
 // CORS
 app.use(cors({
@@ -60,6 +63,9 @@ app.use(cors({
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+// Admin page protection middleware (before static files)
+app.use(adminPageProtection);
 
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));

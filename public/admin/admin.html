@@ -27,6 +27,9 @@
     <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <!-- Authentication Guard (Must Load First) -->
+    <script src="../assets/js/admin/auth-guard.js"></script>
+    
     <!-- Admin Dashboard Scripts (Modular Structure) -->
     <script src="../assets/js/admin/utils.js"></script>
     <script src="../assets/js/admin/api.js"></script>
@@ -36,7 +39,7 @@
     <script src="../assets/js/admin/products.js"></script>
     <script src="../assets/js/admin/orders.js"></script>
     <script src="../assets/js/admin/users.js"></script>
-    <script src="../assets/js/admin/app.js"></script> <link rel="stylesheet" href="../assets/css/admin-styles.css">
+    <script src="../assets/js/admin/app.js"></script> <link rel="stylesheet" href="../assets/css/admin-styles.css";
     <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -131,6 +134,13 @@
                     <button id="theme-toggle" class="flex-1 glass-effect rounded-xl p-3 shadow-lg hover:shadow-xl transition-all duration-200 group">
                         <svg class="w-5 h-5  mx-auto group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Logout -->
+                    <button onclick="AuthGuard.logout()" class="flex-1 glass-effect rounded-xl p-3 shadow-lg hover:shadow-xl transition-all duration-200 group bg-red-500/20 hover:bg-red-500/30">
+                        <svg class="w-5 h-5 mx-auto group-hover:scale-110 transition-transform duration-200 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                         </svg>
                     </button>
 

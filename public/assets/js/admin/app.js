@@ -309,10 +309,22 @@ class AdminApp {
 window.showAddProductModal = () => window.productsController?.showAddModal();
 window.closeProductModal = () => window.productsController?.closeModal();
 
-// Initialize the admin app when DOM is ready
-document.addEventListener('DOMContentLoaded', async () => {
+// Initialize the admin app when authentication is successful
+document.addEventListener('adminAuthSuccess', async () => {
     window.adminApp = new AdminApp();
     await window.adminApp.initialize();
+});
+
+// Fallback initialization for testing/development
+document.addEventListener('DOMContentLoaded', async () => {
+    // Wait a bit to see if auth guard fires first
+    setTimeout(async () => {
+        if (!window.adminApp) {
+            console.warn('Admin app not initialized by auth guard, initializing directly (development mode)');
+            window.adminApp = new AdminApp();
+            await window.adminApp.initialize();
+        }
+    }, 100);
 });
 
 // Export for global access

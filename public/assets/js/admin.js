@@ -1558,13 +1558,4 @@ function updateChartsTheme(isDark) {
     }
 }
 
-// Test function for profile update
-function testProfileUpdate() {
-    if (window.adminApp && window.adminApp.managers && window.adminApp.managers.userProfile) {
-        window.adminApp.managers.userProfile.refresh();
-        alert('Profile update requested. Check the sidebar for changes.');
-    } else {
-        alert('UserProfile manager not available. Please check console for errors.');
-        console.log('adminApp:', window.adminApp);
-    }
-}
+

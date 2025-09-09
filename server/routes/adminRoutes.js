@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { adminAuth } = require('../middleware/auth');
+const { auth } = require('../middleware/auth'); // Use regular auth, check admin role in controller
 const {
     getDashboardStats,
     getAllOrders,
@@ -28,7 +28,7 @@ const {
 router.get('/stats', getDashboardStats);
 
 // @route   GET /api/admin/profile
-router.get('/profile', adminAuth, getCurrentAdmin);
+router.get('/profile', auth, getCurrentAdmin);
 
 // @route   GET /api/admin/orders
 router.get('/orders', getAllOrders);

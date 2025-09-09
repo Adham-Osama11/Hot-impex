@@ -316,11 +316,62 @@ class UserProfileManager {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
                 this.findProfileElements();
+                this.setupAuthentication();
                 this.loadUserProfile();
             });
         } else {
             this.findProfileElements();
+            this.setupAuthentication();
             this.loadUserProfile();
+        }
+    }
+
+    /**
+     * Setup authentication - check for existing user session
+     */
+    setupAuthentication() {
+        const existingToken = localStorage.getItem('hotimpex-token'); // Use unified token
+        
+        if (existingToken) {
+            console.log('🔑 Found existing user session, checking admin privileges...');
+            // Update the API instance to use the existing token
+            this.api.token = existingToken;
+            return;
+        }
+        
+        // If no existing session, redirect to login or create development session
+        console.log('❌ No user session found');
+        this.handleNoAuthentication();
+    }
+
+    /**
+     * Handle case when no authentication is found
+     */
+    handleNoAuthentication() {
+        // For development, you can uncomment this to auto-create admin session
+        // const devAdminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmY4MzVmNDI5NmNjZjIwOWUyNWU0YyIsImlhdCI6MTc1NzM4MTUyMywiZXhwIjoxNzU3OTg2MzIzfQ.5wJXCZ-OfyT3S0S_eM_IaXJRobHN_Hvozm8ng3iGGak';
+        // localStorage.setItem('hotimpex-token', devAdminToken);
+        // this.api.token = devAdminToken;
+        
+        // Show message that user needs to log in
+        this.displayNoAuthenticationMessage();
+    }
+
+    /**
+     * Display message when not authenticated
+     */
+    displayNoAuthenticationMessage() {
+        if (this.nameElement) {
+            this.nameElement.textContent = 'Please log in';
+            this.nameElement.style.color = '#ef4444';
+        }
+        if (this.emailElement) {
+            this.emailElement.textContent = 'Authentication required';
+            this.emailElement.style.color = '#ef4444';
+        }
+        if (this.avatarElement) {
+            this.avatarElement.textContent = '?';
+            this.avatarElement.style.backgroundColor = '#ef4444';
         }
     }
 
@@ -343,11 +394,50 @@ class UserProfileManager {
             if (response.status === 'success') {
                 this.currentUser = response.data;
                 this.updateProfileDisplay();
+                console.log('✅ User profile loaded:', this.currentUser);
             }
         } catch (error) {
             console.error('Error loading user profile:', error);
-            // Fall back to default display if API fails
-            this.displayDefaultProfile();
+            
+            // If it's an authentication error, try to refresh token
+            if (error.message && (error.message.includes('401') || error.message.includes('403'))) {
+                console.log('🔄 Authentication error, attempting to refresh...');
+                this.handleAuthenticationError();
+            } else {
+                // Fall back to default display if API fails for other reasons
+                this.displayDefaultProfile();
+            }
+        }
+    }
+
+    /**
+     * Handle authentication errors
+     */
+    handleAuthenticationError() {
+        console.log('🚫 Authentication failed - user may not have admin privileges or token expired');
+        
+        // Clear invalid token
+        localStorage.removeItem('hotimpex-token'); // Use unified token
+        
+        // Show appropriate message
+        this.displayInsufficientPrivilegesMessage();
+    }
+
+    /**
+     * Display message for insufficient privileges
+     */
+    displayInsufficientPrivilegesMessage() {
+        if (this.nameElement) {
+            this.nameElement.textContent = 'Access Denied';
+            this.nameElement.style.color = '#ef4444';
+        }
+        if (this.emailElement) {
+            this.emailElement.textContent = 'Admin privileges required';
+            this.emailElement.style.color = '#ef4444';
+        }
+        if (this.avatarElement) {
+            this.avatarElement.textContent = '⚠';
+            this.avatarElement.style.backgroundColor = '#ef4444';
         }
     }
 
@@ -372,14 +462,26 @@ class UserProfileManager {
             this.emailElement.textContent = this.currentUser.email || 'admin@hotimpex.com';
         }
 
-        // Visual indicator that profile was updated
+        // Visual indicator that profile was updated with real data
         if (this.avatarElement && this.avatarElement.parentElement) {
             this.avatarElement.parentElement.style.border = '2px solid #10b981';
+            this.avatarElement.parentElement.style.transition = 'border 0.3s ease';
             setTimeout(() => {
                 if (this.avatarElement && this.avatarElement.parentElement) {
                     this.avatarElement.parentElement.style.border = '';
                 }
-            }, 1000);
+            }, 2000);
+        }
+
+        // Add a subtle animation to indicate successful load
+        if (this.nameElement) {
+            this.nameElement.style.opacity = '0.5';
+            this.nameElement.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                if (this.nameElement) {
+                    this.nameElement.style.opacity = '1';
+                }
+            }, 100);
         }
     }
 

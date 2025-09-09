@@ -5,7 +5,7 @@
 class AdminAPI {
     constructor() {
         this.baseURL = '/api/admin';
-        this.token = localStorage.getItem('adminToken');
+        this.token = localStorage.getItem('hotimpex-token'); // Use unified token
     }
 
     /**
@@ -24,6 +24,8 @@ class AdminAPI {
             ...options
         };
 
+        // Always check for fresh token from localStorage
+        this.token = localStorage.getItem('hotimpex-token'); // Use unified token
         if (this.token) {
             config.headers.Authorization = `Bearer ${this.token}`;
         }

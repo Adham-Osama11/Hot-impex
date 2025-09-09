@@ -630,16 +630,34 @@ const getAllProducts = async (req, res) => {
 // @access  Private (Admin only)
 const getCurrentAdmin = async (req, res) => {
     try {
-        // For now, return a mock admin user since authentication is disabled
-        // In a real implementation, this would come from req.user after authentication
+        // Get the authenticated user from the request (set by auth middleware)
+        const user = req.user;
+        
+        if (!user) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Authentication required'
+            });
+        }
+
+        // Check if user has admin role
+        if (user.role !== 'admin') {
+            return res.status(403).json({
+                status: 'error',
+                message: 'Access denied. Admin privileges required.',
+                userRole: user.role
+            });
+        }
+
+        // Return user data (excluding sensitive information like password)
         const adminUser = {
-            id: 'admin-001',
-            firstName: 'Adham',
-            lastName: 'Osama',
-            email: 'admin@hotimpex.com',
-            role: 'admin',
-            avatar: null,
-            joinedDate: '2024-01-01',
+            id: user._id || user.id,
+            firstName: user.firstName || 'Admin',
+            lastName: user.lastName || 'User',
+            email: user.email || 'admin@hotimpex.com',
+            role: user.role,
+            avatar: user.avatar || null,
+            joinedDate: user.createdAt || user.joinedDate || '2024-01-01',
             lastLogin: new Date().toISOString()
         };
 
@@ -648,10 +666,10 @@ const getCurrentAdmin = async (req, res) => {
             data: adminUser
         });
     } catch (error) {
-        console.error('Error fetching admin profile:', error);
+        console.error('Error getting current admin:', error);
         res.status(500).json({
             status: 'error',
-            message: 'Error fetching admin profile',
+            message: 'Server error',
             error: error.message
         });
     }

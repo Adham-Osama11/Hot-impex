@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login Helper - HOT IMPEX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-white">
+            🔑 Admin Login Helper
+        </h1>
+        
+        <div class="space-y-4">
+            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <h2 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                    ℹ️ Unified Authentication
+                </h2>
+                <p class="text-sm text-blue-700 dark:text-blue-300">
+                    The system now uses unified authentication. The same login works for both user pages and admin dashboard.
+                </p>
+            </div>
+
+            <button id="loginAsAdmin" class="w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-3 px-6 rounded-lg hover:shadow-lg transition-all duration-200">
+                🚀 Login as Admin (Adham Osama)
+            </button>
+
+            <div id="status" class="text-center text-sm text-gray-600 dark:text-gray-400"></div>
+
+            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                <h3 class="font-semibold text-green-800 dark:text-green-200 mb-2">
+                    ✅ After Login:
+                </h3>
+                <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
+                    <li>• Visit <a href="/admin/admin.html" class="underline">Admin Dashboard</a></li>
+                    <li>• Visit <a href="/profile.html" class="underline">User Profile</a></li>
+                    <li>• Same login session for both!</li>
+                </ul>
+            </div>
+
+            <div class="text-center">
+                <a href="/index.html" class="text-sm text-gray-500 dark:text-gray-400 hover:underline">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginAsAdmin').addEventListener('click', async function() {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = '🔄 Logging in...';
+            statusEl.className = 'text-center text-sm text-blue-600';
+
+            try {
+                // The admin token that works with unified auth
+                const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmY4MzVmNDI5NmNjZjIwOWUyNWU0YyIsImlhdCI6MTc1NzM4MTUyMywiZXhwIjoxNzU3OTg2MzIzfQ.5wJXCZ-OfyT3S0S_eM_IaXJRobHN_Hvozm8ng3iGGak';
+                
+                // Set the unified token
+                localStorage.setItem('hotimpex-token', adminToken);
+                
+                // Clear any old admin-specific token
+                localStorage.removeItem('adminToken');
+                
+                statusEl.textContent = '✅ Logged in successfully!';
+                statusEl.className = 'text-center text-sm text-green-600';
+                
+                // Show success message
+                setTimeout(() => {
+                    statusEl.innerHTML = `
+                        <div class="space-y-2">
+                            <div>✅ You are now logged in as <strong>Adham Osama</strong></div>
+                            <div class="text-xs">Token stored in localStorage as 'hotimpex-token'</div>
+                        </div>
+                    `;
+                }, 500);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                statusEl.textContent = '❌ Login failed';
+                statusEl.className = 'text-center text-sm text-red-600';
+            }
+        });
+
+        // Check current login status
+        window.addEventListener('load', function() {
+            const token = localStorage.getItem('hotimpex-token');
+            const statusEl = document.getElementById('status');
+            
+            if (token) {
+                statusEl.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="text-green-600">✅ Already logged in</div>
+                        <div class="text-xs text-gray-500">Token found in localStorage</div>
+                    </div>
+                `;
+            } else {
+                statusEl.textContent = 'Not logged in';
+                statusEl.className = 'text-center text-sm text-gray-500';
+            }
+        });
+    </script>
+</body>
+</html>

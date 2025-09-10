@@ -1094,7 +1094,7 @@
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
             if (paymentMethod === 'card') {
                 // Card payment is disabled, show error and switch to COD
-                showNotification('Online payment is not available yet. Please use Cash on Delivery.', 'error');
+                //showNotification('Online payment is not available yet. Please use Cash on Delivery.', 'error');
                 const codOption = document.querySelector('input[name="paymentMethod"][value="cod"]');
                 if (codOption) {
                     codOption.checked = true;
@@ -1187,7 +1187,7 @@
             return /^[\+]?[1-9][\d]{0,15}$/.test(phone.replace(/[\s\-\(\)]/g, ''));
         }
 
-        function processOrder() {
+        async function processOrder() {
             const placeOrderBtn = document.getElementById('place-order-btn');
             const originalText = placeOrderBtn.innerHTML;
             
@@ -1210,15 +1210,27 @@
             // Get cart using universal function for consistency
             let cart = [];
             if (window.getCartForCheckout) {
-                cart = window.getCartForCheckout();
-                console.log('Order processing: Using universal cart getter with', cart.length, 'items');
+                cart = await window.getCartForCheckout();
+                console.log('Order processing: Using universal cart getter with', cart);
             } else {
                 // Fallback method
                 cart = loadGuestCartFromStorage();
-                console.log('Order processing: Using fallback method with', cart.length, 'items');
+                console.log('Order processing: Using fallback method with', cart);
             }
             
             console.log('Cart for order processing:', cart);
+            console.log('Cart type:', typeof cart);
+            console.log('Cart is array:', Array.isArray(cart));
+            
+            // Ensure cart is an array
+            if (!Array.isArray(cart)) {
+                console.error('Cart is not an array:', cart);
+                if (cart && typeof cart === 'object' && cart.items) {
+                    cart = cart.items;
+                } else {
+                    cart = [];
+                }
+            }
             
             if (cart.length === 0) {
                 showNotification('Your cart is empty', 'error');
@@ -1230,103 +1242,134 @@
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
             const user = window.AuthService ? window.AuthService.getUser() : null;
             
+            console.log('Payment method found:', paymentMethod);
+            console.log('User:', user);
+            
             // Calculate totals
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const shipping = subtotal >= 1000 ? 0 : 50;
             const tax = Math.round(subtotal * 0.14);
             const total = subtotal + shipping + tax;
 
+            // Format order data to match backend expectations
             const orderData = {
-                // Customer information
-                customer: {
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone'),
-                    userId: user ? user._id : null
-                },
-                // Shipping address
-                shippingAddress: {
-                    address: formData.get('address'),
-                    city: formData.get('city'),
-                    state: formData.get('state'),
-                    zipCode: formData.get('zipCode'),
-                    country: formData.get('country')
-                },
-                // Order items
-                items: cart.map(item => ({
-                    productId: item.productId || item.id,
+                cart: cart.map(item => ({
+                    id: item.productId || item.id,
                     name: item.productData?.name || item.name,
                     price: item.productData?.price || item.price,
                     quantity: item.quantity,
                     image: item.productData?.image || item.image
                 })),
-                // Payment information
-                payment: {
-                    method: paymentMethod,
-                    subtotal: subtotal,
-                    shipping: shipping,
-                    tax: tax,
-                    total: total
+                customerInfo: {
+                    name: `${formData.get('firstName')} ${formData.get('lastName')}`,
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    address: `${formData.get('address')}, ${formData.get('city')}, ${formData.get('state')} ${formData.get('zipCode')}, ${formData.get('country')}`,
+                    notes: formData.get('notes') || ''
                 },
-                // Additional information
-                notes: formData.get('notes') || '',
-                orderDate: new Date().toISOString()
+                paymentMethod: paymentMethod, // Make sure this is at top level
+                userId: user ? user._id : null,
+                subtotal: subtotal,
+                shippingCost: shipping,
+                tax: tax,
+                total: total
             };
 
-            console.log('Order data:', orderData);
+            console.log('=== FRONTEND ORDER DATA DEBUG ===');
+            console.log('Payment method variable:', paymentMethod);
+            console.log('Complete order data:', JSON.stringify(orderData, null, 2));
+            console.log('================================');
 
-            // Simulate order processing (replace with actual API call)
-            setTimeout(async () => {
-                try {
-                    // Here you would typically send the order to your backend
-                    const response = await submitOrder(orderData);
+            // Submit order to backend
+            try {
+                const response = await submitOrder(orderData);
+                
+                if (response.success) {
+                    // Generate order number
+                    const orderNumber = response.orderNumber || '#HOT' + Date.now();
+                    document.getElementById('order-number').textContent = orderNumber;
                     
-                    if (response.success) {
-                        // Generate order number
-                        const orderNumber = response.orderNumber || '#HOT' + Date.now();
-                        document.getElementById('order-number').textContent = orderNumber;
-                        
-                        // Clear cart from both possible keys
-                        localStorage.removeItem('hotimpex-cart');
-                        localStorage.removeItem('hotimpex_cart');
-                        
-                        // Update user profile if they're logged in and profile data changed
-                        if (user) {
-                            await updateUserProfile(orderData.customer, orderData.shippingAddress);
-                        }
-                        
-                        // Show success modal
-                        showSuccessModal();
-                        
-                        showNotification('Order placed successfully!', 'success');
-                    } else {
-                        throw new Error(response.message || 'Order processing failed');
+                    // Clear cart from all possible keys and update UI
+                    localStorage.removeItem('hotimpex-guest-cart');
+                    localStorage.removeItem('hotimpex-cart');
+                    localStorage.removeItem('hotimpex_cart');
+                    
+                    // Clear global cart if available
+                    if (window.cart) {
+                        window.cart = [];
                     }
-                } catch (error) {
-                    console.error('Order processing error:', error);
-                    showNotification('Failed to process order. Please try again.', 'error');
                     
-                    // Reset button on error
-                    placeOrderBtn.innerHTML = originalText;
-                    placeOrderBtn.disabled = false;
+                    // Update cart UI if CartService is available
+                    if (window.CartService && window.CartService.updateCartUI) {
+                        window.CartService.updateCartUI();
+                    }
+                    
+                    // Update cart badge manually
+                    const cartBadge = document.getElementById('cart-badge');
+                    if (cartBadge) {
+                        cartBadge.style.display = 'none';
+                        cartBadge.textContent = '0';
+                    }
+                    
+                    // Update user profile if they're logged in and profile data changed
+                    if (user) {
+                        const [firstName, ...lastNameParts] = orderData.customerInfo.name.split(' ');
+                        const lastName = lastNameParts.join(' ');
+                        await updateUserProfile({
+                            firstName: firstName,
+                            lastName: lastName,
+                            phone: orderData.customerInfo.phone
+                        }, {
+                            address: orderData.customerInfo.address
+                        });
+                    }
+                    
+                    // Show success modal
+                    showSuccessModal();
+                    
+                    showNotification('Order placed successfully!', 'success');
+                } else {
+                    throw new Error(response.message || 'Order processing failed');
                 }
-            }, 2000);
+            } catch (error) {
+                console.error('Order processing error:', error);
+                showNotification('Failed to process order. Please try again.', 'error');
+                
+                // Reset button on error
+                placeOrderBtn.innerHTML = originalText;
+                placeOrderBtn.disabled = false;
+            }
         }
 
-        // Submit order to backend (placeholder function)
+        // Submit order to backend
         async function submitOrder(orderData) {
             try {
-                // This would be replaced with actual API call
-                // const response = await APIService.request('/orders', {
-                //     method: 'POST',
-                //     body: JSON.stringify(orderData)
-                // });
+                console.log('Submitting order:', orderData);
                 
-                // For now, simulate success
+                // Prepare data for API
+                const response = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(window.AuthService && window.AuthService.getToken() ? {
+                            'Authorization': `Bearer ${window.AuthService.getToken()}`
+                        } : {})
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.message || `HTTP error! status: ${response.status}`);
+                }
+
+                console.log('Order created successfully:', result);
+                
                 return {
                     success: true,
-                    orderNumber: '#HOT' + Date.now(),
+                    orderNumber: result.data.orderNumber || result.data.order.orderNumber,
+                    orderId: result.data.order.id,
                     message: 'Order placed successfully'
                 };
             } catch (error) {

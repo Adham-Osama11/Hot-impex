@@ -16,40 +16,76 @@ const createOrder = async (req, res) => {
             });
         }
 
+        // Extract data from new frontend format
+        const { cart, customerInfo, paymentMethod, userId, subtotal, shippingCost, tax, total } = req.body;
+
+        // Generate unique order number
+        const orderNumber = `HOT${Date.now()}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+
+        // Parse customer name
+        const nameParts = customerInfo.name.split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+
         const orderData = {
-            userId: req.user?.id,
-            customerInfo: req.body.customerInfo,
-            items: req.body.items,
-            shippingAddress: req.body.shippingAddress,
-            billingAddress: req.body.billingAddress || req.body.shippingAddress,
-            paymentMethod: req.body.paymentMethod,
-            notes: req.body.notes || ''
+            orderNumber,
+            user: req.user?.id || userId || null, // MongoDB uses 'user' not 'userId'
+            customerInfo: {
+                firstName: firstName,
+                lastName: lastName,
+                email: customerInfo.email,
+                phone: customerInfo.phone
+            },
+            items: [], // This will be populated after product verification
+            shippingAddress: {
+                firstName: firstName,
+                lastName: lastName,
+                street: customerInfo.address,
+                city: 'Cairo', // Default city
+                state: '',
+                zipCode: '',
+                country: 'Egypt' // Default country
+            },
+            billingAddress: {
+                firstName: firstName,
+                lastName: lastName,
+                street: customerInfo.address,
+                city: 'Cairo', // Default city
+                state: '',
+                zipCode: '',
+                country: 'Egypt' // Default country
+            },
+            paymentMethod: paymentMethod === 'cod' ? 'cash_on_delivery' : paymentMethod,
+            paymentStatus: 'pending',
+            pricing: {
+                subtotal: subtotal || 0,
+                shipping: shippingCost || 0,
+                tax: tax || 0,
+                total: total || 0
+            },
+            currency: 'EGP',
+            status: 'pending',
+            notes: {
+                customer: customerInfo.notes || ''
+            }
         };
 
-        // Validate order data
-        const validation = Order.validate(orderData);
-        if (!validation.isValid) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Validation failed',
-                errors: validation.errors
-            });
-        }
-
-        // Verify products exist and calculate total
-        let totalAmount = 0;
+        // Verify products exist and prepare item data
         const verifiedItems = [];
+        let calculatedSubtotal = 0;
 
-        for (const item of orderData.items) {
-            const product = await hybridDb.findProductById(item.productId);
+        for (const item of cart) {
+            const product = await hybridDb.getProductById(item.id);
+            
             if (!product) {
                 return res.status(404).json({
                     status: 'error',
-                    message: `Product with ID ${item.productId} not found`
+                    message: `Product with ID ${item.id} not found`
                 });
             }
 
-            if (!product.inStock) {
+            // Check stock if available
+            if (product.inStock === false) {
                 return res.status(400).json({
                     status: 'error',
                     message: `Product ${product.name} is out of stock`
@@ -57,29 +93,50 @@ const createOrder = async (req, res) => {
             }
 
             const itemTotal = product.price * item.quantity;
-            totalAmount += itemTotal;
+            calculatedSubtotal += itemTotal;
 
             verifiedItems.push({
-                productId: item.productId,
-                productName: product.name,
-                price: product.price,
+                productId: item.id,
+                productName: item.name || product.name,
+                price: item.price || product.price,
                 quantity: item.quantity,
-                total: itemTotal
+                total: itemTotal,
+                image: item.image || product.mainImage
             });
         }
 
         orderData.items = verifiedItems;
-        orderData.totalAmount = totalAmount;
+        
+        console.log(`Calculated subtotal: ${calculatedSubtotal}`);
+        console.log(`Frontend subtotal: ${orderData.pricing.subtotal}`);
+        
+        // Verify totals match (allow small rounding differences)
+        const totalDifference = Math.abs(calculatedSubtotal - orderData.pricing.subtotal);
+        console.log(`Total difference: ${totalDifference}`);
+        
+        if (totalDifference > 1) {
+            console.warn(`Order total mismatch: calculated ${calculatedSubtotal}, received ${orderData.pricing.subtotal}`);
+            console.log('Updating order data with calculated values...');
+            // Update with calculated values
+            orderData.pricing.subtotal = calculatedSubtotal;
+            orderData.pricing.total = calculatedSubtotal + orderData.pricing.shipping + orderData.pricing.tax;
+            console.log(`New total: ${orderData.pricing.total}`);
+        }
+
+        // MongoDB will handle validation automatically
+        console.log('Final order data before creation:', JSON.stringify(orderData, null, 2));
 
         const order = await hybridDb.createOrder(orderData);
 
         res.status(201).json({
             status: 'success',
             data: {
-                order: new Order(order).toJSON()
+                order: new Order(order).toJSON(),
+                orderNumber: orderNumber
             }
         });
     } catch (error) {
+        console.error('Error creating order:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error creating order',

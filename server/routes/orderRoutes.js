@@ -1,39 +1,78 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
-const {
-    createOrder,
-    getOrders,
-    getOrder,
-    updateOrderStatus,
-    cancelOrder
-} = require('../controllers/orderController');
-const { auth, adminAuth } = require('../middleware/auth');
+const orderController = require('../controllers/orderController');
+const { auth, optionalAuth } = require('../middleware/auth');
 
-// @route   POST /api/orders
-router.post('/', [
-    body('customerInfo.firstName').trim().notEmpty().withMessage('Customer first name is required'),
-    body('customerInfo.lastName').trim().notEmpty().withMessage('Customer last name is required'),
-    body('customerInfo.email').isEmail().withMessage('Customer email is required'),
-    body('items').isArray({ min: 1 }).withMessage('Order must contain at least one item'),
-    body('items.*.productId').notEmpty().withMessage('Product ID is required for each item'),
-    body('items.*.quantity').isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
-    body('shippingAddress.street').trim().notEmpty().withMessage('Shipping address is required'),
-    body('shippingAddress.city').trim().notEmpty().withMessage('Shipping city is required'),
-    body('shippingAddress.country').trim().notEmpty().withMessage('Shipping country is required'),
-    body('paymentMethod').notEmpty().withMessage('Payment method is required')
-], createOrder);
+// Validation middleware for order creation
+const validateOrderData = (req, res, next) => {
+    console.log('=== VALIDATION MIDDLEWARE DEBUG ===');
+    const { cart, customerInfo, paymentMethod } = req.body;
+    console.log('cart:', cart);
+    console.log('customerInfo:', customerInfo);
+    console.log('paymentMethod:', paymentMethod);
+    
+    if (!cart || !Array.isArray(cart) || cart.length === 0) {
+        console.log('Validation failed: Cart validation');
+        return res.status(400).json({
+            status: 'error',
+            message: 'Cart is required and must contain at least one item'
+        });
+    }
+    
+    if (!customerInfo || !customerInfo.name || !customerInfo.email || !customerInfo.phone || !customerInfo.address) {
+        console.log('Validation failed: Customer info validation');
+        console.log('Missing fields:', {
+            customerInfo: !!customerInfo,
+            name: customerInfo?.name,
+            email: customerInfo?.email,
+            phone: customerInfo?.phone,
+            address: customerInfo?.address
+        });
+        return res.status(400).json({
+            status: 'error',
+            message: 'Customer information (name, email, phone, address) is required'
+        });
+    }
+    
+    if (!paymentMethod || paymentMethod !== 'cod') {
+        console.log('Validation failed: Payment method validation');
+        console.log('paymentMethod value:', paymentMethod);
+        return res.status(400).json({
+            status: 'error',
+            message: 'Payment method must be Cash on Delivery (cod)'
+        });
+    }
+    
+    // Validate cart items
+    for (const item of cart) {
+        if (!item.id || !item.name || !item.price || !item.quantity) {
+            console.log('Validation failed: Cart item validation');
+            console.log('Failed item:', item);
+            return res.status(400).json({
+                status: 'error',
+                message: 'Each cart item must have id, name, price, and quantity'
+            });
+        }
+    }
+    
+    console.log('All validation passed!');
+    console.log('=================================');
+    next();
+};
 
-// @route   GET /api/orders
-router.get('/', auth, getOrders);
+// Create order (allows both authenticated and guest users)
+router.post('/', optionalAuth, validateOrderData, orderController.createOrder);
 
-// @route   GET /api/orders/:id
-router.get('/:id', auth, getOrder);
+// Get orders (requires authentication)
+router.get('/', auth, orderController.getOrders);
 
-// @route   PUT /api/orders/:id/status
-router.put('/:id/status', adminAuth, updateOrderStatus);
+// Get order by ID (requires authentication)
+router.get('/:id', auth, orderController.getOrder);
 
-// @route   PUT /api/orders/:id/cancel
-router.put('/:id/cancel', auth, cancelOrder);
+// Update order status (requires authentication)
+router.patch('/:id/status', auth, orderController.updateOrderStatus);
+
+// Cancel order (requires authentication)
+router.patch('/:id/cancel', auth, orderController.cancelOrder);
 
 module.exports = router;

@@ -1,9 +1,13 @@
 class Order {
     constructor(data) {
         this.id = data.id;
+        this.orderNumber = data.orderNumber;
         this.userId = data.userId;
         this.customerInfo = data.customerInfo || {};
         this.items = data.items || [];
+        this.subtotal = data.subtotal || 0;
+        this.shippingCost = data.shippingCost || 0;
+        this.tax = data.tax || 0;
         this.totalAmount = data.totalAmount || 0;
         this.currency = data.currency || 'EGP';
         this.status = data.status || 'pending';
@@ -26,12 +30,9 @@ class Order {
             errors.push('Customer email is required');
         }
 
-        if (!data.customerInfo || !data.customerInfo.firstName) {
-            errors.push('Customer first name is required');
-        }
-
-        if (!data.customerInfo || !data.customerInfo.lastName) {
-            errors.push('Customer last name is required');
+        // Check for either combined name or separate first/last names
+        if (!data.customerInfo || (!data.customerInfo.firstName && !data.customerInfo.name)) {
+            errors.push('Customer name is required');
         }
 
         if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
@@ -52,16 +53,9 @@ class Order {
             });
         }
 
+        // Make shipping address validation more flexible for simple addresses
         if (!data.shippingAddress || !data.shippingAddress.street) {
             errors.push('Shipping address is required');
-        }
-
-        if (!data.shippingAddress || !data.shippingAddress.city) {
-            errors.push('Shipping city is required');
-        }
-
-        if (!data.shippingAddress || !data.shippingAddress.country) {
-            errors.push('Shipping country is required');
         }
 
         return {
@@ -100,9 +94,13 @@ class Order {
     toJSON() {
         return {
             id: this.id,
+            orderNumber: this.orderNumber,
             userId: this.userId,
             customerInfo: this.customerInfo,
             items: this.items,
+            subtotal: this.subtotal,
+            shippingCost: this.shippingCost,
+            tax: this.tax,
             totalAmount: this.totalAmount,
             currency: this.currency,
             status: this.status,

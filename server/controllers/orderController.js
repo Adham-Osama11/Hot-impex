@@ -107,25 +107,17 @@ const createOrder = async (req, res) => {
 
         orderData.items = verifiedItems;
         
-        console.log(`Calculated subtotal: ${calculatedSubtotal}`);
-        console.log(`Frontend subtotal: ${orderData.pricing.subtotal}`);
-        
         // Verify totals match (allow small rounding differences)
         const totalDifference = Math.abs(calculatedSubtotal - orderData.pricing.subtotal);
-        console.log(`Total difference: ${totalDifference}`);
         
         if (totalDifference > 1) {
             console.warn(`Order total mismatch: calculated ${calculatedSubtotal}, received ${orderData.pricing.subtotal}`);
-            console.log('Updating order data with calculated values...');
             // Update with calculated values
             orderData.pricing.subtotal = calculatedSubtotal;
             orderData.pricing.total = calculatedSubtotal + orderData.pricing.shipping + orderData.pricing.tax;
-            console.log(`New total: ${orderData.pricing.total}`);
         }
 
         // MongoDB will handle validation automatically
-        console.log('Final order data before creation:', JSON.stringify(orderData, null, 2));
-
         const order = await hybridDb.createOrder(orderData);
 
         res.status(201).json({

@@ -302,28 +302,10 @@
 
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Credit Card Option -->
+                            <!-- Cash on Delivery Option (Default) -->
                             <label class="payment-option cursor-pointer">
-                                <input type="radio" name="paymentMethod" value="card" class="sr-only" checked>
-                                <div class="payment-card border-2 border-purple-500 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 transition-all duration-300 hover:shadow-lg">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h3 class="font-bold text-gray-800">Credit/Debit Card</h3>
-                                            <p class="text-sm text-gray-600">Visa, Mastercard, etc.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <!-- Cash on Delivery Option -->
-                            <label class="payment-option cursor-pointer">
-                                <input type="radio" name="paymentMethod" value="cod" class="sr-only">
-                                <div class="payment-card border-2 border-gray-300 bg-white rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:border-purple-500 hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50">
+                                <input type="radio" name="paymentMethod" value="cod" class="sr-only" checked>
+                                <div class="payment-card border-2 border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 transition-all duration-300 hover:shadow-lg">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
                                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -337,36 +319,66 @@
                                     </div>
                                 </div>
                             </label>
+
+                            <!-- Credit Card Option (Coming Soon) -->
+                            <label class="payment-option cursor-not-allowed opacity-60">
+                                <input type="radio" name="paymentMethod" value="card" class="sr-only" disabled>
+                                <div class="payment-card border-2 border-gray-300 bg-gray-100 rounded-xl p-6 transition-all duration-300">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-gray-400 to-gray-500 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-gray-600">Credit/Debit Card</h3>
+                                            <p class="text-sm text-gray-500">Coming Soon</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 bg-yellow-100 border border-yellow-300 rounded-lg p-2">
+                                        <p class="text-xs text-yellow-700 font-medium">Online payment will be available soon!</p>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
 
-                        <!-- Credit Card Form (initially visible) -->
-                        <div id="card-form" class="card-details space-y-4 bg-gray-50 rounded-xl p-6">
+                        <!-- Credit Card Form (initially hidden) -->
+                        <div id="card-form" class="card-details hidden space-y-4 bg-gray-50 rounded-xl p-6">
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <p class="text-sm font-medium text-yellow-800">Online payment will be available soon!</p>
+                                </div>
+                                <p class="text-xs text-yellow-700 mt-1">For now, please use Cash on Delivery option.</p>
+                            </div>
                             <div>
                                 <label for="cardNumber" class="block text-sm font-semibold text-gray-700 mb-2">Card Number *</label>
-                                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" 
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" disabled
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-100 cursor-not-allowed transition-all duration-300">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="cardExpiry" class="block text-sm font-semibold text-gray-700 mb-2">Expiry Date *</label>
-                                    <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" 
-                                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                                    <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" disabled
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-100 cursor-not-allowed transition-all duration-300">
                                 </div>
                                 <div>
                                     <label for="cardCVV" class="block text-sm font-semibold text-gray-700 mb-2">CVV *</label>
-                                    <input type="text" id="cardCVV" name="cardCVV" placeholder="123" 
-                                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                                    <input type="text" id="cardCVV" name="cardCVV" placeholder="123" disabled
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-100 cursor-not-allowed transition-all duration-300">
                                 </div>
                             </div>
                             <div>
                                 <label for="cardName" class="block text-sm font-semibold text-gray-700 mb-2">Cardholder Name *</label>
-                                <input type="text" id="cardName" name="cardName" placeholder="John Doe" 
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300">
+                                <input type="text" id="cardName" name="cardName" placeholder="John Doe" disabled
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-100 cursor-not-allowed transition-all duration-300">
                             </div>
                         </div>
 
-                        <!-- Cash on Delivery Info (initially hidden) -->
-                        <div id="cod-info" class="card-details hidden bg-green-50 rounded-xl p-6">
+                        <!-- Cash on Delivery Info (initially visible) -->
+                        <div id="cod-info" class="card-details bg-green-50 rounded-xl p-6">
                             <div class="flex items-center space-x-3 mb-4">
                                 <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -978,7 +990,7 @@
 
         // Setup payment method toggle
         function setupPaymentMethodToggle() {
-            const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]');
+            const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]:not([disabled])');
             const cardForm = document.getElementById('card-form');
             const codInfo = document.getElementById('cod-info');
 
@@ -986,24 +998,42 @@
                 option.addEventListener('change', function() {
                     // Update visual selection
                     document.querySelectorAll('.payment-card').forEach(card => {
-                        card.classList.remove('border-purple-500', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50');
-                        card.classList.add('border-gray-300', 'bg-white');
+                        // Don't change disabled card styles
+                        if (!card.closest('.payment-option').querySelector('input').disabled) {
+                            card.classList.remove('border-green-500', 'bg-gradient-to-br', 'from-green-50', 'to-emerald-50');
+                            card.classList.add('border-gray-300', 'bg-white');
+                        }
                     });
 
                     const selectedCard = this.closest('.payment-option').querySelector('.payment-card');
-                    selectedCard.classList.remove('border-gray-300', 'bg-white');
-                    selectedCard.classList.add('border-purple-500', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50');
+                    if (!this.disabled) {
+                        selectedCard.classList.remove('border-gray-300', 'bg-white');
+                        selectedCard.classList.add('border-green-500', 'bg-gradient-to-br', 'from-green-50', 'to-emerald-50');
+                    }
 
-                    // Show/hide forms
+                    // Show/hide forms - card form is always hidden since it's disabled
                     if (this.value === 'card') {
-                        cardForm.classList.remove('hidden');
-                        codInfo.classList.add('hidden');
+                        // Card payment is disabled, so this shouldn't happen
+                        // But just in case, show a message
+                        showNotification('Online payment is coming soon! Please use Cash on Delivery.', 'info');
+                        // Force back to COD
+                        const codOption = document.querySelector('input[name="paymentMethod"][value="cod"]');
+                        if (codOption) {
+                            codOption.checked = true;
+                            codOption.dispatchEvent(new Event('change'));
+                        }
                     } else {
+                        // COD selected
                         cardForm.classList.add('hidden');
                         codInfo.classList.remove('hidden');
                     }
                 });
             });
+
+            // Show notification about online payment coming soon
+            setTimeout(() => {
+                showNotification('Online payment will be available soon! Currently accepting Cash on Delivery orders.', 'info', 5000);
+            }, 2000);
         }
 
         // Setup form validation
@@ -1063,7 +1093,14 @@
             // Validate payment method specific fields
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
             if (paymentMethod === 'card') {
-                isValid = validateCardFields() && isValid;
+                // Card payment is disabled, show error and switch to COD
+                showNotification('Online payment is not available yet. Please use Cash on Delivery.', 'error');
+                const codOption = document.querySelector('input[name="paymentMethod"][value="cod"]');
+                if (codOption) {
+                    codOption.checked = true;
+                    codOption.dispatchEvent(new Event('change'));
+                }
+                isValid = false;
             }
 
             return isValid;

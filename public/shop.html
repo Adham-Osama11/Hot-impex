@@ -559,78 +559,28 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== CART DEBUG INFO ===');
             
-            // Wait a bit to ensure all scripts are loaded
+            // Cart functionality is now handled by global scripts.js
+            // Just wait for it to initialize and then reinitialize listeners
             setTimeout(() => {
+                console.log('Reinitializing cart event listeners for shop page...');
+                if (window.reinitializeCartEventListeners) {
+                    window.reinitializeCartEventListeners();
+                } else {
+                    console.warn('Global reinitializeCartEventListeners not available');
+                }
+                
+                // Verify cart functionality
                 const cartToggle = document.getElementById('cart-toggle');
                 const cartSidebar = document.getElementById('cart-sidebar');
                 const cartOverlay = document.getElementById('cart-overlay');
                 
-                console.log('Cart toggle element:', cartToggle);
-                console.log('Cart sidebar element:', cartSidebar);
-                console.log('Cart overlay element:', cartOverlay);
-                console.log('toggleCart function available:', typeof window.toggleCart);
-                
-                // Check if scripts.js cart initialization worked
-                if (cartToggle) {
-                    // Remove any existing listeners to avoid duplicates
-                    const newCartToggle = cartToggle.cloneNode(true);
-                    cartToggle.parentNode.replaceChild(newCartToggle, cartToggle);
-                    
-                    console.log('Adding fresh cart toggle listener');
-                    newCartToggle.addEventListener('click', function(e) {
-                        console.log('Cart toggle clicked!');
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        if (cartSidebar && cartOverlay) {
-                            const isHidden = cartSidebar.classList.contains('translate-x-full');
-                            console.log('Cart currently hidden:', isHidden);
-                            
-                            if (isHidden) {
-                                // Show cart
-                                cartSidebar.classList.remove('translate-x-full');
-                                cartOverlay.classList.remove('hidden');
-                                console.log('Showing cart');
-                            } else {
-                                // Hide cart
-                                cartSidebar.classList.add('translate-x-full');
-                                cartOverlay.classList.add('hidden');
-                                console.log('Hiding cart');
-                            }
-                        } else {
-                            console.error('Cart elements not found!');
-                        }
-                    });
-                    
-                    // Add close cart functionality
-                    const closeCart = document.getElementById('close-cart');
-                    if (closeCart) {
-                        closeCart.addEventListener('click', function(e) {
-                            console.log('Close cart clicked!');
-                            e.preventDefault();
-                            if (cartSidebar && cartOverlay) {
-                                cartSidebar.classList.add('translate-x-full');
-                                cartOverlay.classList.add('hidden');
-                            }
-                        });
-                    }
-                    
-                    // Add overlay click to close
-                    if (cartOverlay) {
-                        cartOverlay.addEventListener('click', function(e) {
-                            console.log('Overlay clicked!');
-                            e.preventDefault();
-                            if (cartSidebar) {
-                                cartSidebar.classList.add('translate-x-full');
-                                cartOverlay.classList.add('hidden');
-                            }
-                        });
-                    }
-                    
-                } else {
-                    console.error('Cart toggle element not found!');
-                }
-            }, 500);
+                console.log('Cart elements check:', {
+                    toggle: !!cartToggle,
+                    sidebar: !!cartSidebar,
+                    overlay: !!cartOverlay,
+                    toggleFunction: typeof window.toggleCart
+                });
+            }, 100);
         });
     </script>
     

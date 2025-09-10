@@ -901,8 +901,8 @@
     <script>
         // Checkout functionality
         function proceedToCheckout() {
-            // Check if cart has items
-            const cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
+            // Check if cart has items using consistent cart key
+            const cart = JSON.parse(localStorage.getItem('hotimpex-guest-cart') || '[]');
             
             if (cart.length === 0) {
                 // Show notification that cart is empty

@@ -3869,3 +3869,124 @@ window.testCart = () => {
 
 // Make CartService globally available
 window.CartService = CartService;
+
+// Add getCartForCheckout function for checkout page compatibility
+window.getCartForCheckout = async function() {
+    console.log('=== CART DEBUG START ===');
+    console.log('Raw cart array:', cart);
+    console.log('Cart length:', cart.length);
+    
+    // Debug each raw cart item
+    cart.forEach((item, index) => {
+        console.log(`Raw cart item ${index}:`, item);
+        console.log(`  - productId: ${item.productId}`);
+        console.log(`  - productData exists: ${!!item.productData}`);
+        console.log(`  - name directly: ${item.name}`);
+        console.log(`  - price directly: ${item.price}`);
+        if (item.productData) {
+            console.log(`  - productData:`, item.productData);
+        }
+    });
+    
+    // Normalize cart data for checkout
+    const normalizedCart = await Promise.all(cart.map(async (item, index) => {
+        let normalized;
+        
+        // Check if this is a user cart item with productData (from server)
+        if (item.productData && item.productData.name) {
+            console.log(`Item ${index}: Using server user cart format (productData)`);
+            
+            // Check if price is missing and try to fetch it
+            let price = parseFloat(item.productData.price) || 0;
+            let image = item.productData.image || item.productData.mainImage;
+            
+            if (price === 0 || !image) {
+                console.log(`Item ${index}: Price or image missing, trying to fetch product details...`);
+                try {
+                    // Try to get product from global products array first
+                    const localProduct = products?.find(p => p.id === item.productId);
+                    if (localProduct) {
+                        price = parseFloat(localProduct.price) || price;
+                        image = localProduct.mainImage || localProduct.image || image;
+                        console.log(`Item ${index}: Found in local products:`, { price, image });
+                    } else if (window.APIService && typeof window.APIService.getProduct === 'function') {
+                        // Fallback to API call
+                        const productResponse = await APIService.getProduct(item.productId);
+                        if (productResponse.status === 'success') {
+                            const product = productResponse.data.product;
+                            price = parseFloat(product.price) || price;
+                            image = product.mainImage || product.image || image;
+                            console.log(`Item ${index}: Fetched from API:`, { price, image });
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Error fetching product details for ${item.productId}:`, error);
+                }
+            }
+            
+            normalized = {
+                id: item.productId,
+                productId: item.productId,
+                name: item.productData.name,
+                price: price,
+                quantity: parseInt(item.quantity) || 1,
+                image: image,
+                mainImage: image,
+                currency: item.productData.currency || 'EGP'
+            };
+        }
+        // Check if this is a guest cart item with productData
+        else if (item.productData && !item.name) {
+            console.log(`Item ${index}: Using guest cart format (productData)`);
+            normalized = {
+                id: item.productId,
+                productId: item.productId,
+                name: item.productData.name,
+                price: parseFloat(item.productData.price) || 0,
+                quantity: parseInt(item.quantity) || 1,
+                image: item.productData.image,
+                mainImage: item.productData.image,
+                currency: item.productData.currency || 'EGP'
+            };
+        }
+        // Check if this is a direct format (already normalized)
+        else if (item.name && item.price) {
+            console.log(`Item ${index}: Using direct format`);
+            normalized = {
+                id: item.productId || item.id,
+                productId: item.productId || item.id,
+                name: item.name,
+                price: parseFloat(item.price) || 0,
+                quantity: parseInt(item.quantity) || 1,
+                image: item.image || item.mainImage,
+                mainImage: item.mainImage || item.image,
+                currency: item.currency || 'EGP'
+            };
+        }
+        // Fallback: try to extract from any nested structure
+        else {
+            console.log(`Item ${index}: Using fallback format`);
+            const name = item.name || item.product?.name || item.productData?.name || 'Unknown Product';
+            const price = parseFloat(item.price || item.product?.price || item.productData?.price || 0);
+            const image = item.image || item.mainImage || item.product?.image || item.productData?.image || 'assets/images/placeholder.jpg';
+            
+            normalized = {
+                id: item.productId || item.id || item.product?.id,
+                productId: item.productId || item.id || item.product?.id,
+                name: name,
+                price: price,
+                quantity: parseInt(item.quantity) || 1,
+                image: image,
+                mainImage: image,
+                currency: item.currency || item.product?.currency || item.productData?.currency || 'EGP'
+            };
+        }
+        
+        console.log(`Normalized item ${index}:`, normalized);
+        return normalized;
+    }));
+    
+    console.log('=== FINAL NORMALIZED CART ===', normalizedCart);
+    console.log('=== CART DEBUG END ===');
+    return normalizedCart;
+};

@@ -530,6 +530,54 @@
     <!-- JavaScript -->
     <script src="assets/js/scripts.js"></script>
     
+    <!-- Checkout Page Initialization -->
+    <script>
+        // Debug function to check cart status
+        function debugCartStatus() {
+            console.log('=== CART DEBUG STATUS ===');
+            console.log('window.cart:', window.cart);
+            console.log('localStorage hotimpex-guest-cart:', localStorage.getItem('hotimpex-guest-cart'));
+            console.log('getCartForCheckout available:', typeof window.getCartForCheckout);
+            if (window.getCartForCheckout) {
+                console.log('getCartForCheckout result:', window.getCartForCheckout());
+            }
+            console.log('AuthService available:', typeof window.AuthService);
+            if (window.AuthService) {
+                console.log('User logged in:', window.AuthService.isLoggedIn());
+            }
+            console.log('CartService available:', typeof window.CartService);
+            console.log('=== END CART DEBUG ===');
+        }
+        
+        // Make debug function globally available
+        window.debugCartStatus = debugCartStatus;
+        
+        // Wait for scripts.js to fully load before initializing checkout
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Checkout page initializing...');
+            
+            // Wait for scripts.js to initialize global variables and CartService
+            function initializeCheckoutWhenReady() {
+                if (window.CartService && window.getCartForCheckout) {
+                    // Initialize checkout cart
+                    loadCheckoutCart();
+                    
+                    // Load user data and prefill form
+                    loadUserData();
+                    
+                    // Initialize payment method toggle and other checkout-specific functionality
+                    setupPaymentMethodToggle();
+                    
+                    console.log('Checkout page initialized successfully');
+                } else {
+                    setTimeout(initializeCheckoutWhenReady, 100);
+                }
+            }
+            
+            initializeCheckoutWhenReady();
+        });
+    </script>
+    
     <!-- Simple CSS fix for scroll -->
     <style>
         /* Prevent horizontal scroll */
@@ -556,37 +604,33 @@
     </style>
     
     <script>
-        // Checkout page specific JavaScript
+        // Checkout page specific JavaScript - secondary initialization
         document.addEventListener('DOMContentLoaded', function() {
-            loadCheckoutCart();
-            loadUserData();
-            setupPaymentMethodToggle();
+            // These functions are called after the main initialization above
             setupFormValidation();
             setupMobileMenu();
             setupThemeToggle();
-            updateCartUI();
         });
 
         // Load user data and prefill form
         async function loadUserData() {
             try {
-                const user = AuthService.getUser();
-                const token = AuthService.getToken();
-                
-                console.log('Loading user data for checkout...');
-                console.log('Local user data:', user);
-                console.log('Token available:', !!token);
+                const user = AuthService?.getUser();
+                const token = AuthService?.getToken();
                 
                 if (token && user) {
                     // Try to get fresh user data from server
                     try {
-                        const freshUserData = await AuthService.getCurrentUser();
-                        console.log('Fresh user data from server:', freshUserData);
-                        
-                        if (freshUserData && freshUserData.data && freshUserData.data.user) {
-                            prefillUserForm(freshUserData.data.user);
-                        } else if (user) {
-                            // Fallback to cached user data
+                        if (window.AuthService && typeof AuthService.getCurrentUser === 'function') {
+                            const freshUserData = await AuthService.getCurrentUser();
+                            
+                            if (freshUserData && freshUserData.data && freshUserData.data.user) {
+                                prefillUserForm(freshUserData.data.user);
+                            } else if (user) {
+                                // Fallback to cached user data
+                                prefillUserForm(user);
+                            }
+                        } else {
                             prefillUserForm(user);
                         }
                     } catch (error) {
@@ -596,8 +640,6 @@
                             prefillUserForm(user);
                         }
                     }
-                } else {
-                    console.log('No user logged in, form will remain empty');
                 }
             } catch (error) {
                 console.error('Error in loadUserData:', error);
@@ -606,34 +648,42 @@
 
         // Prefill form with user data
         function prefillUserForm(user) {
-            console.log('Prefilling form with user data:', user);
-            
             try {
                 // Basic user information
                 if (user.firstName) {
                     const firstNameField = document.getElementById('firstName');
-                    if (firstNameField) firstNameField.value = user.firstName;
+                    if (firstNameField) {
+                        firstNameField.value = user.firstName;
+                    }
                 }
                 
                 if (user.lastName) {
                     const lastNameField = document.getElementById('lastName');
-                    if (lastNameField) lastNameField.value = user.lastName;
+                    if (lastNameField) {
+                        lastNameField.value = user.lastName;
+                    }
                 }
                 
                 if (user.email) {
                     const emailField = document.getElementById('email');
-                    if (emailField) emailField.value = user.email;
+                    if (emailField) {
+                        emailField.value = user.email;
+                    }
                 }
                 
                 if (user.phone) {
                     const phoneField = document.getElementById('phone');
-                    if (phoneField) phoneField.value = user.phone;
+                    if (phoneField) {
+                        phoneField.value = user.phone;
+                    }
                 }
                 
                 // Address information
                 if (user.address) {
                     const addressField = document.getElementById('address');
-                    if (addressField) addressField.value = user.address;
+                    if (addressField) {
+                        addressField.value = user.address;
+                    }
                 }
                 
                 if (user.city) {
@@ -666,33 +716,97 @@
             }
         }
         // Enhanced cart loading for checkout
-        function loadCheckoutCart() {
-            console.log('Loading checkout cart...');
+        async function loadCheckoutCart() {
+            console.log('=== CHECKOUT CART LOADING ===');
             
-            // Try both possible cart key formats
-            let cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
-            if (cart.length === 0) {
-                cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            let cart = [];
+            
+            // First ensure CartService is loaded and cart is initialized
+            if (window.CartService) {
+                try {
+                    // Load the appropriate cart based on user status
+                    if (window.AuthService && window.AuthService.isLoggedIn()) {
+                        cart = await window.CartService.loadUserCart();
+                        console.log('Loaded user cart from service:', cart);
+                    } else {
+                        cart = window.CartService.loadGuestCart();
+                        console.log('Loaded guest cart from service:', cart);
+                    }
+                } catch (error) {
+                    console.error('Error loading cart from CartService:', error);
+                }
             }
+            
+            // Use getCartForCheckout if available and cart is still empty
+            if (cart.length === 0 && window.getCartForCheckout) {
+                cart = await window.getCartForCheckout();
+            } else if (window.getCartForCheckout) {
+                // Even if we have a cart, process it through getCartForCheckout for normalization
+                cart = await window.getCartForCheckout();
+            }
+            
+            // Fallback to direct storage access if needed
+            if (cart.length === 0) {
+                cart = loadGuestCartFromStorage();
+                console.log('Fallback: loaded from storage:', cart);
+            }
+            
+            processCheckoutCart(cart);
+        }
+        
+        function loadGuestCartFromStorage() {
+            let cart = [];
+            
+            // Try the new guest cart key first
+            const guestCart = localStorage.getItem('hotimpex-guest-cart');
+            if (guestCart) {
+                try {
+                    cart = JSON.parse(guestCart);
+                    console.log('Loaded guest cart from hotimpex-guest-cart:', cart);
+                } catch (e) {
+                    console.error('Error parsing guest cart:', e);
+                }
+            }
+            
+            // Fallback to old cart keys for migration only
+            if (cart.length === 0) {
+                const oldCart1 = localStorage.getItem('hotimpex-cart');
+                const oldCart2 = localStorage.getItem('hotimpex_cart');
+                
+                if (oldCart1) {
+                    try {
+                        cart = JSON.parse(oldCart1);
+                        console.log('Migrated cart from hotimpex-cart:', cart);
+                        // Migrate to new structure
+                        localStorage.setItem('hotimpex-guest-cart', oldCart1);
+                        localStorage.removeItem('hotimpex-cart');
+                    } catch (e) {
+                        console.error('Error parsing old cart:', e);
+                    }
+                } else if (oldCart2) {
+                    try {
+                        cart = JSON.parse(oldCart2);
+                        console.log('Migrated cart from hotimpex_cart:', cart);
+                        // Migrate to new structure
+                        localStorage.setItem('hotimpex-guest-cart', oldCart2);
+                        localStorage.removeItem('hotimpex_cart');
+                    } catch (e) {
+                        console.error('Error parsing old cart:', e);
+                    }
+                }
+            }
+            
+            return cart;
+        }
+        
+        function processCheckoutCart(cart) {
+            console.log('=== PROCESSING CHECKOUT CART ===');
+            console.log('Cart to process:', cart);
+            console.log('Cart length:', cart.length);
             
             const cartItemsContainer = document.getElementById('checkout-cart-items');
             const orderTotals = document.getElementById('order-totals');
             const placeOrderBtn = document.getElementById('place-order-btn');
-
-            console.log('Cart data:', cart);
-            console.log('Cart length:', cart.length);
-            
-            // Debug each cart item
-            cart.forEach((item, index) => {
-                console.log(`Cart item ${index}:`, item);
-                console.log('Item properties:', {
-                    id: item.id,
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity,
-                    image: item.image
-                });
-            });
 
             if (cart.length === 0) {
                 placeOrderBtn.disabled = true;
@@ -724,24 +838,28 @@
             let subtotal = 0;
 
             cart.forEach((item, index) => {
+                console.log(`=== PROCESSING ITEM ${index} ===`);
+                console.log('Item data:', item);
+                console.log('Item name:', item.name);
+                console.log('Item price:', item.price);
+                console.log('Item quantity:', item.quantity);
+                
                 // Ensure we have valid data
                 const itemPrice = parseFloat(item.price) || 0;
                 const itemQuantity = parseInt(item.quantity) || 1;
                 const itemTotal = itemPrice * itemQuantity;
                 subtotal += itemTotal;
-                
-                console.log(`Processing item ${index}:`, {
-                    name: item.name,
-                    price: itemPrice,
-                    quantity: itemQuantity,
-                    total: itemTotal,
-                    image: item.image,
-                    mainImage: item.mainImage
-                });
 
                 // Determine the correct image to use
                 const imageUrl = item.mainImage || item.image || 'assets/images/placeholder.jpg';
-                console.log(`Using image URL for ${item.name}:`, imageUrl);
+                console.log(`Item ${index} final data:`, {
+                    name: item.name || 'Unknown Product',
+                    price: itemPrice,
+                    quantity: itemQuantity,
+                    total: itemTotal,
+                    image: imageUrl
+                });
+                
                 // Handle image error - create a fallback with better styling
                 const imgError = "this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkgzMlYzMkgyMlYyMloiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTM0IDI0SzQyVjMySDM0VjI0WiIgZmlsbD0iIzlDQTNBRiIvPgo8cGF0aCBkPSJNMjIgMzRIMzJWNDJIMjJWMzRaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik0zNCAzNEg0MlY0MkgzNFYzNFoiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+'; this.style.objectFit='contain';";
                 
@@ -790,17 +908,33 @@
 
         // Remove item from checkout cart
         function removeFromCheckoutCart(index) {
-            // Try both possible cart key formats
-            let cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
-            if (cart.length === 0) {
-                cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            // Get current cart using universal function
+            let cart = [];
+            if (window.getCartForCheckout) {
+                // Get the raw cart structure for modification
+                if (window.cart && Array.isArray(window.cart)) {
+                    cart = [...window.cart]; // Create a copy of global cart
+                } else {
+                    cart = loadGuestCartFromStorage();
+                }
+            } else {
+                cart = loadGuestCartFromStorage();
             }
             
             if (index >= 0 && index < cart.length) {
                 cart.splice(index, 1);
-                // Update both possible cart keys to ensure consistency
-                localStorage.setItem('hotimpex-cart', JSON.stringify(cart));
-                localStorage.setItem('hotimpex_cart', JSON.stringify(cart));
+                
+                // Update both global cart and localStorage
+                if (window.cart) {
+                    window.cart = cart;
+                }
+                localStorage.setItem('hotimpex-guest-cart', JSON.stringify(cart));
+                
+                // Update cart UI if CartService is available
+                if (window.CartService && window.CartService.updateCartUI) {
+                    window.CartService.updateCartUI();
+                }
+                
                 loadCheckoutCart(); // Reload the cart display
                 showNotification('Item removed from cart', 'info');
             }
@@ -810,26 +944,29 @@
         function addTestCartItems() {
             const testItems = [
                 {
-                    id: 'test-1',
-                    name: '4K UHD Generator Test Item',
-                    price: 2500,
+                    productId: 'test-1',
                     quantity: 1,
-                    image: '4K UHD Generator',
-                    mainImage: 'assets/images/Products/Av distribution/4K UHD GENRATOR.jpg'
+                    productData: {
+                        name: '4K UHD Generator Test Item',
+                        price: 2500,
+                        image: 'assets/images/Products/Av distribution/4K UHD GENRATOR.jpg',
+                        currency: 'EGP'
+                    }
                 },
                 {
-                    id: 'test-2', 
-                    name: 'HDMI Cable Test Item',
-                    price: 150,
+                    productId: 'test-2',
                     quantity: 2,
-                    image: 'HDMI Cable',
-                    mainImage: 'assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg'
+                    productData: {
+                        name: 'HDMI Cable Test Item',
+                        price: 150,
+                        image: 'assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg',
+                        currency: 'EGP'
+                    }
                 }
             ];
             
-            // Store in both possible cart key formats for compatibility
-            localStorage.setItem('hotimpex-cart', JSON.stringify(testItems));
-            localStorage.setItem('hotimpex_cart', JSON.stringify(testItems));
+            // Store using consistent cart key only
+            localStorage.setItem('hotimpex-guest-cart', JSON.stringify(testItems));
             loadCheckoutCart();
             showNotification('Test items added to cart', 'info');
             console.log('Test items added:', testItems);
@@ -1032,13 +1169,29 @@
             // Collect order data
             const form = document.getElementById('checkout-form');
             const formData = new FormData(form);
-            // Try both possible cart key formats
-            let cart = JSON.parse(localStorage.getItem('hotimpex-cart') || '[]');
-            if (cart.length === 0) {
-                cart = JSON.parse(localStorage.getItem('hotimpex_cart') || '[]');
+            
+            // Get cart using universal function for consistency
+            let cart = [];
+            if (window.getCartForCheckout) {
+                cart = window.getCartForCheckout();
+                console.log('Order processing: Using universal cart getter with', cart.length, 'items');
+            } else {
+                // Fallback method
+                cart = loadGuestCartFromStorage();
+                console.log('Order processing: Using fallback method with', cart.length, 'items');
             }
+            
+            console.log('Cart for order processing:', cart);
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                placeOrderBtn.innerHTML = originalText;
+                placeOrderBtn.disabled = false;
+                return;
+            }
+            
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            const user = AuthService.getUser();
+            const user = window.AuthService ? window.AuthService.getUser() : null;
             
             // Calculate totals
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -1065,11 +1218,11 @@
                 },
                 // Order items
                 items: cart.map(item => ({
-                    productId: item.id,
-                    name: item.name,
-                    price: item.price,
+                    productId: item.productId || item.id,
+                    name: item.productData?.name || item.name,
+                    price: item.productData?.price || item.price,
                     quantity: item.quantity,
-                    image: item.image
+                    image: item.productData?.image || item.image
                 })),
                 // Payment information
                 payment: {

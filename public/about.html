@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hot Impex - About Us</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
     <!-- Theme initialization script - must run before body content -->
@@ -14,9 +18,6 @@
         if (isDarkMode) {
             document.documentElement.classList.add('dark');
         }
-        
-        // Store the theme state for immediate icon initialization
-        window.initialDarkMode = isDarkMode;
     </script>
 </head>
 <body class="min-h-screen">
@@ -44,10 +45,10 @@
                 <!-- Main Navigation Section -->
                 <div id="main-nav" class="hidden lg:flex items-center">
                     <div class="rounded-full p-3 flex items-center border border-white/30 shadow-2xl gap-2 bg-white/15 backdrop-blur-3xl">
-                        <a href="#" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">Home</a>
+                        <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Home</a>
                         <a href="shop.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Shop</a>
                         <a href="contact.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Contact Us</a>
-                        <a href="about.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">About Us</a>
+                        <a href="about.html" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">About Us</a>
                         
                         <!-- Dark Mode Toggle -->
                         <div class="flex items-center justify-center px-4 py-2.5">
@@ -158,10 +159,10 @@
                 </div>
                 <nav class="space-y-6">
                     <ul class="space-y-4">
-                        <li><a href="#" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Home</a></li>
+                        <li><a href="index.html" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Home</a></li>
                         <li><a href="shop.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Shop</a></li>
                         <li><a href="contact.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Contact Us</a></li>
-                        <li><a href="about.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">About Us</a></li>
+                        <li><a href="about.html" class="py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">About Us</a></li>
                     </ul>
                     <div class="mt-8 pt-8 border-t border-white/30">
                         <div class="flex items-center justify-between p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">

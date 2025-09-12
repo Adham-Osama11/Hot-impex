@@ -122,6 +122,44 @@ class APIService {
             }
         });
     }
+
+    // Order API methods
+    static async getUserOrders(params = {}) {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        const queryString = new URLSearchParams(params).toString();
+        const endpoint = queryString ? `/orders?${queryString}` : '/orders';
+        
+        return await this.request(endpoint, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+
+    static async getOrder(orderId) {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        return await this.request(`/orders/${orderId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+
+    static async cancelOrder(orderId) {
+        const token = AuthService.getToken();
+        if (!token) throw new Error('User not authenticated');
+        
+        return await this.request(`/orders/${orderId}/cancel`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
 }
 
 // Cart Service - Handles user-specific cart operations
@@ -3990,3 +4028,613 @@ window.getCartForCheckout = async function() {
     console.log('=== CART DEBUG END ===');
     return normalizedCart;
 };
+
+// My Orders Page Functionality
+class MyOrdersService {
+    static currentOrders = [];
+    static filteredOrders = [];
+    static currentFilter = 'all';
+    static currentPage = 1;
+    static ordersPerPage = 10;
+
+    static async initialize() {
+        console.log('Initializing My Orders page...');
+        
+        // Check if user is logged in
+        if (!AuthService.isLoggedIn()) {
+            this.showLoginMessage();
+            return;
+        }
+
+        // Setup event listeners
+        this.setupEventListeners();
+
+        // Load orders
+        await this.loadOrders();
+    }
+
+    static setupEventListeners() {
+        // Filter buttons
+        document.querySelectorAll('.orders-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const status = e.target.dataset.status;
+                this.filterOrders(status);
+            });
+        });
+
+        // Search input
+        const searchInput = document.getElementById('orders-search');
+        if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    this.searchOrders(e.target.value);
+                }, 300);
+            });
+        }
+
+        // Pagination
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => this.previousPage());
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.nextPage());
+        }
+
+        // Modal close handlers
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'order-details-modal' || e.target.closest('[data-close-modal]')) {
+                this.closeOrderDetailsModal();
+            }
+        });
+    }
+
+    static async loadOrders() {
+        const loadingEl = document.getElementById('orders-loading');
+        const containerEl = document.getElementById('orders-container');
+        const emptyEl = document.getElementById('orders-empty');
+
+        // Show loading state
+        loadingEl?.classList.remove('hidden');
+        containerEl?.classList.add('hidden');
+        emptyEl?.classList.add('hidden');
+
+        try {
+            const response = await APIService.getUserOrders();
+            
+            if (response.status === 'success') {
+                this.currentOrders = response.data.orders || [];
+                this.filteredOrders = [...this.currentOrders];
+                
+                if (this.currentOrders.length === 0) {
+                    this.showEmptyState();
+                } else {
+                    this.displayOrders();
+                }
+            } else {
+                console.error('Failed to load orders:', response.message);
+                this.showError('Failed to load orders. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error loading orders:', error);
+            this.showError('Error loading orders. Please check your connection.');
+        } finally {
+            loadingEl?.classList.add('hidden');
+        }
+    }
+
+    static filterOrders(status) {
+        this.currentFilter = status;
+        this.currentPage = 1;
+
+        // Update filter buttons
+        document.querySelectorAll('.orders-filter-btn').forEach(btn => {
+            if (btn.dataset.status === status) {
+                btn.classList.add('active', 'bg-blue-600', 'text-white');
+                btn.classList.remove('bg-gray-100', 'text-gray-700');
+            } else {
+                btn.classList.remove('active', 'bg-blue-600', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+            }
+        });
+
+        // Filter orders
+        if (status === 'all') {
+            this.filteredOrders = [...this.currentOrders];
+        } else {
+            this.filteredOrders = this.currentOrders.filter(order => 
+                order.status.toLowerCase() === status.toLowerCase()
+            );
+        }
+
+        this.displayOrders();
+    }
+
+    static searchOrders(query) {
+        const searchTerm = query.toLowerCase().trim();
+        
+        if (!searchTerm) {
+            this.filteredOrders = this.currentFilter === 'all' 
+                ? [...this.currentOrders]
+                : this.currentOrders.filter(order => 
+                    order.status.toLowerCase() === this.currentFilter.toLowerCase()
+                );
+        } else {
+            let baseOrders = this.currentFilter === 'all' 
+                ? this.currentOrders
+                : this.currentOrders.filter(order => 
+                    order.status.toLowerCase() === this.currentFilter.toLowerCase()
+                );
+
+            this.filteredOrders = baseOrders.filter(order => 
+                order.orderNumber.toLowerCase().includes(searchTerm) ||
+                order.items.some(item => 
+                    item.productName.toLowerCase().includes(searchTerm)
+                )
+            );
+        }
+
+        this.currentPage = 1;
+        this.displayOrders();
+    }
+
+    static displayOrders() {
+        const containerEl = document.getElementById('orders-container');
+        const emptyEl = document.getElementById('orders-empty');
+        const paginationEl = document.getElementById('orders-pagination');
+
+        if (this.filteredOrders.length === 0) {
+            containerEl?.classList.add('hidden');
+            emptyEl?.classList.remove('hidden');
+            paginationEl?.classList.add('hidden');
+            return;
+        }
+
+        containerEl?.classList.remove('hidden');
+        emptyEl?.classList.add('hidden');
+
+        // Calculate pagination
+        const totalPages = Math.ceil(this.filteredOrders.length / this.ordersPerPage);
+        const startIndex = (this.currentPage - 1) * this.ordersPerPage;
+        const endIndex = startIndex + this.ordersPerPage;
+        const pageOrders = this.filteredOrders.slice(startIndex, endIndex);
+
+        // Generate orders HTML
+        const ordersHTML = pageOrders.map(order => this.generateOrderHTML(order)).join('');
+        
+        if (containerEl) {
+            containerEl.innerHTML = ordersHTML;
+        }
+
+        // Setup pagination
+        if (totalPages > 1) {
+            this.setupPagination(totalPages);
+            paginationEl?.classList.remove('hidden');
+        } else {
+            paginationEl?.classList.add('hidden');
+        }
+
+        // Setup order click handlers
+        this.setupOrderClickHandlers();
+    }
+
+    static generateOrderHTML(order) {
+        const statusColors = {
+            'pending': 'bg-yellow-100 text-yellow-800',
+            'processing': 'bg-blue-100 text-blue-800',
+            'shipped': 'bg-purple-100 text-purple-800',
+            'delivered': 'bg-green-100 text-green-800',
+            'cancelled': 'bg-red-100 text-red-800'
+        };
+
+        const statusColor = statusColors[order.status.toLowerCase()] || 'bg-gray-100 text-gray-800';
+        const orderDate = new Date(order.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+
+        const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
+
+        return `
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer" 
+                 data-order-id="${order._id || order.id}">
+                <div class="p-6">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4 mb-4 lg:mb-0">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Order #${order.orderNumber}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    ${orderDate} • ${totalItems} item${totalItems > 1 ? 's' : ''}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${statusColor}">
+                                ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </span>
+                            <div class="text-right">
+                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    ${order.pricing.total.toFixed(2)} ${order.currency}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                ${order.items.slice(0, 3).map(item => `
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                                        ${item.productName}${item.quantity > 1 ? ` (×${item.quantity})` : ''}
+                                    </div>
+                                `).join('<span class="text-gray-400">•</span>')}
+                                ${order.items.length > 3 ? `<span class="text-sm text-gray-500">+${order.items.length - 3} more</span>` : ''}
+                            </div>
+                            <button class="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                                View Details →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    static setupOrderClickHandlers() {
+        document.querySelectorAll('[data-order-id]').forEach(orderEl => {
+            orderEl.addEventListener('click', () => {
+                const orderId = orderEl.dataset.orderId;
+                this.showOrderDetails(orderId);
+            });
+        });
+    }
+
+    static async showOrderDetails(orderId) {
+        const modal = document.getElementById('order-details-modal');
+        const content = document.getElementById('order-details-content');
+
+        if (!modal || !content) return;
+
+        // Show modal with loading state
+        modal.classList.remove('hidden');
+        content.innerHTML = `
+            <div class="p-8 text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading order details...</p>
+            </div>
+        `;
+
+        try {
+            const response = await APIService.getOrder(orderId);
+            
+            if (response.status === 'success') {
+                const order = response.data.order;
+                content.innerHTML = this.generateOrderDetailsHTML(order);
+                this.setupOrderDetailsHandlers(order);
+            } else {
+                content.innerHTML = `
+                    <div class="p-8 text-center">
+                        <div class="text-red-500 text-6xl mb-4">⚠️</div>
+                        <p class="text-gray-600">Failed to load order details.</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading order details:', error);
+            content.innerHTML = `
+                <div class="p-8 text-center">
+                    <div class="text-red-500 text-6xl mb-4">❌</div>
+                    <p class="text-gray-600">Error loading order details.</p>
+                </div>
+            `;
+        }
+    }
+
+    static generateOrderDetailsHTML(order) {
+        const statusColors = {
+            'pending': 'bg-yellow-100 text-yellow-800',
+            'processing': 'bg-blue-100 text-blue-800',
+            'shipped': 'bg-purple-100 text-purple-800',
+            'delivered': 'bg-green-100 text-green-800',
+            'cancelled': 'bg-red-100 text-red-800'
+        };
+
+        const statusColor = statusColors[order.status.toLowerCase()] || 'bg-gray-100 text-gray-800';
+        const orderDate = new Date(order.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const canCancel = order.status === 'pending';
+
+        return `
+            <div class="max-w-4xl mx-auto">
+                <!-- Header -->
+                <div class="bg-gray-50 dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between rounded-t-2xl">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Order #${order.orderNumber}</h2>
+                        <p class="text-gray-600 dark:text-gray-400">${orderDate}</p>
+                    </div>
+                    <button data-close-modal class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p-6">
+                    <!-- Status and Actions -->
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-4 py-2 rounded-full text-sm font-medium ${statusColor}">
+                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                        ${canCancel ? `
+                            <button id="cancel-order-btn" data-order-id="${order._id || order.id}" 
+                                    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                Cancel Order
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Order Items</h3>
+                        <div class="space-y-4">
+                            ${order.items.map(item => `
+                                <div class="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-900 dark:text-white">${item.productName}</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Quantity: ${item.quantity}</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Unit Price: ${item.price.toFixed(2)} ${order.currency}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold text-gray-900 dark:text-white">
+                                            ${(item.price * item.quantity).toFixed(2)} ${order.currency}
+                                        </p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Shipping Address -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Shipping Address</h3>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <p class="font-medium text-gray-900 dark:text-white">
+                                    ${order.shippingAddress.firstName} ${order.shippingAddress.lastName}
+                                </p>
+                                <p class="text-gray-600 dark:text-gray-400">${order.shippingAddress.street}</p>
+                                <p class="text-gray-600 dark:text-gray-400">
+                                    ${order.shippingAddress.city}, ${order.shippingAddress.country}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Order Total -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Order Summary</h3>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Subtotal:</span>
+                                    <span class="text-gray-900 dark:text-white">${order.pricing.subtotal.toFixed(2)} ${order.currency}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Shipping:</span>
+                                    <span class="text-gray-900 dark:text-white">${order.pricing.shipping.toFixed(2)} ${order.currency}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Tax:</span>
+                                    <span class="text-gray-900 dark:text-white">${order.pricing.tax.toFixed(2)} ${order.currency}</span>
+                                </div>
+                                <div class="border-t border-gray-300 dark:border-gray-600 pt-2">
+                                    <div class="flex justify-between font-semibold">
+                                        <span class="text-gray-900 dark:text-white">Total:</span>
+                                        <span class="text-gray-900 dark:text-white">${order.pricing.total.toFixed(2)} ${order.currency}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="mt-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Payment Method</h3>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <p class="text-gray-900 dark:text-white">
+                                ${order.paymentMethod === 'cash_on_delivery' ? 'Cash on Delivery' : order.paymentMethod}
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Status: ${order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    static setupOrderDetailsHandlers(order) {
+        const cancelBtn = document.getElementById('cancel-order-btn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => this.cancelOrder(order._id || order.id));
+        }
+    }
+
+    static async cancelOrder(orderId) {
+        if (!confirm('Are you sure you want to cancel this order?')) {
+            return;
+        }
+
+        try {
+            const response = await APIService.cancelOrder(orderId);
+            
+            if (response.status === 'success') {
+                alert('Order cancelled successfully!');
+                this.closeOrderDetailsModal();
+                await this.loadOrders(); // Reload orders
+            } else {
+                alert(response.message || 'Failed to cancel order');
+            }
+        } catch (error) {
+            console.error('Error cancelling order:', error);
+            alert('Error cancelling order. Please try again.');
+        }
+    }
+
+    static closeOrderDetailsModal() {
+        const modal = document.getElementById('order-details-modal');
+        modal?.classList.add('hidden');
+    }
+
+    static showEmptyState() {
+        const containerEl = document.getElementById('orders-container');
+        const emptyEl = document.getElementById('orders-empty');
+        const paginationEl = document.getElementById('orders-pagination');
+
+        containerEl?.classList.add('hidden');
+        emptyEl?.classList.remove('hidden');
+        paginationEl?.classList.add('hidden');
+    }
+
+    static showLoginMessage() {
+        const containerEl = document.getElementById('orders-container');
+        const emptyEl = document.getElementById('orders-empty');
+        const loadingEl = document.getElementById('orders-loading');
+        const paginationEl = document.getElementById('orders-pagination');
+
+        loadingEl?.classList.add('hidden');
+        containerEl?.classList.add('hidden');
+        paginationEl?.classList.add('hidden');
+        
+        if (emptyEl) {
+            emptyEl.classList.remove('hidden');
+            emptyEl.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center">
+                    <div class="text-gray-400 text-6xl mb-4">🔐</div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Please sign in to view your orders</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">You need to be logged in to access your order history.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                        <button id="show-login-from-orders" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Sign In
+                        </button>
+                        <a href="shop.html" class="inline-flex items-center px-6 py-3 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition-colors">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
+                            </svg>
+                            Continue Shopping
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Setup login button handler
+            const loginBtn = document.getElementById('show-login-from-orders');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', () => {
+                    const loginModal = document.getElementById('login-modal');
+                    if (loginModal) {
+                        loginModal.classList.remove('hidden');
+                    }
+                });
+            }
+        }
+    }
+
+    static showError(message) {
+        const containerEl = document.getElementById('orders-container');
+        const emptyEl = document.getElementById('orders-empty');
+        const paginationEl = document.getElementById('orders-pagination');
+
+        containerEl?.classList.add('hidden');
+        paginationEl?.classList.add('hidden');
+        
+        if (emptyEl) {
+            emptyEl.classList.remove('hidden');
+            emptyEl.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center">
+                    <div class="text-red-500 text-6xl mb-4">⚠️</div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Error Loading Orders</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">${message}</p>
+                    <button onclick="MyOrdersService.loadOrders()" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    static setupPagination(totalPages) {
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+        const pageInfo = document.getElementById('page-info');
+
+        if (pageInfo) {
+            pageInfo.textContent = `Page ${this.currentPage} of ${totalPages}`;
+        }
+
+        if (prevBtn) {
+            prevBtn.disabled = this.currentPage === 1;
+            prevBtn.classList.toggle('opacity-50', this.currentPage === 1);
+            prevBtn.classList.toggle('cursor-not-allowed', this.currentPage === 1);
+        }
+
+        if (nextBtn) {
+            nextBtn.disabled = this.currentPage === totalPages;
+            nextBtn.classList.toggle('opacity-50', this.currentPage === totalPages);
+            nextBtn.classList.toggle('cursor-not-allowed', this.currentPage === totalPages);
+        }
+    }
+
+    static previousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.displayOrders();
+        }
+    }
+
+    static nextPage() {
+        const totalPages = Math.ceil(this.filteredOrders.length / this.ordersPerPage);
+        if (this.currentPage < totalPages) {
+            this.currentPage++;
+            this.displayOrders();
+        }
+    }
+}
+
+// Initialize My Orders page function
+function initializeMyOrdersPage() {
+    MyOrdersService.initialize();
+}
+
+// Make functions available globally
+window.initializeMyOrdersPage = initializeMyOrdersPage;
+window.MyOrdersService = MyOrdersService;

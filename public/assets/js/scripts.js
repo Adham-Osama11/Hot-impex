@@ -1098,12 +1098,13 @@ function initializeCart() {
     
     const cartToggle = document.getElementById('cart-toggle');
     const desktopCartToggle = document.getElementById('desktop-cart-toggle');
+    const mobileCartToggle = document.getElementById('mobile-cart-toggle');
     const cartSidebar = document.getElementById('cart-sidebar');
     const closeCart = document.getElementById('close-cart');
     const cartOverlay = document.getElementById('cart-overlay');
     
     // Add event listeners to all cart toggle elements
-    [cartToggle, desktopCartToggle].forEach(toggle => {
+    [cartToggle, desktopCartToggle, mobileCartToggle].forEach(toggle => {
         if (toggle) {
             toggle.addEventListener('click', handleCartToggleClick);
         }
@@ -1126,6 +1127,7 @@ function reinitializeCartEventListeners() {
     
     const cartToggle = document.getElementById('cart-toggle');
     const desktopCartToggle = document.getElementById('desktop-cart-toggle');
+    const mobileCartToggle = document.getElementById('mobile-cart-toggle');
     const cartSidebar = document.getElementById('cart-sidebar');
     const closeCart = document.getElementById('close-cart');
     const cartOverlay = document.getElementById('cart-overlay');
@@ -1133,13 +1135,14 @@ function reinitializeCartEventListeners() {
     console.log('Found elements:', {
         cartToggle: !!cartToggle,
         desktopCartToggle: !!desktopCartToggle,
+        mobileCartToggle: !!mobileCartToggle,
         cartSidebar: !!cartSidebar,
         closeCart: !!closeCart,
         cartOverlay: !!cartOverlay
     });
     
     // Add event listeners to all cart toggle elements
-    [cartToggle, desktopCartToggle].forEach(toggle => {
+    [cartToggle, desktopCartToggle, mobileCartToggle].forEach(toggle => {
         if (toggle) {
             // Remove existing listeners first
             toggle.removeEventListener('click', handleCartToggleClick);
@@ -1166,6 +1169,16 @@ function reinitializeCartEventListeners() {
 function handleCartToggleClick(e) {
     e.preventDefault();
     console.log('Cart toggle clicked via event handler');
+    
+    // If this is the mobile cart toggle, close the mobile menu first
+    if (e.target.id === 'mobile-cart-toggle' || e.target.closest('#mobile-cart-toggle')) {
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+    
     toggleCart();
 }
 

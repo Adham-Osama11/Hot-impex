@@ -243,7 +243,7 @@ class DashboardController {
                         <p class="text-sm text-black dark:text-black">${alert.message}</p>
                     </div>
                 </div>
-                <button class="text-${alert.type === 'warning' ? 'yellow' : 'blue'}-600 hover:text-${alert.type === 'warning' ? 'yellow' : 'blue'}-800 font-medium text-sm">
+                <button onclick="navigateToSection('${alert.type === 'warning' ? 'products' : 'orders'}')" class="text-${alert.type === 'warning' ? 'yellow' : 'blue'}-600 hover:text-${alert.type === 'warning' ? 'yellow' : 'blue'}-800 font-medium text-sm hover:underline transition-all duration-200">
                     ${alert.action}
                 </button>
             </div>
@@ -292,6 +292,41 @@ class DashboardController {
         }
     }
 }
+
+/**
+ * Global function to navigate between admin sections
+ * @param {string} section - The section to navigate to
+ */
+function navigateToSection(section) {
+    // Find the target sidebar link and trigger a click
+    const sidebarLink = document.querySelector(`[data-section="${section}"]`);
+    if (sidebarLink) {
+        sidebarLink.click();
+        
+        // Add visual feedback
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50 transition-all duration-300';
+        notification.innerHTML = `
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle"></i>
+                <span>Navigated to ${section.charAt(0).toUpperCase() + section.slice(1)}</span>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    } else {
+        console.warn(`Section "${section}" not found`);
+    }
+}
+
+// Make navigateToSection available globally
+window.navigateToSection = navigateToSection;
 
 // Export the controller
 window.DashboardController = DashboardController;

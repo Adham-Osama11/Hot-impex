@@ -123,31 +123,31 @@ class OrdersController {
                         <div class="space-y-6">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-300">Customer</label>
+                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-600">Customer</label>
                                     <p class="text-lg">${userName}</p>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">${userEmail}</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-300">Date</label>
+                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-600">Date</label>
                                     <p class="text-lg">${new Date(order.createdAt).toLocaleDateString()}</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-300">Status</label>
+                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-600">Status</label>
                                     <p class="text-lg">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-300">Total</label>
+                                    <label class="block text-sm font-medium text-gray-800 dark:text-gray-600">Total</label>
                                     <p class="text-lg font-bold">${totalAmount.toFixed(2)} ${currency}</p>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Payment</label>
+                                <label class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Payment</label>
                                 <p class="text-sm">${order.paymentMethod || 'N/A'} - ${order.paymentStatus || 'pending'}</p>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Shipping Address</label>
+                                <label class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Shipping Address</label>
                                 <div class="text-sm">
                                     <p>${order.shippingAddress?.firstName || ''} ${order.shippingAddress?.lastName || ''}</p>
                                     <p>${order.shippingAddress?.street || ''}</p>
@@ -156,13 +156,13 @@ class OrdersController {
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Items</label>
+                                <label class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Items</label>
                                 <div class="space-y-2">
                                     ${order.items && order.items.length > 0 ? order.items.map(item => `
                                         <div class="flex justify-between items-center p-3 bg-white/10 dark:bg-gray-800/20 rounded-lg">
                                             <div>
                                                 <span class="font-medium">${item.productName || item.productId}</span>
-                                                <span class="text-sm text-gray-600 dark:text-gray-400 block">Qty: ${item.quantity}</span>
+                                                <span class="text-sm text-gray-600 dark:text-gray-500 block">Qty: ${item.quantity}</span>
                                             </div>
                                             <span class="font-semibold">${(item.price || 0).toFixed(2)} ${currency}</span>
                                         </div>

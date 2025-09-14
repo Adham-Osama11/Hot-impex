@@ -310,36 +310,36 @@ class UsersController {
         userDetailsContent.innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-effect p-6 rounded-xl border border-white/20 dark:border-gray-700/20">
-                    <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Personal Information</h4>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-800">Personal Information</h4>
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Full Name</label>
-                            <p class="text-gray-800 dark:text-gray-200">${fullName}</p>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-600">Full Name</label>
+                            <p class="text-gray-800 dark:text-gray-400">${fullName}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Email</label>
-                            <p class="text-gray-800 dark:text-gray-200">${user.email || 'N/A'}</p>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-600">Email</label>
+                            <p class="text-gray-800 dark:text-gray-400">${user.email || 'N/A'}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Phone</label>
-                            <p class="text-gray-800 dark:text-gray-200">${user.phone || 'N/A'}</p>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-600">Phone</label>
+                            <p class="text-gray-800 dark:text-gray-400">${user.phone || 'N/A'}</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="glass-effect p-6 rounded-xl border border-white/20 dark:border-gray-700/20">
-                    <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Account Information</h4>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-800">Account Information</h4>
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Customer ID</label>
-                            <p class="text-gray-800 dark:text-gray-200">${user.id || user._id || 'N/A'}</p>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-600">Customer ID</label>
+                            <p class="text-gray-800 dark:text-gray-400">${user.id || user._id || 'N/A'}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Member Since</label>
-                            <p class="text-gray-800 dark:text-gray-200">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</p>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-600">Member Since</label>
+                            <p class="text-gray-800 dark:text-gray-400">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Account Status</label>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-600">Account Status</label>
                             <span class="px-2 py-1 text-xs font-semibold rounded-full ${user.isActive ? 'text-green-700 bg-green-100 dark:bg-green-900 dark:text-green-300' : 'text-red-700 bg-red-100 dark:bg-red-900 dark:text-red-300'}">
                                 ${user.isActive ? 'Active' : 'Inactive'}
                             </span>
@@ -349,19 +349,19 @@ class UsersController {
             </div>
             
             <div class="glass-effect p-6 rounded-xl border border-white/20 dark:border-gray-700/20">
-                <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Purchase Summary</h4>
+                <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-800">Purchase Summary</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="text-center">
                         <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${(user.totalSpent || 0).toFixed(2)}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Total Spent</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-600">Total Spent</p>
                     </div>
                     <div class="text-center">
                         <p class="text-2xl font-bold text-green-600 dark:text-green-400">${user.totalOrders || 0}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Total Orders</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-600">Total Orders</p>
                     </div>
                     <div class="text-center">
                         <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">${user.avgOrderValue ? '$' + user.avgOrderValue.toFixed(2) : '$0.00'}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Avg Order Value</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-600">Avg Order Value</p>
                     </div>
                 </div>
             </div>

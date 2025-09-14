@@ -581,12 +581,12 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="productName" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Product Name</label>
+                            <label for="productName" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Product Name</label>
                             <input type="text" id="productName" name="name" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
                         </div>
                         
                         <div>
-                            <label for="productCategory" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Category</label>
+                            <label for="productCategory" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Category</label>
                             <select id="productCategory" name="category" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
                                 <option value="">Select Category</option>
                                 <option value="Gaming">Gaming</option>
@@ -601,34 +601,34 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="productPrice" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Price ($)</label>
+                            <label for="productPrice" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Price ($)</label>
                             <input type="number" id="productPrice" name="price" step="0.01" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
                         </div>
                         
                         <div>
-                            <label for="productStock" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Stock Quantity</label>
+                            <label for="productStock" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Stock Quantity</label>
                             <input type="number" id="productStock" name="stock" min="0" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
                         </div>
                     </div>
                     
                     <div>
-                        <label for="productShortDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Short Description</label>
+                        <label for="productShortDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Short Description</label>
                         <textarea id="productShortDescription" name="shortDescription" rows="2" placeholder="Brief product summary (150 characters max)" maxlength="150" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Used for product previews and search results</p>
                     </div>
                     
                     <div>
-                        <label for="productDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Description</label>
+                        <label for="productDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Description</label>
                         <textarea id="productDescription" name="description" rows="4" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
                     </div>
                     
                     <div>
-                        <label for="productImages" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Image URLs (one per line)</label>
+                        <label for="productImages" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Image URLs (one per line)</label>
                         <textarea id="productImages" name="images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
                     </div>
                     
                     <div class="flex justify-end space-x-4">
-                        <button type="button" onclick="closeProductModal()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <button type="button" onclick="closeProductModal()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                             Cancel
                         </button>
                         <button type="submit" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">
@@ -658,28 +658,28 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="userFirstName" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">First Name</label>
+                            <label for="userFirstName" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">First Name</label>
                             <input type="text" id="userFirstName" name="firstName" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                         </div>
                         
                         <div>
-                            <label for="userLastName" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Last Name</label>
+                            <label for="userLastName" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Last Name</label>
                             <input type="text" id="userLastName" name="lastName" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                         </div>
                     </div>
                     
                     <div>
-                        <label for="userEmail" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Email Address</label>
+                        <label for="userEmail" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Email Address</label>
                         <input type="email" id="userEmail" name="email" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                     </div>
                     
                     <div>
-                        <label for="userPhone" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Phone Number</label>
+                        <label for="userPhone" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Phone Number</label>
                         <input type="tel" id="userPhone" name="phone" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                     </div>
                     
                     <div>
-                        <label for="userRole" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Role</label>
+                        <label for="userRole" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Role</label>
                         <select id="userRole" name="role" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                             <option value="customer">Customer</option>
                             <option value="admin">Admin</option>
@@ -689,19 +689,19 @@
                     
                     <div id="passwordSection" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="userPassword" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Password</label>
+                            <label for="userPassword" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Password</label>
                             <input type="password" id="userPassword" name="password" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Minimum 6 characters (leave blank to keep current)</p>
                         </div>
                         
                         <div>
-                            <label for="userPasswordConfirm" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Confirm Password</label>
+                            <label for="userPasswordConfirm" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Confirm Password</label>
                             <input type="password" id="userPasswordConfirm" name="passwordConfirm" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-cyan-500 focus:border-cyan-500">
                         </div>
                     </div>
                     
                     <div class="flex justify-end space-x-4">
-                        <button type="button" onclick="closeUserModal()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <button type="button" onclick="closeUserModal()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                             Cancel
                         </button>
                         <button type="submit" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">

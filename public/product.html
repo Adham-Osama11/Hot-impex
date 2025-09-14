@@ -6,6 +6,30 @@
     <title>4K UHD Generator - HOT IMPEX</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar styles for better mobile experience */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Line clamp utility for text truncation */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Smooth scrolling for horizontal container */
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+    </style>
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
@@ -927,7 +951,7 @@
         </div>
 
         <!-- Related Products -->
-        <section class="mt-20"  style="margin: 0px 200px;">
+        <section class="mt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-4 sm:gap-0">
                 <div class="relative">
                     <h2 class="text-4xl sm:text-5xl font-black text-gray-800 tracking-tight relative z-10">
@@ -945,93 +969,11 @@
                     </svg>
                 </a>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-                <!-- Related Product 1 -->
-                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
-                    <div class="relative bg-gradient-to-br from-purple-50 to-pink-50 p-8 h-72">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
-                        <div class="flex items-center justify-center h-full relative z-10">
-                            <img src="assets/images/Products/Av distribution/Dvi-d Male (24 1 Pin) to HDMI Female Adapter.jpg" alt="4K HDMI Splitter" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-purple-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-purple-600 transition-colors duration-300">4K HDMI Splitter</h3>
-                        <div class="flex items-center justify-between">
-                            <p class="text-purple-600 font-black text-xl">EGP 899.00</p>
-                            <button class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Related Product 2 -->
-                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
-                    <div class="relative bg-gradient-to-br from-emerald-50 to-teal-50 p-8 h-72">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-200 to-teal-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
-                        <div class="flex items-center justify-center h-full relative z-10">
-                            <img src="assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg" alt="4K HDMI Matrix" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-emerald-600 transition-colors duration-300">4K HDMI Matrix</h3>
-                        <div class="flex items-center justify-between">
-                            <p class="text-emerald-600 font-black text-xl">EGP 1,999.00</p>
-                            <button class="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Related Product 3 -->
-                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
-                    <div class="relative bg-gradient-to-br from-blue-50 to-cyan-50 p-8 h-72">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-200 to-cyan-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
-                        <div class="flex items-center justify-center h-full relative z-10">
-                            <img src="assets/images/Products/Av distribution/4K UHD GENRATOR.jpg" alt="HDMI Extender" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-blue-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-blue-600 transition-colors duration-300">HDMI Extender Kit</h3>
-                        <div class="flex items-center justify-between">
-                            <p class="text-blue-600 font-black text-xl">EGP 1,249.00</p>
-                            <button class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Related Product 4 -->
-                <div class="group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200">
-                    <div class="relative bg-gradient-to-br from-orange-50 to-red-50 p-8 h-72">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-200 to-red-200 rounded-full opacity-30 transform translate-x-10 -translate-y-10 group-hover:scale-125 transition-transform duration-500"></div>
-                        <div class="flex items-center justify-center h-full relative z-10">
-                            <img src="assets/images/Products/Av distribution/4K UHD GENRATOR-2.jpg" alt="HDMI Switcher" class="max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-orange-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-gray-800 text-xl mb-3 group-hover:text-orange-600 transition-colors duration-300">HDMI Switcher</h3>
-                        <div class="flex items-center justify-between">
-                            <p class="text-orange-600 font-black text-xl">EGP 649.00</p>
-                            <button class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+            <div id="related-products-grid" class="flex overflow-x-auto gap-4 pb-4 scrollbar-hide sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
+                <!-- Loading state -->
+                <div class="flex-shrink-0 w-full sm:col-span-full text-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+                    <p class="text-gray-600 mt-2">Loading related products...</p>
                 </div>
             </div>
         </section>
@@ -1485,6 +1427,202 @@
             });
         }
 
+        // Load and display related products
+        async function loadRelatedProducts(currentProduct) {
+            console.log('Loading related products for:', currentProduct);
+            
+            try {
+                // Try API first
+                const response = await fetch('/api/products');
+                let allProducts = [];
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        allProducts = data.data.products;
+                    }
+                } else {
+                    // Fallback to local products data
+                    if (window.products && Array.isArray(window.products)) {
+                        allProducts = window.products;
+                    }
+                }
+
+                if (allProducts.length === 0) {
+                    console.log('No products available for related products display');
+                    return;
+                }
+
+                // Filter related products
+                let relatedProducts = getRelatedProducts(currentProduct, allProducts);
+                
+                // Display related products
+                displayRelatedProducts(relatedProducts);
+                
+            } catch (error) {
+                console.error('Error loading related products:', error);
+                // Hide loading state and show error or empty message
+                const grid = document.getElementById('related-products-grid');
+                if (grid) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">Unable to load related products</p></div>';
+                }
+            }
+        }
+
+        // Get related products based on current product
+        function getRelatedProducts(currentProduct, allProducts) {
+            const maxRelatedProducts = 4;
+            let relatedProducts = [];
+
+            // First, try to get products from the same category
+            const sameCategory = allProducts.filter(product => 
+                product.id !== currentProduct.id && 
+                (product.category === currentProduct.category || 
+                 product.categorySlug === currentProduct.categorySlug ||
+                 product.categorySlug === currentProduct.category)
+            );
+
+            // Add products from same category first
+            relatedProducts = [...sameCategory.slice(0, maxRelatedProducts)];
+
+            // If we need more products, add random products from other categories
+            if (relatedProducts.length < maxRelatedProducts) {
+                const otherProducts = allProducts.filter(product => 
+                    product.id !== currentProduct.id && 
+                    !relatedProducts.some(rp => rp.id === product.id)
+                );
+                
+                // Shuffle and add remaining products
+                const shuffled = otherProducts.sort(() => 0.5 - Math.random());
+                const needed = maxRelatedProducts - relatedProducts.length;
+                relatedProducts = [...relatedProducts, ...shuffled.slice(0, needed)];
+            }
+
+            return relatedProducts.slice(0, maxRelatedProducts);
+        }
+
+        // Create a product card for related products using the same style as shop
+        function createRelatedProductCard(product) {
+            const productPrice = parseFloat(product.price) || 0;
+            const originalPrice = product.originalPrice ? parseFloat(product.originalPrice) : null;
+            const currency = product.currency || 'EGP';
+            const isOnSale = originalPrice && originalPrice > productPrice;
+            
+            // Check stock status - product is in stock if inStock is true AND stockQuantity > 0
+            const isInStock = product.inStock && (product.stockQuantity === undefined || product.stockQuantity > 0);
+            const stockQuantity = product.stockQuantity || 0;
+            
+            // Handle image URL
+            let imageUrl = product.mainImage || product.image;
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                // For products with full path already in mainImage
+                if (!imageUrl.startsWith('assets/')) {
+                    imageUrl = `assets/images/Products/${imageUrl}`;
+                }
+            }
+            if (!imageUrl) {
+                imageUrl = 'assets/images/logos/logo.png'; // Use logo as fallback
+            }
+
+            // Determine the gradient colors based on product index or category
+            const gradients = [
+                { bg: 'from-purple-50 to-pink-50', accent: 'from-purple-200 to-pink-200', text: 'text-purple-600', button: 'from-purple-500 to-pink-500' },
+                { bg: 'from-emerald-50 to-teal-50', accent: 'from-emerald-200 to-teal-200', text: 'text-emerald-600', button: 'from-emerald-500 to-teal-500' },
+                { bg: 'from-blue-50 to-cyan-50', accent: 'from-blue-200 to-cyan-200', text: 'text-blue-600', button: 'from-blue-500 to-cyan-500' },
+                { bg: 'from-orange-50 to-red-50', accent: 'from-orange-200 to-red-200', text: 'text-orange-600', button: 'from-orange-500 to-red-500' }
+            ];
+            
+            // Use a hash of product ID to consistently assign colors
+            const colorIndex = Math.abs(product.id.toString().split('').reduce((a, b) => (a << 5) - a + b.charCodeAt(0), 0)) % gradients.length;
+            const gradient = gradients[colorIndex];
+
+            // Apply out of stock styling and responsive card sizing
+            const cardClasses = `group bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200 flex-shrink-0 w-64 sm:w-full sm:min-w-[280px] ${!isInStock ? 'opacity-90' : ''}`;
+            const imageClasses = `max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500 ${!isInStock ? 'opacity-70' : ''}`;
+
+            return `
+                <a href="product.html?product=${product.id}" class="${cardClasses}" onclick="${!isInStock ? 'event.preventDefault(); alert(\'This product is currently out of stock.\'); return false;' : ''}">
+                    <div class="relative bg-gradient-to-br ${gradient.bg} p-4 sm:p-6 h-48 sm:h-64 flex items-center justify-center">
+                        <div class="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${gradient.accent} rounded-full opacity-30 transform translate-x-6 sm:translate-x-8 -translate-y-6 sm:-translate-y-8 group-hover:scale-125 transition-transform duration-500"></div>
+                        <div class="w-full h-full flex items-center justify-center relative z-10">
+                            <img src="${imageUrl}" 
+                                 alt="${product.name}" 
+                                 class="${imageClasses} max-w-[70%] sm:max-w-[80%] max-h-[70%] sm:max-h-[80%]"
+                                 onerror="this.src='assets/images/logos/logo.png'">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <!-- Out of Stock Badge -->
+                        ${!isInStock ? `
+                            <div class="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full z-50">
+                                Out of Stock
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Product badges -->
+                        ${product.featured ? '<span class="absolute top-2 left-2 sm:top-3 sm:left-3 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full z-50">FEATURED</span>' : ''}
+                        ${product.bestSeller ? '<span class="absolute top-2 left-2 sm:top-3 sm:left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full z-50">BEST SELLER</span>' : ''}
+                        ${isOnSale ? '<span class="absolute top-2 left-2 sm:top-3 sm:left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-50">SALE</span>' : ''}
+                    </div>
+                    <div class="p-3 sm:p-4">
+                        <h3 class="font-bold text-gray-800 text-base sm:text-lg mb-2 group-hover:${gradient.text} transition-colors duration-300 line-clamp-2 ${!isInStock ? 'text-gray-500' : ''}" title="${product.name}">${product.name}</h3>
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col min-w-0 flex-1">
+                                ${isOnSale ? `<span class="text-xs sm:text-sm text-gray-500 line-through">${currency} ${originalPrice.toFixed(2)}</span>` : ''}
+                                <p class="${isInStock ? gradient.text : 'text-gray-500'} font-black text-base sm:text-lg">${currency} ${productPrice.toFixed(2)}</p>
+                                ${!isInStock ? `
+                                    <div class="flex flex-col">
+                                        <span class="text-red-600 text-xs font-medium">Unavailable</span>
+                                        ${stockQuantity !== undefined ? `<span class="text-gray-500 text-xs">Stock: ${stockQuantity}</span>` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="ml-2 sm:ml-3 flex-shrink-0">
+                                ${isInStock ? `
+                                    <button onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', 1);" 
+                                            class="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-r ${gradient.button} rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-2 sm:translate-x-3 group-hover:translate-x-0 transition-all duration-300"
+                                            title="Add to Cart">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                    </button>
+                                ` : `
+                                    <button class="w-8 h-8 sm:w-9 sm:h-9 bg-gray-400 rounded-full flex items-center justify-center text-white cursor-not-allowed"
+                                            title="Out of Stock">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }
+
+        // Display related products
+        function displayRelatedProducts(relatedProducts) {
+            const grid = document.getElementById('related-products-grid');
+            if (!grid) {
+                console.error('Related products grid not found');
+                return;
+            }
+
+            if (relatedProducts.length === 0) {
+                grid.innerHTML = '<div class="flex-shrink-0 w-full sm:col-span-full text-center py-8"><p class="text-gray-600">No related products found</p></div>';
+                return;
+            }
+
+            // Generate HTML for all related products
+            const productsHTML = relatedProducts.map(product => createRelatedProductCard(product)).join('');
+            
+            // Update the grid
+            grid.innerHTML = productsHTML;
+            
+            console.log(`Displayed ${relatedProducts.length} related products`);
+        }
+
         // Initialize product page
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('Product page loaded - checking elements...');
@@ -1519,6 +1657,9 @@
             const product = await fetchProduct(productId);
             if (product) {
                 populateProductData(product);
+                
+                // Load related products
+                loadRelatedProducts(product);
                 
                 // Set up quantity controls after product is loaded
                 const qtyMinusTop = document.getElementById('qty-minus-top');

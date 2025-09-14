@@ -3829,9 +3829,9 @@ async function handleProfileUpdate(e) {
     
     const formData = new FormData(e.target);
     const profileData = {
-        firstName: formData.get('firstName').trim(),
-        lastName: formData.get('lastName').trim(),
-        phone: formData.get('phone').trim()
+        firstName: formData.get('firstName')?.trim() || '',
+        lastName: formData.get('lastName')?.trim() || '',
+        phone: formData.get('phone')?.trim() || ''
     };
     
     // Validate required fields
@@ -3850,10 +3850,16 @@ async function handleProfileUpdate(e) {
         showLoading();
         const token = localStorage.getItem('hotimpex-token');
         
+        if (!token) {
+            showError('Please log in to update your profile');
+            return;
+        }
+        
         const response = await APIService.request('/users/profile', {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(profileData)
         });
@@ -3864,11 +3870,17 @@ async function handleProfileUpdate(e) {
             localStorage.setItem('hotimpex-user', JSON.stringify(response.data.user));
             cancelEdit();
         } else {
-            showError(response.message || 'Failed to update profile');
+            // Handle validation errors
+            if (response.errors && Array.isArray(response.errors)) {
+                const errorMessages = response.errors.map(error => error.msg).join(', ');
+                showError(errorMessages);
+            } else {
+                showError(response.message || 'Failed to update profile');
+            }
         }
     } catch (error) {
         console.error('Error updating profile:', error);
-        showError('Failed to update profile');
+        showError('Failed to update profile. Please try again.');
     } finally {
         hideLoading();
     }
@@ -3880,9 +3892,9 @@ async function handlePasswordChange(e) {
     
     const formData = new FormData(e.target);
     const passwordData = {
-        currentPassword: formData.get('currentPassword'),
-        newPassword: formData.get('newPassword'),
-        confirmPassword: formData.get('confirmPassword')
+        currentPassword: formData.get('currentPassword')?.trim() || '',
+        newPassword: formData.get('newPassword')?.trim() || '',
+        confirmPassword: formData.get('confirmPassword')?.trim() || ''
     };
     
     // Validate fields
@@ -3905,10 +3917,16 @@ async function handlePasswordChange(e) {
         showLoading();
         const token = localStorage.getItem('hotimpex-token');
         
+        if (!token) {
+            showError('Please log in to change your password');
+            return;
+        }
+        
         const response = await APIService.request('/users/change-password', {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 currentPassword: passwordData.currentPassword,
@@ -3920,11 +3938,17 @@ async function handlePasswordChange(e) {
             showSuccess('Password changed successfully!');
             document.getElementById('password-form').reset();
         } else {
-            showError(response.message || 'Failed to change password');
+            // Handle validation errors
+            if (response.errors && Array.isArray(response.errors)) {
+                const errorMessages = response.errors.map(error => error.msg).join(', ');
+                showError(errorMessages);
+            } else {
+                showError(response.message || 'Failed to change password');
+            }
         }
     } catch (error) {
         console.error('Error changing password:', error);
-        showError('Failed to change password');
+        showError('Failed to change password. Please try again.');
     } finally {
         hideLoading();
     }

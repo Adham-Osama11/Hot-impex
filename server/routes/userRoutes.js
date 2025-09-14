@@ -34,10 +34,25 @@ router.post('/login', [
 router.get('/profile', auth, getUserProfile);
 
 // @route   PUT /api/users/profile
-router.put('/profile', auth, updateUserProfile);
+router.put('/profile', auth, [
+    body('firstName').trim().notEmpty().withMessage('First name is required'),
+    body('lastName').trim().notEmpty().withMessage('Last name is required'),
+    body('phone').optional().custom(value => {
+        if (value && value.trim()) {
+            // Allow international formats, local formats, and various separators
+            if (!/^\+?[\d\s\-\(\)]{10,}$/.test(value.trim())) {
+                throw new Error('Please enter a valid phone number');
+            }
+        }
+        return true;
+    })
+], updateUserProfile);
 
 // @route   PUT /api/users/change-password
-router.put('/change-password', auth, changePassword);
+router.put('/change-password', auth, [
+    body('currentPassword').notEmpty().withMessage('Current password is required'),
+    body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters long')
+], changePassword);
 
 // Cart Routes
 // @route   GET /api/users/cart

@@ -189,10 +189,20 @@ const getUserProfile = async (req, res) => {
 // @access  Private
 const updateUserProfile = async (req, res) => {
     try {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Validation errors',
+                errors: errors.array()
+            });
+        }
+
         const { firstName, lastName, phone } = req.body;
 
-        // Validate required fields
-        if (!firstName || !lastName) {
+        // Validate required fields (additional check)
+        if (!firstName?.trim() || !lastName?.trim()) {
             return res.status(400).json({
                 status: 'error',
                 message: 'First name and last name are required'
@@ -227,7 +237,7 @@ const updateUserProfile = async (req, res) => {
             status: 'success',
             data: {
                 user: {
-                    id: updatedUser._id,
+                    id: updatedUser._id || updatedUser.id,
                     firstName: updatedUser.firstName,
                     lastName: updatedUser.lastName,
                     email: updatedUser.email,
@@ -236,9 +246,11 @@ const updateUserProfile = async (req, res) => {
                     createdAt: updatedUser.createdAt,
                     lastLoginAt: updatedUser.lastLoginAt
                 }
-            }
+            },
+            message: 'Profile updated successfully'
         });
     } catch (error) {
+        console.error('Error updating user profile:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error updating user profile',
@@ -252,9 +264,20 @@ const updateUserProfile = async (req, res) => {
 // @access  Private
 const changePassword = async (req, res) => {
     try {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Validation errors',
+                errors: errors.array()
+            });
+        }
+
         const { currentPassword, newPassword } = req.body;
 
-        if (!currentPassword || !newPassword) {
+        // Additional validation
+        if (!currentPassword?.trim() || !newPassword?.trim()) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Current password and new password are required'
@@ -301,6 +324,7 @@ const changePassword = async (req, res) => {
             message: 'Password updated successfully'
         });
     } catch (error) {
+        console.error('Error changing password:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error changing password',

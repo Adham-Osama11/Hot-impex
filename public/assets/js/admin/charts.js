@@ -40,8 +40,8 @@ class ChartManager {
                 data: {
                     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                     datasets: [{
-                        label: 'Sales',
-                        data: [1200, 1900, 3000, 2500, 2200, 3000, 4500],
+                        label: 'Revenue (EGP)',
+                        data: [0, 0, 0, 0, 0, 0, 0], // Will be updated with real data
                         borderColor: 'rgb(34, 197, 94)',
                         backgroundColor: 'rgba(34, 197, 94, 0.1)',
                         tension: 0.4,
@@ -131,22 +131,72 @@ class ChartManager {
         const orders = data.orders || {};
         const products = data.products || {};
         
-        // Update sales chart with recent sales data (mock data since we don't have time series)
+        console.log('Updating charts with data:', { orders, products });
+        
+        // Update sales chart with real weekly revenue trend data
         if (window.chartManager && window.chartManager.salesChartInstance) {
-            // Generate mock weekly data based on total revenue
-            const totalRevenue = orders.totalRevenue || 0;
-            const dailyAverage = totalRevenue / 30; // Assume 30 days
-            const mockWeeklyData = [
-                Math.round(dailyAverage * 0.8),
-                Math.round(dailyAverage * 1.2),
-                Math.round(dailyAverage * 1.5),
-                Math.round(dailyAverage * 1.1),
-                Math.round(dailyAverage * 0.9),
-                Math.round(dailyAverage * 1.3),
-                Math.round(dailyAverage * 1.6)
-            ];
+            const weeklyTrend = orders.weeklyRevenueTrend || [];
+            console.log('Weekly revenue trend:', weeklyTrend);
             
-            window.chartManager.salesChartInstance.data.datasets[0].data = mockWeeklyData;
+            if (weeklyTrend.length > 0) {
+                // Create labels and data from the actual trend data
+                const labels = [];
+                const salesData = [];
+                
+                // Sort by date to ensure proper order
+                const sortedTrend = weeklyTrend.sort((a, b) => new Date(a._id) - new Date(b._id));
+                
+                // Fill the last 7 days, using 0 for missing days
+                const today = new Date();
+                const last7Days = [];
+                
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateStr = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+                    last7Days.push(dateStr);
+                }
+                
+                // Create labels (day names) and data for the last 7 days
+                last7Days.forEach(dateStr => {
+                    const date = new Date(dateStr);
+                    const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                    labels.push(dayName);
+                    
+                    // Find revenue for this date
+                    const dayData = sortedTrend.find(item => item._id === dateStr);
+                    const revenue = dayData ? Math.round(dayData.dailyRevenue) : 0;
+                    salesData.push(revenue);
+                });
+                
+                console.log('Chart labels:', labels);
+                console.log('Chart data:', salesData);
+                
+                // Update the chart
+                window.chartManager.salesChartInstance.data.labels = labels;
+                window.chartManager.salesChartInstance.data.datasets[0].data = salesData;
+                window.chartManager.salesChartInstance.data.datasets[0].label = 'Daily Revenue ($)';
+            } else {
+                // Fallback to mock data if no real data available
+                const totalRevenue = orders.totalRevenue || 0;
+                const dailyAverage = totalRevenue / 30; // Assume 30 days
+                const mockWeeklyData = [
+                    Math.round(dailyAverage * 0.8),
+                    Math.round(dailyAverage * 1.2),
+                    Math.round(dailyAverage * 1.5),
+                    Math.round(dailyAverage * 1.1),
+                    Math.round(dailyAverage * 0.9),
+                    Math.round(dailyAverage * 1.3),
+                    Math.round(dailyAverage * 1.6)
+                ];
+                
+                window.chartManager.salesChartInstance.data.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                window.chartManager.salesChartInstance.data.datasets[0].data = mockWeeklyData;
+                window.chartManager.salesChartInstance.data.datasets[0].label = 'Daily Revenue (Estimated)';
+                
+                console.log('Using fallback mock data:', mockWeeklyData);
+            }
+            
             window.chartManager.salesChartInstance.update('none'); // Disable animation to prevent resize issues
         }
 

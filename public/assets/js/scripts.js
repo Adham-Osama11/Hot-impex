@@ -3728,6 +3728,30 @@ function updateProfileUI(user) {
         });
     }
     
+    // Update spending statistics
+    if (user.spending) {
+        const totalSpentElement = document.getElementById('total-spent');
+        const totalOrdersElement = document.getElementById('total-orders');
+        const completedOrdersElement = document.getElementById('completed-orders');
+        const avgOrderValueElement = document.getElementById('avg-order-value');
+        
+        if (totalSpentElement) {
+            totalSpentElement.textContent = `${user.spending.totalSpent} ${user.spending.currency}`;
+        }
+        
+        if (totalOrdersElement) {
+            totalOrdersElement.textContent = user.spending.totalOrders.toString();
+        }
+        
+        if (completedOrdersElement) {
+            completedOrdersElement.textContent = user.spending.completedOrders.toString();
+        }
+        
+        if (avgOrderValueElement) {
+            avgOrderValueElement.textContent = `${user.spending.averageOrderValue} ${user.spending.currency}`;
+        }
+    }
+    
     // Form fields
     const firstNameInput = document.getElementById('firstName');
     const lastNameInput = document.getElementById('lastName');

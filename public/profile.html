@@ -434,9 +434,36 @@
                         <p class="text-gray-600 dark:text-gray-400 mb-4" id="profile-email">Loading...</p>
                         
                         <!-- Member Since -->
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
                             <p class="text-sm text-gray-600 dark:text-gray-400">Member since</p>
                             <p class="text-sm font-medium text-gray-900 dark:text-white" id="member-since">Loading...</p>
+                        </div>
+
+                        <!-- Spending Statistics -->
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Your Spending</h3>
+                            <div class="space-y-3">
+                                <!-- Total Spent -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Total Spent:</span>
+                                    <span class="font-bold text-blue-600 dark:text-blue-400" id="total-spent">0 EGP</span>
+                                </div>
+                                <!-- Total Orders -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Total Orders:</span>
+                                    <span class="font-semibold text-gray-900 dark:text-white" id="total-orders">0</span>
+                                </div>
+                                <!-- Completed Orders -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Completed Orders:</span>
+                                    <span class="font-semibold text-green-600 dark:text-green-400" id="completed-orders">0</span>
+                                </div>
+                                <!-- Average Order Value -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Avg Order Value:</span>
+                                    <span class="font-semibold text-purple-600 dark:text-purple-400" id="avg-order-value">0 EGP</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

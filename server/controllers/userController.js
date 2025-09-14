@@ -160,22 +160,48 @@ const getUserProfile = async (req, res) => {
             });
         }
 
+        // Get user's order history to calculate spending statistics
+        const userOrders = await hybridDb.findOrdersByUserId(req.user.id);
+        
+        // Calculate spending statistics
+        const completedOrders = userOrders.filter(order => 
+            order.status === 'delivered' || order.status === 'completed'
+        );
+        
+        const totalSpent = completedOrders.reduce((sum, order) => {
+            const orderTotal = order.pricing?.total || order.totalAmount || 0;
+            return sum + parseFloat(orderTotal);
+        }, 0);
+        
+        const totalOrders = userOrders.length;
+        const completedOrdersCount = completedOrders.length;
+        const averageOrderValue = completedOrdersCount > 0 ? totalSpent / completedOrdersCount : 0;
+
         res.status(200).json({
             status: 'success',
             data: {
                 user: {
-                    id: user._id,
+                    id: user._id || user.id,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
                     phone: user.phone,
                     role: user.role,
                     createdAt: user.createdAt,
-                    lastLoginAt: user.lastLoginAt
+                    lastLoginAt: user.lastLoginAt,
+                    // Add spending statistics
+                    spending: {
+                        totalSpent: parseFloat(totalSpent.toFixed(2)),
+                        totalOrders: totalOrders,
+                        completedOrders: completedOrdersCount,
+                        averageOrderValue: parseFloat(averageOrderValue.toFixed(2)),
+                        currency: 'EGP'
+                    }
                 }
             }
         });
     } catch (error) {
+        console.error('Error fetching user profile:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error fetching user profile',

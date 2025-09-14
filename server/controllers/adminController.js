@@ -50,22 +50,68 @@ const getAllOrders = async (req, res) => {
 // @desc    Get all users (Admin)
 // @route   GET /api/admin/users
 // @access  Private (Admin only)
+// Get all users
 const getAllUsers = async (req, res) => {
     try {
-        const { role, limit, page = 1 } = req.query;
+        const { page = 1, limit = 20, role, sortBy = 'createdAt', sortOrder = 'desc' } = req.query;
         
-        const options = { role, limit, page };
+        const options = {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            sortBy,
+            sortOrder
+        };
+        
+        if (role && role !== 'all') {
+            options.role = role;
+        }
+        
         const result = await hybridDb.getAllUsers(options);
-
+        
+        // Calculate totalSpent for each user
+        const usersWithSpending = await Promise.all(
+            result.users.map(async (user) => {
+                try {
+                    // Get user's order history
+                    const userOrders = await hybridDb.findOrdersByUserId(user._id || user.id);
+                    
+                    // Calculate spending for completed orders
+                    const completedOrders = userOrders.filter(order => 
+                        order.status === 'delivered' || order.status === 'completed'
+                    );
+                    
+                    const totalSpent = completedOrders.reduce((sum, order) => {
+                        const orderTotal = order.pricing?.total || order.totalAmount || 0;
+                        return sum + parseFloat(orderTotal);
+                    }, 0);
+                    
+                    return {
+                        ...user.toObject ? user.toObject() : user,
+                        totalSpent: parseFloat(totalSpent.toFixed(2))
+                    };
+                } catch (error) {
+                    console.error(`Error calculating spending for user ${user._id || user.id}:`, error);
+                    return {
+                        ...user.toObject ? user.toObject() : user,
+                        totalSpent: 0
+                    };
+                }
+            })
+        );
+        
         res.status(200).json({
             status: 'success',
-            data: result
+            data: {
+                ...result,
+                users: usersWithSpending
+            }
         });
     } catch (error) {
-        res.status(500).json({
-            status: 'error',
-            message: 'Error fetching users',
-            error: error.message
+        console.error('Error fetching users:', error);
+        res.status(500).json({ 
+            status: 'error', 
+            message: 'Failed to fetch users',
+            error: error.message 
         });
     }
 };
@@ -672,6 +718,120 @@ const getCurrentAdmin = async (req, res) => {
     }
 };
 
+// @desc    Create test orders for development
+// @route   POST /api/admin/test-orders
+// @access  Private (Admin only)
+const createTestOrders = async (req, res) => {
+    try {
+        // Only allow in development mode
+        if (process.env.NODE_ENV === 'production') {
+            return res.status(403).json({
+                status: 'error',
+                message: 'Test order creation not allowed in production'
+            });
+        }
+        
+        const { userId } = req.body;
+        
+        if (!userId) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'User ID is required'
+            });
+        }
+        
+        // Create sample test orders
+        const testOrders = [
+            {
+                user: userId,
+                orderNumber: `HOT${Date.now()}1`,
+                items: [{
+                    productId: 'test-product-1',
+                    productName: 'Test Product 1',
+                    price: 150,
+                    quantity: 2,
+                    total: 300
+                }],
+                customerInfo: {
+                    name: 'Test User',
+                    email: 'test@example.com',
+                    phone: '+1234567890',
+                    address: '123 Test Street, Test City'
+                },
+                shippingAddress: {
+                    firstName: 'Test',
+                    lastName: 'User',
+                    street: '123 Test Street',
+                    city: 'Test City',
+                    country: 'Egypt'
+                },
+                pricing: {
+                    subtotal: 300,
+                    shipping: 0,
+                    tax: 42,
+                    total: 342
+                },
+                paymentMethod: 'cash_on_delivery',
+                status: 'delivered',
+                currency: 'EGP'
+            },
+            {
+                user: userId,
+                orderNumber: `HOT${Date.now()}2`,
+                items: [{
+                    productId: 'test-product-2',
+                    productName: 'Test Product 2',
+                    price: 500,
+                    quantity: 1,
+                    total: 500
+                }],
+                customerInfo: {
+                    name: 'Test User',
+                    email: 'test@example.com',
+                    phone: '+1234567890',
+                    address: '123 Test Street, Test City'
+                },
+                shippingAddress: {
+                    firstName: 'Test',
+                    lastName: 'User',
+                    street: '123 Test Street',
+                    city: 'Test City',
+                    country: 'Egypt'
+                },
+                pricing: {
+                    subtotal: 500,
+                    shipping: 50,
+                    tax: 70,
+                    total: 620
+                },
+                paymentMethod: 'cash_on_delivery',
+                status: 'delivered',
+                currency: 'EGP'
+            }
+        ];
+        
+        const createdOrders = [];
+        for (const orderData of testOrders) {
+            const order = await hybridDb.createOrder(orderData);
+            createdOrders.push(order);
+        }
+        
+        res.status(201).json({
+            status: 'success',
+            message: `Created ${createdOrders.length} test orders`,
+            data: { orders: createdOrders }
+        });
+        
+    } catch (error) {
+        console.error('Error creating test orders:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error creating test orders',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getDashboardStats,
     getAllOrders,
@@ -688,5 +848,6 @@ module.exports = {
     deleteProduct,
     getSettings,
     updateSettings,
-    getCurrentAdmin
+    getCurrentAdmin,
+    createTestOrders
 };

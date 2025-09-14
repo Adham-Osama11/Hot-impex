@@ -17,7 +17,8 @@ const {
     deleteProduct,
     getSettings,
     updateSettings,
-    getCurrentAdmin
+    getCurrentAdmin,
+    createTestOrders
 } = require('../controllers/adminController');
 
 // Apply admin authentication to all routes
@@ -70,5 +71,8 @@ router.get('/settings', getSettings);
 
 // @route   PUT /api/admin/settings
 router.put('/settings', updateSettings);
+
+// @route   POST /api/admin/test-orders
+router.post('/test-orders', createTestOrders);
 
 module.exports = router;

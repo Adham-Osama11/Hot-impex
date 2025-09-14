@@ -277,42 +277,39 @@ const getOrderById = async (req, res) => {
 };
 
 // @desc    Update order status
+// @desc    Update order status
 // @route   PUT /api/admin/orders/:id/status
 // @access  Private (Admin only)
 const updateOrderStatus = async (req, res) => {
     try {
         const { status } = req.body;
-        const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+        const validStatuses = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'];
         
         if (!validStatuses.includes(status)) {
             return res.status(400).json({
                 status: 'error',
-                message: 'Invalid status'
+                message: 'Invalid status',
+                validStatuses
             });
         }
 
-        const ordersData = await hybridDb.getOrders();
-        const orderIndex = ordersData.orders.findIndex(o => o.id === req.params.id);
+        const updatedOrder = await hybridDb.updateOrderStatus(req.params.id, status);
         
-        if (orderIndex === -1) {
+        if (!updatedOrder) {
             return res.status(404).json({
                 status: 'error',
                 message: 'Order not found'
             });
         }
 
-        ordersData.orders[orderIndex].status = status;
-        ordersData.orders[orderIndex].updatedAt = new Date().toISOString();
-        
-        await hybridDb.saveOrders(ordersData);
-
         res.status(200).json({
             status: 'success',
             data: {
-                order: ordersData.orders[orderIndex]
+                order: updatedOrder
             }
         });
     } catch (error) {
+        console.error('Error updating order status:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error updating order status',

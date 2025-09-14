@@ -198,7 +198,7 @@ const getOrder = async (req, res) => {
 };
 
 // @desc    Update order status
-// @route   PUT /api/orders/:id/status
+// @route   PATCH /api/orders/:id/status
 // @access  Private (Admin only)
 const updateOrderStatus = async (req, res) => {
     try {
@@ -228,6 +228,7 @@ const updateOrderStatus = async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Error updating order status:', error);
         res.status(500).json({
             status: 'error',
             message: 'Error updating order status',

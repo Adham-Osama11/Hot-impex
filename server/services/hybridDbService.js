@@ -348,6 +348,33 @@ class HybridDatabaseService {
         }
     }
 
+    async updateOrderStatus(orderId, status) {
+        if (this.useMongoDb) {
+            return await mongoService.updateOrderStatus(orderId, status);
+        } else {
+            const data = await fileService.getOrders();
+            const orderIndex = data.orders.findIndex(order => order.id === orderId);
+            if (orderIndex === -1) {
+                throw new Error('Order not found');
+            }
+            
+            data.orders[orderIndex] = { 
+                ...data.orders[orderIndex], 
+                status,
+                updatedAt: new Date().toISOString()
+            };
+            await fileService.saveOrders(data);
+            return data.orders[orderIndex];
+        }
+    }
+
+    async saveOrders(data) {
+        if (!this.useMongoDb) {
+            return await fileService.saveOrders(data);
+        }
+        throw new Error('saveOrders method not available for MongoDB');
+    }
+
     getConnectionInfo() {
         return {
             type: this.useMongoDb ? 'MongoDB' : 'File-based JSON',

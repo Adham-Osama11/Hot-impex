@@ -16,7 +16,10 @@ class OrdersController {
         try {
             UIHelpers.showLoadingState('orders');
             const ordersData = await this.api.getAllOrders({ limit: 50 });
-            this.currentOrders = ordersData.data.orders;
+            console.log('Orders data received:', ordersData);
+            
+            // Handle different response structures
+            this.currentOrders = ordersData.data?.orders || ordersData.data || [];
             this.updateTable(this.currentOrders);
             UIHelpers.hideLoadingState();
         } catch (error) {
@@ -58,6 +61,7 @@ class OrdersController {
                             <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
                             <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
                             <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            <option value="refunded" ${order.status === 'refunded' ? 'selected' : ''}>Refunded</option>
                         </select>
                     </td>
                     <td class="px-6 py-4 text-right">

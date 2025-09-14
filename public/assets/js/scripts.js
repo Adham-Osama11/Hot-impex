@@ -855,6 +855,116 @@ function initializeMobileMenu() {
             document.body.style.overflow = '';
         });
     }
+    
+    // Initialize authentication buttons
+    initializeMobileAuth();
+}
+
+// Mobile Authentication Buttons
+function initializeMobileAuth() {
+    const mobileLoginBtn = document.getElementById('mobile-login-btn');
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    const mobileProfileLink = document.getElementById('mobile-profile-link');
+    const mobileOrdersLink = document.getElementById('mobile-orders-link');
+    
+    // Update UI based on authentication state
+    updateMobileAuthUI();
+    
+    // Add event listeners
+    if (mobileLoginBtn) {
+        mobileLoginBtn.addEventListener('click', () => {
+            // Close mobile menu first
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu) {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+            
+            // Open login/register modal
+            const loginModal = document.getElementById('login-modal');
+            if (loginModal) {
+                loginModal.classList.remove('hidden');
+                loginModal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+    
+    if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', () => {
+            AuthService.logout();
+        });
+    }
+    
+    // Hide profile and orders links for non-authenticated users
+    if (mobileProfileLink) {
+        mobileProfileLink.addEventListener('click', (e) => {
+            if (!AuthService.isLoggedIn()) {
+                e.preventDefault();
+                // Show login modal instead
+                const loginModal = document.getElementById('login-modal');
+                if (loginModal) {
+                    loginModal.classList.remove('hidden');
+                    loginModal.classList.add('flex');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+        });
+    }
+    
+    if (mobileOrdersLink) {
+        mobileOrdersLink.addEventListener('click', (e) => {
+            if (!AuthService.isLoggedIn()) {
+                e.preventDefault();
+                // Show login modal instead
+                const loginModal = document.getElementById('login-modal');
+                if (loginModal) {
+                    loginModal.classList.remove('hidden');
+                    loginModal.classList.add('flex');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+        });
+    }
+}
+
+// Update Mobile Auth UI
+function updateMobileAuthUI() {
+    const mobileLoginBtn = document.getElementById('mobile-login-btn');
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    const mobileProfileLink = document.getElementById('mobile-profile-link');
+    const mobileOrdersLink = document.getElementById('mobile-orders-link');
+    
+    const isLoggedIn = AuthService.isLoggedIn();
+    
+    if (mobileLoginBtn) {
+        mobileLoginBtn.style.display = isLoggedIn ? 'none' : 'block';
+    }
+    
+    if (mobileLogoutBtn) {
+        mobileLogoutBtn.style.display = isLoggedIn ? 'block' : 'none';
+    }
+    
+    // Show profile and orders links for authenticated users, but gray them out for non-authenticated
+    if (mobileProfileLink) {
+        if (isLoggedIn) {
+            mobileProfileLink.style.opacity = '1';
+            mobileProfileLink.style.pointerEvents = 'auto';
+        } else {
+            mobileProfileLink.style.opacity = '0.5';
+            mobileProfileLink.style.pointerEvents = 'auto'; // Keep clickable to show login modal
+        }
+    }
+    
+    if (mobileOrdersLink) {
+        if (isLoggedIn) {
+            mobileOrdersLink.style.opacity = '1';
+            mobileOrdersLink.style.pointerEvents = 'auto';
+        } else {
+            mobileOrdersLink.style.opacity = '0.5';
+            mobileOrdersLink.style.pointerEvents = 'auto'; // Keep clickable to show login modal
+        }
+    }
 }
 
 // Carousel Functionality
@@ -3384,6 +3494,9 @@ class AuthUI {
                 loggedIn.classList.add('hidden');
             }
         }
+
+        // Update mobile authentication UI
+        updateMobileAuthUI();
     }
 
     static updateAdminLinkVisibility(user) {

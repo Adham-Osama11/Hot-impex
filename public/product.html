@@ -16,6 +16,9 @@
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
         if (isDarkMode) {
             document.documentElement.classList.add('dark');
+        } else {
+            // Ensure light mode is properly applied
+            document.documentElement.classList.remove('dark');
         }
     </script>
 </head>

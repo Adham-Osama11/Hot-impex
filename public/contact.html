@@ -17,6 +17,9 @@
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
         if (isDarkMode) {
             document.documentElement.classList.add('dark');
+        } else {
+            // Ensure light mode is properly applied
+            document.documentElement.classList.remove('dark');
         }
     </script>
 </head>
@@ -397,7 +400,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Page Header -->
             <div class="text-center mb-16">
-                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-6">
+                <h1 id="contact-heading" class="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-6">
                     Contact <span class="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">Us</span>
                 </h1>
                 <p class="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
@@ -590,9 +593,9 @@
                     <span class="text-lg font-semibold text-gray-800 dark:text-white">Subtotal:</span>
                     <span id="cart-total" class="text-2xl font-bold text-purple-600 dark:text-purple-400">0 EGP</span>
                 </div>
-                <button class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 font-bold text-lg">
+                <a href="checkout.html" class="block w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 font-bold text-lg text-center">
                     Proceed to Checkout
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -602,5 +605,25 @@
 
     <!-- JavaScript -->
     <script src="assets/js/scripts.js"></script>
+    <script>
+        // Contact form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contact-form');
+            
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData);
+                
+                // Show success message (you can implement actual form submission here)
+                showNotification('Message sent successfully! We\'ll get back to you soon.', 'success');
+                
+                // Reset form
+                contactForm.reset();
+            });
+        });
+    </script>
 </body>
 </html>

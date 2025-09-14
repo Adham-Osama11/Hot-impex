@@ -29,6 +29,18 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Theme initialization script - must run before body content -->
+    <script>
+        // Check for saved dark mode preference and apply immediately
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            // Ensure light mode is properly applied
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>

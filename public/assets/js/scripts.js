@@ -769,6 +769,11 @@ function initializeDarkMode() {
         html.classList.add('dark');
         updateDarkModeToggle(true);
         updateMobileDarkModeToggle(true);
+    } else {
+        // Ensure light mode is properly applied
+        html.classList.remove('dark');
+        updateDarkModeToggle(false);
+        updateMobileDarkModeToggle(false);
     }
     
     if (darkModeToggle) {

@@ -23,6 +23,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/css/admin-styles.css">
+    
+    <!-- Theme initialization script - must run before body content -->
+    <script>
+        // Check for saved dark mode preference and apply immediately
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            // Ensure light mode is properly applied
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
         <!-- JavaScript -->
     <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -1206,7 +1206,7 @@
             });
 
             // Calculate and update totals
-            const shipping = subtotal >= 1000 ? 0 : 50; // Free shipping over 1000 EGP
+            const shipping = 100; // Flat shipping fee
             const tax = Math.round(subtotal * 0.14); // 14% tax
             const total = subtotal + shipping + tax;
 

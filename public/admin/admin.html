@@ -182,7 +182,7 @@
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Total Sales</p>
                                 <p class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent" data-stat="total-sales">--</p>
-                                <p class="text-sm text-green-600 dark:text-green-400 mt-2 flex items-center">
+                                <p class="text-sm text-green-600 dark:text-green-400 mt-2 flex items-center" data-growth="sales">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                                     </svg>
@@ -203,7 +203,7 @@
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Total Orders</p>
                                 <p class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent" data-stat="total-orders">--</p>
-                                <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center">
+                                <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center" data-growth="orders">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                                     </svg>
@@ -224,7 +224,7 @@
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Products</p>
                                 <p class="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-500 bg-clip-text text-transparent" data-stat="total-products">--</p>
-                                <p class="text-sm text-teal-600 dark:text-teal-400 mt-2">Loading...</p>
+                                <p class="text-sm text-teal-600 dark:text-teal-400 mt-2">In Stock: <span data-stat="in-stock">--</span></p>
                             </div>
                             <div class="w-16 h-16 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-2xl flex items-center justify-center shadow-lg">
                                 <svg class="w-8 h-8 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -240,7 +240,7 @@
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-400 mb-2">Customers</p>
                                 <p class="text-3xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent" data-stat="total-customers">--</p>
-                                <p class="text-sm text-orange-600 dark:text-orange-400 mt-2 flex items-center">
+                                <p class="text-sm text-orange-600 dark:text-orange-400 mt-2 flex items-center" data-growth="customers">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                                     </svg>
@@ -253,6 +253,74 @@
                                 </svg>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Stats Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Monthly Sales -->
+                    <div class="admin-card rounded-xl shadow-lg p-4 border border-white/20 dark:border-gray-700/20">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Monthly Sales</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white" data-stat="monthly-sales">--</p>
+                            </div>
+                            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Average Order Value -->
+                    <div class="admin-card rounded-xl shadow-lg p-4 border border-white/20 dark:border-gray-700/20">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Avg. Order Value</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white" data-stat="average-order">--</p>
+                            </div>
+                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completion Rate -->
+                    <div class="admin-card rounded-xl shadow-lg p-4 border border-white/20 dark:border-gray-700/20">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Completion Rate</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white" data-stat="completion-rate">--</p>
+                            </div>
+                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Last Updated -->
+                    <div class="admin-card rounded-xl shadow-lg p-4 border border-white/20 dark:border-gray-700/20">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Live Updates</p>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400" id="last-refresh-time">Loading...</p>
+                            </div>
+                            <div class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts Section -->
+                <div class="mb-8">
+                    <div id="dashboard-alerts" class="space-y-3">
+                        <p class="text-gray-500 text-center py-4">Loading alerts...</p>
                     </div>
                 </div>
 
@@ -283,8 +351,13 @@
 
                 <!-- Recent Activity -->
                 <div class="admin-card rounded-2xl shadow-xl p-8 border border-white/30 dark:border-gray-700/30">
-                    <h3 class="text-xl font-bold mb-6">Recent Activity</h3>
-                    <div class="space-y-4">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold">Recent Activity</h3>
+                        <div class="glass-effect rounded-lg px-3 py-1 text-sm">
+                            Live Feed
+                        </div>
+                    </div>
+                    <div id="recent-activities" class="space-y-4">
                         <div class="flex items-center justify-center p-8 text-gray-500 dark:text-gray-400">
                             <div class="text-center">
                                 <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">

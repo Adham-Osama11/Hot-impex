@@ -83,7 +83,7 @@ class DashboardController {
         }
         
         if (this.statsElements.totalCustomers) {
-            const totalUsers = users.customers || users.total || 0;
+            const totalUsers = users.total || 0;
             this.statsElements.totalCustomers.textContent = totalUsers.toLocaleString();
         }
 

@@ -161,7 +161,10 @@ class UsersController {
         
         if (addModal) {
             addModal.classList.add('hidden');
-            document.getElementById('userForm').reset();
+            const form = document.getElementById('userForm');
+            if (form) {
+                form.reset();
+            }
         }
         if (detailsModal) {
             detailsModal.classList.add('hidden');
@@ -377,10 +380,10 @@ class UsersController {
     /**
      * Close user details modal
      */
-    closeUserModal() {
+    closeUserDetailsModal() {
         const modal = document.getElementById('userDetailsModal');
         if (modal) {
-            modal.remove();
+            modal.classList.add('hidden');
         }
     }
 

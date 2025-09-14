@@ -771,6 +771,125 @@
     
     <!-- Custom Scripts -->
     <script src="../assets/js/admin.js"></script>
+    
+    <!-- Modal Control Functions -->
+    <script>
+        // Global functions for modal control - ensuring they work properly
+        function closeUserModal() {
+            const userModal = document.getElementById('userModal');
+            const userDetailsModal = document.getElementById('userDetailsModal');
+            
+            if (userModal) {
+                userModal.classList.add('hidden');
+                // Reset the form
+                const form = document.getElementById('userForm');
+                if (form) {
+                    form.reset();
+                }
+            }
+            
+            if (userDetailsModal) {
+                userDetailsModal.classList.add('hidden');
+            }
+        }
+
+        function closeUserDetailsModal() {
+            const userDetailsModal = document.getElementById('userDetailsModal');
+            if (userDetailsModal) {
+                userDetailsModal.classList.add('hidden');
+            }
+        }
+
+        function showAddUserModal() {
+            if (typeof usersController !== 'undefined' && usersController.showAddUserModal) {
+                usersController.showAddUserModal();
+            } else {
+                // Fallback implementation
+                const userModal = document.getElementById('userModal');
+                if (userModal) {
+                    // Reset form for new user
+                    document.getElementById('userModalTitle').textContent = 'Add New User';
+                    document.getElementById('userSubmitButtonText').textContent = 'Add User';
+                    document.getElementById('userForm').reset();
+                    document.getElementById('userId').value = '';
+                    
+                    // Set default role to customer
+                    document.getElementById('userRole').value = 'customer';
+                    
+                    // Show password fields for new users
+                    const passwordSection = document.getElementById('passwordSection');
+                    if (passwordSection) {
+                        passwordSection.style.display = 'grid';
+                    }
+                    
+                    const userPassword = document.getElementById('userPassword');
+                    const userPasswordConfirm = document.getElementById('userPasswordConfirm');
+                    if (userPassword) userPassword.required = true;
+                    if (userPasswordConfirm) userPasswordConfirm.required = true;
+                    
+                    // Show the modal
+                    userModal.classList.remove('hidden');
+                }
+            }
+        }
+
+        function editUserFromDetails() {
+            if (typeof usersController !== 'undefined' && usersController.editUserFromDetails) {
+                usersController.editUserFromDetails();
+            } else {
+                console.error('Users controller not available');
+            }
+        }
+
+        function viewUser(userId) {
+            if (typeof usersController !== 'undefined' && usersController.viewUser) {
+                usersController.viewUser(userId);
+            } else {
+                console.error('Users controller not available');
+            }
+        }
+
+        function deleteUser(userId) {
+            if (typeof usersController !== 'undefined' && usersController.deleteUser) {
+                usersController.deleteUser(userId);
+            } else {
+                console.error('Users controller not available');
+            }
+        }
+
+        // Order modal functions
+        function closeOrderModal() {
+            const orderModal = document.getElementById('orderDetailsModal');
+            if (orderModal) {
+                orderModal.remove(); // Remove the modal completely as it's dynamically created
+            }
+        }
+
+        // Ensure modal close on backdrop click
+        document.addEventListener('click', function(event) {
+            // Close user modal on backdrop click
+            if (event.target.id === 'userModal') {
+                closeUserModal();
+            }
+            // Close user details modal on backdrop click  
+            if (event.target.id === 'userDetailsModal') {
+                closeUserDetailsModal();
+            }
+            // Close order modal on backdrop click
+            if (event.target.id === 'orderDetailsModal') {
+                closeOrderModal();
+            }
+        });
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeUserModal();
+                closeUserDetailsModal();
+                closeOrderModal();
+            }
+        });
+    </script>
 
 </body>
 </html>

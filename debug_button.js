@@ -1,0 +1,1 @@
+console.log('Button debug - checking if button exists:', document.getElementById('place-order-btn')); console.log('Button disabled state:', document.getElementById('place-order-btn')?.disabled); console.log('setupFormValidation function exists:', typeof setupFormValidation);

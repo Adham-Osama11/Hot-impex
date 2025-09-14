@@ -1292,6 +1292,8 @@
         // Add this to window for testing in console
         window.addTestCartItems = addTestCartItems;
         window.loadCheckoutCart = loadCheckoutCart;
+        window.debugCartStatus = debugCartStatus;
+        window.clearCartAfterOrder = clearCartAfterOrder;
 
         // Setup payment method toggle
         function setupPaymentMethodToggle() {
@@ -1346,11 +1348,33 @@
             const form = document.getElementById('checkout-form');
             const placeOrderBtn = document.getElementById('place-order-btn');
 
-            placeOrderBtn.addEventListener('click', function() {
-                if (validateForm()) {
-                    processOrder();
-                }
-            });
+            console.log('Setting up form validation...');
+            console.log('Place order button found:', placeOrderBtn);
+            console.log('Button disabled state:', placeOrderBtn ? placeOrderBtn.disabled : 'N/A');
+
+            if (placeOrderBtn) {
+                placeOrderBtn.addEventListener('click', function(event) {
+                    console.log('Place Order button clicked!');
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    if (placeOrderBtn.disabled) {
+                        console.log('Button is disabled, ignoring click');
+                        return;
+                    }
+                    
+                    console.log('Validating form...');
+                    if (validateForm()) {
+                        console.log('Form validation passed, processing order...');
+                        processOrder();
+                    } else {
+                        console.log('Form validation failed');
+                    }
+                });
+                console.log('Event listener added to place order button');
+            } else {
+                console.error('Place order button not found!');
+            }
 
             // Real-time validation
             const requiredFields = form.querySelectorAll('[required]');
@@ -1594,27 +1618,12 @@
                     const orderNumber = response.orderNumber || '#HOT' + Date.now();
                     document.getElementById('order-number').textContent = orderNumber;
                     
-                    // Clear cart from all possible keys and update UI
-                    localStorage.removeItem('hotimpex-guest-cart');
-                    localStorage.removeItem('hotimpex-cart');
-                    localStorage.removeItem('hotimpex_cart');
+                    console.log('Order placed successfully, clearing cart...');
                     
-                    // Clear global cart if available
-                    if (window.cart) {
-                        window.cart = [];
-                    }
+                    // Clear cart completely - both client and server side
+                    await clearCartAfterOrder();
                     
-                    // Update cart UI if CartService is available
-                    if (window.CartService && window.CartService.updateCartUI) {
-                        window.CartService.updateCartUI();
-                    }
-                    
-                    // Update cart badge manually
-                    const cartBadge = document.getElementById('cart-badge');
-                    if (cartBadge) {
-                        cartBadge.style.display = 'none';
-                        cartBadge.textContent = '0';
-                    }
+                    console.log('Cart cleared after successful order');
                     
                     // Update user profile if they're logged in and profile data changed
                     if (user) {
@@ -1629,10 +1638,9 @@
                         });
                     }
                     
-                    // Show success modal
+                    // Show success modal and notification
                     showSuccessModal();
-                    
-                    showNotification('Order placed successfully!', 'success');
+                    showNotification('Order placed successfully! Your cart has been cleared.', 'success');
                 } else {
                     throw new Error(response.message || 'Order processing failed');
                 }
@@ -1643,6 +1651,106 @@
                 // Reset button on error
                 placeOrderBtn.innerHTML = originalText;
                 placeOrderBtn.disabled = false;
+            }
+        }
+
+        // Clear cart after successful order - handles both guest and logged-in users
+        async function clearCartAfterOrder() {
+            try {
+                console.log('Clearing cart after successful order...');
+                
+                // 1. Clear all local storage cart keys
+                localStorage.removeItem('hotimpex-guest-cart');
+                localStorage.removeItem('hotimpex-cart');
+                localStorage.removeItem('hotimpex_cart');
+                console.log('Local storage cart keys cleared');
+                
+                // 2. Clear global cart variable if available
+                if (window.cart) {
+                    window.cart = [];
+                    console.log('Global cart variable cleared');
+                }
+                
+                // 3. If user is logged in, clear server-side cart
+                if (window.AuthService && window.AuthService.isLoggedIn() && window.CartService) {
+                    try {
+                        // Clear server-side cart using CartService
+                        if (typeof window.CartService.clearCart === 'function') {
+                            await window.CartService.clearCart();
+                            console.log('Server-side cart cleared via CartService');
+                        } else {
+                            // Fallback: clear cart via direct API call
+                            const token = window.AuthService.getToken();
+                            if (token) {
+                                const response = await fetch('/api/users/cart', {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Authorization': `Bearer ${token}`,
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+                                
+                                if (response.ok) {
+                                    console.log('Server-side cart cleared via API call');
+                                } else {
+                                    console.warn('Failed to clear server-side cart via API');
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.warn('Error clearing server-side cart:', error);
+                    }
+                }
+                
+                // 4. Update all cart UI elements
+                updateCartUIAfterClear();
+                
+                // 5. Reload the checkout page cart display to show empty state
+                if (typeof loadCheckoutCart === 'function') {
+                    loadCheckoutCart();
+                }
+                
+                console.log('Cart clearing completed successfully');
+                
+            } catch (error) {
+                console.error('Error during cart clearing:', error);
+                // Don't throw error as order was successful, just log the cart clearing issue
+            }
+        }
+
+        // Update all cart UI elements after clearing
+        function updateCartUIAfterClear() {
+            try {
+                // Update cart badge
+                const cartBadge = document.getElementById('cart-badge');
+                if (cartBadge) {
+                    cartBadge.style.display = 'none';
+                    cartBadge.textContent = '0';
+                }
+                
+                // Update cart count if available
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    cartCount.textContent = '0';
+                    cartCount.style.display = 'none';
+                }
+                
+                // Update CartService UI if available
+                if (window.CartService && typeof window.CartService.updateCartUI === 'function') {
+                    window.CartService.updateCartUI();
+                }
+                
+                // Update any other cart indicators
+                const cartIndicators = document.querySelectorAll('[data-cart-count]');
+                cartIndicators.forEach(indicator => {
+                    indicator.textContent = '0';
+                    indicator.style.display = 'none';
+                });
+                
+                console.log('Cart UI updated after clearing');
+                
+            } catch (error) {
+                console.error('Error updating cart UI after clearing:', error);
             }
         }
 

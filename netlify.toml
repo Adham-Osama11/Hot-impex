@@ -29,10 +29,12 @@
   status = 200
 
 [[redirects]]
-  # API calls should be handled by external backend or serverless functions
+  # API calls should be proxied to your Railway backend
+  # REPLACE 'your-app.railway.app' with your actual Railway URL
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "https://your-app.railway.app/api/:splat"
   status = 200
+  force = true
 
 [[redirects]]
   # Fallback for any other routes (SPA behavior)

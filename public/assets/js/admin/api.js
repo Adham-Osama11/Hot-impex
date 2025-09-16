@@ -4,7 +4,8 @@
  */
 class AdminAPI {
     constructor() {
-        this.baseURL = '/api/admin';
+        // Use the API configuration for the base URL
+        this.baseURL = API_CONFIG.getApiUrl() + '/admin';
         this.token = localStorage.getItem('hotimpex-token'); // Use unified token
     }
 

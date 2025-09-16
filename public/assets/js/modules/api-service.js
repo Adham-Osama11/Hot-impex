@@ -1,14 +1,14 @@
 // Hot Impex API Service Module
 // Handles all API communication with the backend
 
-// API Configuration
-const API_BASE_URL = window.location.origin + '/api';
+// Use the API configuration from config.js
+// This will automatically use Railway URL in production and localhost in development
 
 // API Service Functions
 class APIService {
     static async request(endpoint, options = {}) {
         try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            const response = await fetch(`${API_CONFIG.getApiUrl()}${endpoint}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...options.headers

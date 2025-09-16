@@ -7,24 +7,31 @@
 class APIService {
     static async request(endpoint, options = {}) {
         try {
+            console.log(`Making API request to: ${API_CONFIG.getApiUrl()}${endpoint}`);
             const response = await fetch(`${API_CONFIG.getApiUrl()}${endpoint}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...options.headers
                 },
+                credentials: 'omit', // Don't send cookies for CORS requests
                 ...options
             });
             
-            const data = await response.json();
+            console.log(`API Response status: ${response.status}`);
             
             if (!response.ok) {
-                // Return the server error response instead of throwing a generic error
-                return data;
+                console.error(`API Error: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
+            const data = await response.json();
+            console.log('API Response data:', data);
             
             return data;
         } catch (error) {
-            console.error('API Error:', error);
+            console.error('API Request failed:', error);
+            console.error('Endpoint:', endpoint);
+            console.error('API URL:', API_CONFIG.getApiUrl());
             throw error;
         }
     }

@@ -1,0 +1,72 @@
+[build]
+  # Publish directory - contains all static files to be deployed
+  publish = "public"
+  
+  # No build command needed since this is a static site
+  command = "echo 'No build process required for static files'"
+
+[build.environment]
+  # Node.js version for any build processes
+  NODE_VERSION = "18"
+
+# Redirect rules for SPA-like behavior
+[[redirects]]
+  # Handle shop category filtering
+  from = "/shop/*"
+  to = "/shop.html"
+  status = 200
+  
+[[redirects]]
+  # Handle product pages
+  from = "/product/*"
+  to = "/product.html"
+  status = 200
+
+[[redirects]]
+  # Handle admin routes
+  from = "/admin/*"
+  to = "/admin/admin.html"
+  status = 200
+
+[[redirects]]
+  # API calls should be handled by external backend or serverless functions
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  # Fallback for any other routes (SPA behavior)
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Cache static assets
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    # Don't cache HTML files too aggressively
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    # Don't cache service worker
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# Error pages
+[[redirects]]
+  from = "/404"
+  to = "/404.html"
+  status = 404

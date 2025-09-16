@@ -3,7 +3,7 @@
 
 const API_CONFIG = {
     // REPLACE THIS WITH YOUR ACTUAL RAILWAY URL
-    RAILWAY_API_URL: 'https://your-app-name.railway.app/api',
+    RAILWAY_API_URL: 'https://hot-impex-production.up.railway.app/api',
     
     // Fallback for development
     LOCAL_API_URL: 'http://localhost:3000/api',

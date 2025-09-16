@@ -32,7 +32,7 @@
   # API calls should be proxied to your Railway backend
   # REPLACE 'your-app.railway.app' with your actual Railway URL
   from = "/api/*"
-  to = "https://your-app.railway.app/api/:splat"
+  to = "https://hot-impex-production.up.railway.app/api/:splat"
   status = 200
   force = true
 

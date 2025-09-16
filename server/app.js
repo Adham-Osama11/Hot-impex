@@ -52,10 +52,17 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // CORS
+const corsOrigins = process.env.NODE_ENV === 'production' 
+    ? process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim()) : ['https://hotimpex.com', 'https://www.hotimpex.com']
+    : ['http://localhost:3000', 'http://localhost:8000', 'http://127.0.0.1:3000', 'http://127.0.0.1:8000'];
+
+console.log('🌐 CORS Configuration:');
+console.log('   Environment:', process.env.NODE_ENV);
+console.log('   CORS_ORIGINS env var:', process.env.CORS_ORIGINS);
+console.log('   Allowed origins:', corsOrigins);
+
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://hotimpex.com', 'https://www.hotimpex.com'] 
-        : ['http://localhost:3000', 'http://localhost:8000', 'http://127.0.0.1:3000', 'http://127.0.0.1:8000'],
+    origin: corsOrigins,
     credentials: true
 }));
 

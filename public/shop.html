@@ -726,7 +726,6 @@
 
     <!-- JavaScript -->
     <script src="assets/js/config.js"></script>
-    <script src="assets/js/cors-debug.js"></script>
     <script src="assets/js/scripts.js"></script>
     
     <!-- Force products loading -->
@@ -734,11 +733,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Shop page DOM loaded, forcing product load...');
             
-            // Force load products directly
+            // Force load products directly using proper API config
             setTimeout(async function() {
                 try {
                     console.log('Fetching products directly...');
-                    const response = await fetch('/api/products?limit=100');
+                    const response = await fetch(`${API_CONFIG.getApiUrl()}/products?limit=100`);
                     const data = await response.json();
                     
                     console.log('Products response:', data);

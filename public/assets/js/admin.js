@@ -1,152 +1,8 @@
-// --- API CLIENT ---
-class AdminAPI {
-    constructor() {
-        this.baseURL = '/api/admin';
-        this.token = localStorage.getItem('adminToken');
-        this.retryAttempts = 3;
-        this.retryDelay = 1000;
-    }
+// Use the AdminAPI from the modular admin/api.js file
+// which properly integrates with API_CONFIG
 
-    async request(endpoint, options = {}) {
-        const url = `${this.baseURL}${endpoint}`;
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            },
-            timeout: 10000, // 10 second timeout
-            ...options
-        };
-
-        if (this.token) {
-            config.headers.Authorization = `Bearer ${this.token}`;
-        }
-
-        return this.requestWithRetry(url, config);
-    }
-
-    async requestWithRetry(url, config, attempt = 1) {
-        try {
-            // Add timeout wrapper
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), config.timeout || 10000);
-            
-            const response = await fetch(url, {
-                ...config,
-                signal: controller.signal
-            });
-            
-            clearTimeout(timeoutId);
-
-            // Handle different response types
-            let data;
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                data = await response.json();
-            } else {
-                data = { message: await response.text() };
-            }
-
-            if (!response.ok) {
-                // Handle specific HTTP error codes
-                if (response.status === 401) {
-                    this.handleUnauthorized();
-                    throw new Error('Authentication required. Please log in again.');
-                } else if (response.status === 403) {
-                    throw new Error('Access denied. Insufficient permissions.');
-                } else if (response.status === 404) {
-                    throw new Error('Resource not found.');
-                } else if (response.status >= 500) {
-                    throw new Error('Server error. Please try again later.');
-                }
-                throw new Error(data.message || `Request failed with status ${response.status}`);
-            }
-
-            return data;
-        } catch (error) {
-            console.error(`API Request failed (attempt ${attempt}):`, error);
-            
-            // Handle network errors with retry
-            if (this.shouldRetry(error, attempt)) {
-                console.log(`Retrying request in ${this.retryDelay}ms...`);
-                await this.delay(this.retryDelay);
-                return this.requestWithRetry(url, config, attempt + 1);
-            }
-            
-            // Transform error messages for better user experience
-            if (error.name === 'AbortError') {
-                throw new Error('Request timed out. Please check your connection and try again.');
-            } else if (error.message.includes('Failed to fetch')) {
-                throw new Error('Network error. Please check your internet connection.');
-            }
-            
-            throw error;
-        }
-    }
-
-    shouldRetry(error, attempt) {
-        return attempt < this.retryAttempts && 
-               (error.name === 'AbortError' || 
-                error.message.includes('Failed to fetch') ||
-                error.message.includes('Server error'));
-    }
-
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    handleUnauthorized() {
-        localStorage.removeItem('adminToken');
-        this.token = null;
-        // Redirect to login page or show login modal
-        showNotification('Session expired. Please log in again.', 'error');
-    }
-
-    // Dashboard Stats
-    async getDashboardStats() {
-        return this.request('/stats');
-    }
-
-    // Orders
-    async getAllOrders(params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        return this.request(`/orders${queryString ? `?${queryString}` : ''}`);
-    }
-
-    // Users
-    async getAllUsers(params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        return this.request(`/users${queryString ? `?${queryString}` : ''}`);
-    }
-
-    // Products
-    async createProduct(productData) {
-        return this.request('/products', {
-            method: 'POST',
-            body: JSON.stringify(productData)
-        });
-    }
-
-    async updateProduct(id, productData) {
-        return this.request(`/products/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(productData)
-        });
-    }
-
-    async deleteProduct(id) {
-        return this.request(`/products/${id}`, {
-            method: 'DELETE'
-        });
-    }
-
-    async getProducts() {
-        return this.request('/api/products');
-    }
-}
-
-// Initialize API client
-const adminAPI = new AdminAPI();
+// Create a reference to the adminAPI instance created by the modular API
+let adminAPI;
 
 // --- NOTIFICATION SYSTEM ---
 class NotificationManager {
@@ -296,6 +152,9 @@ class FormValidator {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize adminAPI reference from the modular API system
+    adminAPI = new AdminAPI();
+    
     // --- THEME MANAGEMENT ---
     const themeToggle = document.getElementById('theme-toggle');
     const html = document.documentElement;

@@ -47,9 +47,9 @@ class DashboardController {
             UIHelpers.hideLoadingState();
             
             // Set up auto-refresh every 30 seconds
-            if (autoRefresh && !this.refreshInterval) {
-                this.refreshInterval = setInterval(() => this.loadData(false), 30000);
-            }
+            // if (autoRefresh && !this.refreshInterval) {
+            //     this.refreshInterval = setInterval(() => this.loadData(false), 30000);
+            // }
             
         } catch (error) {
             console.error('Failed to load dashboard data:', error);

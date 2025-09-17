@@ -8,6 +8,7 @@ class ProductsController {
         this.currentProducts = [];
         this.isEditing = false;
         this.editingProductId = null;
+        this.isSubmitting = false; // Prevent double submit
         this.initializeEventListeners();
     }
 
@@ -146,7 +147,9 @@ class ProductsController {
         console.log('handleProductSubmit called', e);
         e.preventDefault();
         e.stopPropagation();
-        
+        if (this.isSubmitting) return; // Guard against double submit
+        this.isSubmitting = true;
+
         const formData = new FormData(e.target);
         const productData = {
             name: formData.get('name'),
@@ -158,7 +161,7 @@ class ProductsController {
             images: formData.get('images') ? 
                 formData.get('images').split('\\n').filter(img => img.trim()) : []
         };
-        
+
         try {
             let result;
             if (this.isEditing && this.editingProductId) {
@@ -168,12 +171,14 @@ class ProductsController {
                 result = await this.api.createProduct(productData);
                 NotificationManager.showSuccess('Product added successfully!');
             }
-            
+
             this.closeModal();
             await this.loadData(); // Reload products table
         } catch (error) {
             console.error('Failed to save product:', error);
             NotificationManager.showError('Failed to save product: ' + error.message);
+        } finally {
+            this.isSubmitting = false;
         }
     }
 
@@ -185,6 +190,7 @@ class ProductsController {
         document.getElementById('productForm').reset();
         this.isEditing = false;
         this.editingProductId = null;
+        this.isSubmitting = false;
     }
 
     /**

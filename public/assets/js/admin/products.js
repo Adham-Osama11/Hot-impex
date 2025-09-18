@@ -114,7 +114,7 @@ class ProductsController {
         <td class="px-6 py-4 font-medium whitespace-nowrap">${product.name ?? ''}</td>
         <td class="px-6 py-4">${product.category ?? ''}</td>
         <td class="px-6 py-4">$${Number(product.price || 0).toFixed(2)}</td>
-        <!-- <td class="px-6 py-4">${product.stockQuantity ?? product.stock ?? 'N/A'}</td> -->
+  // <!-- <td class="px-6 py-4">${product.stockQuantity ?? product.stock ?? 'N/A'}</td> -->
         <td class="px-6 py-4 text-right space-x-2">
           <button onclick="productsController.editProduct('${product.id}')" class="text-blue-500 hover:text-blue-400">Edit</button>
           <button onclick="productsController.deleteProduct('${product.id}')" class="text-red-500 hover:text-red-400">Delete</button>

@@ -48,7 +48,7 @@ class UsersController {
                             ${role.charAt(0).toUpperCase() + role.slice(1)}
                         </span>
                     </td>
-                    <td class="px-6 py-4">$${(user.totalSpent || 0).toFixed(2)}</td>
+                   <!-- <td class="px-6 py-4">$${(user.totalSpent || 0).toFixed(2)}</td> -->
                     <td class="px-6 py-4">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td>
                     <td class="px-6 py-4 text-right space-x-2">
                         <button onclick="viewUser('${user.id || user._id}')" class="text-blue-500 hover:text-blue-400">View</button>
@@ -351,7 +351,7 @@ class UsersController {
                 </div>
             </div>
             
-            <div class="glass-effect p-6 rounded-xl border border-white/20 dark:border-gray-700/20">
+            <!--<div class="glass-effect p-6 rounded-xl border border-white/20 dark:border-gray-700/20">
                 <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-800">Purchase Summary</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="text-center">
@@ -367,7 +367,7 @@ class UsersController {
                         <p class="text-sm text-gray-600 dark:text-gray-600">Avg Order Value</p>
                     </div>
                 </div>
-            </div>
+            </div>-->
         `;
         
         // Store current user ID for editing
@@ -433,11 +433,11 @@ class UsersController {
      */
     exportToCSV() {
         const csvContent = [
-            ['Name', 'Email', 'Total Spent', 'Joined Date', 'Status'],
+            ['Name', 'Email', 'Joined Date', 'Status'],
             ...this.currentUsers.map(user => [
                 user.name,
                 user.email,
-                (user.totalSpent || 0).toFixed(2),
+                // (user.totalSpent || 0).toFixed(2),
                 new Date(user.createdAt).toLocaleDateString(),
                 user.isActive !== false ? 'Active' : 'Inactive'
             ])

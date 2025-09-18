@@ -114,7 +114,7 @@ class ProductsController {
         <td class="px-6 py-4 font-medium whitespace-nowrap">${product.name ?? ''}</td>
         <td class="px-6 py-4">${product.category ?? ''}</td>
         <td class="px-6 py-4">$${Number(product.price || 0).toFixed(2)}</td>
-        <td class="px-6 py-4">${product.stockQuantity ?? product.stock ?? 'N/A'}</td>
+        <!-- <td class="px-6 py-4">${product.stockQuantity ?? product.stock ?? 'N/A'}</td> -->
         <td class="px-6 py-4 text-right space-x-2">
           <button onclick="productsController.editProduct('${product.id}')" class="text-blue-500 hover:text-blue-400">Edit</button>
           <button onclick="productsController.deleteProduct('${product.id}')" class="text-red-500 hover:text-red-400">Delete</button>
@@ -154,7 +154,7 @@ class ProductsController {
     document.getElementById('productName').value = product.name || '';
     document.getElementById('productCategory').value = product.category || '';
     document.getElementById('productPrice').value = product.price ?? '';
-    document.getElementById('productStock').value = product.stockQuantity ?? product.stock ?? '';
+    // document.getElementById('productStock').value = product.stockQuantity ?? product.stock ?? '';
     document.getElementById('productShortDescription').value = product.shortDescription ?? '';
     document.getElementById('productDescription').value = product.description ?? '';
     document.getElementById('productImages').value = Array.isArray(product.images) ? product.images.join('\n') : '';

@@ -37,28 +37,21 @@
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6">
             <nav class="flex items-center justify-between h-16">
-                <!-- Mobile Header with Hot Button and Menu Toggle -->
-                <div class="flex items-center justify-between w-full lg:w-auto lg:flex-shrink-0">
-                    <!-- Hot Button Section -->
-                    <div class="flex-shrink-0">
-                        <button class="logo text-gray-800 font-bold py-3 px-6 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-xl lg:text-xl bg-white/15 backdrop-blur-3xl">
-                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-28 lg:h-12 lg:w-32">
-                        </button>
-                    </div>
+                <!-- Mobile Menu Toggle Button (Left side on mobile) -->
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-800 p-3 rounded-full border border-white/30 shadow-2xl transition-all duration-200 bg-white/15 backdrop-blur-3xl hover:bg-white/25">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
 
-                    <!-- Mobile Menu Toggle Button -->
-                    <button id="mobile-menu-toggle" class="lg:hidden text-gray-800 p-3 rounded-full border border-white/30 shadow-2xl transition-all duration-200 bg-white/15 backdrop-blur-3xl hover:bg-white/25">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
+                <!-- Invisible spacer for mobile balance -->
+                <div class="lg:hidden w-14 h-14"></div>
 
-                <!-- Main Navigation Section -->
-                <div id="main-nav" class="hidden lg:flex items-center">
+                <!-- Main Navigation Section (Centered) -->
+                <div id="main-nav" class="hidden lg:flex items-center justify-center flex-1">
                     <div class="rounded-full p-3 flex items-center border border-white/30 shadow-2xl gap-2 bg-white/15 backdrop-blur-3xl">
-                        <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Home</a>
-                        <a href="shop.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Shop</a>
+                        <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">Home</a>
+                        <a href="shop.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Products</a>
                         <a href="contact.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Contact Us</a>
                         <a href="about.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">About Us</a>
                         
@@ -116,12 +109,12 @@
                                             </svg>
                                             Profile
                                         </a>
-                                        <a href="my-orders.html" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                        <!-- <a href="my-orders.html" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
                                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
                                             </svg>
                                             My Orders
-                                        </a>
+                                        </a> -->
                                         <!-- Admin Panel Link (visible only for admin users) -->
                                         <a href="admin/admin.html" id="admin-panel-link" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50/50 transition-colors duration-200 hidden">
                                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,13 +136,12 @@
                         </div>
 
                         <!-- Shopping Cart Icon with Count -->
-                        <div id="cart-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
-                            <!-- Simple SVG for shopping bag icon -->
+                        <!-- <div id="cart-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
                             <svg class="user-icon w-4 h-4" viewBox="0 0 24 24" fill="#374151">
                                 <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.763.746-1.858 1.705L2.26 19.99a2.25 2.25 0 002.24 2.51h15.002a2.25 2.25 0 002.24-2.51l-1.395-11.535A1.875 1.875 0 0018.488 6.75H16.5V6a4.5 4.5 0 10-9 0zM15 6.75V6a3 3 0 10-6 0v.75H15z" clip-rule="evenodd" />
                             </svg>
                             <span id="cart-badge" class="bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full" style="display: none;">0</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </nav>
@@ -171,8 +163,8 @@
                 </div>
                 <nav class="space-y-6">
                     <ul class="space-y-4">
-                        <li><a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Home</a></li>
-                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Shop</a></li>
+                        <li><a href="index.html" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Home</a></li>
+                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Products</a></li>
                         <li><a href="contact.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Contact Us</a></li>
                         <li><a href="about.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">About Us</a></li>
                         <li>
@@ -185,7 +177,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="my-orders.html" id="mobile-orders-link" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">
                                 <div class="flex items-center space-x-3">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,8 +186,8 @@
                                     <span>My Orders</span>
                                 </div>
                             </a>
-                        </li>
-                        <li>
+                        </li> -->
+                        <!-- <li>
                             <button id="mobile-cart-toggle" class="block w-full py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20 text-left">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
@@ -207,7 +199,7 @@
                                     <span id="mobile-cart-badge" class="bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full" style="display: none;">0</span>
                                 </div>
                             </button>
-                        </li>
+                        </li> -->
                         <li class="border-t border-white/20 pt-4 mt-4">
                             <button id="mobile-login-btn" class="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white font-medium transition-all duration-200 hover:shadow-lg hover:scale-105" style="display: none;">
                                 <div class="flex items-center justify-center space-x-3">
@@ -437,33 +429,6 @@
                         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
                             <p class="text-sm text-gray-600 dark:text-gray-400">Member since</p>
                             <p class="text-sm font-medium text-gray-900 dark:text-white" id="member-since">Loading...</p>
-                        </div>
-
-                        <!-- Spending Statistics -->
-                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-lg p-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Your Spending</h3>
-                            <div class="space-y-3">
-                                <!-- Total Spent -->
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">Total Spent:</span>
-                                    <span class="font-bold text-blue-600 dark:text-blue-400" id="total-spent">0 EGP</span>
-                                </div>
-                                <!-- Total Orders -->
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">Total Orders:</span>
-                                    <span class="font-semibold text-gray-900 dark:text-white" id="total-orders">0</span>
-                                </div>
-                                <!-- Completed Orders -->
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">Completed Orders:</span>
-                                    <span class="font-semibold text-green-600 dark:text-green-400" id="completed-orders">0</span>
-                                </div>
-                                <!-- Average Order Value -->
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">Avg Order Value:</span>
-                                    <span class="font-semibold text-purple-600 dark:text-purple-400" id="avg-order-value">0 EGP</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

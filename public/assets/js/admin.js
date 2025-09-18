@@ -1,6 +1,6 @@
 // Use the AdminAPI from the modular admin/api.js file
 // which properly integrates with API_CONFIG
-
+const LEGACY_DISABLED = !!window.__DISABLE_LEGACY_PRODUCT_FORM__;
 // Create a reference to the adminAPI instance created by the modular API
 let adminAPI;
 
@@ -966,6 +966,7 @@ function closeProductModal() {
 
 // Handle form submission
 document.addEventListener('DOMContentLoaded', function() {
+    if (LEGACY_DISABLED) return;
     const productForm = document.getElementById('productForm');
     if (productForm) {
         productForm.addEventListener('submit', async function(e) {

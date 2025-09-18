@@ -1960,137 +1960,137 @@ function showShopError(message) {
     `;
 }
 
-function displayShopProducts(productsToShow) {
-    console.log('displayShopProducts called with:', productsToShow?.length, 'products');
-    const container = document.getElementById('products-grid');
-    const loadingState = document.getElementById('loading-state');
+// function displayShopProducts(productsToShow) {
+//     console.log('displayShopProducts called with:', productsToShow?.length, 'products');
+//     const container = document.getElementById('products-grid');
+//     const loadingState = document.getElementById('loading-state');
     
-    if (!container) {
-        console.error('Products grid container not found!');
-        return;
-    }
+//     if (!container) {
+//         console.error('Products grid container not found!');
+//         return;
+//     }
 
-    // Hide loading state if it exists
-    if (loadingState) {
-        loadingState.style.display = 'none';
-        console.log('Loading state hidden');
-    }
+//     // Hide loading state if it exists
+//     if (loadingState) {
+//         loadingState.style.display = 'none';
+//         console.log('Loading state hidden');
+//     }
 
-    // Show products grid
-    container.classList.remove('hidden');
-    console.log('Products grid shown');
+//     // Show products grid
+//     container.classList.remove('hidden');
+//     console.log('Products grid shown');
     
-    if (!productsToShow || productsToShow.length === 0) {
-        container.innerHTML = `
-            <div class="col-span-full flex items-center justify-center py-20">
-                <div class="text-center">
-                    <div class="text-gray-400 text-6xl mb-4">📦</div>
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">No products found</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Try adjusting your search or filter criteria.</p>
-                </div>
-            </div>
-        `;
-        console.log('No products to display');
-        return;
-    }
+//     if (!productsToShow || productsToShow.length === 0) {
+//         container.innerHTML = `
+//             <div class="col-span-full flex items-center justify-center py-20">
+//                 <div class="text-center">
+//                     <div class="text-gray-400 text-6xl mb-4">📦</div>
+//                     <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">No products found</h3>
+//                     <p class="text-gray-600 dark:text-gray-400">Try adjusting your search or filter criteria.</p>
+//                 </div>
+//             </div>
+//         `;
+//         console.log('No products to display');
+//         return;
+//     }
     
-    container.innerHTML = productsToShow.map(product => {
-        const productPrice = parseFloat(product.price) || 0;
-        const originalPrice = product.originalPrice ? parseFloat(product.originalPrice) : null;
-        const currency = product.currency || 'EGP';
-        const isOnSale = originalPrice && originalPrice > productPrice;
+//     container.innerHTML = productsToShow.map(product => {
+//         const productPrice = parseFloat(product.price) || 0;
+//         const originalPrice = product.originalPrice ? parseFloat(product.originalPrice) : null;
+//         const currency = product.currency || 'EGP';
+//         const isOnSale = originalPrice && originalPrice > productPrice;
         
-        // Handle image URL
-        let imageUrl = product.mainImage || product.image;
-        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-            imageUrl = `assets/images/Products/${imageUrl}`;
-        }
-        if (!imageUrl) {
-            imageUrl = 'assets/images/placeholder.jpg';
-        }
+//         // Handle image URL
+//         let imageUrl = product.mainImage || product.image;
+//         if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+//             imageUrl = `assets/images/Products/${imageUrl}`;
+//         }
+//         if (!imageUrl) {
+//             imageUrl = 'assets/images/placeholder.jpg';
+//         }
         
-        return `
-            <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
-               data-product-id="${product.id}" 
-               data-category="${product.categorySlug || product.category}" 
-               data-name="${product.name}" 
-               data-price="${productPrice}">
-                <div class="relative h-64">
-                    <img src="${imageUrl}" 
-                         alt="${product.name}" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                         onerror="this.src='assets/images/placeholder.jpg'">
+//         return `
+//             <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
+//                data-product-id="${product.id}" 
+//                data-category="${product.categorySlug || product.category}" 
+//                data-name="${product.name}" 
+//                data-price="${productPrice}">
+//                 <div class="relative h-64">
+//                     <img src="${imageUrl}" 
+//                          alt="${product.name}" 
+//                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+//                          onerror="this.src='assets/images/placeholder.jpg'">
                     
-                    <!-- Product Badges -->
-                    ${isOnSale ? '<span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SALE</span>' : ''}
-                    ${product.featured ? '<span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>' : ''}
-                    ${product.bestSeller ? '<span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">BEST SELLER</span>' : ''}
+//                     <!-- Product Badges -->
+//                     ${isOnSale ? '<span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SALE</span>' : ''}
+//                     ${product.featured ? '<span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>' : ''}
+//                     ${product.bestSeller ? '<span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">BEST SELLER</span>' : ''}
                     
-                    <!-- Hover Actions -->
-                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', 1);" 
-                                class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
-                                title="Add to Cart">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </button>
-                        <button onclick="event.preventDefault(); event.stopPropagation(); openQuickView('${product.id}');" 
-                                class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
-                                title="Quick View">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+//                     <!-- Hover Actions -->
+//                     <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+//                         <button onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', 1);" 
+//                                 class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
+//                                 title="Add to Cart">
+//                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+//                             </svg>
+//                         </button>
+//                         <button onclick="event.preventDefault(); event.stopPropagation(); openQuickView('${product.id}');" 
+//                                 class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
+//                                 title="Quick View">
+//                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+//                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+//                             </svg>
+//                         </button>
+//                     </div>
+//                 </div>
                 
-                <div class="p-6">
-                    <h3 class="font-semibold text-gray-800 dark:text-white text-lg mb-2 truncate">${product.name}</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 capitalize">${product.category || 'Product'}</p>
+//                 <div class="p-6">
+//                     <h3 class="font-semibold text-gray-800 dark:text-white text-lg mb-2 truncate">${product.name}</h3>
+//                     <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 capitalize">${product.category || 'Product'}</p>
                     
-                    <!-- Rating -->
-                    ${product.rating ? `
-                        <div class="flex items-center mb-3">
-                            <div class="flex text-yellow-400">
-                                ${Array.from({length: 5}, (_, i) => 
-                                    `<svg class="w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>`
-                                ).join('')}
-                            </div>
-                            <span class="text-gray-600 dark:text-gray-400 ml-1 text-sm">${product.rating}</span>
-                        </div>
-                    ` : ''}
+//                     <!-- Rating -->
+//                     ${product.rating ? `
+//                         <div class="flex items-center mb-3">
+//                             <div class="flex text-yellow-400">
+//                                 ${Array.from({length: 5}, (_, i) => 
+//                                     `<svg class="w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}" viewBox="0 0 20 20">
+//                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+//                                     </svg>`
+//                                 ).join('')}
+//                             </div>
+//                             <span class="text-gray-600 dark:text-gray-400 ml-1 text-sm">${product.rating}</span>
+//                         </div>
+//                     ` : ''}
                     
-                    <!-- Price -->
-                    <div class="flex justify-between items-center">
-                        <div>
-                            ${isOnSale ? `<span class="text-sm text-gray-500 dark:text-gray-400 line-through">${originalPrice} ${currency}</span><br>` : ''}
-                            <span class="text-gray-800 dark:text-white font-bold text-xl">${productPrice.toFixed(2)} ${currency}</span>
-                        </div>
+//                     <!-- Price -->
+//                     <div class="flex justify-between items-center">
+//                         <div>
+//                             ${isOnSale ? `<span class="text-sm text-gray-500 dark:text-gray-400 line-through">${originalPrice} ${currency}</span><br>` : ''}
+//                             <span class="text-gray-800 dark:text-white font-bold text-xl">${productPrice.toFixed(2)} ${currency}</span>
+//                         </div>
                         
-                        <!-- Stock Status -->
-                        ${product.inStock !== undefined ? `
-                            <span class="text-xs px-2 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                ${product.inStock ? 'In Stock' : 'Out of Stock'}
-                            </span>
-                        ` : ''}
-                    </div>
-                </div>
-            </a>
-        `;
-    }).join('');
+//                         <!-- Stock Status -->
+//                         <!-- ${product.inStock !== undefined ? `
+//                             <span class="text-xs px-2 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+//                                 ${product.inStock ? 'In Stock' : 'Out of Stock'}
+//                             </span>
+//                         ` : ''}-->
+//                     </div>
+//                 </div>
+//             </a>
+//         `;
+//     }).join('');
     
-    // Add click event listeners for add to cart buttons
-    container.querySelectorAll('button[onclick*="addToCart"]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-        });
-    });
-}
+//     // Add click event listeners for add to cart buttons
+//     container.querySelectorAll('button[onclick*="addToCart"]').forEach(btn => {
+//         btn.addEventListener('click', (e) => {
+//             e.preventDefault();
+//             e.stopPropagation();
+//         });
+//     });
+// }
 
 // Product Page Functions
 function initializeProductPage() {
@@ -2921,11 +2921,11 @@ function createProductCard(product) {
                   product.featured ? 'Featured' : '';
     
     // Add out of stock badge if needed
-    const stockBadge = !isInStock ? 'Out of Stock' : '';
+    // const stockBadge = !isInStock ? 'Out of Stock' : '';
 
     // Add disabled styling if out of stock
-    const disabledClass = !isInStock ? 'opacity-60 cursor-not-allowed' : '';
-    const disabledOverlay = !isInStock ? '<div class="absolute inset-0 bg-gray-900 bg-opacity-30 flex items-center justify-center"><span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">Out of Stock</span></div>' : '';
+    // const disabledClass = !isInStock ? 'opacity-60 cursor-not-allowed' : '';
+    // const disabledOverlay = !isInStock ? '<div class="absolute inset-0 bg-gray-900 bg-opacity-30 flex items-center justify-center"><span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">Out of Stock</span></div>' : '';
 
     cardWrapper.innerHTML = `
         <div class="card ${disabledClass}" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-price="${product.price}" data-in-stock="${isInStock}">
@@ -2956,12 +2956,12 @@ function createProductCard(product) {
     `;
 
     // Disable click for out of stock products
-    if (!isInStock) {
-        cardWrapper.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('This product is currently out of stock.');
-        });
-    }
+    // if (!isInStock) {
+    //     cardWrapper.addEventListener('click', function(e) {
+    //         e.preventDefault();
+    //         alert('This product is currently out of stock.');
+    //     });
+    // }
 
     return cardWrapper;
 }

@@ -104,58 +104,7 @@ class ProductsController {
     }
   }
 
-  /** Figure mode by reading hidden input, then call API exactly once */
-  async onSubmit(e, form) {
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
-    if (this.isSubmitting) return;
-    this.isSubmitting = true;
-
-    const submitBtn = e.submitter || form.querySelector('[type="submit"]');
-    if (submitBtn) submitBtn.disabled = true;
-
-    try {
-      const fd = new FormData(form);
-
-      // IMPORTANT: set name="id" on your hidden input (#productId). We also fall back to name="productId".
-      const idField = (fd.get('id') || fd.get('productId') || '').trim();
-      const mode = idField ? 'update' : 'create';
-
-      // Build payload
-      const productData = {
-        name: (fd.get('name') || '').trim(),
-        category: (fd.get('category') || '').trim(),
-        price: parseFloat(fd.get('price') || '0') || 0,
-        // Use stockQuantity (what your schema expects); accept "stock" from form
-        stockQuantity: parseInt(fd.get('stock'), 10) || 0,
-        shortDescription: (fd.get('shortDescription') || '').trim(),
-        description: (fd.get('description') || '').trim(),
-        images: String(fd.get('images') || '')
-          .split('\n')
-          .map(s => s.trim())
-          .filter(Boolean)
-      };
-
-      if (mode === 'update') {
-        await this.api.updateProduct(idField, productData);
-        NotificationManager.showSuccess('Product updated successfully!');
-      } else {
-        await this.api.createProduct(productData);
-        NotificationManager.showSuccess('Product added successfully!');
-      }
-
-      this.closeModal();
-      await this.loadData();
-    } catch (err) {
-      console.error('Failed to save product:', err);
-      NotificationManager.showError('Failed to save product: ' + (err?.message || 'Unknown error'));
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
-      this.isSubmitting = false;
-    }
-  }
+  // Removed legacy onSubmit (single form logic)
 
   /** Load and render table */
   async loadData() {
@@ -239,8 +188,12 @@ class ProductsController {
 
   closeModal() {
     document.getElementById('productModal').classList.add('hidden');
-    const form = document.getElementById('productForm');
-    if (form) form.reset();
+    const addForm = document.getElementById('addProductForm');
+    const editForm = document.getElementById('editProductForm');
+    if (addForm) addForm.reset();
+    if (editForm) editForm.reset();
+    if (editForm) editForm.classList.add('hidden');
+    if (addForm) addForm.classList.add('hidden');
     const hidden = document.getElementById('productId');
     if (hidden) hidden.value = '';
     this.isSubmitting = false;

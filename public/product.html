@@ -964,33 +964,32 @@
                 
                 // Fallback to local products array if available
                 if (window.products && Array.isArray(window.products)) {
-                    // First try to find by string ID (e.g., "av-002")
+                    // First try to find by string ID
                     let localProduct = window.products.find(p => p.id === productId);
-                    // If not found, try as integer ID for backward compatibility
+                    // If not found, try as integer
                     if (!localProduct) {
                         localProduct = window.products.find(p => p.id === parseInt(productId));
                     }
                     
                     if (localProduct) {
-                        // Add some default values for API compatibility
                         return {
                             ...localProduct,
                             inStock: true,
-                            stock: 15,
-                            description: "High-quality product from HOT IMPEX.",
-                            specifications: ["Professional grade", "High performance"],
-                            images: localProduct.images && localProduct.images.length > 0 
+                            stock: localProduct.stock || 15,
+                            description: localProduct.description || localProduct.shortDescription || "High-quality product from HOT IMPEX.",
+                            specifications: localProduct.specifications || ["Professional grade", "High performance"],
+                            images: (localProduct.images && localProduct.images.length > 0) 
                                 ? localProduct.images 
-                                : [`assets/images/placeholder.png`]
-
+                                : ["assets/images/placeholder.png"],
+                            datasheet: localProduct.datasheet || null
                         };
                     }
                 }
 
-                // If no local product found, create a default test product
+                // Default test product
                 console.log('Creating default test product for ID:', productId);
                 return {
-                    id: productId, // Keep as string ID
+                    id: productId,
                     name: "4K UHD Generator",
                     category: "av-distribution",
                     price: 299.99,
@@ -998,11 +997,9 @@
                     stock: 15,
                     description: "Professional 4K UHD test pattern generator for display calibration and testing.",
                     specifications: ["4K@60Hz output", "HDMI 2.0", "100+ test patterns"],
-                    images: ["assets/images/Products/Av distribution/4K UHD GENRATOR.jpg"]
+                    images: ["assets/images/Products/Av distribution/4K UHD GENRATOR.jpg"],
+                    datasheet: "assets/datasheets/sample.pdf"
                 };
-                
-                showError('Failed to load product. Please try again.');
-                return null;
             }
         }
 

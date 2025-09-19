@@ -48,6 +48,7 @@ class UsersController {
                             ${role.charAt(0).toUpperCase() + role.slice(1)}
                         </span>
                     </td>
+                   <!-- <td class="px-6 py-4">$${(user.totalSpent || 0).toFixed(2)}</td> -->
                     <td class="px-6 py-4">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td>
                     <td class="px-6 py-4 text-right space-x-2">
                         <button onclick="viewUser('${user.id || user._id}')" class="text-blue-500 hover:text-blue-400">View</button>
@@ -349,6 +350,24 @@ class UsersController {
                     </div>
                 </div>
             </div>
+            
+            <!--<div class="glass-effect p-6 rounded-xl border border-white/20 dark:border-gray-700/20">
+                <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-800">Purchase Summary</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${(user.totalSpent || 0).toFixed(2)}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-600">Total Spent</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">${user.totalOrders || 0}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-600">Total Orders</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">${user.avgOrderValue ? '$' + user.avgOrderValue.toFixed(2) : '$0.00'}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-600">Avg Order Value</p>
+                    </div>
+                </div>
+            </div>-->
         `;
         
         // Store current user ID for editing

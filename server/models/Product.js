@@ -19,6 +19,7 @@ class Product {
         this.brand = data.brand;
         this.model = data.model;
         this.tags = data.tags || [];
+        this.datasheet = data.datasheet || null;   // ✅ NEW FIELD
         this.createdAt = data.createdAt || new Date().toISOString();
         this.updatedAt = data.updatedAt || new Date().toISOString();
     }
@@ -84,6 +85,7 @@ class Product {
             brand: this.brand,
             model: this.model,
             tags: this.tags,
+            datasheet: this.datasheet,   // ✅ NEW FIELD
             createdAt: this.createdAt,
             updatedAt: this.updatedAt
         };

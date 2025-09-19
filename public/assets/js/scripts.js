@@ -2237,40 +2237,52 @@ function initializeHeroProductShowcase() {
     const prevButton = document.getElementById('prev-product');
     const nextButton = document.getElementById('next-product');
     
-    // Update product display
-    function updateProduct(index) {
-        const product = products[index];
+// Update product display
+function updateProduct(index) {
+    const product = products[index];
+    
+    // Add transition effect
+    const card = document.getElementById('active-product-card');
+    card.style.transform = 'scale(0.95) rotateY(10deg)';
+    card.style.opacity = '0.7';
+    
+    setTimeout(() => {
+        // Update content
+        if (productImage) productImage.src = product.image;
+        if (productTitle) productTitle.textContent = product.title;
+        if (productDescription) productDescription.textContent = product.description;
+        if (cardNumber) cardNumber.textContent = `${index + 1}/${products.length}`;
         
-        // Add transition effect
-        const card = document.getElementById('active-product-card');
-        card.style.transform = 'scale(0.95) rotateY(10deg)';
-        card.style.opacity = '0.7';
+        // Update features
+        if (productFeatures) {
+            productFeatures.innerHTML = product.features.map(feature => 
+                `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">${feature}</span>`
+            ).join('');
+        }
+
+        // ✅ Update datasheet button
+        const datasheetBtn = document.getElementById("datasheet-btn");
+        if (datasheetBtn) {
+            if (product.datasheet) {
+                datasheetBtn.onclick = () => window.open(product.datasheet, "_blank");
+                datasheetBtn.style.display = "block";
+            } else {
+                datasheetBtn.style.display = "none";
+            }
+        }
         
-        setTimeout(() => {
-            // Update content
-            if (productImage) productImage.src = product.image;
-            if (productTitle) productTitle.textContent = product.title;
-            if (productDescription) productDescription.textContent = product.description;
-            if (cardNumber) cardNumber.textContent = `${index + 1}/${products.length}`;
-            
-            // Update features
-            if (productFeatures) {
-                productFeatures.innerHTML = product.features.map(feature => 
-                    `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">${feature}</span>`
-                ).join('');
-            }
-            
-            // Update progress bar
-            if (progressBar) {
-                const progressWidth = ((index + 1) / products.length) * 100;
-                progressBar.style.width = `${progressWidth}%`;
-            }
-            
-            // Restore card appearance
-            card.style.transform = 'scale(1) rotateY(0deg)';
-            card.style.opacity = '1';
-        }, 200);
-    }
+        // Update progress bar
+        if (progressBar) {
+            const progressWidth = ((index + 1) / products.length) * 100;
+            progressBar.style.width = `${progressWidth}%`;
+        }
+        
+        // Restore card appearance
+        card.style.transform = 'scale(1) rotateY(0deg)';
+        card.style.opacity = '1';
+    }, 200);
+}
+
     
     // Navigation functions
     function nextProduct() {

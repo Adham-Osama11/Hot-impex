@@ -979,7 +979,10 @@
                             stock: 15,
                             description: "High-quality product from HOT IMPEX.",
                             specifications: ["Professional grade", "High performance"],
-                            images: [`assets/images/Products/${localProduct.category}/${localProduct.image || 'default'}.jpg`]
+                            images: localProduct.images && localProduct.images.length > 0 
+                                ? localProduct.images 
+                                : [`assets/images/placeholder.png`]
+
                         };
                     }
                 }
@@ -1078,6 +1081,17 @@
 
             // Update description
             document.getElementById('product-description').textContent = product.description || product.shortDescription || 'No description available.';
+            // Handle datasheet button
+            const datasheetButton = document.getElementById('datasheetButton');
+            if (datasheetButton) {
+            if (product.datasheet && product.datasheet.trim() !== '') {
+                datasheetButton.classList.remove('hidden');
+                datasheetButton.onclick = () => window.open(product.datasheet, '_blank');
+            } else {
+                datasheetButton.classList.add('hidden');
+                datasheetButton.onclick = null;
+            }
+            }
 
             // Update images
             updateProductImages(product);
@@ -1095,13 +1109,14 @@
             const thumbnailsContainer = document.getElementById('product-thumbnails');
 
             // Set main image
-            if (product.mainImage) {
-                mainImage.src = product.mainImage;
-                mainImage.alt = product.name;
-            } else if (product.images && product.images.length > 0) {
-                mainImage.src = product.images[0];
-                mainImage.alt = product.name;
+            if (product.images && product.images.length > 0) {
+            mainImage.src = product.images[0];
+            mainImage.alt = product.name;
+            } else {
+            mainImage.src = "assets/images/placeholder.png";
+            mainImage.alt = "No image available";
             }
+
 
             // Create thumbnails
             thumbnailsContainer.innerHTML = '';

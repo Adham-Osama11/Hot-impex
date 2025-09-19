@@ -591,7 +591,81 @@
                     </button>
                 </div>
                 
-                <form id="productForm" class="space-y-6" onsubmit="return false;">
+                <!-- Add Product Form -->
+                <form id="addProductForm" class="space-y-6" onsubmit="return false;">
+                    <input type="hidden" id="addProductId" name="id"/>
+                    <div>
+                        <label for="addProductName" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Product Name</label>
+                        <input type="text" id="addProductName" name="name" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label for="addProductCategory" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Category</label>
+                        <select id="addProductCategory" name="category" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                            <!-- Categories will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="addProductPrice" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Price ($)</label>
+                        <input type="number" id="addProductPrice" name="price" step="0.01" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label for="addProductStock" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Stock Quantity</label>
+                        <input type="number" id="addProductStock" name="stock" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label for="addProductShortDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Short Description</label>
+                        <textarea id="addProductShortDescription" name="shortDescription" rows="2" placeholder="Brief product summary (150 characters max)" maxlength="150" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    <div>
+                        <label for="addProductDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Description</label>
+                        <textarea id="addProductDescription" name="description" rows="4" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    <div>
+                        <label for="addProductImages" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Image URLs (one per line)</label>
+                        <textarea id="addProductImages" name="images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="submit" id="addProductSubmit" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-pink-500">Add Product</button>
+                    </div>
+                </form>
+
+                <!-- Edit Product Form -->
+                <form id="editProductForm" class="space-y-6 hidden" onsubmit="return false;">
+                    <input type="hidden" id="productId" name="id"/>
+                    <div>
+                        <label for="productName" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Product Name</label>
+                        <input type="text" id="productName" name="name" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label for="productCategory" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Category</label>
+                        <select id="productCategory" name="category" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                            <!-- Categories will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="productPrice" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Price ($)</label>
+                        <input type="number" id="productPrice" name="price" step="0.01" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label for="productStock" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Stock Quantity</label>
+                        <input type="number" id="productStock" name="stock" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label for="productShortDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Short Description</label>
+                        <textarea id="productShortDescription" name="shortDescription" rows="2" placeholder="Brief product summary (150 characters max)" maxlength="150" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    <div>
+                        <label for="productDescription" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Description</label>
+                        <textarea id="productDescription" name="description" rows="4" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    <div>
+                        <label for="productImages" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Image URLs (one per line)</label>
+                        <textarea id="productImages" name="images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="submit" id="editProductSubmit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500">Update Product</button>
+                    </div>
+                </form>
                     <div>
                         <label for="productStock" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Stock Quantity</label>
                         <input type="number" id="productStock" name="stock" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">

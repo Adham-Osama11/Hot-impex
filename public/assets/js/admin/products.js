@@ -17,26 +17,91 @@ class ProductsController {
 
   /** Remove all old listeners and attach exactly one submit handler */
   bindFormOnce() {
-    const oldForm = document.getElementById('productForm');
-    if (!oldForm) return;
+    // Add Product Form
+    const addForm = document.getElementById('addProductForm');
+    if (addForm && !addForm.dataset.pctrlSanitized) {
+      const newAddForm = addForm.cloneNode(true);
+      newAddForm.removeAttribute('onsubmit');
+      newAddForm.dataset.pctrlSanitized = '1';
+      addForm.parentNode.replaceChild(newAddForm, addForm);
+      newAddForm.addEventListener('submit', (e) => this.onAddSubmit(e, newAddForm), { capture: true });
+    }
 
-    // If we already sanitized this node, skip
-    if (oldForm.dataset.pctrlSanitized === '1') return;
+    // Edit Product Form
+    const editForm = document.getElementById('editProductForm');
+    if (editForm && !editForm.dataset.pctrlSanitized) {
+      const newEditForm = editForm.cloneNode(true);
+      newEditForm.removeAttribute('onsubmit');
+      newEditForm.dataset.pctrlSanitized = '1';
+      editForm.parentNode.replaceChild(newEditForm, editForm);
+      newEditForm.addEventListener('submit', (e) => this.onEditSubmit(e, newEditForm), { capture: true });
+    }
+  }
 
-    // Clone to drop ALL event listeners (addEventListener) from any script
-    const newForm = oldForm.cloneNode(true);
+  async onAddSubmit(e, form) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+    const submitBtn = e.submitter || form.querySelector('[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+    try {
+      const fd = new FormData(form);
+      const productData = {
+        name: (fd.get('name') || '').trim(),
+        category: (fd.get('category') || '').trim(),
+        price: parseFloat(fd.get('price') || '0') || 0,
+        stockQuantity: parseInt(fd.get('stock'), 10) || 0,
+        shortDescription: (fd.get('shortDescription') || '').trim(),
+        description: (fd.get('description') || '').trim(),
+        images: String(fd.get('images') || '').split('\n').map(s => s.trim()).filter(Boolean)
+      };
+      await this.api.createProduct(productData);
+      NotificationManager.showSuccess('Product added successfully!');
+      this.closeModal();
+      await this.loadData();
+    } catch (err) {
+      console.error('Failed to add product:', err);
+      NotificationManager.showError('Failed to add product: ' + (err?.message || 'Unknown error'));
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+      this.isSubmitting = false;
+    }
+  }
 
-    // Ensure there is no inline onsubmit
-    newForm.removeAttribute('onsubmit');
-
-    // Mark sanitized to avoid re-cloning loops
-    newForm.dataset.pctrlSanitized = '1';
-
-    // Replace in DOM
-    oldForm.parentNode.replaceChild(newForm, oldForm);
-
-    // Single capture-phase submit (to pre-empt any future rogue listeners)
-    newForm.addEventListener('submit', (e) => this.onSubmit(e, newForm), { capture: true });
+  async onEditSubmit(e, form) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+    const submitBtn = e.submitter || form.querySelector('[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+    try {
+      const fd = new FormData(form);
+      const idField = (fd.get('id') || '').trim();
+      if (!idField) throw new Error('Missing product ID for edit');
+      const productData = {
+        name: (fd.get('name') || '').trim(),
+        category: (fd.get('category') || '').trim(),
+        price: parseFloat(fd.get('price') || '0') || 0,
+        stockQuantity: parseInt(fd.get('stock'), 10) || 0,
+        shortDescription: (fd.get('shortDescription') || '').trim(),
+        description: (fd.get('description') || '').trim(),
+        images: String(fd.get('images') || '').split('\n').map(s => s.trim()).filter(Boolean)
+      };
+      await this.api.updateProduct(idField, productData);
+      NotificationManager.showSuccess('Product updated successfully!');
+      this.closeModal();
+      await this.loadData();
+    } catch (err) {
+      console.error('Failed to update product:', err);
+      NotificationManager.showError('Failed to update product: ' + (err?.message || 'Unknown error'));
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+      this.isSubmitting = false;
+    }
   }
 
   /** Figure mode by reading hidden input, then call API exactly once */
@@ -125,46 +190,39 @@ class ProductsController {
 
   /** UI helpers — still set labels, but logic derives from hidden field */
   showAddModal() {
-    this.isEditing = false;
-    this.editingProductId = null;
-
-    document.getElementById('modalTitle').textContent = 'Add New Product';
-    document.getElementById('submitButtonText').textContent = 'Add Product';
-    document.getElementById('productForm').reset();
-
-    // CRUCIAL: clear hidden id so mode becomes "create"
-    const hidden = document.getElementById('productId');
-    if (hidden) hidden.value = '';
-
-    document.getElementById('productModal').classList.remove('hidden');
-    this.bindFormOnce(); // re-sanitize in case modal HTML was re-rendered
+  this.isEditing = false;
+  this.editingProductId = null;
+  document.getElementById('modalTitle').textContent = 'Add New Product';
+  document.getElementById('addProductForm').reset();
+  document.getElementById('addProductForm').classList.remove('hidden');
+  document.getElementById('editProductForm').classList.add('hidden');
+  document.getElementById('productModal').classList.remove('hidden');
+  this.bindFormOnce();
   }
 
   async editProduct(productId) {
     const product = this.currentProducts.find(p => p.id === productId);
     if (!product) return NotificationManager.showError('Product not found');
 
-    this.isEditing = true;
-    this.editingProductId = productId;
-
-    document.getElementById('modalTitle').textContent = 'Edit Product';
-    document.getElementById('submitButtonText').textContent = 'Update Product';
-
-    // Populate fields
-    document.getElementById('productName').value = product.name || '';
-    document.getElementById('productCategory').value = product.category || '';
-    document.getElementById('productPrice').value = product.price ?? '';
+  this.isEditing = true;
+  this.editingProductId = productId;
+  document.getElementById('modalTitle').textContent = 'Edit Product';
+  document.getElementById('editProductForm').reset();
+  document.getElementById('addProductForm').classList.add('hidden');
+  document.getElementById('editProductForm').classList.remove('hidden');
+  // Populate fields
+  document.getElementById('productName').value = product.name || '';
+  document.getElementById('productCategory').value = product.category || '';
+  document.getElementById('productPrice').value = product.price ?? '';
   document.getElementById('productStock').value = product.stockQuantity ?? product.stock ?? '';
-    document.getElementById('productShortDescription').value = product.shortDescription ?? '';
-    document.getElementById('productDescription').value = product.description ?? '';
-    document.getElementById('productImages').value = Array.isArray(product.images) ? product.images.join('\n') : '';
-
-    // CRUCIAL: set hidden id so mode becomes "update"
-    const hidden = document.getElementById('productId');
-    if (hidden) hidden.value = product.id;
-
-    document.getElementById('productModal').classList.remove('hidden');
-    this.bindFormOnce(); // ensure only our listener exists even after modal open
+  document.getElementById('productShortDescription').value = product.shortDescription ?? '';
+  document.getElementById('productDescription').value = product.description ?? '';
+  document.getElementById('productImages').value = Array.isArray(product.images) ? product.images.join('\n') : '';
+  // CRUCIAL: set hidden id so mode becomes "update"
+  const hidden = document.getElementById('productId');
+  if (hidden) hidden.value = product.id;
+  document.getElementById('productModal').classList.remove('hidden');
+  this.bindFormOnce();
   }
 
   async deleteProduct(productId) {

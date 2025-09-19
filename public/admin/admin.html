@@ -490,6 +490,16 @@
             <label for="addProductImages" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Image URLs (one per line)</label>
             <textarea id="addProductImages" name="images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
           </div>
+          <div>
+            <label for="addProductDatasheet" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">
+              Datasheet URL (PDF)
+            </label>
+            <input type="url" id="addProductDatasheet" name="datasheet" placeholder="https://example.com/datasheet.pdf"
+              class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 
+                    focus:ring-pink-500 focus:border-pink-500">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave empty if product has no datasheet</p>
+          </div>
+
           <div class="flex justify-end space-x-2">
             <button type="submit" id="addProductSubmit" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-pink-500">Add Product</button>
           </div>
@@ -534,6 +544,16 @@
             <label for="productImages" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Image URLs (one per line)</label>
             <textarea id="productImages" name="images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500"></textarea>
           </div>
+          <div>
+            <label for="productDatasheet" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">
+              Datasheet URL (PDF)
+            </label>
+            <input type="url" id="productDatasheet" name="datasheet" placeholder="https://example.com/datasheet.pdf"
+              class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 
+                    focus:ring-blue-500 focus:border-blue-500">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave empty if product has no datasheet</p>
+          </div>
+
           <div class="flex justify-end space-x-2">
             <button type="submit" id="editProductSubmit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500">Update Product</button>
           </div>

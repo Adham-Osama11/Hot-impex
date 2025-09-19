@@ -592,6 +592,10 @@
                 </div>
                 
                 <form id="productForm" class="space-y-6" onsubmit="return false;">
+                    <div>
+                        <label for="productStock" class="block text-sm font-medium text-gray-800 dark:text-gray-600 mb-2">Stock Quantity</label>
+                        <input type="number" id="productStock" name="stock" min="0" required class="w-full glass-effect rounded-lg px-4 py-3 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500">
+                    </div>
                     <input type="hidden" id="productId" name="id"/>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

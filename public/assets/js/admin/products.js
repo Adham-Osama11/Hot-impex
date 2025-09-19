@@ -154,7 +154,7 @@ class ProductsController {
     document.getElementById('productName').value = product.name || '';
     document.getElementById('productCategory').value = product.category || '';
     document.getElementById('productPrice').value = product.price ?? '';
-    // document.getElementById('productStock').value = product.stockQuantity ?? product.stock ?? '';
+  document.getElementById('productStock').value = product.stockQuantity ?? product.stock ?? '';
     document.getElementById('productShortDescription').value = product.shortDescription ?? '';
     document.getElementById('productDescription').value = product.description ?? '';
     document.getElementById('productImages').value = Array.isArray(product.images) ? product.images.join('\n') : '';

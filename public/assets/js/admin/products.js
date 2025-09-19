@@ -47,15 +47,15 @@ class ProductsController {
     const submitBtn = e.submitter || form.querySelector('[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
     try {
-      const fd = new FormData(form);
+      // Use explicit field IDs for add form
       const productData = {
-        name: (fd.get('name') || '').trim(),
-        category: (fd.get('category') || '').trim(),
-        price: parseFloat(fd.get('price') || '0') || 0,
-        stockQuantity: parseInt(fd.get('stock'), 10) || 0,
-        shortDescription: (fd.get('shortDescription') || '').trim(),
-        description: (fd.get('description') || '').trim(),
-        images: String(fd.get('images') || '').split('\n').map(s => s.trim()).filter(Boolean)
+        name: (form.querySelector('#addProductName')?.value || '').trim(),
+        category: (form.querySelector('#addProductCategory')?.value || '').trim(),
+        price: parseFloat(form.querySelector('#addProductPrice')?.value || '0') || 0,
+        stockQuantity: parseInt(form.querySelector('#addProductStock')?.value, 10) || 0,
+        shortDescription: (form.querySelector('#addProductShortDescription')?.value || '').trim(),
+        description: (form.querySelector('#addProductDescription')?.value || '').trim(),
+        images: (form.querySelector('#addProductImages')?.value || '').split('\n').map(s => s.trim()).filter(Boolean)
       };
       await this.api.createProduct(productData);
       NotificationManager.showSuccess('Product added successfully!');
@@ -139,14 +139,18 @@ class ProductsController {
 
   /** UI helpers — still set labels, but logic derives from hidden field */
   showAddModal() {
-  this.isEditing = false;
-  this.editingProductId = null;
-  document.getElementById('modalTitle').textContent = 'Add New Product';
-  document.getElementById('addProductForm').reset();
-  document.getElementById('addProductForm').classList.remove('hidden');
-  document.getElementById('editProductForm').classList.add('hidden');
-  document.getElementById('productModal').classList.remove('hidden');
-  this.bindFormOnce();
+    this.isEditing = false;
+    this.editingProductId = null;
+    const addForm = document.getElementById('addProductForm');
+    const editForm = document.getElementById('editProductForm');
+    document.getElementById('modalTitle').textContent = 'Add New Product';
+    if (addForm) {
+      addForm.reset();
+      addForm.classList.remove('hidden');
+    }
+    if (editForm) editForm.classList.add('hidden');
+    document.getElementById('productModal').classList.remove('hidden');
+    this.bindFormOnce();
   }
 
   async editProduct(productId) {
@@ -190,10 +194,14 @@ class ProductsController {
     document.getElementById('productModal').classList.add('hidden');
     const addForm = document.getElementById('addProductForm');
     const editForm = document.getElementById('editProductForm');
-    if (addForm) addForm.reset();
-    if (editForm) editForm.reset();
-    if (editForm) editForm.classList.add('hidden');
-    if (addForm) addForm.classList.add('hidden');
+    if (addForm) {
+      addForm.reset();
+      addForm.classList.add('hidden');
+    }
+    if (editForm) {
+      editForm.reset();
+      editForm.classList.add('hidden');
+    }
     const hidden = document.getElementById('productId');
     if (hidden) hidden.value = '';
     this.isSubmitting = false;

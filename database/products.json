@@ -1,551 +1,564 @@
 {
-  "products": [
-    {
-      "id": "av-001",
-      "name": "4K UHD Generator",
-      "category": "AV Distribution",
-      "categorySlug": "av-distribution",
-      "description": "High-performance 4K UHD signal generator for professional audio-visual applications",
-      "shortDescription": "Professional 4K UHD signal generator",
-      "price": 299.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
-        "assets/images/Products/Av distribution/4K UHD GENRATOR-2.jpg",
-        "assets/images/Products/Av distribution/4K UHD GENRATOR-3.jpg"
-      ],
-      "mainImage": "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
-      "specifications": {
-        "resolution": "4K UHD (3840x2160)",
-        "outputPorts": "HDMI",
-        "compatibility": "Universal",
-        "powerConsumption": "Low"
-      },
-      "features": [
-        "4K UHD Support",
-        "Professional Grade",
-        "Multiple Outputs",
-        "Compact Design"
-      ],
-      "tags": [
-        "4K",
-        "UHD",
-        "Generator",
-        "Professional",
-        "AV"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "av-002",
-      "name": "CVBS/S-Video to HDMI Converter",
-      "category": "AV Distribution",
-      "categorySlug": "av-distribution",
-      "description": "Convert legacy CVBS or S-Video signals to modern HDMI output with superior quality",
-      "shortDescription": "Legacy to HDMI signal converter",
-      "price": 89.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": false,
-      "bestSeller": true,
-      "images": [
-        "assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg"
-      ],
-      "mainImage": "assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg",
-      "specifications": {
-        "inputPorts": "CVBS, S-Video",
-        "outputPorts": "HDMI",
-        "resolution": "Up to 1080p",
-        "powerSupply": "USB Powered"
-      },
-      "features": [
-        "Legacy Support",
-        "HDMI Output",
-        "Easy Setup",
-        "Compact Size"
-      ],
-      "tags": [
-        "CVBS",
-        "S-Video",
-        "HDMI",
-        "Converter",
-        "Legacy"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "av-003",
-      "name": "DVI-D to HDMI Adapter",
-      "category": "AV Distribution",
-      "categorySlug": "av-distribution",
-      "description": "High-quality DVI-D Male (24+1 Pin) to HDMI Female adapter for seamless connectivity",
-      "shortDescription": "DVI-D to HDMI adapter",
-      "price": 29.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": false,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Av distribution/Dvi-d Male (24 1 Pin) to HDMI Female Adapter.jpg"
-      ],
-      "mainImage": "assets/images/Products/Av distribution/Dvi-d Male (24 1 Pin) to HDMI Female Adapter.jpg",
-      "specifications": {
-        "inputType": "DVI-D Male (24+1 Pin)",
-        "outputType": "HDMI Female",
-        "resolution": "Up to 1080p",
-        "goldPlated": true
-      },
-      "features": [
-        "Gold Plated Connectors",
-        "High Resolution",
-        "Durable Build",
-        "Plug & Play"
-      ],
-      "tags": [
-        "DVI-D",
-        "HDMI",
-        "Adapter",
-        "Connector"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "cable-001",
-      "name": "Premium AUX Cable",
-      "category": "Cable",
-      "categorySlug": "cable",
-      "description": "High-quality 3.5mm AUX cable for crystal clear audio transmission",
-      "shortDescription": "Premium 3.5mm AUX audio cable",
-      "price": 19.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": false,
-      "bestSeller": true,
-      "images": [
-        "assets/images/Products/Cable/AUX-CABLE.jpg"
-      ],
-      "mainImage": "assets/images/Products/Cable/AUX-CABLE.jpg",
-      "specifications": {
-        "connector": "3.5mm Male to Male",
-        "length": "1.5m",
-        "shielding": "Double Shielded",
-        "compatibility": "Universal"
-      },
-      "features": [
-        "Crystal Clear Audio",
-        "Durable Construction",
-        "Universal Compatibility",
-        "Tangle-Free Design"
-      ],
-      "tags": [
-        "AUX",
-        "Audio",
-        "Cable",
-        "3.5mm"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "cable-002",
-      "name": "DTECH High Speed HDMI Cable",
-      "category": "Cable",
-      "categorySlug": "cable",
-      "description": "Premium HDMI cable supporting 4K UHD, 3D, and 2160p for computers, TVs, and monitors",
-      "shortDescription": "High-speed 4K HDMI cable",
-      "price": 49.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": true,
-      "images": [
-        "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
-        "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0 - 2.jpg",
-        "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0 - 3.jpg",
-        "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0 - 4.jpg"
-      ],
-      "mainImage": "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
-      "specifications": {
-        "version": "HDMI 2.0",
-        "resolution": "4K UHD (3840x2160)",
-        "support3D": true,
-        "length": "1-5m available",
-        "bandwidth": "18Gbps"
-      },
-      "features": [
-        "4K UHD Support",
-        "3D Compatible",
-        "High Speed",
-        "Multiple Lengths",
-        "Premium Build Quality"
-      ],
-      "tags": [
-        "HDMI",
-        "4K",
-        "UHD",
-        "3D",
-        "High-Speed",
-        "DTECH"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "cable-003",
-      "name": "Cat6 Ethernet Cable",
-      "category": "Cable",
-      "categorySlug": "cable",
-      "description": "High-performance Cat6 LAN cable with UTP RJ45 connectors for reliable network connections",
-      "shortDescription": "Cat6 network patch cable",
-      "price": 34.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": false,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Cable/Ethernet Cable Cat6 Lan Cable UTP RJ45 Network Cable 2m & 3m Patch Cord for Laptop Router RJ45 Network Cable.jpg"
-      ],
-      "mainImage": "assets/images/Products/Cable/Ethernet Cable Cat6 Lan Cable UTP RJ45 Network Cable 2m & 3m Patch Cord for Laptop Router RJ45 Network Cable.jpg",
-      "specifications": {
-        "category": "Cat6",
-        "type": "UTP (Unshielded Twisted Pair)",
-        "connector": "RJ45",
-        "length": "2m & 3m",
-        "speed": "Up to 1Gbps"
-      },
-      "features": [
-        "Cat6 Standard",
-        "High Speed Data Transfer",
-        "Reliable Connection",
-        "Multiple Lengths"
-      ],
-      "tags": [
-        "Cat6",
-        "Ethernet",
-        "LAN",
-        "RJ45",
-        "Network"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "cable-004",
-      "name": "HOT DisplayPort to HDMI Cable",
-      "category": "Cable",
-      "categorySlug": "cable",
-      "description": "Premium DisplayPort to HDMI cable for connecting DisplayPort devices to HDMI displays",
-      "shortDescription": "DisplayPort to HDMI cable",
-      "price": 59.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable.jpg",
-        "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable - 2.jpg",
-        "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable - 3.jpg"
-      ],
-      "mainImage": "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable.jpg",
-      "specifications": {
-        "inputConnector": "DisplayPort",
-        "outputConnector": "HDMI",
-        "resolution": "Up to 4K",
-        "length": "Various lengths available"
-      },
-      "features": [
-        "4K Resolution Support",
-        "Premium Quality",
-        "Plug & Play",
-        "Durable Construction"
-      ],
-      "tags": [
-        "DisplayPort",
-        "HDMI",
-        "Cable",
-        "4K",
-        "HOT"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "mount-001",
-      "name": "Ceiling TV Mount (32-60 inch)",
-      "category": "Ceiling Bracket",
-      "categorySlug": "ceiling-bracket",
-      "description": "Professional ceiling TV mount suitable for most 32-60 inch LED and LCD flat panel TVs",
-      "shortDescription": "Ceiling mount for 32-60 inch TVs",
-      "price": 149.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": true,
-      "images": [
-        "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs.jpg",
-        "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs - 2.jpg",
-        "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs - 3.jpg"
-      ],
-      "mainImage": "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs.jpg",
-      "specifications": {
-        "tvSize": "32-60 inches",
-        "tvType": "LED, LCD Flat Panel",
-        "mounting": "Ceiling Mount",
-        "adjustable": true,
-        "maxWeight": "50kg"
-      },
-      "features": [
-        "Adjustable Positioning",
-        "Heavy Duty Construction",
-        "Easy Installation",
-        "Universal Compatibility"
-      ],
-      "tags": [
-        "Ceiling",
-        "Mount",
-        "TV",
-        "32-60 inch",
-        "LED",
-        "LCD"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "mount-002",
-      "name": "Heavy-Duty Ceiling Mount (55-120 inch)",
-      "category": "Ceiling Bracket",
-      "categorySlug": "ceiling-bracket",
-      "description": "Industrial-grade fixed ceiling mount for large 55-120 inch flat panel displays",
-      "shortDescription": "Heavy-duty mount for 55-120 inch displays",
-      "price": 399.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs.jpg",
-        "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs - 2.jpg",
-        "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs - 3.jpg"
-      ],
-      "mainImage": "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs.jpg",
-      "specifications": {
-        "tvSize": "55-120 inches",
-        "mounting": "Fixed Ceiling Mount",
-        "maxWeight": "150kg",
-        "construction": "Heavy-Duty Steel",
-        "vesa": "Universal VESA Compatible"
-      },
-      "features": [
-        "Heavy-Duty Construction",
-        "Large Display Support",
-        "Fixed Positioning",
-        "Professional Grade"
-      ],
-      "tags": [
-        "Heavy-Duty",
-        "Ceiling",
-        "Mount",
-        "55-120 inch",
-        "Fixed",
-        "Professional"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "mount-003",
-      "name": "PM4365F Professional Ceiling Mount",
-      "category": "Ceiling Bracket",
-      "categorySlug": "ceiling-bracket",
-      "description": "Professional-grade PM4365F ceiling mount system for commercial and residential use",
-      "shortDescription": "PM4365F professional ceiling mount",
-      "price": 249.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": false,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Ceiling bracket/PM4365F CEILING MOUNT.jpg",
-        "assets/images/Products/Ceiling bracket/PM4365F CEILING MOUNT - 2.jpg"
-      ],
-      "mainImage": "assets/images/Products/Ceiling bracket/PM4365F CEILING MOUNT.jpg",
-      "specifications": {
-        "model": "PM4365F",
-        "type": "Professional Ceiling Mount",
-        "adjustability": "Tilt and Swivel",
-        "installation": "Professional Grade"
-      },
-      "features": [
-        "Professional Grade",
-        "Adjustable Positioning",
-        "Durable Construction",
-        "Easy Installation"
-      ],
-      "tags": [
-        "PM4365F",
-        "Professional",
-        "Ceiling",
-        "Mount",
-        "Commercial"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "gaming-001",
-      "name": "LRS01-GR Gear Shifter Mount",
-      "category": "Gaming",
-      "categorySlug": "gaming",
-      "description": "Professional gear shifter mount for LRS01-BS racing simulator cockpit, mountable on left or right side",
-      "shortDescription": "Gear shifter mount for racing simulator",
-      "price": 199.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Gaming/LRS01-GR GEAR SHIFTER MOUNT FOR LRS01-BS RACING SIMULATOR COCKPIT SEAT Mounted for Left or Right Side Use.jpg",
-        "assets/images/Products/Gaming/LRS01-GR GEAR SHIFTER MOUNT FOR LRS01-BS RACING SIMULATOR COCKPIT SEAT Mounted for Left or Right Side Use - 2.jpg"
-      ],
-      "mainImage": "assets/images/Products/Gaming/LRS01-GR GEAR SHIFTER MOUNT FOR LRS01-BS RACING SIMULATOR COCKPIT SEAT Mounted for Left or Right Side Use.jpg",
-      "specifications": {
-        "model": "LRS01-GR",
-        "compatibility": "LRS01-BS Racing Simulator",
-        "mounting": "Left or Right Side",
-        "adjustability": "Height and Angle Adjustable"
-      },
-      "features": [
-        "Left/Right Mounting",
-        "Height Adjustable",
-        "Professional Grade",
-        "Easy Installation"
-      ],
-      "tags": [
-        "Racing",
-        "Simulator",
-        "Gear Shifter",
-        "Mount",
-        "LRS01-GR",
-        "Gaming"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "gaming-002",
-      "name": "LRS02-BS Premium Racing Simulator Cockpit",
-      "category": "Gaming",
-      "categorySlug": "gaming",
-      "description": "Premium racing simulator cockpit seat - professional grade product designed for serious sim racers",
-      "shortDescription": "Premium racing simulator cockpit",
-      "price": 1299.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": true,
-      "images": [
-        "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
-        "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer - 2.jpg"
-      ],
-      "mainImage": "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
-      "specifications": {
-        "model": "LRS02-BS",
-        "type": "Premium Racing Simulator Cockpit",
-        "grade": "Professional",
-        "target": "Serious Sim Racers",
-        "adjustability": "Fully Adjustable"
-      },
-      "features": [
-        "Professional Grade",
-        "Premium Construction",
-        "Fully Adjustable",
-        "Serious Sim Racing",
-        "Ergonomic Design"
-      ],
-      "tags": [
-        "Racing",
-        "Simulator",
-        "Cockpit",
-        "Premium",
-        "LRS02-BS",
-        "Professional",
-        "Gaming"
-      ],
-      "stockQuantity": 0
-    },
-    {
-      "id": "gaming-003",
-      "name": "LRS02-SR02 Triple Monitor Mount",
-      "category": "Gaming",
-      "categorySlug": "gaming",
-      "description": "Triple monitor mount system designed for LRS02-BS racing simulator cockpit for perfect viewing angles",
-      "shortDescription": "Triple monitor mount for racing simulator",
-      "price": 599.99,
-      "currency": "EGP",
-      "inStock": true,
-      "featured": true,
-      "bestSeller": false,
-      "images": [
-        "assets/images/Products/Gaming/LRS02-SR02 TRIPLE MONITOR MOUNT FOR LRS02-BS RACING SIMULATOR COCKPIT SEAT Get the Perfect Viewing in the Game.jpg"
-      ],
-      "mainImage": "assets/images/Products/Gaming/LRS02-SR02 TRIPLE MONITOR MOUNT FOR LRS02-BS RACING SIMULATOR COCKPIT SEAT Get the Perfect Viewing in the Game.jpg",
-      "specifications": {
-        "model": "LRS02-SR02",
-        "type": "Triple Monitor Mount",
-        "compatibility": "LRS02-BS Racing Simulator",
-        "monitors": "Up to 3 monitors",
-        "adjustability": "Full 3D Adjustment"
-      },
-      "features": [
-        "Triple Monitor Support",
-        "Perfect Viewing Angles",
-        "Full Adjustability",
-        "Professional Racing Setup",
-        "Immersive Experience"
-      ],
-      "tags": [
-        "Racing",
-        "Simulator",
-        "Triple Monitor",
-        "Mount",
-        "LRS02-SR02",
-        "Gaming",
-        "Immersive"
-      ],
-      "stockQuantity": 0
+    "products": [
+        {
+            "id": "av-001",
+            "name": "4K UHD Generator",
+            "category": "AV Distribution",
+            "categorySlug": "av-distribution",
+            "description": "High-performance 4K UHD signal generator for professional audio-visual applications",
+            "shortDescription": "Professional 4K UHD signal generator",
+            "price": 299.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
+                "assets/images/Products/Av distribution/4K UHD GENRATOR-2.jpg",
+                "assets/images/Products/Av distribution/4K UHD GENRATOR-3.jpg"
+            ],
+            "mainImage": "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
+            "specifications": {
+                "resolution": "4K UHD (3840x2160)",
+                "outputPorts": "HDMI",
+                "compatibility": "Universal",
+                "powerConsumption": "Low"
+            },
+            "features": [
+                "4K UHD Support",
+                "Professional Grade",
+                "Multiple Outputs",
+                "Compact Design"
+            ],
+            "tags": [
+                "4K",
+                "UHD",
+                "Generator",
+                "Professional",
+                "AV"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/av-001.pdf"
+        },
+        {
+            "id": "av-002",
+            "name": "CVBS/S-Video to HDMI Converter",
+            "category": "AV Distribution",
+            "categorySlug": "av-distribution",
+            "description": "Convert legacy CVBS or S-Video signals to modern HDMI output with superior quality",
+            "shortDescription": "Legacy to HDMI signal converter",
+            "price": 89.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": false,
+            "bestSeller": true,
+            "images": [
+                "assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg"
+            ],
+            "mainImage": "assets/images/Products/Av distribution/CVBS or S-video to HDMI converter.jpg",
+            "specifications": {
+                "inputPorts": "CVBS, S-Video",
+                "outputPorts": "HDMI",
+                "resolution": "Up to 1080p",
+                "powerSupply": "USB Powered"
+            },
+            "features": [
+                "Legacy Support",
+                "HDMI Output",
+                "Easy Setup",
+                "Compact Size"
+            ],
+            "tags": [
+                "CVBS",
+                "S-Video",
+                "HDMI",
+                "Converter",
+                "Legacy"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/av-002.pdf"
+        },
+        {
+            "id": "av-003",
+            "name": "DVI-D to HDMI Adapter",
+            "category": "AV Distribution",
+            "categorySlug": "av-distribution",
+            "description": "High-quality DVI-D Male (24+1 Pin) to HDMI Female adapter for seamless connectivity",
+            "shortDescription": "DVI-D to HDMI adapter",
+            "price": 29.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": false,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Av distribution/Dvi-d Male (24 1 Pin) to HDMI Female Adapter.jpg"
+            ],
+            "mainImage": "assets/images/Products/Av distribution/Dvi-d Male (24 1 Pin) to HDMI Female Adapter.jpg",
+            "specifications": {
+                "inputType": "DVI-D Male (24+1 Pin)",
+                "outputType": "HDMI Female",
+                "resolution": "Up to 1080p",
+                "goldPlated": true
+            },
+            "features": [
+                "Gold Plated Connectors",
+                "High Resolution",
+                "Durable Build",
+                "Plug & Play"
+            ],
+            "tags": [
+                "DVI-D",
+                "HDMI",
+                "Adapter",
+                "Connector"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/av-003.pdf"
+        },
+        {
+            "id": "cable-001",
+            "name": "Premium AUX Cable",
+            "category": "Cable",
+            "categorySlug": "cable",
+            "description": "High-quality 3.5mm AUX cable for crystal clear audio transmission",
+            "shortDescription": "Premium 3.5mm AUX audio cable",
+            "price": 19.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": false,
+            "bestSeller": true,
+            "images": [
+                "assets/images/Products/Cable/AUX-CABLE.jpg"
+            ],
+            "mainImage": "assets/images/Products/Cable/AUX-CABLE.jpg",
+            "specifications": {
+                "connector": "3.5mm Male to Male",
+                "length": "1.5m",
+                "shielding": "Double Shielded",
+                "compatibility": "Universal"
+            },
+            "features": [
+                "Crystal Clear Audio",
+                "Durable Construction",
+                "Universal Compatibility",
+                "Tangle-Free Design"
+            ],
+            "tags": [
+                "AUX",
+                "Audio",
+                "Cable",
+                "3.5mm"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/cable-001.pdf"
+        },
+        {
+            "id": "cable-002",
+            "name": "DTECH High Speed HDMI Cable",
+            "category": "Cable",
+            "categorySlug": "cable",
+            "description": "Premium HDMI cable supporting 4K UHD, 3D, and 2160p for computers, TVs, and monitors",
+            "shortDescription": "High-speed 4K HDMI cable",
+            "price": 49.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": true,
+            "images": [
+                "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
+                "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0 - 2.jpg",
+                "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0 - 3.jpg",
+                "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0 - 4.jpg"
+            ],
+            "mainImage": "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
+            "specifications": {
+                "version": "HDMI 2.0",
+                "resolution": "4K UHD (3840x2160)",
+                "support3D": true,
+                "length": "1-5m available",
+                "bandwidth": "18Gbps"
+            },
+            "features": [
+                "4K UHD Support",
+                "3D Compatible",
+                "High Speed",
+                "Multiple Lengths",
+                "Premium Build Quality"
+            ],
+            "tags": [
+                "HDMI",
+                "4K",
+                "UHD",
+                "3D",
+                "High-Speed",
+                "DTECH"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/cable-002.pdf"
+        },
+        {
+            "id": "cable-003",
+            "name": "Cat6 Ethernet Cable",
+            "category": "Cable",
+            "categorySlug": "cable",
+            "description": "High-performance Cat6 LAN cable with UTP RJ45 connectors for reliable network connections",
+            "shortDescription": "Cat6 network patch cable",
+            "price": 34.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": false,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Cable/Ethernet Cable Cat6 Lan Cable UTP RJ45 Network Cable 2m & 3m Patch Cord for Laptop Router RJ45 Network Cable.jpg"
+            ],
+            "mainImage": "assets/images/Products/Cable/Ethernet Cable Cat6 Lan Cable UTP RJ45 Network Cable 2m & 3m Patch Cord for Laptop Router RJ45 Network Cable.jpg",
+            "specifications": {
+                "category": "Cat6",
+                "type": "UTP (Unshielded Twisted Pair)",
+                "connector": "RJ45",
+                "length": "2m & 3m",
+                "speed": "Up to 1Gbps"
+            },
+            "features": [
+                "Cat6 Standard",
+                "High Speed Data Transfer",
+                "Reliable Connection",
+                "Multiple Lengths"
+            ],
+            "tags": [
+                "Cat6",
+                "Ethernet",
+                "LAN",
+                "RJ45",
+                "Network"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/cable-003.pdf"
+        },
+        {
+            "id": "cable-004",
+            "name": "HOT DisplayPort to HDMI Cable",
+            "category": "Cable",
+            "categorySlug": "cable",
+            "description": "Premium DisplayPort to HDMI cable for connecting DisplayPort devices to HDMI displays",
+            "shortDescription": "DisplayPort to HDMI cable",
+            "price": 59.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable.jpg",
+                "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable - 2.jpg",
+                "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable - 3.jpg"
+            ],
+            "mainImage": "assets/images/Products/Cable/HOT DisplayPort to HDMI Cable.jpg",
+            "specifications": {
+                "inputConnector": "DisplayPort",
+                "outputConnector": "HDMI",
+                "resolution": "Up to 4K",
+                "length": "Various lengths available"
+            },
+            "features": [
+                "4K Resolution Support",
+                "Premium Quality",
+                "Plug & Play",
+                "Durable Construction"
+            ],
+            "tags": [
+                "DisplayPort",
+                "HDMI",
+                "Cable",
+                "4K",
+                "HOT"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/cable-004.pdf"
+        },
+        {
+            "id": "mount-001",
+            "name": "Ceiling TV Mount (32-60 inch)",
+            "category": "Ceiling Bracket",
+            "categorySlug": "ceiling-bracket",
+            "description": "Professional ceiling TV mount suitable for most 32-60 inch LED and LCD flat panel TVs",
+            "shortDescription": "Ceiling mount for 32-60 inch TVs",
+            "price": 149.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": true,
+            "images": [
+                "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs.jpg",
+                "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs - 2.jpg",
+                "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs - 3.jpg"
+            ],
+            "mainImage": "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs.jpg",
+            "specifications": {
+                "tvSize": "32-60 inches",
+                "tvType": "LED, LCD Flat Panel",
+                "mounting": "Ceiling Mount",
+                "adjustable": true,
+                "maxWeight": "50kg"
+            },
+            "features": [
+                "Adjustable Positioning",
+                "Heavy Duty Construction",
+                "Easy Installation",
+                "Universal Compatibility"
+            ],
+            "tags": [
+                "Ceiling",
+                "Mount",
+                "TV",
+                "32-60 inch",
+                "LED",
+                "LCD"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/mount-001.pdf"
+        },
+        {
+            "id": "mount-002",
+            "name": "Heavy-Duty Ceiling Mount (55-120 inch)",
+            "category": "Ceiling Bracket",
+            "categorySlug": "ceiling-bracket",
+            "description": "Industrial-grade fixed ceiling mount for large 55-120 inch flat panel displays",
+            "shortDescription": "Heavy-duty mount for 55-120 inch displays",
+            "price": 399.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs.jpg",
+                "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs - 2.jpg",
+                "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs - 3.jpg"
+            ],
+            "mainImage": "assets/images/Products/Ceiling bracket/HEAVY-DUTY Fixed Ceiling Mount For most 55″-120″ Flat Panel TVs.jpg",
+            "specifications": {
+                "tvSize": "55-120 inches",
+                "mounting": "Fixed Ceiling Mount",
+                "maxWeight": "150kg",
+                "construction": "Heavy-Duty Steel",
+                "vesa": "Universal VESA Compatible"
+            },
+            "features": [
+                "Heavy-Duty Construction",
+                "Large Display Support",
+                "Fixed Positioning",
+                "Professional Grade"
+            ],
+            "tags": [
+                "Heavy-Duty",
+                "Ceiling",
+                "Mount",
+                "55-120 inch",
+                "Fixed",
+                "Professional"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/mount-002.pdf"
+        },
+        {
+            "id": "mount-003",
+            "name": "PM4365F Professional Ceiling Mount",
+            "category": "Ceiling Bracket",
+            "categorySlug": "ceiling-bracket",
+            "description": "Professional-grade PM4365F ceiling mount system for commercial and residential use",
+            "shortDescription": "PM4365F professional ceiling mount",
+            "price": 249.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": false,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Ceiling bracket/PM4365F CEILING MOUNT.jpg",
+                "assets/images/Products/Ceiling bracket/PM4365F CEILING MOUNT - 2.jpg"
+            ],
+            "mainImage": "assets/images/Products/Ceiling bracket/PM4365F CEILING MOUNT.jpg",
+            "specifications": {
+                "model": "PM4365F",
+                "type": "Professional Ceiling Mount",
+                "adjustability": "Tilt and Swivel",
+                "installation": "Professional Grade"
+            },
+            "features": [
+                "Professional Grade",
+                "Adjustable Positioning",
+                "Durable Construction",
+                "Easy Installation"
+            ],
+            "tags": [
+                "PM4365F",
+                "Professional",
+                "Ceiling",
+                "Mount",
+                "Commercial"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/mount-003.pdf"
+        },
+        {
+            "id": "gaming-001",
+            "name": "LRS01-GR Gear Shifter Mount",
+            "category": "Gaming",
+            "categorySlug": "gaming",
+            "description": "Professional gear shifter mount for LRS01-BS racing simulator cockpit, mountable on left or right side",
+            "shortDescription": "Gear shifter mount for racing simulator",
+            "price": 199.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Gaming/LRS01-GR GEAR SHIFTER MOUNT FOR LRS01-BS RACING SIMULATOR COCKPIT SEAT Mounted for Left or Right Side Use.jpg",
+                "assets/images/Products/Gaming/LRS01-GR GEAR SHIFTER MOUNT FOR LRS01-BS RACING SIMULATOR COCKPIT SEAT Mounted for Left or Right Side Use - 2.jpg"
+            ],
+            "mainImage": "assets/images/Products/Gaming/LRS01-GR GEAR SHIFTER MOUNT FOR LRS01-BS RACING SIMULATOR COCKPIT SEAT Mounted for Left or Right Side Use.jpg",
+            "specifications": {
+                "model": "LRS01-GR",
+                "compatibility": "LRS01-BS Racing Simulator",
+                "mounting": "Left or Right Side",
+                "adjustability": "Height and Angle Adjustable"
+            },
+            "features": [
+                "Left/Right Mounting",
+                "Height Adjustable",
+                "Professional Grade",
+                "Easy Installation"
+            ],
+            "tags": [
+                "Racing",
+                "Simulator",
+                "Gear Shifter",
+                "Mount",
+                "LRS01-GR",
+                "Gaming"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/gaming-001.pdf"
+        },
+        {
+            "id": "gaming-002",
+            "name": "LRS02-BS Premium Racing Simulator Cockpit",
+            "category": "Gaming",
+            "categorySlug": "gaming",
+            "description": "Premium racing simulator cockpit seat - professional grade product designed for serious sim racers",
+            "shortDescription": "Premium racing simulator cockpit",
+            "price": 1299.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": true,
+            "images": [
+                "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
+                "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer - 2.jpg"
+            ],
+            "mainImage": "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
+            "specifications": {
+                "model": "LRS02-BS",
+                "type": "Premium Racing Simulator Cockpit",
+                "grade": "Professional",
+                "target": "Serious Sim Racers",
+                "adjustability": "Fully Adjustable"
+            },
+            "features": [
+                "Professional Grade",
+                "Premium Construction",
+                "Fully Adjustable",
+                "Serious Sim Racing",
+                "Ergonomic Design"
+            ],
+            "tags": [
+                "Racing",
+                "Simulator",
+                "Cockpit",
+                "Premium",
+                "LRS02-BS",
+                "Professional",
+                "Gaming"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/gaming-002.pdf"
+        },
+        {
+            "id": "gaming-003",
+            "name": "LRS02-SR02 Triple Monitor Mount",
+            "category": "Gaming",
+            "categorySlug": "gaming",
+            "description": "Triple monitor mount system designed for LRS02-BS racing simulator cockpit for perfect viewing angles",
+            "shortDescription": "Triple monitor mount for racing simulator",
+            "price": 599.99,
+            "currency": "EGP",
+            "inStock": true,
+            "featured": true,
+            "bestSeller": false,
+            "images": [
+                "assets/images/Products/Gaming/LRS02-SR02 TRIPLE MONITOR MOUNT FOR LRS02-BS RACING SIMULATOR COCKPIT SEAT Get the Perfect Viewing in the Game.jpg"
+            ],
+            "mainImage": "assets/images/Products/Gaming/LRS02-SR02 TRIPLE MONITOR MOUNT FOR LRS02-BS RACING SIMULATOR COCKPIT SEAT Get the Perfect Viewing in the Game.jpg",
+            "specifications": {
+                "model": "LRS02-SR02",
+                "type": "Triple Monitor Mount",
+                "compatibility": "LRS02-BS Racing Simulator",
+                "monitors": "Up to 3 monitors",
+                "adjustability": "Full 3D Adjustment"
+            },
+            "features": [
+                "Triple Monitor Support",
+                "Perfect Viewing Angles",
+                "Full Adjustability",
+                "Professional Racing Setup",
+                "Immersive Experience"
+            ],
+            "tags": [
+                "Racing",
+                "Simulator",
+                "Triple Monitor",
+                "Mount",
+                "LRS02-SR02",
+                "Gaming",
+                "Immersive"
+            ],
+            "stockQuantity": 0,
+            "datasheet": "assets/datasheets/gaming-003.pdf"
+        }
+    ],
+    "categories": [
+        {
+            "id": "av-distribution",
+            "name": "AV Distribution",
+            "description": "Professional audio-visual distribution equipment and converters",
+            "image": "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
+            "productCount": 3
+        },
+        {
+            "id": "cable",
+            "name": "Cable",
+            "description": "High-quality cables for audio, video, and data transmission",
+            "image": "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
+            "productCount": 4
+        },
+        {
+            "id": "ceiling-bracket",
+            "name": "Ceiling Bracket",
+            "description": "Professional ceiling mounting solutions for displays and TVs",
+            "image": "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs.jpg",
+            "productCount": 3
+        },
+        {
+            "id": "gaming",
+            "name": "Gaming",
+            "description": "Professional racing simulator equipment and gaming accessories",
+            "image": "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
+            "productCount": 3
+        }
+    ],
+    "metadata": {
+        "totalProducts": 13,
+        "totalCategories": 4,
+        "currency": "EGP",
+        "lastUpdated": "2025-01-31",
+        "version": "1.0"
     }
-  ],
-  "categories": [
-    {
-      "id": "av-distribution",
-      "name": "AV Distribution",
-      "description": "Professional audio-visual distribution equipment and converters",
-      "image": "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
-      "productCount": 3
-    },
-    {
-      "id": "cable",
-      "name": "Cable",
-      "description": "High-quality cables for audio, video, and data transmission",
-      "image": "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
-      "productCount": 4
-    },
-    {
-      "id": "ceiling-bracket",
-      "name": "Ceiling Bracket",
-      "description": "Professional ceiling mounting solutions for displays and TVs",
-      "image": "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs.jpg",
-      "productCount": 3
-    },
-    {
-      "id": "gaming",
-      "name": "Gaming",
-      "description": "Professional racing simulator equipment and gaming accessories",
-      "image": "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
-      "productCount": 3
-    }
-  ],
-  "metadata": {
-    "totalProducts": 13,
-    "totalCategories": 4,
-    "currency": "EGP",
-    "lastUpdated": "2025-01-31",
-    "version": "1.0"
-  }
 }

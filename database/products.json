@@ -17,43 +17,6 @@
     ],
     "mainImage": "assets/images/Products/Wall Mount/N2.jpg",
     "specifications": {
-      "tvSize": "14”-32”",
-      "brand": "Hot",
-      "maxWeight": "15kg",
-      "maxVESA": "100x100 mm"
-    },
-    "features": [
-      "Brand: Hot",
-      "Max VESA: 100x100 mm",
-      "Light Duty"
-    ],
-    "tags": [
-      "N2",
-      "Wall Mount",
-      "Hot",
-      "14-32 inch",
-      "Fixed"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-001.pdf"
-  },
-  {
-    "id": "wm-002",
-    "name": "LCD -201",
-    "category": "Fixed stand",
-    "categorySlug": "wall-mount",
-    "description": "Fixed wall mount for 14\"-42\" screens with 25Kg weight capacity and a maximum VESA of 200x200 mm.",
-    "shortDescription": "Fixed wall mount for 14\"-42\" screens",
-    "price": 99.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Wall Mount/LCD-201.jpg"
-    ],
-    "mainImage": "assets/images/Products/Wall Mount/LCD-201.jpg",
-    "specifications": {
       "tvSize": "14\"-42\"",
       "brand": "Hot",
       "maxWeight": "25Kg",
@@ -5714,43 +5677,78 @@
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-154.pdf"
   }
-        
-    ],
-    "categories": [
-        {
-            "id": "av-distribution",
-            "name": "AV Distribution",
-            "description": "Professional audio-visual distribution equipment and converters",
-            "image": "assets/images/Products/Av distribution/4K UHD GENRATOR.jpg",
-            "productCount": 3
-        },
-        {
-            "id": "cable",
-            "name": "Cable",
-            "description": "High-quality cables for audio, video, and data transmission",
-            "image": "assets/images/Products/Cable/DTECH Hdmi Cable by HOT High Speed Hdmi Cable Hdmi Male To Hdmi Male Cable Uhd 4k 3d 2160p 1 To 5m For Computer Tv Monitor V2.0.jpg",
-            "productCount": 4
-        },
-        {
-            "id": "ceiling-bracket",
-            "name": "Ceiling Bracket",
-            "description": "Professional ceiling mounting solutions for displays and TVs",
-            "image": "assets/images/Products/Ceiling bracket/Ceiling Tv Mounts TV Ceiling Holder For most 32″- 60″LED, LCD Flat Panel TVs.jpg",
-            "productCount": 3
-        },
-        {
-            "id": "gaming",
-            "name": "Gaming",
-            "description": "Professional racing simulator equipment and gaming accessories",
-            "image": "assets/images/Products/Gaming/LRS02-BS PREMIUM RACING SIMULATOR COCKPIT SEAT Professional Grade Product for the Serious Sim Racer.jpg",
-            "productCount": 3
-        }
-    ],
-    "metadata": {
-        "totalProducts": 13,
-        "totalCategories": 4,
-        "currency": "EGP",
-        "lastUpdated": "2025-01-31",
-        "version": "1.0"
+    
+  ],
+  "categories": [
+    {
+      "id": "ceiling-bracket",
+      "name": "Ceiling Bracket",
+      "description": "Mounts and brackets for ceiling installations and professional fixtures",
+      "image": "",
+      "productCount": 55
+    },
+    {
+      "id": "fixed-stand",
+      "name": "Fixed Stand",
+      "description": "Fixed wall and floor stands for displays",
+      "image": "",
+      "productCount": 26
+    },
+    {
+      "id": "full-motion",
+      "name": "Full Motion",
+      "description": "Full motion mounts and articulating arms for flexible positioning",
+      "image": "",
+      "productCount": 21
+    },
+    {
+      "id": "tv-cart",
+      "name": "TV Cart",
+      "description": "Mobile TV carts and trolley solutions",
+      "image": "",
+      "productCount": 13
+    },
+    {
+      "id": "stand-tilt",
+      "name": "Stand Tilt",
+      "description": "Tilt stands and mounts for simple angle adjustments",
+      "image": "",
+      "productCount": 12
+    },
+    {
+      "id": "video-wall",
+      "name": "Video Wall",
+      "description": "Video wall panels and mounting systems",
+      "image": "",
+      "productCount": 7
+    },
+    {
+      "id": "cables",
+      "name": "Cables",
+      "description": "High-quality audio, video and data cables",
+      "image": "",
+      "productCount": 7
+    },
+    {
+      "id": "motorized-tv",
+      "name": "Motorized TV",
+      "description": "Motorized mounts and automated display lifts",
+      "image": "",
+      "productCount": 5
+    },
+    {
+      "id": "gaming",
+      "name": "Gaming",
+      "description": "Racing simulators, gaming cockpits and accessories",
+      "image": "",
+      "productCount": 3
     }
+  ],
+  "metadata": {
+    "totalProducts": 149,
+    "totalCategories": 9,
+    "currency": "EGP",
+    "lastUpdated": "2025-09-20",
+    "version": "1.1"
+  }
 }

@@ -1134,7 +1134,7 @@ function displaySearchResults(results) {
                 <div>
                     <h4 class="font-medium text-gray-900 dark:text-white">${product.name}</h4>
                     <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">${product.category}</p>
-                    <p class="text-lg font-bold text-blue-600">${product.price}EGP</p>
+                    <!-- Price hidden in search results -->
                 </div>
             </div>
         </div>
@@ -1181,7 +1181,7 @@ function displayHeroSearchResults(results) {
                 <div>
                     <h4 class="font-medium text-gray-900">${product.name}</h4>
                     <p class="text-sm text-gray-500 capitalize">${product.category}</p>
-                    <p class="text-sm font-bold text-blue-600">${product.price}EGP</p>
+                    <!-- Price hidden in hero search suggestions -->
                 </div>
             </div>
         </div>
@@ -1723,10 +1723,7 @@ function displayFeaturedProducts() {
             <p class="text-gray-600 dark:text-gray-300 capitalize mb-3">${product.category}</p>
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    ${product.originalPrice ? 
-                        `<span class="text-sm text-gray-500 line-through">${product.originalPrice}EGP</span><br>` : ''
-                    }
-                    <span class="text-2xl font-bold text-blue-600">${product.price}EGP</span>
+                    <!-- Price hidden on featured product cards -->
                 </div>
             </div>
             <div class="flex space-x-2">
@@ -2062,13 +2059,7 @@ function displayShopProducts(productsToShow) {
                         </div>
                     ` : ''}
                     
-                    <!-- Price -->
-                    <div class="flex justify-between items-center">
-                        <div>
-                            ${isOnSale ? `<span class="text-sm text-gray-500 dark:text-gray-400 line-through">${originalPrice} ${currency}</span><br>` : ''}
-                            <span class="text-gray-800 dark:text-white font-bold text-xl">${productPrice.toFixed(2)} ${currency}</span>
-                        </div>
-                    </div>
+                    <!-- Price hidden on product cards; retained in data-price for sorting -->
                 </div>
             </a>
         `;

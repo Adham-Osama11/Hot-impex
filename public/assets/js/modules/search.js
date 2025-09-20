@@ -152,7 +152,7 @@ class SearchManager {
                     <div>
                         <h4 class="font-medium text-gray-900 dark:text-white">${product.name}</h4>
                         <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">${product.category}</p>
-                        <p class="text-lg font-bold text-blue-600">${product.price}${product.currency || 'EGP'}</p>
+                        <!-- Price hidden in search results -->
                     </div>
                 </div>
             </div>
@@ -236,7 +236,7 @@ class SearchManager {
                     <div>
                         <h4 class="font-medium text-gray-900">${product.name}</h4>
                         <p class="text-sm text-gray-500 capitalize">${product.category}</p>
-                        <p class="text-sm font-bold text-blue-600">${product.price}${product.currency || 'EGP'}</p>
+                        <!-- Price hidden in suggestions; kept in product data for sorting -->
                     </div>
                 </div>
             </div>

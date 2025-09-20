@@ -616,8 +616,6 @@ const products = [
         name: "CVBS/S-Video to HDMI Converter", 
         category: "AV Distribution",
         categorySlug: "av-distribution", 
-        price: 89.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "Convert legacy CVBS or S-Video signals to modern HDMI output with superior quality",
@@ -631,8 +629,6 @@ const products = [
         name: "Premium AUX Cable", 
         category: "Cable",
         categorySlug: "cable", 
-        price: 19.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "High-quality 3.5mm AUX cable for crystal clear audio transmission",
@@ -646,8 +642,6 @@ const products = [
         name: "DTECH High Speed HDMI Cable", 
         category: "Cable",
         categorySlug: "cable", 
-        price: 49.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "Premium HDMI cable supporting 4K UHD, 3D, and 2160p for computers, TVs, and monitors",
@@ -661,8 +655,6 @@ const products = [
         name: "LRS02-BS Premium Racing Simulator Cockpit", 
         category: "Gaming",
         categorySlug: "gaming", 
-        price: 1299.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "Premium racing simulator cockpit seat - professional grade product designed for serious sim racers",
@@ -676,8 +668,6 @@ const products = [
         name: "4K UHD Generator", 
         category: "AV Distribution",
         categorySlug: "av-distribution", 
-        price: 299.99,
-        currency: "EGP",
         inStock: true,
         featured: true,
         description: "High-performance 4K UHD signal generator for professional audio-visual applications",
@@ -690,8 +680,7 @@ const products = [
         id: "av-003", 
         name: "DVI-D to HDMI Adapter", 
         category: "AV Distribution",
-        categorySlug: "av-distribution", 
-        price: 29.99,
+        categorySlug: "av-distribution",
         currency: "EGP",
         inStock: true,
         description: "High-quality DVI-D Male (24+1 Pin) to HDMI Female adapter for seamless connectivity",
@@ -1606,12 +1595,7 @@ function openQuickView(productId) {
                 <div class="md:w-1/2 md:pl-6 mt-4 md:mt-0">
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">${product.name}</h2>
                     <p class="text-gray-600 dark:text-gray-300 capitalize mb-4">${product.category} Category</p>
-                    <div class="mb-4">
-                        ${product.originalPrice ? 
-                            `<span class="text-lg text-gray-500 line-through">${product.originalPrice}EGP</span>` : ''
-                        }
-                        <span class="text-2xl font-bold text-blue-600 ml-2">${product.price}EGP</span>
-                    </div>
+                   
                     <p class="text-gray-600 dark:text-gray-300 mb-6">
                         High-quality ${product.category} supplement designed for optimal performance and health benefits.
                     </p>
@@ -2010,8 +1994,7 @@ function displayShopProducts(productsToShow) {
             <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
                data-product-id="${product.id}" 
                data-category="${product.categorySlug || product.category}" 
-               data-name="${product.name}" 
-               data-price="${productPrice}">
+               data-name="${product.name}" >
                 <div class="relative h-64">
                     <img src="${imageUrl}" 
                          alt="${product.name}" 
@@ -2917,7 +2900,7 @@ function createProductCard(product) {
     // ...removed out of stock badge and overlays...
 
     cardWrapper.innerHTML = `
-        <div class="card" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-price="${product.price}" data-in-stock="${isInStock}">
+        <div class="card" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-in-stock="${isInStock}">
             <div class="card__shine"></div>
             <div class="card__glow"></div>
             <div class="card__content">

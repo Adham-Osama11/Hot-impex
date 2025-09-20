@@ -765,7 +765,7 @@
                                         card.classList.add('product-card');
                                         card.setAttribute('data-category', normalizedCategory);
                                         card.setAttribute('data-name', product.name || '');
-                                        card.setAttribute('data-price', product.price || 0);
+                                        //card.setAttribute('data-price', product.price || 0);
                                         grid.appendChild(card);
                                     });
                                 } else {
@@ -777,8 +777,7 @@
                                             <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden p-6 relative"
                                                  data-in-stock="true"
                                                  data-category="${normalizedCategory}"
-                                                 data-name="${product.name || ''}"
-                                                 data-price="${product.price || 0}">
+                                                 data-name="${product.name || ''}">
                                                 <h3 class="font-semibold text-gray-800 text-lg mb-2">${product.name}</h3>
                                                 <p class="text-gray-500 text-sm mb-4">${product.category}</p>
                                                 <p class="text-gray-800 font-bold text-xl">${product.price} ${product.currency}</p>

@@ -2937,7 +2937,7 @@ function createProductCard(product) {
                     <p class="card__description">${product.shortDescription}</p>
                 </div>
                 <div class="card__footer">
-                    <div class="card__price">${product.price}${product.currency}</div>
+                    <!-- Price intentionally hidden from product cards; kept in data-price attribute for sorting -->
                     <div class="card__button add-to-cart">
                         <svg height="16" width="16" viewBox="0 0 24 24"><path stroke-width="2" stroke="currentColor" d="M4 12H20M12 4V20" fill="none"></path></svg>
                     </div>

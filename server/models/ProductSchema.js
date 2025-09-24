@@ -32,6 +32,11 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    datasheet: {
+    type: String, // URL or file path to PDF
+    trim: true
+    },
+
     price: {
         type: Number,
         required: true,

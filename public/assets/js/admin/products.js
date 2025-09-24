@@ -60,7 +60,8 @@ class ProductsController {
         shortDescription: (form.querySelector('#addProductShortDescription')?.value || '').trim(),
         description: (form.querySelector('#addProductDescription')?.value || '').trim(),
         images: (form.querySelector('#addProductImages')?.value || '')
-          .split('\n').map(s => s.trim()).filter(Boolean)
+          .split('\n').map(s => s.trim()).filter(Boolean),
+        datasheet: (form.querySelector('#addProductDatasheet')?.value || '').trim() || null   // ✅ NEW
       };
 
       await this.api.createProduct(productData);
@@ -101,7 +102,8 @@ class ProductsController {
         shortDescription: (fd.get('shortDescription') || '').trim(),
         description: (fd.get('description') || '').trim(),
         images: String(fd.get('images') || '')
-          .split('\n').map(s => s.trim()).filter(Boolean)
+          .split('\n').map(s => s.trim()).filter(Boolean),
+        datasheet: (fd.get('datasheet') || '').trim() || null   // ✅ NEW
       };
 
       await this.api.updateProduct(idField, productData);
@@ -139,7 +141,7 @@ class ProductsController {
     if (!products || !products.length) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+          <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
             <div class="flex flex-col items-center">
               <svg class="w-12 h-12 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
@@ -157,6 +159,9 @@ class ProductsController {
         <td class="px-6 py-4">${p.category ?? ''}</td>
         <td class="px-6 py-4">$${Number(p.price || 0).toFixed(2)}</td>
         <td class="px-6 py-4">${p.stockQuantity ?? p.stock ?? 'N/A'}</td>
+        <td class="px-6 py-4">
+          ${p.datasheet ? `<a href="${p.datasheet}" target="_blank" class="text-blue-500 underline">Datasheet</a>` : '—'}
+        </td>
         <td class="px-6 py-4 text-right space-x-2">
           <button onclick="productsController.editProduct('${p.id}')" class="text-blue-500 hover:text-blue-400">Edit</button>
           <button onclick="productsController.deleteProduct('${p.id}')" class="text-red-500 hover:text-red-400">Delete</button>
@@ -208,6 +213,7 @@ class ProductsController {
     document.getElementById('productShortDescription').value = product.shortDescription ?? '';
     document.getElementById('productDescription').value = product.description ?? '';
     document.getElementById('productImages').value = Array.isArray(product.images) ? product.images.join('\n') : '';
+    document.getElementById('productDatasheet').value = product.datasheet ?? '';   // ✅ NEW
 
     document.getElementById('productModal').classList.remove('hidden');
     this.bindFormOnce();

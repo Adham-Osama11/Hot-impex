@@ -64,7 +64,7 @@
                 <!-- Main Navigation Section (Centered) -->
                 <div id="main-nav" class="hidden lg:flex items-center justify-center flex-1">
                     <div class="rounded-full p-3 flex items-center border border-white/30 shadow-2xl gap-2 bg-white/15 backdrop-blur-3xl">
-                        <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">Home</a>
+                        <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Home</a>
                         <a href="shop.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Products</a>
                         <a href="contact.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Contact Us</a>
                         <a href="about.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">About Us</a>
@@ -484,22 +484,22 @@
                 <div>
                     <span id="product-badge" class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-3">Loading...</span>
                     <h1 id="product-title" class="text-xl lg:text-2xl font-black text-gray-800 mb-3">Loading Product...</h1>
-                    <div class="flex flex-col space-y-2 mb-4">
+                    <!-- <div class="flex flex-col space-y-2 mb-4">
                         <span id="product-price" class="text-xl lg:text-2xl font-bold text-blue-600">EGP 0.00</span>
                         <div id="product-discount" class="flex items-center space-x-2 hidden">
                             <span id="original-price" class="text-sm text-gray-500 line-through"></span>
                             <span id="discount-badge" class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full"></span>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- Main Action Buttons -->
                     <div class="space-y-2">
-                        <button class="group w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm transform hover:scale-105 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <button id="datasheet-btn" class="group w-full bg-red-100 border-2 border-red-600 text-red-800 hover:bg-red-200 hover:border-red-700 hover:text-red-900 font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm transform hover:scale-105 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-red-200 opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
                             <div class="relative z-10 flex items-center justify-center space-x-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 384 512">
+                                    <path d="M181.9 256.1c-5-16-4.9-46.9-2-46.9 8.4 0 7.6 36.9 2 46.9zm-1.7 47.2c-7.7 20.2-17.3 43.3-28.4 62.7 18.3-7 39-17.2 62.9-21.9-12.7-9.6-24.9-23.4-34.5-40.8zM86.1 428.1c0 .8 13.2-5.4 34.9-40.2-6.7 6.3-29.1 24.5-34.9 40.2zM248 160h136v328c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V24C0 10.7 10.7 0 24 0h200v136c0 13.2 10.8 24 24 24zm-8 171.8c-20-12.2-33.3-29-42.7-53.8 4.5-18.5 11.6-46.6 6.2-64.2-4.7-29.4-42.4-26.5-47.8-6.8-5 18.3-.4 44.1 8.1 77-11.6 27.6-28.7 64.6-40.8 85.8-.1 0-.1.1-.2.1-27.1 13.9-73.6 44.5-54.5 68 5.6 6.9 16 10 21.5 10 17.9 0 35.7-18 61.1-61.8 25.8-8.5 54.1-19.1 79-23.2 21.7 11.8 47.1 19.5 64 19.5 29.2 0 31.2-32 19.7-43.4-13.9-13.6-54.3-9.7-73.6-7.2zM377 105L279 7c-4.5-4.5-10.6-7-17-7h-6v128h128v-6c0-6.4-2.5-12.5-7-17z"/>
                                 </svg>
-                                <span>Open DataSheet</span>
+                                <span>View Data Sheet</span>
                             </div>
                         </button>
                     </div>
@@ -964,30 +964,32 @@
                 
                 // Fallback to local products array if available
                 if (window.products && Array.isArray(window.products)) {
-                    // First try to find by string ID (e.g., "av-002")
+                    // First try to find by string ID
                     let localProduct = window.products.find(p => p.id === productId);
-                    // If not found, try as integer ID for backward compatibility
+                    // If not found, try as integer
                     if (!localProduct) {
                         localProduct = window.products.find(p => p.id === parseInt(productId));
                     }
                     
                     if (localProduct) {
-                        // Add some default values for API compatibility
                         return {
                             ...localProduct,
                             inStock: true,
-                            stock: 15,
-                            description: "High-quality product from HOT IMPEX.",
-                            specifications: ["Professional grade", "High performance"],
-                            images: [`assets/images/Products/${localProduct.category}/${localProduct.image || 'default'}.jpg`]
+                            stock: localProduct.stock || 15,
+                            description: localProduct.description || localProduct.shortDescription || "High-quality product from HOT IMPEX.",
+                            specifications: localProduct.specifications || ["Professional grade", "High performance"],
+                            images: (localProduct.images && localProduct.images.length > 0) 
+                                ? localProduct.images 
+                                : ["assets/images/placeholder.png"],
+                            datasheet: localProduct.datasheet || null
                         };
                     }
                 }
 
-                // If no local product found, create a default test product
+                // Default test product
                 console.log('Creating default test product for ID:', productId);
                 return {
-                    id: productId, // Keep as string ID
+                    id: productId,
                     name: "4K UHD Generator",
                     category: "av-distribution",
                     price: 299.99,
@@ -995,11 +997,9 @@
                     stock: 15,
                     description: "Professional 4K UHD test pattern generator for display calibration and testing.",
                     specifications: ["4K@60Hz output", "HDMI 2.0", "100+ test patterns"],
-                    images: ["assets/images/Products/Av distribution/4K UHD GENRATOR.jpg"]
+                    images: ["assets/images/Products/Av distribution/4K UHD GENRATOR.jpg"],
+                    datasheet: "assets/datasheets/sample.pdf"
                 };
-                
-                showError('Failed to load product. Please try again.');
-                return null;
             }
         }
 
@@ -1056,28 +1056,41 @@
                 discountSection.classList.add('hidden');
             }
 
-            // Update stock status
+            // Update stock status (guard in case element is missing)
             const stockStatus = document.getElementById('stock-status');
-            if (product.inStock) {
-                stockStatus.innerHTML = `
-                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    In Stock
-                `;
-                stockStatus.className = 'bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center';
-            } else {
-                stockStatus.innerHTML = `
-                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm4.293-5.707a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    Out of Stock
-                `;
-                stockStatus.className = 'bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center';
+            if (stockStatus) {
+                if (product.inStock) {
+                    stockStatus.innerHTML = `
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        In Stock
+                    `;
+                    stockStatus.className = 'bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center';
+                } else {
+                    stockStatus.innerHTML = `
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm4.293-5.707a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Out of Stock
+                    `;
+                    stockStatus.className = 'bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full flex items-center';
+                }
             }
 
             // Update description
             document.getElementById('product-description').textContent = product.description || product.shortDescription || 'No description available.';
+            // Handle datasheet button (support both id formats and guard if missing)
+            const datasheetButton = document.getElementById('datasheet-btn') || document.getElementById('datasheetButton');
+            if (datasheetButton) {
+                if (product.datasheet && product.datasheet.trim() !== '') {
+                    datasheetButton.classList.remove('hidden');
+                    datasheetButton.onclick = () => window.open(product.datasheet, '_blank');
+                } else {
+                    datasheetButton.classList.add('hidden');
+                    datasheetButton.onclick = null;
+                }
+            }
 
             // Update images
             updateProductImages(product);
@@ -1095,13 +1108,14 @@
             const thumbnailsContainer = document.getElementById('product-thumbnails');
 
             // Set main image
-            if (product.mainImage) {
-                mainImage.src = product.mainImage;
-                mainImage.alt = product.name;
-            } else if (product.images && product.images.length > 0) {
-                mainImage.src = product.images[0];
-                mainImage.alt = product.name;
+            if (product.images && product.images.length > 0) {
+            mainImage.src = product.images[0];
+            mainImage.alt = product.name;
+            } else {
+            mainImage.src = "assets/images/placeholder.png";
+            mainImage.alt = "No image available";
             }
+
 
             // Create thumbnails
             thumbnailsContainer.innerHTML = '';

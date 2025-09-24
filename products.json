@@ -1,6 +1,7 @@
 {
-    "products": [
-        {
+  "products": {
+    "Fixed stand": [
+  {
     "id": "wm-001",
     "name": "N2",
     "category": "Fixed stand",
@@ -16,6 +17,43 @@
       "assets/images/Products/Wall Mount/N2.jpg"
     ],
     "mainImage": "assets/images/Products/Wall Mount/N2.jpg",
+    "specifications": {
+      "tvSize": "14”-32”",
+      "brand": "Hot",
+      "maxWeight": "15kg",
+      "maxVESA": "100x100 mm"
+    },
+    "features": [
+      "Brand: Hot",
+      "Max VESA: 100x100 mm",
+      "Light Duty"
+    ],
+    "tags": [
+      "N2",
+      "Wall Mount",
+      "Hot",
+      "14-32 inch",
+      "Fixed"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-001.pdf"
+  },
+  {
+    "id": "wm-002",
+    "name": "LCD -201",
+    "category": "Fixed stand",
+    "categorySlug": "wall-mount",
+    "description": "Fixed wall mount for 14\"-42\" screens with 25Kg weight capacity and a maximum VESA of 200x200 mm.",
+    "shortDescription": "Fixed wall mount for 14\"-42\" screens",
+    "price": 99.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Wall Mount/LCD-201.jpg"
+    ],
+    "mainImage": "assets/images/Products/Wall Mount/LCD-201.jpg",
     "specifications": {
       "tvSize": "14\"-42\"",
       "brand": "Hot",
@@ -933,7 +971,11 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-026.pdf"
-  },{
+  }
+
+    ],
+    "STAND TILT": [
+  {
     "id": "wm-027",
     "name": "HOT 101N",
     "category": "Stand Tilt",
@@ -1411,7 +1453,9 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-038.pdf"
-  },
+  }
+    ],
+    "FULL MOTION": [
   {
     "id": "wm-039",
     "name": "CP 201",
@@ -2243,7 +2287,9 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-059.pdf"
-  },
+  }
+    ],
+    "VIDEO WALL": [
   {
     "id": "wm-060",
     "name": "LVW09-46T",
@@ -2519,7 +2565,10 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-066.pdf"
-  },
+  }
+
+    ],
+    "Motorized tv": [
   {
     "id": "wm-067",
     "name": "LP66-44M",
@@ -2717,8 +2766,12 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-071.pdf"
-  },
-   {
+  }
+
+    ],
+    "TV.CART": [
+      
+  {
     "id": "wm-072",
     "name": "FS02G",
     "category": "TV Cart",
@@ -3230,423 +3283,10 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-084.pdf"
-  },
-{
-    "id": "wm-085",
-    "name": "PM100180",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Adjustable ceiling pole/bracket (LUMI) with a very long extension from 100mm to 1800mm, featuring a 15kg weight capacity.",
-    "shortDescription": "Long adjustable ceiling pole (1.8m max)",
-    "price": 299.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/PM100180.jpg"
+  }
+
     ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/PM100180.jpg",
-    "specifications": {
-      "brand": "LUMI",
-      "maxWeight": "15kg",
-      "length": "100mm to 1800mm"
-    },
-    "features": [
-      "Adjustable Pole Length",
-      "Max Extension: 1.8m",
-      "Brand: LUMI"
-    ],
-    "tags": [
-      "PM100180",
-      "Ceiling",
-      "Pole",
-      "LUMI",
-      "Adjustable"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-085.pdf"
-  },
-  {
-    "id": "wm-086",
-    "name": "PM63100",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Adjustable ceiling pole/bracket (LUMI) with length adjustable from 630mm to 1000mm, featuring a 20kg weight capacity.",
-    "shortDescription": "Adjustable ceiling pole (630mm to 1000mm)",
-    "price": 199.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/PM63100.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/PM63100.jpg",
-    "specifications": {
-      "brand": "LUMI",
-      "maxWeight": "20kg",
-      "length": "630mm to 1000mm"
-    },
-    "features": [
-      "Adjustable Pole Length",
-      "Max Extension: 1.0m",
-      "Brand: LUMI"
-    ],
-    "tags": [
-      "PM63100",
-      "Ceiling",
-      "Pole",
-      "LUMI",
-      "Adjustable"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-086.pdf"
-  },
-  {
-    "id": "wm-087",
-    "name": "PM4365F",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Fixed/Short adjustable ceiling mount for smaller 15”-23” screens, with 20kg capacity and length adjustable from 430mm to 650mm.",
-    "shortDescription": "Short adjustable ceiling mount for 15”-23” screens",
-    "price": 179.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/PM4365F.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/PM4365F.jpg",
-    "specifications": {
-      "tvSize": "15”-23”",
-      "maxWeight": "20kg",
-      "length": "430mm to 650mm",
-      "brand": null
-    },
-    "features": [
-      "Adjustable Length",
-      "Supports Small Screens",
-      "20kg Capacity"
-    ],
-    "tags": [
-      "PM4365F",
-      "Ceiling",
-      "Small Screen",
-      "Fixed"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-087.pdf"
-  },
-  {
-    "id": "wm-088",
-    "name": "HOT- 01",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Adjustable drop ceiling mount (HOT) for 27\"-50\" screens, featuring a 50kg capacity and max VESA 200x200mm, with an adjustable drop from 745mm to 1045mm.",
-    "shortDescription": "Adjustable drop ceiling mount for 27\"-50\"",
-    "price": 249.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/HOT-01.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-01.jpg",
-    "specifications": {
-      "tvSize": "27\"-50\"",
-      "brand": "HOT",
-      "maxWeight": "50kg",
-      "maxVESA": "200x200mm",
-      "length": "745mm to 1045mm"
-    },
-    "features": [
-      "Adjustable Drop Length",
-      "Brand: HOT",
-      "Heavy Duty (50kg)"
-    ],
-    "tags": [
-      "HOT-01",
-      "Ceiling",
-      "Adjustable",
-      "HOT",
-      "27-50 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-088.pdf"
-  },
-  {
-    "id": "wm-089",
-    "name": "HOT- 02",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Adjustable drop ceiling mount (HOT) for 32\"-60\" screens, featuring a 50kg capacity and max VESA 400x400 mm, with an adjustable drop from 745mm to 1045mm.",
-    "shortDescription": "Adjustable drop ceiling mount for 32\"-60\"",
-    "price": 279.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/HOT-02.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-02.jpg",
-    "specifications": {
-      "tvSize": "32\"-60\"",
-      "brand": "HOT",
-      "maxWeight": "50kg",
-      "maxVESA": "400x400 mm",
-      "length": "745mm to 1045mm"
-    },
-    "features": [
-      "Adjustable Drop Length",
-      "Brand: HOT",
-      "Heavy Duty (50kg)"
-    ],
-    "tags": [
-      "HOT-02",
-      "Ceiling",
-      "Adjustable",
-      "HOT",
-      "32-60 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-089.pdf"
-  },
-  {
-    "id": "wm-090",
-    "name": "HOT- 03",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Adjustable drop ceiling mount (HOT) for 42\"-75\" large screens, featuring a 50kg capacity and max VESA 600x600, with an adjustable drop from 745mm to 1045mm.",
-    "shortDescription": "Adjustable drop ceiling mount for 42\"-75\"",
-    "price": 319.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/HOT-03.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-03.jpg",
-    "specifications": {
-      "tvSize": "42\"-75\"",
-      "brand": "HOT",
-      "maxWeight": "50kg",
-      "maxVESA": "600x600",
-      "length": "745mm to 1045mm"
-    },
-    "features": [
-      "Adjustable Drop Length",
-      "Brand: HOT",
-      "Supports 75\" Screens",
-      "Large VESA (600x600)"
-    ],
-    "tags": [
-      "HOT-03",
-      "Ceiling",
-      "Adjustable",
-      "HOT",
-      "42-75 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-090.pdf"
-  },
-  {
-    "id": "wm-091",
-    "name": "HOT 3275",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Heavy-Duty Adjustable Ceiling Mount (HOT) for 32\"-75\" screens, featuring a robust 65kg capacity and max VESA 600x400mm, with a drop length of 750mm to 1100mm.",
-    "shortDescription": "Heavy-Duty adjustable ceiling mount for 32\"-75\"",
-    "price": 349.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/HOT3275.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/HOT3275.jpg",
-    "specifications": {
-      "tvSize": "32\"-75\"",
-      "brand": "HOT",
-      "maxWeight": "65kg",
-      "maxVESA": "600x400mm",
-      "length": "750mm to 1100mm"
-    },
-    "features": [
-      "Heavy Duty (65kg)",
-      "Adjustable Drop Length",
-      "Supports 75\" Screens",
-      "Brand: HOT"
-    ],
-    "tags": [
-      "HOT 3275",
-      "Ceiling",
-      "Heavy Duty",
-      "HOT",
-      "32-75 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-091.pdf"
-  },
-  {
-    "id": "wm-092",
-    "name": "HOT-55-120",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Ultra Heavy-Duty Adjustable Ceiling Mount (HOT) for massive 55\"-120\" screens, featuring a 120kg capacity and max VESA 900x600mm, with a long drop length of 105mm to 1620mm.",
-    "shortDescription": "Ultra Heavy-Duty adjustable ceiling mount for 55\"-120\"",
-    "price": 699.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": true,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/HOT-55-120.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-55-120.jpg",
-    "specifications": {
-      "tvSize": "55\"-120\"",
-      "brand": "HOT",
-      "maxWeight": "120kg",
-      "maxVESA": "900x600mm",
-      "length": "105mm to 1620mm"
-    },
-    "features": [
-      "Ultra Heavy Duty (120kg)",
-      "Supports Massive 120\" Screens",
-      "Long Adjustable Drop",
-      "Brand: HOT"
-    ],
-    "tags": [
-      "HOT-55-120",
-      "Ceiling",
-      "Ultra Heavy Duty",
-      "HOT",
-      "120 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-092.pdf"
-  },
-  {
-    "id": "wm-093",
-    "name": "PLB-CE3",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Adjustable Ceiling Mount (HOT) for 37\"-70\" screens, featuring 75kg capacity and max VESA 150x90, with a drop length of 745mm to 1045mm.",
-    "shortDescription": "Heavy-Duty adjustable ceiling mount for 37\"-70\"",
-    "price": 329.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/PLB-CE3.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/PLB-CE3.jpg",
-    "specifications": {
-      "tvSize": "37\"-70\"",
-      "brand": "HOT",
-      "maxWeight": "75kg",
-      "maxVESA": "150x90",
-      "length": "745mm to 1045mm"
-    },
-    "features": [
-      "Heavy Duty (75kg)",
-      "Adjustable Drop Length",
-      "Brand: HOT"
-    ],
-    "tags": [
-      "PLB-CE3",
-      "Ceiling",
-      "Heavy Duty",
-      "HOT",
-      "37-70 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-093.pdf"
-  },
-  {
-    "id": "wm-094",
-    "name": "PLB-CE922-01L",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Adjustable drop ceiling mount (HOT) for 23\"-42\" screens, featuring 50kg capacity and max VESA 200x200, with a long adjustable drop from 1060mm to 1560mm.",
-    "shortDescription": "Long drop ceiling mount for 23\"-42\" screens",
-    "price": 279.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/PLB-CE922-01L.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/PLB-CE922-01L.jpg",
-    "specifications": {
-      "tvSize": "23\"-42\"",
-      "brand": "HOT",
-      "maxWeight": "50kg",
-      "maxVESA": "200x200",
-      "length": "1060mm to 1560mm"
-    },
-    "features": [
-      "Long Adjustable Drop (1.56m max)",
-      "Brand: HOT",
-      "Heavy Duty (50kg)"
-    ],
-    "tags": [
-      "PLB-CE922-01L",
-      "Ceiling",
-      "Long Drop",
-      "HOT",
-      "23-42 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-094.pdf"
-  },
-  {
-    "id": "wm-095",
-    "name": "PLB-CE1046D-02",
-    "category": "Ceiling Bracket",
-    "categorySlug": "ceiling-bracket",
-    "description": "Heavy-Duty Adjustable Ceiling Mount (HOT) for 32\"-75\" screens, featuring 65kg capacity and max VESA 600x400mm, with a wide adjustable drop from 695mm to 1565mm.",
-    "shortDescription": "Heavy-Duty long drop ceiling mount for 32\"-75\"",
-    "price": 389.99,
-    "currency": "EGP",
-    "inStock": true,
-    "featured": false,
-    "bestSeller": false,
-    "images": [
-      "assets/images/Products/Ceiling Bracket/PLB-CE1046D-02.jpg"
-    ],
-    "mainImage": "assets/images/Products/Ceiling Bracket/PLB-CE1046D-02.jpg",
-    "specifications": {
-      "tvSize": "32\"-75\"",
-      "brand": "HOT",
-      "maxWeight": "65kg",
-      "maxVESA": "600x400mm",
-      "length": "695mm to 1565mm"
-    },
-    "features": [
-      "Heavy Duty (65kg)",
-      "Long Adjustable Drop (1.565m max)",
-      "Supports 75\" Screens",
-      "Brand: HOT"
-    ],
-    "tags": [
-      "PLB-CE1046D-02",
-      "Ceiling",
-      "Heavy Duty",
-      "HOT",
-      "32-75 inch"
-    ],
-    "stockQuantity": 0,
-    "datasheet": "assets/datasheets/wm-095.pdf"
-  },
+    "Celling bracket": [
   {
     "id": "wm-085",
     "name": "PM100180",
@@ -4062,7 +3702,9 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-095.pdf"
-  },
+  }
+],
+    "Desktop mount": [
   {
     "id": "wm-085",
     "name": "PM100180",
@@ -4478,8 +4120,10 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-095.pdf"
-  },
-   {
+  }
+],
+    "extenders": [
+  {
     "id": "wm-085",
     "name": "PM100180",
     "category": "Ceiling Bracket",
@@ -4894,8 +4538,10 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-095.pdf"
-  },
-   {
+  }
+],
+    "Av distribution": [
+  {
     "id": "wm-085",
     "name": "PM100180",
     "category": "Ceiling Bracket",
@@ -5310,7 +4956,427 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-095.pdf"
+  }
+],
+    "Dvd bracket": [
+  {
+    "id": "wm-085",
+    "name": "PM100180",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Adjustable ceiling pole/bracket (LUMI) with a very long extension from 100mm to 1800mm, featuring a 15kg weight capacity.",
+    "shortDescription": "Long adjustable ceiling pole (1.8m max)",
+    "price": 299.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/PM100180.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/PM100180.jpg",
+    "specifications": {
+      "brand": "LUMI",
+      "maxWeight": "15kg",
+      "length": "100mm to 1800mm"
+    },
+    "features": [
+      "Adjustable Pole Length",
+      "Max Extension: 1.8m",
+      "Brand: LUMI"
+    ],
+    "tags": [
+      "PM100180",
+      "Ceiling",
+      "Pole",
+      "LUMI",
+      "Adjustable"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-085.pdf"
   },
+  {
+    "id": "wm-086",
+    "name": "PM63100",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Adjustable ceiling pole/bracket (LUMI) with length adjustable from 630mm to 1000mm, featuring a 20kg weight capacity.",
+    "shortDescription": "Adjustable ceiling pole (630mm to 1000mm)",
+    "price": 199.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/PM63100.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/PM63100.jpg",
+    "specifications": {
+      "brand": "LUMI",
+      "maxWeight": "20kg",
+      "length": "630mm to 1000mm"
+    },
+    "features": [
+      "Adjustable Pole Length",
+      "Max Extension: 1.0m",
+      "Brand: LUMI"
+    ],
+    "tags": [
+      "PM63100",
+      "Ceiling",
+      "Pole",
+      "LUMI",
+      "Adjustable"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-086.pdf"
+  },
+  {
+    "id": "wm-087",
+    "name": "PM4365F",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Fixed/Short adjustable ceiling mount for smaller 15”-23” screens, with 20kg capacity and length adjustable from 430mm to 650mm.",
+    "shortDescription": "Short adjustable ceiling mount for 15”-23” screens",
+    "price": 179.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/PM4365F.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/PM4365F.jpg",
+    "specifications": {
+      "tvSize": "15”-23”",
+      "maxWeight": "20kg",
+      "length": "430mm to 650mm",
+      "brand": null
+    },
+    "features": [
+      "Adjustable Length",
+      "Supports Small Screens",
+      "20kg Capacity"
+    ],
+    "tags": [
+      "PM4365F",
+      "Ceiling",
+      "Small Screen",
+      "Fixed"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-087.pdf"
+  },
+  {
+    "id": "wm-088",
+    "name": "HOT- 01",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Adjustable drop ceiling mount (HOT) for 27\"-50\" screens, featuring a 50kg capacity and max VESA 200x200mm, with an adjustable drop from 745mm to 1045mm.",
+    "shortDescription": "Adjustable drop ceiling mount for 27\"-50\"",
+    "price": 249.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/HOT-01.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-01.jpg",
+    "specifications": {
+      "tvSize": "27\"-50\"",
+      "brand": "HOT",
+      "maxWeight": "50kg",
+      "maxVESA": "200x200mm",
+      "length": "745mm to 1045mm"
+    },
+    "features": [
+      "Adjustable Drop Length",
+      "Brand: HOT",
+      "Heavy Duty (50kg)"
+    ],
+    "tags": [
+      "HOT-01",
+      "Ceiling",
+      "Adjustable",
+      "HOT",
+      "27-50 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-088.pdf"
+  },
+  {
+    "id": "wm-089",
+    "name": "HOT- 02",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Adjustable drop ceiling mount (HOT) for 32\"-60\" screens, featuring a 50kg capacity and max VESA 400x400 mm, with an adjustable drop from 745mm to 1045mm.",
+    "shortDescription": "Adjustable drop ceiling mount for 32\"-60\"",
+    "price": 279.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/HOT-02.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-02.jpg",
+    "specifications": {
+      "tvSize": "32\"-60\"",
+      "brand": "HOT",
+      "maxWeight": "50kg",
+      "maxVESA": "400x400 mm",
+      "length": "745mm to 1045mm"
+    },
+    "features": [
+      "Adjustable Drop Length",
+      "Brand: HOT",
+      "Heavy Duty (50kg)"
+    ],
+    "tags": [
+      "HOT-02",
+      "Ceiling",
+      "Adjustable",
+      "HOT",
+      "32-60 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-089.pdf"
+  },
+  {
+    "id": "wm-090",
+    "name": "HOT- 03",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Adjustable drop ceiling mount (HOT) for 42\"-75\" large screens, featuring a 50kg capacity and max VESA 600x600, with an adjustable drop from 745mm to 1045mm.",
+    "shortDescription": "Adjustable drop ceiling mount for 42\"-75\"",
+    "price": 319.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/HOT-03.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-03.jpg",
+    "specifications": {
+      "tvSize": "42\"-75\"",
+      "brand": "HOT",
+      "maxWeight": "50kg",
+      "maxVESA": "600x600",
+      "length": "745mm to 1045mm"
+    },
+    "features": [
+      "Adjustable Drop Length",
+      "Brand: HOT",
+      "Supports 75\" Screens",
+      "Large VESA (600x600)"
+    ],
+    "tags": [
+      "HOT-03",
+      "Ceiling",
+      "Adjustable",
+      "HOT",
+      "42-75 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-090.pdf"
+  },
+  {
+    "id": "wm-091",
+    "name": "HOT 3275",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Heavy-Duty Adjustable Ceiling Mount (HOT) for 32\"-75\" screens, featuring a robust 65kg capacity and max VESA 600x400mm, with a drop length of 750mm to 1100mm.",
+    "shortDescription": "Heavy-Duty adjustable ceiling mount for 32\"-75\"",
+    "price": 349.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/HOT3275.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/HOT3275.jpg",
+    "specifications": {
+      "tvSize": "32\"-75\"",
+      "brand": "HOT",
+      "maxWeight": "65kg",
+      "maxVESA": "600x400mm",
+      "length": "750mm to 1100mm"
+    },
+    "features": [
+      "Heavy Duty (65kg)",
+      "Adjustable Drop Length",
+      "Supports 75\" Screens",
+      "Brand: HOT"
+    ],
+    "tags": [
+      "HOT 3275",
+      "Ceiling",
+      "Heavy Duty",
+      "HOT",
+      "32-75 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-091.pdf"
+  },
+  {
+    "id": "wm-092",
+    "name": "HOT-55-120",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Ultra Heavy-Duty Adjustable Ceiling Mount (HOT) for massive 55\"-120\" screens, featuring a 120kg capacity and max VESA 900x600mm, with a long drop length of 105mm to 1620mm.",
+    "shortDescription": "Ultra Heavy-Duty adjustable ceiling mount for 55\"-120\"",
+    "price": 699.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": true,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/HOT-55-120.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/HOT-55-120.jpg",
+    "specifications": {
+      "tvSize": "55\"-120\"",
+      "brand": "HOT",
+      "maxWeight": "120kg",
+      "maxVESA": "900x600mm",
+      "length": "105mm to 1620mm"
+    },
+    "features": [
+      "Ultra Heavy Duty (120kg)",
+      "Supports Massive 120\" Screens",
+      "Long Adjustable Drop",
+      "Brand: HOT"
+    ],
+    "tags": [
+      "HOT-55-120",
+      "Ceiling",
+      "Ultra Heavy Duty",
+      "HOT",
+      "120 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-092.pdf"
+  },
+  {
+    "id": "wm-093",
+    "name": "PLB-CE3",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Adjustable Ceiling Mount (HOT) for 37\"-70\" screens, featuring 75kg capacity and max VESA 150x90, with a drop length of 745mm to 1045mm.",
+    "shortDescription": "Heavy-Duty adjustable ceiling mount for 37\"-70\"",
+    "price": 329.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/PLB-CE3.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/PLB-CE3.jpg",
+    "specifications": {
+      "tvSize": "37\"-70\"",
+      "brand": "HOT",
+      "maxWeight": "75kg",
+      "maxVESA": "150x90",
+      "length": "745mm to 1045mm"
+    },
+    "features": [
+      "Heavy Duty (75kg)",
+      "Adjustable Drop Length",
+      "Brand: HOT"
+    ],
+    "tags": [
+      "PLB-CE3",
+      "Ceiling",
+      "Heavy Duty",
+      "HOT",
+      "37-70 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-093.pdf"
+  },
+  {
+    "id": "wm-094",
+    "name": "PLB-CE922-01L",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Adjustable drop ceiling mount (HOT) for 23\"-42\" screens, featuring 50kg capacity and max VESA 200x200, with a long adjustable drop from 1060mm to 1560mm.",
+    "shortDescription": "Long drop ceiling mount for 23\"-42\" screens",
+    "price": 279.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/PLB-CE922-01L.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/PLB-CE922-01L.jpg",
+    "specifications": {
+      "tvSize": "23\"-42\"",
+      "brand": "HOT",
+      "maxWeight": "50kg",
+      "maxVESA": "200x200",
+      "length": "1060mm to 1560mm"
+    },
+    "features": [
+      "Long Adjustable Drop (1.56m max)",
+      "Brand: HOT",
+      "Heavy Duty (50kg)"
+    ],
+    "tags": [
+      "PLB-CE922-01L",
+      "Ceiling",
+      "Long Drop",
+      "HOT",
+      "23-42 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-094.pdf"
+  },
+  {
+    "id": "wm-095",
+    "name": "PLB-CE1046D-02",
+    "category": "Ceiling Bracket",
+    "categorySlug": "ceiling-bracket",
+    "description": "Heavy-Duty Adjustable Ceiling Mount (HOT) for 32\"-75\" screens, featuring 65kg capacity and max VESA 600x400mm, with a wide adjustable drop from 695mm to 1565mm.",
+    "shortDescription": "Heavy-Duty long drop ceiling mount for 32\"-75\"",
+    "price": 389.99,
+    "currency": "EGP",
+    "inStock": true,
+    "featured": false,
+    "bestSeller": false,
+    "images": [
+      "assets/images/Products/Ceiling Bracket/PLB-CE1046D-02.jpg"
+    ],
+    "mainImage": "assets/images/Products/Ceiling Bracket/PLB-CE1046D-02.jpg",
+    "specifications": {
+      "tvSize": "32\"-75\"",
+      "brand": "HOT",
+      "maxWeight": "65kg",
+      "maxVESA": "600x400mm",
+      "length": "695mm to 1565mm"
+    },
+    "features": [
+      "Heavy Duty (65kg)",
+      "Long Adjustable Drop (1.565m max)",
+      "Supports 75\" Screens",
+      "Brand: HOT"
+    ],
+    "tags": [
+      "PLB-CE1046D-02",
+      "Ceiling",
+      "Heavy Duty",
+      "HOT",
+      "32-75 inch"
+    ],
+    "stockQuantity": 0,
+    "datasheet": "assets/datasheets/wm-095.pdf"
+  }
+],
+    "gaming": [
   {
     "id": "wm-145",
     "name": "LRS01-GR",
@@ -5426,7 +5492,9 @@
     ],
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-147.pdf"
-  },
+  }
+],
+    "Cables": [
   {
     "id": "wm-148",
     "name": "DP to DP cable",
@@ -5677,78 +5745,6 @@
     "stockQuantity": 0,
     "datasheet": "assets/datasheets/wm-154.pdf"
   }
-    
-  ],
-  "categories": [
-    {
-      "id": "ceiling-bracket",
-      "name": "Ceiling Bracket",
-      "description": "Mounts and brackets for ceiling installations and professional fixtures",
-      "image": "",
-      "productCount": 55
-    },
-    {
-      "id": "fixed-stand",
-      "name": "Fixed Stand",
-      "description": "Fixed wall and floor stands for displays",
-      "image": "",
-      "productCount": 26
-    },
-    {
-      "id": "full-motion",
-      "name": "Full Motion",
-      "description": "Full motion mounts and articulating arms for flexible positioning",
-      "image": "",
-      "productCount": 21
-    },
-    {
-      "id": "tv-cart",
-      "name": "TV Cart",
-      "description": "Mobile TV carts and trolley solutions",
-      "image": "",
-      "productCount": 13
-    },
-    {
-      "id": "stand-tilt",
-      "name": "Stand Tilt",
-      "description": "Tilt stands and mounts for simple angle adjustments",
-      "image": "",
-      "productCount": 12
-    },
-    {
-      "id": "video-wall",
-      "name": "Video Wall",
-      "description": "Video wall panels and mounting systems",
-      "image": "",
-      "productCount": 7
-    },
-    {
-      "id": "cables",
-      "name": "Cables",
-      "description": "High-quality audio, video and data cables",
-      "image": "",
-      "productCount": 7
-    },
-    {
-      "id": "motorized-tv",
-      "name": "Motorized TV",
-      "description": "Motorized mounts and automated display lifts",
-      "image": "",
-      "productCount": 5
-    },
-    {
-      "id": "gaming",
-      "name": "Gaming",
-      "description": "Racing simulators, gaming cockpits and accessories",
-      "image": "",
-      "productCount": 3
-    }
-  ],
-  "metadata": {
-    "totalProducts": 149,
-    "totalCategories": 9,
-    "currency": "EGP",
-    "lastUpdated": "2025-09-20",
-    "version": "1.1"
+]
   }
 }

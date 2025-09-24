@@ -218,10 +218,7 @@ class ProductsManager {
                 <p class="text-gray-600 dark:text-gray-300 capitalize mb-3">${product.category}</p>
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        ${isOnSale ? 
-                            `<span class="text-sm text-gray-500 line-through">${originalPrice}${currency}</span><br>` : ''
-                        }
-                        <span class="text-2xl font-bold text-blue-600">${productPrice.toFixed(2)}${currency}</span>
+                        <!-- Price hidden on product cards; used internally via data-price -->
                     </div>
                 </div>
                 <div class="flex space-x-2">

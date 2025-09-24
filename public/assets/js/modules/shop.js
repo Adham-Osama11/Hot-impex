@@ -340,13 +340,8 @@ class ShopManager {
                         </div>
                     ` : ''}
                     
-                    <!-- Price -->
+                    <!-- Price hidden on product cards; retained in data-price for sorting -->
                     <div class="flex justify-between items-center">
-                        <div>
-                            ${isOnSale ? `<span class="text-sm text-gray-500 dark:text-gray-400 line-through">${originalPrice} ${currency}</span><br>` : ''}
-                            <span class="text-gray-800 dark:text-white font-bold text-xl">${productPrice.toFixed(2)} ${currency}</span>
-                        </div>
-                        
                         <!-- Stock Status -->
                         ${product.inStock !== undefined ? `
                             <span class="text-xs px-2 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">

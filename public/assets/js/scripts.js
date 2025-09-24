@@ -616,8 +616,6 @@ const products = [
         name: "CVBS/S-Video to HDMI Converter", 
         category: "AV Distribution",
         categorySlug: "av-distribution", 
-        price: 89.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "Convert legacy CVBS or S-Video signals to modern HDMI output with superior quality",
@@ -631,8 +629,6 @@ const products = [
         name: "Premium AUX Cable", 
         category: "Cable",
         categorySlug: "cable", 
-        price: 19.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "High-quality 3.5mm AUX cable for crystal clear audio transmission",
@@ -646,8 +642,6 @@ const products = [
         name: "DTECH High Speed HDMI Cable", 
         category: "Cable",
         categorySlug: "cable", 
-        price: 49.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "Premium HDMI cable supporting 4K UHD, 3D, and 2160p for computers, TVs, and monitors",
@@ -661,8 +655,6 @@ const products = [
         name: "LRS02-BS Premium Racing Simulator Cockpit", 
         category: "Gaming",
         categorySlug: "gaming", 
-        price: 1299.99,
-        currency: "EGP",
         inStock: true,
         bestSeller: true,
         description: "Premium racing simulator cockpit seat - professional grade product designed for serious sim racers",
@@ -676,8 +668,6 @@ const products = [
         name: "4K UHD Generator", 
         category: "AV Distribution",
         categorySlug: "av-distribution", 
-        price: 299.99,
-        currency: "EGP",
         inStock: true,
         featured: true,
         description: "High-performance 4K UHD signal generator for professional audio-visual applications",
@@ -690,8 +680,7 @@ const products = [
         id: "av-003", 
         name: "DVI-D to HDMI Adapter", 
         category: "AV Distribution",
-        categorySlug: "av-distribution", 
-        price: 29.99,
+        categorySlug: "av-distribution",
         currency: "EGP",
         inStock: true,
         description: "High-quality DVI-D Male (24+1 Pin) to HDMI Female adapter for seamless connectivity",
@@ -1134,7 +1123,7 @@ function displaySearchResults(results) {
                 <div>
                     <h4 class="font-medium text-gray-900 dark:text-white">${product.name}</h4>
                     <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">${product.category}</p>
-                    <p class="text-lg font-bold text-blue-600">${product.price}EGP</p>
+                    <!-- Price hidden in search results -->
                 </div>
             </div>
         </div>
@@ -1181,7 +1170,7 @@ function displayHeroSearchResults(results) {
                 <div>
                     <h4 class="font-medium text-gray-900">${product.name}</h4>
                     <p class="text-sm text-gray-500 capitalize">${product.category}</p>
-                    <p class="text-sm font-bold text-blue-600">${product.price}EGP</p>
+                    <!-- Price hidden in hero search suggestions -->
                 </div>
             </div>
         </div>
@@ -1600,18 +1589,13 @@ function openQuickView(productId) {
         content.innerHTML = `
             <div class="flex flex-col md:flex-row">
                 <div class="md:w-1/2">
-                    <img src="https://placehold.co/400x400/E0E0E0/808080?text=${product.image}" 
+                    <img src="https://placehold.co/400x400/E0E0E0?text=${product.image}" 
                          alt="${product.name}" class="w-full h-64 md:h-96 object-cover rounded-lg">
                 </div>
                 <div class="md:w-1/2 md:pl-6 mt-4 md:mt-0">
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">${product.name}</h2>
                     <p class="text-gray-600 dark:text-gray-300 capitalize mb-4">${product.category} Category</p>
-                    <div class="mb-4">
-                        ${product.originalPrice ? 
-                            `<span class="text-lg text-gray-500 line-through">${product.originalPrice}EGP</span>` : ''
-                        }
-                        <span class="text-2xl font-bold text-blue-600 ml-2">${product.price}EGP</span>
-                    </div>
+                   
                     <p class="text-gray-600 dark:text-gray-300 mb-6">
                         High-quality ${product.category} supplement designed for optimal performance and health benefits.
                     </p>
@@ -1714,7 +1698,7 @@ function displayFeaturedProducts() {
         <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 scroll-animate" 
              data-product-id="${product.id}">
             <div class="relative mb-4">
-                <img src="https://placehold.co/300x300/E0E0E0/808080?text=${product.image}" 
+                <img src="https://placehold.co/300x300/E0E0E0?text=${product.image}" 
                      alt="${product.name}" 
                      class="w-full h-48 object-cover rounded-lg">
                 ${product.originalPrice ? '<span class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">Sale</span>' : ''}
@@ -1723,10 +1707,7 @@ function displayFeaturedProducts() {
             <p class="text-gray-600 dark:text-gray-300 capitalize mb-3">${product.category}</p>
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    ${product.originalPrice ? 
-                        `<span class="text-sm text-gray-500 line-through">${product.originalPrice}EGP</span><br>` : ''
-                    }
-                    <span class="text-2xl font-bold text-blue-600">${product.price}EGP</span>
+                    <!-- Price hidden on featured product cards -->
                 </div>
             </div>
             <div class="flex space-x-2">
@@ -2013,19 +1994,16 @@ function displayShopProducts(productsToShow) {
             <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
                data-product-id="${product.id}" 
                data-category="${product.categorySlug || product.category}" 
-               data-name="${product.name}" 
-               data-price="${productPrice}">
+               data-name="${product.name}" >
                 <div class="relative h-64">
                     <img src="${imageUrl}" 
                          alt="${product.name}" 
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                          onerror="this.src='assets/images/placeholder.jpg'">
-                    
                     <!-- Product Badges -->
                     ${isOnSale ? '<span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SALE</span>' : ''}
                     ${product.featured ? '<span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>' : ''}
                     ${product.bestSeller ? '<span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">BEST SELLER</span>' : ''}
-                    
                     <!-- Hover Actions -->
                     <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <button onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', 1);" 
@@ -2064,20 +2042,7 @@ function displayShopProducts(productsToShow) {
                         </div>
                     ` : ''}
                     
-                    <!-- Price -->
-                    <div class="flex justify-between items-center">
-                        <div>
-                            ${isOnSale ? `<span class="text-sm text-gray-500 dark:text-gray-400 line-through">${originalPrice} ${currency}</span><br>` : ''}
-                            <span class="text-gray-800 dark:text-white font-bold text-xl">${productPrice.toFixed(2)} ${currency}</span>
-                        </div>
-                        
-                        <!-- Stock Status -->
-                        ${product.inStock !== undefined ? `
-                            <span class="text-xs px-2 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                ${product.inStock ? 'In Stock' : 'Out of Stock'}
-                            </span>
-                        ` : ''}
-                    </div>
+                    <!-- Price hidden on product cards; retained in data-price for sorting -->
                 </div>
             </a>
         `;
@@ -2246,40 +2211,52 @@ function initializeHeroProductShowcase() {
     const prevButton = document.getElementById('prev-product');
     const nextButton = document.getElementById('next-product');
     
-    // Update product display
-    function updateProduct(index) {
-        const product = products[index];
+// Update product display
+function updateProduct(index) {
+    const product = products[index];
+    
+    // Add transition effect
+    const card = document.getElementById('active-product-card');
+    card.style.transform = 'scale(0.95) rotateY(10deg)';
+    card.style.opacity = '0.7';
+    
+    setTimeout(() => {
+        // Update content
+        if (productImage) productImage.src = product.image;
+        if (productTitle) productTitle.textContent = product.title;
+        if (productDescription) productDescription.textContent = product.description;
+        if (cardNumber) cardNumber.textContent = `${index + 1}/${products.length}`;
         
-        // Add transition effect
-        const card = document.getElementById('active-product-card');
-        card.style.transform = 'scale(0.95) rotateY(10deg)';
-        card.style.opacity = '0.7';
+        // Update features
+        if (productFeatures) {
+            productFeatures.innerHTML = product.features.map(feature => 
+                `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">${feature}</span>`
+            ).join('');
+        }
+
+        // ✅ Update datasheet button
+        const datasheetBtn = document.getElementById("datasheet-btn");
+        if (datasheetBtn) {
+            if (product.datasheet) {
+                datasheetBtn.onclick = () => window.open(product.datasheet, "_blank");
+                datasheetBtn.style.display = "block";
+            } else {
+                datasheetBtn.style.display = "none";
+            }
+        }
         
-        setTimeout(() => {
-            // Update content
-            if (productImage) productImage.src = product.image;
-            if (productTitle) productTitle.textContent = product.title;
-            if (productDescription) productDescription.textContent = product.description;
-            if (cardNumber) cardNumber.textContent = `${index + 1}/${products.length}`;
-            
-            // Update features
-            if (productFeatures) {
-                productFeatures.innerHTML = product.features.map(feature => 
-                    `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">${feature}</span>`
-                ).join('');
-            }
-            
-            // Update progress bar
-            if (progressBar) {
-                const progressWidth = ((index + 1) / products.length) * 100;
-                progressBar.style.width = `${progressWidth}%`;
-            }
-            
-            // Restore card appearance
-            card.style.transform = 'scale(1) rotateY(0deg)';
-            card.style.opacity = '1';
-        }, 200);
-    }
+        // Update progress bar
+        if (progressBar) {
+            const progressWidth = ((index + 1) / products.length) * 100;
+            progressBar.style.width = `${progressWidth}%`;
+        }
+        
+        // Restore card appearance
+        card.style.transform = 'scale(1) rotateY(0deg)';
+        card.style.opacity = '1';
+    }, 200);
+}
+
     
     // Navigation functions
     function nextProduct() {
@@ -2920,48 +2897,30 @@ function createProductCard(product) {
     const badge = product.bestSeller ? 'Best Seller' : 
                   product.featured ? 'Featured' : '';
     
-    // Add out of stock badge if needed
-    const stockBadge = !isInStock ? 'Out of Stock' : '';
-
-    // Add disabled styling if out of stock
-    const disabledClass = !isInStock ? 'opacity-60 cursor-not-allowed' : '';
-    const disabledOverlay = !isInStock ? '<div class="absolute inset-0 bg-gray-900 bg-opacity-30 flex items-center justify-center"><span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">Out of Stock</span></div>' : '';
+    // ...removed out of stock badge and overlays...
 
     cardWrapper.innerHTML = `
-        <div class="card ${disabledClass}" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-price="${product.price}" data-in-stock="${isInStock}">
-            <div class="card__shine ${!isInStock ? 'opacity-30' : ''}"></div>
-            <div class="card__glow ${!isInStock ? 'opacity-30' : ''}"></div>
+        <div class="card" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-in-stock="${isInStock}">
+            <div class="card__shine"></div>
+            <div class="card__glow"></div>
             <div class="card__content">
                 ${badge ? `<div class="card__badge">${badge}</div>` : ''}
-                ${stockBadge ? `<div class="card__badge bg-red-600">${stockBadge}</div>` : ''}
-                <div class="card__image relative" style="background-image: url('${product.mainImage}'); background-size: cover; background-position: center;">
-                    ${disabledOverlay}
-                </div>
+                <div class="card__image relative" style="background-image: url('${product.mainImage}'); background-size: cover; background-position: center;"></div>
                 <div class="card__text">
                     <p class="card__title">${product.name}</p>
                     <p class="card__description">${product.shortDescription}</p>
-                    ${!isInStock && product.stockQuantity !== undefined ? `<p class="text-red-600 text-sm font-medium">Stock: ${product.stockQuantity}</p>` : ''}
                 </div>
                 <div class="card__footer">
-                    <div class="card__price">${product.price}${product.currency}</div>
-                    <div class="card__button add-to-cart ${!isInStock ? 'opacity-50 cursor-not-allowed bg-gray-400' : ''}" ${!isInStock ? 'data-disabled="true"' : ''}>
-                        ${isInStock ? 
-                            '<svg height="16" width="16" viewBox="0 0 24 24"><path stroke-width="2" stroke="currentColor" d="M4 12H20M12 4V20" fill="none"></path></svg>' :
-                            '<svg height="16" width="16" viewBox="0 0 24 24"><path stroke-width="2" stroke="currentColor" d="M6 18L18 6M6 6l12 12" fill="none"></path></svg>'
-                        }
+                    <!-- Price intentionally hidden from product cards; kept in data-price attribute for sorting -->
+                    <div class="card__button add-to-cart">
+                        <svg height="16" width="16" viewBox="0 0 24 24"><path stroke-width="2" stroke="currentColor" d="M4 12H20M12 4V20" fill="none"></path></svg>
                     </div>
                 </div>
             </div>
         </div>
     `;
 
-    // Disable click for out of stock products
-    if (!isInStock) {
-        cardWrapper.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('This product is currently out of stock.');
-        });
-    }
+    // ...removed out of stock click disable...
 
     return cardWrapper;
 }
@@ -4029,9 +3988,9 @@ function showError(message) {
 }
 
 // Show success message
-function showSuccess(message) {
+function showSuccess(message, elementId = 'register-success') {
     const container = document.getElementById('message-container');
-    const successDiv = document.getElementById('success-message');
+    const successDiv = document.getElementById(elementId);
     const successText = document.getElementById('success-text');
     const errorDiv = document.getElementById('error-message');
     
@@ -4436,7 +4395,7 @@ class MyOrdersService {
                             <div class="flex-shrink-0">
                                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12H20M12 4V20" fill="none"></path>
                                     </svg>
                                 </div>
                             </div>
@@ -4450,7 +4409,7 @@ class MyOrdersService {
                             </div>
                         </div>
                         <div class="flex items-center space-x-4">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium ${statusColor}">
+                            <span class="px-3 py-1 rounded-full text-sm font-medium ${statusColor}">
                                 ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                             </span>
                             <div class="text-right">
@@ -4588,7 +4547,7 @@ class MyOrdersService {
                                 <div class="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                     <div class="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center">
                                         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4m8-4V7l-8-4"></path>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
@@ -4737,7 +4696,7 @@ class MyOrdersService {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
                             </svg>
                             Continue Shopping
-                        </button>
+                        </a>
                     </div>
                 </div>
             `;

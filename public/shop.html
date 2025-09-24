@@ -44,11 +44,14 @@
                     </button>
                 </div>
 
-                <!-- Main Navigation Section -->
+                <!-- Invisible spacer for mobile balance -->
+                <div class="lg:hidden w-14 h-14"></div>
+
+               <!-- Main Navigation Section -->
                 <div id="main-nav" class="hidden lg:flex items-center">
                     <div class="rounded-full p-3 flex items-center border border-white/30 shadow-2xl gap-2 bg-white/15 backdrop-blur-3xl">
                         <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Home</a>
-                        <a href="shop.html" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">Shop</a>
+                        <a href="shop.html" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">Products</a>
                         <a href="contact.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Contact Us</a>
                         <a href="about.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">About Us</a>
                         
@@ -106,12 +109,12 @@
                                             </svg>
                                             Profile
                                         </a>
-                                        <a href="my-orders.html" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
+                                        <!-- <a href="my-orders.html" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
                                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
                                             </svg>
                                             My Orders
-                                        </a>
+                                        </a> -->
                                         <!-- Admin Panel Link (visible only for admin users) -->
                                         <a href="admin/admin.html" id="admin-panel-link" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50/50 transition-colors duration-200 hidden">
                                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,13 +136,12 @@
                         </div>
 
                         <!-- Shopping Cart Icon with Count -->
-                        <div id="cart-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
-                            <!-- Simple SVG for shopping bag icon -->
+                        <!-- <div id="cart-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
                             <svg class="user-icon w-4 h-4" viewBox="0 0 24 24" fill="#374151">
                                 <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.763.746-1.858 1.705L2.26 19.99a2.25 2.25 0 002.24 2.51h15.002a2.25 2.25 0 002.24-2.51l-1.395-11.535A1.875 1.875 0 0018.488 6.75H16.5V6a4.5 4.5 0 10-9 0zM15 6.75V6a3 3 0 10-6 0v.75H15z" clip-rule="evenodd" />
                             </svg>
                             <span id="cart-badge" class="bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full" style="display: none;">0</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </nav>
@@ -161,8 +163,8 @@
                 </div>
                 <nav class="space-y-6">
                     <ul class="space-y-4">
-                        <li><a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Home</a></li>
-                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Shop</a></li>
+                       <li><a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Home</a></li>
+                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">Products</a></li>
                         <li><a href="contact.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Contact Us</a></li>
                         <li><a href="about.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">About Us</a></li>
                         <li>
@@ -175,7 +177,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="my-orders.html" id="mobile-orders-link" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">
                                 <div class="flex items-center space-x-3">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,8 +186,8 @@
                                     <span>My Orders</span>
                                 </div>
                             </a>
-                        </li>
-                        <li>
+                        </li> -->
+                        <!-- <li>
                             <button id="mobile-cart-toggle" class="block w-full py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20 text-left">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
@@ -197,7 +199,7 @@
                                     <span id="mobile-cart-badge" class="bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full" style="display: none;">0</span>
                                 </div>
                             </button>
-                        </li>
+                        </li> -->
                         <li class="border-t border-white/20 pt-4 mt-4">
                             <button id="mobile-login-btn" class="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white font-medium transition-all duration-200 hover:shadow-lg hover:scale-105" style="display: none;">
                                 <div class="flex items-center justify-center space-x-3">
@@ -410,24 +412,24 @@
                         </div>
                         <ul id="categories-list" class="space-y-3 hidden lg:block">
                             <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="all">All Products</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="av-distribution">AV Distribution</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="cable">Cable</a></li>
+                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="fixed-stand">Fixed Stands</a></li>
+                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="stand-tilt">Stand</a></li>
+                            <!-- <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="av-distribution">AV Distribution</a></li> -->
+                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="cables">Cables</a></li>
                             <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="ceiling-bracket">Ceiling Bracket</a></li>
                             <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="gaming">Gaming</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="desktop-mount">Desktop Mount</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="dvd-bracket">DVD Bracket</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="extender">Extender</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="full-motion-wall">Full Motion Wall</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="kiosk">Kiosk</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="motorized">Motorized</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="stand">Stand</a></li>
+                            <!-- <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="desktop-mount">Desktop Mount</a></li>
+                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="dvd-bracket">DVD Bracket</a></li> -->
+                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="full-motion">Full Motion Wall</a></li>
+                            <!-- <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="kiosk">Kiosk</a></li> -->
+                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="motorized-tv">Motorized</a></li>
                             <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="tv-cart">TV Cart</a></li>
-                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="v-wall">V.Wall</a></li>
+                            <li><a href="#" class="category-filter block text-gray-700 hover:text-blue-600 py-2 border-b border-gray-100 transition-colors" data-category="video-wall">V.Wall</a></li>
                         </ul>
                     </div>
 
                     <!-- Filter by Price -->
-                    <div>
+                    <!-- <div>
                         <div class="flex items-center justify-between mb-4 cursor-pointer lg:cursor-default" id="filter-toggle">
                             <h3 class="text-lg font-bold text-gray-800">FILTER BY</h3>
                             <svg id="filter-arrow" class="w-5 h-5 text-gray-600 transform transition-transform duration-200 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -444,7 +446,7 @@
                                 <input type="range" min="25" max="35" value="30" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -459,7 +461,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        <div class="relative">
+                        <!-- <div class="relative">
                             <select class="w-full sm:w-auto appearance-none bg-gray-100 border border-gray-200 text-gray-700 py-3 px-5 pr-8 rounded-full focus:outline-none focus:bg-white focus:border-gray-500">
                                 <option>Sort by: Featured</option>
                                 <option>Price: Low to High</option>
@@ -469,7 +471,7 @@
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -542,7 +544,7 @@
                     </h4>
                     <ul class="space-y-3">
                         <li><a href="index.html" class=" hover:text-purple-600 transition-colors duration-200 text-base lg:text-lg hover:translate-x-1 transform inline-block" style="color: #ffffff;">Home</a></li>
-                        <li><a href="shop.html" class=" hover:text-purple-600 transition-colors duration-200 text-base lg:text-lg hover:translate-x-1 transform inline-block" style="color: #ffffff;">Shop</a></li>
+                        <li><a href="shop.html" class=" hover:text-purple-600 transition-colors duration-200 text-base lg:text-lg hover:translate-x-1 transform inline-block" style="color: #ffffff;">Products</a></li>
                         <li><a href="about.html" class=" hover:text-purple-600 transition-colors duration-200 text-base lg:text-lg hover:translate-x-1 transform inline-block" style="color: #ffffff;">About Us</a></li>
                         <li><a href="contact.html" class=" hover:text-purple-600 transition-colors duration-200 text-base lg:text-lg hover:translate-x-1 transform inline-block" style="color: #ffffff;">Contact</a></li>
                         <li><a href="#" class="hover:text-purple-600 transition-colors duration-200 text-base lg:text-lg hover:translate-x-1 transform inline-block" style="color: #ffffff;">Privacy Policy</a></li>
@@ -602,10 +604,9 @@
     </footer>
 
     <!-- Cart Sidebar -->
-    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
     <div id="cart-sidebar" class="fixed top-4 right-0 h-[calc(100vh-2rem)] w-[450px] bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-2xl z-50 transform translate-x-full transition-transform duration-500 ease-in-out border border-white/20 rounded-l-2xl">
         <div class="flex flex-col h-full">
-            <!-- Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200/10 flex-shrink-0">
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Shopping Cart</h2>
                 <button id="close-cart" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors">
@@ -615,10 +616,8 @@
                 </button>
             </div>
 
-            <!-- Cart Items -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
                 <div id="cart-items">
-                    <!-- Empty Cart Message -->
                     <div class="text-center text-gray-500 dark:text-gray-400 py-16">
                         <svg class="w-24 h-24 mx-auto text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -626,11 +625,9 @@
                         <p class="mt-4 text-lg font-semibold">Your cart is empty</p>
                         <p class="mt-2 text-sm">Add items to see them here.</p>
                     </div>
-                    <!-- Cart items will be dynamically added here -->
                 </div>
             </div>
 
-            <!-- Footer -->
             <div class="border-t border-gray-200/10 p-6 flex-shrink-0">
                 <div class="flex items-center justify-between mb-4">
                     <span class="text-lg font-semibold text-gray-800 dark:text-white">Subtotal:</span>
@@ -641,7 +638,7 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Quick View Modal -->
     <div id="quick-view-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
@@ -671,7 +668,7 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-2" id="quick-view-product-name">4K UHD Generator</h3>
                     <p class="text-gray-500 mb-4" id="quick-view-product-category">AV Distribution</p>
                     <div class="flex items-center justify-between mb-4">
-                        <span class="text-lg font-bold text-gray-800" id="quick-view-product-price">299.99 EGP</span>
+                        <!-- <span class="text-lg font-bold text-gray-800" id="quick-view-product-price">299.99 EGP</span> -->
                         <div class="flex items-center">
                             <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                             <span class="text-gray-600 ml-1" id="quick-view-product-rating">4.8</span>
@@ -768,32 +765,21 @@
                                         card.classList.add('product-card');
                                         card.setAttribute('data-category', normalizedCategory);
                                         card.setAttribute('data-name', product.name || '');
-                                        card.setAttribute('data-price', product.price || 0);
+                                        //card.setAttribute('data-price', product.price || 0);
                                         grid.appendChild(card);
                                     });
                                 } else {
-                                    // Simple fallback with stock handling
+                                    // Simple fallback without out-of-stock logic
                                     grid.innerHTML = products.map(product => {
-                                        const isInStock = product.inStock && product.isAvailable && (product.stockQuantity > 0);
-                                        const disabledClass = !isInStock ? 'opacity-60 cursor-not-allowed' : '';
-                                        const stockBadge = !isInStock ? '<div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">Out of Stock</div>' : '';
-                                        const stockInfo = !isInStock && product.stockQuantity !== undefined ? `<p class="text-red-600 text-sm font-medium mt-2">Stock: ${product.stockQuantity}</p>` : '';
-                                        
                                         // Normalize category for filtering
                                         const normalizedCategory = product.category ? product.category.toLowerCase().replace(/\s+/g, '-') : 'uncategorized';
-                                        
                                         return `
-                                            <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden p-6 relative ${disabledClass}" 
-                                                 data-in-stock="${isInStock}"
+                                            <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden p-6 relative"
+                                                 data-in-stock="true"
                                                  data-category="${normalizedCategory}"
-                                                 data-name="${product.name || ''}"
-                                                 data-price="${product.price || 0}">
-                                                ${stockBadge}
+                                                 data-name="${product.name || ''}">
                                                 <h3 class="font-semibold text-gray-800 text-lg mb-2">${product.name}</h3>
                                                 <p class="text-gray-500 text-sm mb-4">${product.category}</p>
-                                                <p class="text-gray-800 font-bold text-xl">${product.price} ${product.currency}</p>
-                                                ${stockInfo}
-                                                ${!isInStock ? '<p class="text-red-600 text-sm mt-2">Currently unavailable</p>' : ''}
                                             </div>
                                         `;
                                     }).join('');

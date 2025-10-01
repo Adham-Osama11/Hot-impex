@@ -1,5 +1,32 @@
 const mongoose = require('mongoose');
 
+// Review sub-schema
+const reviewSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    rating: {
+        type: Number,
+        required: true,
+        min: 1,
+        max: 5
+    },
+    comment: {
+        type: String,
+        required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    color: {
+        type: String,
+        default: 'blue'
+    },
+    initials: String
+});
+
 const productSchema = new mongoose.Schema({
     id: {
         type: String,
@@ -28,6 +55,38 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    detailedDescription: {
+        type: String,
+        required: true
+    },
+    perfectFor: [{
+        type: String,
+        required: true
+    }],
+    specifications: {
+        type: Map,
+        of: String,
+        required: true,
+        default: {}
+    },
+    packageContents: [{
+        type: String,
+        required: true
+    }],
+    setup: {
+        quickStart: {
+            type: String,
+            required: true
+        },
+        instructions: [{
+            type: String,
+            required: true
+        }],
+        commonPatterns: [{
+            type: String
+        }]
+    },
+    reviews: [reviewSchema],
     shortDescription: {
         type: String,
         required: true

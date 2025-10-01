@@ -32,11 +32,15 @@ class ShopManager {
     async loadProducts() {
         try {
             console.log('Loading products from API...');
-            const response = await APIService.getProducts({ limit: 100 });
+            // Request all products with a high limit to ensure we get everything
+            const response = await APIService.getProducts({ limit: 1000 });
             
             if (response.status === 'success') {
                 this.shopProducts = response.data.products || [];
                 console.log('Loaded products from database:', this.shopProducts.length);
+                // Log categories to help debug product filtering
+                const categories = [...new Set(this.shopProducts.map(p => p.category))];
+                console.log('Available categories:', categories);
                 
                 this.displayProducts(this.shopProducts);
                 this.updateCategoryFilters(this.shopProducts);
@@ -152,21 +156,35 @@ class ShopManager {
     }
 
     filterByCategory(category) {
+        console.log('Filtering by category:', category);
         this.currentCategory = category;
         this.filterProducts();
     }
 
     filterProducts() {
+        console.log('Filtering products...');
+        console.log('Current category:', this.currentCategory);
+        console.log('Current search term:', this.currentSearchTerm);
+        
         let filtered = [...this.shopProducts];
         
-        // Filter by category
+                // Filter by category
         if (this.currentCategory && this.currentCategory !== 'all') {
-            filtered = filtered.filter(product => 
-                product.categorySlug === this.currentCategory || 
-                product.category === this.currentCategory ||
-                product.categorySlug === this.currentCategory.toLowerCase() ||
-                product.category === this.currentCategory.toLowerCase()
-            );
+            filtered = filtered.filter(product => {
+                const productCategory = (product.category || '').toLowerCase();
+                const productSlug = (product.categorySlug || '').toLowerCase();
+                const targetCategory = this.currentCategory.toLowerCase();
+                
+                // Log category matching for debugging
+                console.log('Product:', product.name);
+                console.log('Product category:', productCategory);
+                console.log('Product slug:', productSlug);
+                console.log('Target category:', targetCategory);
+                
+                return productCategory === targetCategory || 
+                       productSlug === targetCategory ||
+                       productCategory.replace(/\s+/g, '-') === targetCategory;
+            });
         }
         
         // Filter by search term

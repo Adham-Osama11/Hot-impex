@@ -828,22 +828,32 @@
 
         // Fetch product data from API or local data
         async function fetchProduct(productId) {
+            console.log('🔍 Fetching product with ID:', productId);
+            
             try {
                 // Try API first
+                console.log('🌐 Trying API endpoint...');
                 const response = await fetch(`/api/products/${productId}`);
-                const data = await response.json();
+                console.log('📡 API Response status:', response.status);
                 
-                if (data.status === 'success') {
+                const data = await response.json();
+                console.log('📦 API Response data:', data);
+                
+                if (data.status === 'success' && data.data && data.data.product) {
+                    console.log('✅ Product fetched successfully from API');
+                    console.log('🖼️ Product images from API:', data.data.product.images);
+                    console.log('📄 Product datasheet from API:', data.data.product.datasheet);
                     return data.data.product;
                 } else {
-                    throw new Error(data.message || 'Product not found');
+                    throw new Error(data.message || 'Product not found in API response');
                 }
             } catch (error) {
-                console.error('Error fetching product from API:', error);
-                console.log('Falling back to local product data...');
+                console.error('❌ Error fetching product from API:', error);
+                console.log('🔄 Falling back to local product data...');
                 
                 // Fallback to local products array if available
                 if (window.products && Array.isArray(window.products)) {
+                    console.log('📁 Searching in local products array...');
                     // First try to find by string ID
                     let localProduct = window.products.find(p => p.id === productId);
                     // If not found, try as integer
@@ -852,6 +862,9 @@
                     }
                     
                     if (localProduct) {
+                        console.log('✅ Found product in local data');
+                        console.log('🖼️ Local product images:', localProduct.images);
+                        console.log('📄 Local product datasheet:', localProduct.datasheet);
                         return {
                             ...localProduct,
                             inStock: true,
@@ -863,22 +876,26 @@
                                 : ["assets/images/placeholder.png"],
                             datasheet: localProduct.datasheet || null
                         };
+                    } else {
+                        console.warn('⚠️ Product not found in local data either');
                     }
+                } else {
+                    console.warn('⚠️ No local products array available');
                 }
 
-                // Default test product
-                console.log('Creating default test product for ID:', productId);
+                // Default test product as last resort
+                console.log('🆘 Creating default test product for ID:', productId);
                 return {
                     id: productId,
-                    name: "4K UHD Generator",
+                    name: "Test Product - Data Not Found",
                     category: "av-distribution",
                     price: 299.99,
                     inStock: true,
                     stock: 15,
-                    description: "Professional 4K UHD test pattern generator for display calibration and testing.",
-                    specifications: ["4K@60Hz output", "HDMI 2.0", "100+ test patterns"],
-                    images: ["assets/images/Products/Av distribution/4K UHD GENRATOR.jpg"],
-                    datasheet: "assets/datasheets/sample.pdf"
+                    description: "This is a test product displayed because the actual product data could not be loaded.",
+                    specifications: ["Test specification"],
+                    images: ["assets/images/placeholder.png"],
+                    datasheet: null
                 };
             }
         }
@@ -963,13 +980,53 @@
             // Handle datasheet button (support both id formats and guard if missing)
             const datasheetButton = document.getElementById('datasheet-btn') || document.getElementById('datasheetButton');
             if (datasheetButton) {
+                console.log('📄 Processing datasheet:', product.datasheet);
+                
                 if (product.datasheet && product.datasheet.trim() !== '') {
+                    let datasheetPath = product.datasheet.trim();
+                    
+                    // Handle Google Drive URLs for datasheets
+                    if (datasheetPath.includes('drive.google.com')) {
+                        console.log('📄 Converting Google Drive datasheet URL');
+                        datasheetPath = convertGoogleDriveUrl(datasheetPath);
+                        console.log('📄 Converted datasheet URL:', datasheetPath);
+                    } else if (!datasheetPath.startsWith('http://') && !datasheetPath.startsWith('https://')) {
+                        // Handle local file paths
+                        if (datasheetPath.startsWith('/')) {
+                            datasheetPath = datasheetPath.slice(1);
+                        }
+                        // Path should already be correct from database
+                    }
+                    
+                    console.log('📄 Final datasheet path:', datasheetPath);
+                    
                     datasheetButton.classList.remove('hidden');
-                    datasheetButton.onclick = () => window.open(product.datasheet, '_blank');
+                    datasheetButton.onclick = function() {
+                        console.log('📄 Opening datasheet:', datasheetPath);
+                        try {
+                            // For Google Drive direct links, open directly
+                            if (datasheetPath.includes('drive.google.com') || datasheetPath.includes('googleusercontent.com')) {
+                                window.open(datasheetPath, '_blank');
+                                console.log('✅ Google Drive datasheet opened');
+                            } else {
+                                // For local files, test and open
+                                const testLink = document.createElement('a');
+                                testLink.href = datasheetPath;
+                                window.open(datasheetPath, '_blank');
+                                console.log('✅ Local datasheet opened');
+                            }
+                        } catch (error) {
+                            console.error('❌ Failed to open datasheet:', error);
+                            showError('Failed to open datasheet. Please try again later.');
+                        }
+                    };
                 } else {
+                    console.log('📭 No datasheet available');
                     datasheetButton.classList.add('hidden');
                     datasheetButton.onclick = null;
                 }
+            } else {
+                console.warn('⚠️ Datasheet button not found in DOM');
             }
 
             // Update images
@@ -987,33 +1044,304 @@
             const mainImage = document.getElementById('main-image');
             const thumbnailsContainer = document.getElementById('product-thumbnails');
 
-            // Set main image
-            if (product.images && product.images.length > 0) {
-            mainImage.src = product.images[0];
-            mainImage.alt = product.name;
-            } else {
-            mainImage.src = "assets/images/placeholder.png";
-            mainImage.alt = "No image available";
+            console.log('🖼️ Updating product images for:', product.name);
+            console.log('🖼️ Product images:', product.images);
+            console.log('🖼️ Main image:', product.mainImage);
+            
+            // Test Google Drive URL conversion
+            if (product.images && product.images[0] && product.images[0].includes('drive.google.com')) {
+                const testConverted = convertGoogleDriveUrl(product.images[0]);
+                console.log('🧪 Test conversion result:', testConverted);
             }
 
+            // Function to validate and handle image paths
+            function getValidImagePath(imagePath) {
+                if (!imagePath) {
+                    console.warn('⚠️ Empty image path provided');
+                    return 'assets/images/placeholder.svg';
+                }
+                
+                // Log the original path
+                console.log('📁 Processing image path:', imagePath);
+                
+                // Handle Google Drive links
+                if (imagePath.includes('drive.google.com')) {
+                    console.log('🔗 Converting Google Drive link');
+                    let convertedUrl = convertGoogleDriveUrl(imagePath);
+                    console.log('🔧 Converted Google Drive URL to:', convertedUrl);
+                    return convertedUrl;
+                }
+                
+                // If it's already a full URL (but not Google Drive), use it as is
+                if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                    return imagePath;
+                }
+                
+                // If it starts with a slash, remove it to make it relative
+                if (imagePath.startsWith('/')) {
+                    imagePath = imagePath.slice(1);
+                }
+                
+                // Fix common path mismatches between database and filesystem
+                let correctedPath = imagePath;
+                
+                // Directory name corrections (database vs filesystem mismatches)
+                const pathCorrections = {
+                    '/Cables/': '/Cable/',
+                    '/Wall Mount/': '/Cable/', // Fallback to Cable directory for missing Wall Mount
+                    '/wall-mount/': '/Cable/',
+                    '/Mounts/': '/Cable/',
+                    '/wall mount/': '/Cable/',
+                };
+                
+                // Apply corrections
+                Object.entries(pathCorrections).forEach(([wrong, correct]) => {
+                    if (correctedPath.includes(wrong)) {
+                        correctedPath = correctedPath.replace(wrong, correct);
+                        console.log('🔧 Applied correction:', wrong, '->', correct);
+                    }
+                });
+                
+                // If path contains non-existing directory structure, try to find the filename in existing directories
+                if (correctedPath.includes('/Wall Mount/') || !correctedPath.startsWith('assets/images/Products/')) {
+                    const filename = correctedPath.split('/').pop();
+                    console.log('🔍 Extracted filename for fallback:', filename);
+                    
+                    // Try common directories for the filename
+                    const fallbackDirs = ['Cable', 'Av distribution', 'Gaming', 'Ceiling bracket'];
+                    for (const dir of fallbackDirs) {
+                        const fallbackPath = `assets/images/Products/${dir}/${filename}`;
+                        console.log('🔄 Trying fallback path:', fallbackPath);
+                        // We'll test this in the image loading handlers
+                    }
+                }
+                
+                // Log the final corrected path
+                if (correctedPath !== imagePath) {
+                    console.log('🔧 Final corrected path from:', imagePath, 'to:', correctedPath);
+                }
+                
+                return correctedPath || 'assets/images/placeholder.svg';
+            }
+
+            // Function to convert Google Drive URLs to direct image URLs
+            function convertGoogleDriveUrl(url) {
+                if (!url.includes('drive.google.com')) {
+                    return url;
+                }
+                
+                console.log('🔍 Original Google Drive URL:', url);
+                
+                // Extract file ID from different Google Drive URL formats
+                let fileId = null;
+                
+                // Format: https://drive.google.com/file/d/FILE_ID/view (with optional query params)
+                if (url.includes('/file/d/')) {
+                    const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                    if (match) {
+                        fileId = match[1];
+                        console.log('🔍 Extracted file ID from /file/d/ format:', fileId);
+                    }
+                }
+                
+                // Format: https://drive.google.com/open?id=FILE_ID
+                if (!fileId && url.includes('open?id=')) {
+                    const match = url.match(/open\?id=([a-zA-Z0-9_-]+)/);
+                    if (match) {
+                        fileId = match[1];
+                        console.log('🔍 Extracted file ID from open?id= format:', fileId);
+                    }
+                }
+                
+                // Format: https://drive.google.com/uc?id=FILE_ID
+                if (!fileId && url.includes('uc?id=')) {
+                    const match = url.match(/uc\?id=([a-zA-Z0-9_-]+)/);
+                    if (match) {
+                        fileId = match[1];
+                        console.log('🔍 Extracted file ID from uc?id= format:', fileId);
+                    }
+                }
+                
+                if (fileId) {
+                    // Convert to direct image URL
+                    const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                    console.log('✅ Converted Google Drive URL:', url, '->', directUrl);
+                    return directUrl;
+                } else {
+                    console.error('❌ Could not extract file ID from Google Drive URL:', url);
+                    console.error('   URL was:', url);
+                    return url; // Return original URL as fallback instead of placeholder
+                }
+            }
+
+            // Set main image - prioritize images array (Google Drive) over mainImage (local)
+            let mainImagePath = null;
+            
+            // First try images array (usually Google Drive URLs)
+            if (product.images && product.images.length > 0) {
+                mainImagePath = product.images[0];
+                console.log('🖼️ Using first image from images array:', mainImagePath);
+            } 
+            // Fallback to mainImage field
+            else if (product.mainImage) {
+                mainImagePath = product.mainImage;
+                console.log('🖼️ Using mainImage field:', mainImagePath);
+            }
+            
+            if (mainImagePath) {
+                const validPath = getValidImagePath(mainImagePath);
+                console.log('🖼️ Final processed main image path:', validPath);
+                
+                // Show loading state
+                mainImage.style.opacity = '0.5';
+                mainImage.alt = 'Loading...';
+                
+                // Create a new image element to test loading
+                const testImage = new Image();
+                
+                // Set a timeout for image loading
+                const imageTimeout = setTimeout(() => {
+                    console.warn('⏰ Image loading timeout for:', validPath);
+                    mainImage.style.opacity = '1';
+                    // Try alternative if it was a Google Drive URL
+                    if (validPath.includes('drive.google.com')) {
+                        const fileId = validPath.match(/id=([a-zA-Z0-9_-]+)/);
+                        if (fileId) {
+                            const alternativeUrl = `https://lh3.googleusercontent.com/d/${fileId[1]}`;
+                            console.log('⏰ Timeout - trying alternative URL:', alternativeUrl);
+                            testImage.src = alternativeUrl; // This will trigger the handlers again
+                        }
+                    }
+                }, 5000); // 5 second timeout
+                
+                testImage.onload = function() {
+                    clearTimeout(imageTimeout);
+                    console.log('✅ Main image loaded successfully:', validPath);
+                    mainImage.src = validPath;
+                    mainImage.alt = product.name;
+                    mainImage.style.opacity = '1';
+                };
+                testImage.onerror = function() {
+                    clearTimeout(imageTimeout);
+                    console.error('❌ Failed to load main image:', validPath);
+                    
+                    // If it was a Google Drive URL that failed, try alternative formats
+                    if (validPath.includes('drive.google.com')) {
+                        console.log('🔄 Google Drive image failed, trying alternative format');
+                        const fileId = validPath.match(/id=([a-zA-Z0-9_-]+)/);
+                        if (fileId) {
+                            const alternativeUrl = `https://lh3.googleusercontent.com/d/${fileId[1]}`;
+                            console.log('🔄 Trying alternative Google Drive URL:', alternativeUrl);
+                            
+                            const altImage = new Image();
+                            altImage.onload = function() {
+                                console.log('✅ Alternative Google Drive URL worked');
+                                mainImage.src = alternativeUrl;
+                                mainImage.alt = product.name;
+                            };
+                            altImage.onerror = function() {
+                                console.error('❌ Alternative Google Drive URL also failed');
+                                
+                                // Try the local mainImage as final fallback
+                                if (product.mainImage && product.mainImage !== mainImagePath) {
+                                    console.log('🔄 Trying local mainImage as fallback:', product.mainImage);
+                                    const localPath = getValidImagePath(product.mainImage);
+                                    const localImage = new Image();
+                                    localImage.onload = function() {
+                                        console.log('✅ Local fallback image worked');
+                                        mainImage.src = localPath;
+                                        mainImage.alt = product.name;
+                                    };
+                                    localImage.onerror = function() {
+                                        console.log('🔄 Local fallback also failed, using placeholder');
+                                        mainImage.src = 'assets/images/placeholder.svg';
+                                        mainImage.alt = 'Image not available';
+                                    };
+                                    localImage.src = localPath;
+                                } else {
+                                    console.log('🔄 Falling back to placeholder');
+                                    mainImage.src = 'assets/images/placeholder.svg';
+                                    mainImage.alt = 'Image not available';
+                                }
+                            };
+                            altImage.src = alternativeUrl;
+                            return;
+                        }
+                    }
+                    
+                    console.log('🔄 Falling back to placeholder');
+                    mainImage.src = 'assets/images/placeholder.svg';
+                    mainImage.alt = 'Image not available';
+                };
+                testImage.src = validPath;
+            } else {
+                console.log('📭 No main image found, using placeholder');
+                mainImage.src = 'assets/images/placeholder.svg';
+                mainImage.alt = 'No image available';
+            }
 
             // Create thumbnails
             thumbnailsContainer.innerHTML = '';
-            if (product.images && product.images.length > 0) {
-                product.images.forEach((image, index) => {
+            const images = product.images || [];
+            console.log('🖼️ Creating', images.length, 'thumbnails');
+            
+            if (images.length > 0) {
+                images.forEach((image, index) => {
+                    const validPath = getValidImagePath(image);
+                    console.log(`🖼️ Creating thumbnail ${index + 1}:`, validPath);
+                    
                     const button = document.createElement('button');
                     button.className = `thumbnail group bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-4 border-2 transition-all duration-300 transform hover:scale-105 ${
                         index === 0 ? 'border-purple-500 bg-purple-50 opacity-100 active' : 'border-transparent opacity-50 hover:opacity-100'
                     } hover:border-purple-500`;
                     
-                    button.onclick = () => changeImage(image, button);
+                    button.onclick = () => changeImage(validPath, button);
                     
-                    button.innerHTML = `
-                        <img src="${image}" alt="Product view ${index + 1}" class="w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300">
-                    `;
+                    // Create image element with error handling
+                    const imgElement = document.createElement('img');
+                    imgElement.src = validPath;
+                    imgElement.alt = `Product view ${index + 1}`;
+                    imgElement.className = 'w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300';
                     
+                    imgElement.onerror = function() {
+                        console.error(`❌ Failed to load thumbnail ${index + 1}:`, validPath);
+                        
+                        // If it was a Google Drive URL that failed, try alternative formats
+                        if (validPath.includes('drive.google.com')) {
+                            console.log(`🔄 Thumbnail ${index + 1} Google Drive image failed, trying alternative`);
+                            const fileId = validPath.match(/id=([a-zA-Z0-9_-]+)/);
+                            if (fileId) {
+                                const alternativeUrl = `https://lh3.googleusercontent.com/d/${fileId[1]}`;
+                                console.log(`🔄 Trying alternative URL for thumbnail ${index + 1}:`, alternativeUrl);
+                                
+                                const altImg = new Image();
+                                altImg.onload = () => {
+                                    console.log(`✅ Alternative URL worked for thumbnail ${index + 1}`);
+                                    this.src = alternativeUrl;
+                                };
+                                altImg.onerror = () => {
+                                    console.error(`❌ Alternative URL also failed for thumbnail ${index + 1}`);
+                                    this.src = 'assets/images/placeholder.svg';
+                                    this.alt = 'Image not available';
+                                };
+                                altImg.src = alternativeUrl;
+                                return;
+                            }
+                        }
+                        
+                        this.src = 'assets/images/placeholder.svg';
+                        this.alt = 'Image not available';
+                    };
+                    
+                    imgElement.onload = function() {
+                        console.log(`✅ Thumbnail ${index + 1} loaded:`, validPath);
+                    };
+                    
+                    button.appendChild(imgElement);
                     thumbnailsContainer.appendChild(button);
                 });
+            } else {
+                console.log('📭 No thumbnail images to create');
             }
         }
 
@@ -1054,16 +1382,69 @@
         // Image switching functionality
         window.changeImage = function(src, clickedThumbnail) {
             const mainImage = document.getElementById('main-image');
+            console.log('🔄 Changing main image to:', src);
+            
+            // Start transition
             mainImage.style.transform = 'scale(0.95)';
             mainImage.style.opacity = '0.7';
             
-            setTimeout(() => {
-                mainImage.src = src;
+            // Test the image before setting it
+            const testImage = new Image();
+            testImage.onload = function() {
+                console.log('✅ New image loaded successfully, switching display');
+                setTimeout(() => {
+                    mainImage.src = src;
+                    mainImage.style.transform = 'scale(1)';
+                    mainImage.style.opacity = '1';
+                }, 150);
+            };
+            
+            testImage.onerror = function() {
+                console.error('❌ Failed to load new image:', src);
+                
+                // If it was a Google Drive URL that failed, try alternative formats
+                if (src.includes('drive.google.com')) {
+                    console.log('🔄 Trying alternative Google Drive format for image switch');
+                    const fileId = src.match(/id=([a-zA-Z0-9_-]+)/);
+                    if (fileId) {
+                        const alternativeUrl = `https://lh3.googleusercontent.com/d/${fileId[1]}`;
+                        console.log('🔄 Trying alternative URL:', alternativeUrl);
+                        
+                        const altTestImage = new Image();
+                        altTestImage.onload = function() {
+                            console.log('✅ Alternative URL worked for image switch');
+                            setTimeout(() => {
+                                mainImage.src = alternativeUrl;
+                                mainImage.style.transform = 'scale(1)';
+                                mainImage.style.opacity = '1';
+                            }, 150);
+                        };
+                        altTestImage.onerror = function() {
+                            console.error('❌ Alternative URL also failed for image switch');
+                            // Restore the original state
+                            mainImage.style.transform = 'scale(1)';
+                            mainImage.style.opacity = '1';
+                            showError('Failed to load image. Please try again.');
+                        };
+                        altTestImage.src = alternativeUrl;
+                        return;
+                    }
+                }
+                
+                console.log('🔄 Keeping current image');
+                // Restore the original state
                 mainImage.style.transform = 'scale(1)';
                 mainImage.style.opacity = '1';
-            }, 150);
+                
+                // Show error message
+                showError('Failed to load image. Please try again.');
+                return;
+            };
             
-            // Reset all thumbnails
+            // Start loading the test image
+            testImage.src = src;
+            
+            // Update thumbnail states
             document.querySelectorAll('.thumbnail').forEach(thumb => {
                 thumb.classList.remove('border-purple-500', 'bg-purple-50', 'active', 'opacity-100');
                 thumb.classList.add('border-transparent', 'opacity-50');
@@ -1290,7 +1671,24 @@
 
         // Initialize product page
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('Product page loaded - checking elements...');
+            console.log('=== PRODUCT PAGE INITIALIZATION START ===');
+            
+            // Wait for other scripts to load
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Check if required global objects exist
+            if (typeof API_CONFIG === 'undefined') {
+                console.error('❌ API_CONFIG not loaded from config.js');
+                return;
+            }
+            
+            if (typeof APIService === 'undefined') {
+                console.error('❌ APIService not loaded from scripts.js');
+                return;
+            }
+            
+            console.log('✅ Required dependencies loaded');
+            console.log('📍 API URL:', API_CONFIG.getApiUrl());
             
             // Check if dropdown elements exist
             const userDropdownToggle = document.getElementById('user-dropdown-toggle');
@@ -1300,12 +1698,13 @@
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
             const mobileMenu = document.getElementById('mobile-menu');
             
-            console.log('User dropdown toggle:', !!userDropdownToggle);
-            console.log('User dropdown menu:', !!userDropdownMenu);
-            console.log('Cart toggle:', !!cartToggle);
-            console.log('Cart sidebar:', !!cartSidebar);
-            console.log('Mobile menu toggle:', !!mobileMenuToggle);
-            console.log('Mobile menu:', !!mobileMenu);
+            console.log('🔍 Checking UI elements:');
+            console.log('  User dropdown toggle:', !!userDropdownToggle);
+            console.log('  User dropdown menu:', !!userDropdownMenu);
+            console.log('  Cart toggle:', !!cartToggle);
+            console.log('  Cart sidebar:', !!cartSidebar);
+            console.log('  Mobile menu toggle:', !!mobileMenuToggle);
+            console.log('  Mobile menu:', !!mobileMenu);
             
             // Get product ID from URL
             const productId = getProductIdFromUrl();
@@ -1353,15 +1752,34 @@
                 const addToCartBtn = document.getElementById('add-to-cart-btn');
                 if (addToCartBtn) {
                     addToCartBtn.addEventListener('click', function() {
-                        console.log('Add to cart button clicked!');
+                        console.log('🛒 Add to cart button clicked!');
+                        console.log('Current product:', currentProduct);
+                        console.log('Current quantity:', currentQuantity);
+                        console.log('Window addToCart function:', typeof window.addToCart);
                         
-                        if (currentProduct && window.addToCart) {
-                            // Use the global addToCart function
-                            window.addToCart(currentProduct.id, currentQuantity);
+                        if (!currentProduct) {
+                            console.error('❌ No product loaded');
+                            showError('Product not loaded. Please refresh the page.');
+                            return;
+                        }
+                        
+                        if (typeof window.addToCart === 'function') {
+                            try {
+                                // Use the global addToCart function
+                                console.log('✅ Using global addToCart function');
+                                window.addToCart(currentProduct.id, currentQuantity);
+                            } catch (error) {
+                                console.error('❌ Error calling addToCart:', error);
+                                showError('Failed to add product to cart. Please try again.');
+                            }
                         } else {
-                            console.error('Global addToCart function not available or product not found');
+                            console.error('❌ Global addToCart function not available');
+                            console.log('Available window functions:', Object.keys(window).filter(key => typeof window[key] === 'function' && key.includes('cart')));
+                            showError('Cart system not ready. Please refresh the page.');
                         }
                     });
+                } else {
+                    console.error('❌ Add to cart button not found in DOM');
                 }
 
                 // Function to show success message
@@ -1411,42 +1829,56 @@
 
             // Reinitialize cart event listeners for this page
             setTimeout(() => {
-                console.log('Reinitializing cart event listeners...');
-                if (window.reinitializeCartEventListeners) {
-                    window.reinitializeCartEventListeners();
-                } else {
-                    console.warn('Global reinitializeCartEventListeners not available');
+                console.log('🔄 Reinitializing cart event listeners...');
+                try {
+                    if (typeof window.reinitializeCartEventListeners === 'function') {
+                        window.reinitializeCartEventListeners();
+                        console.log('✅ Cart event listeners reinitialized');
+                    } else {
+                        console.warn('⚠️ Global reinitializeCartEventListeners not available');
+                    }
+                } catch (error) {
+                    console.error('❌ Error reinitializing cart listeners:', error);
                 }
                 
                 // Verify cart functionality
-                console.log('Verifying cart functionality...');
+                console.log('🔍 Verifying cart functionality...');
                 const cartToggle = document.getElementById('cart-toggle');
                 const desktopCartToggle = document.getElementById('desktop-cart-toggle');
                 const cartSidebar = document.getElementById('cart-sidebar');
                 const cartOverlay = document.getElementById('cart-overlay');
                 
-                console.log('Cart toggle element:', cartToggle);
-                console.log('Desktop cart toggle element:', desktopCartToggle);
-                console.log('Cart sidebar element:', cartSidebar);
-                console.log('Cart overlay element:', cartOverlay);
-                console.log('Window toggleCart function:', typeof window.toggleCart);
+                console.log('  Cart toggle element:', !!cartToggle);
+                console.log('  Desktop cart toggle element:', !!desktopCartToggle);
+                console.log('  Cart sidebar element:', !!cartSidebar);
+                console.log('  Cart overlay element:', !!cartOverlay);
+                console.log('  Window toggleCart function:', typeof window.toggleCart);
+                
+                // List available cart-related functions
+                const cartFunctions = Object.keys(window).filter(key => 
+                    typeof window[key] === 'function' && 
+                    (key.toLowerCase().includes('cart') || key.toLowerCase().includes('toggle'))
+                );
+                console.log('  Available cart functions:', cartFunctions);
                 
                 // Test the cart functionality
-                if (window.toggleCart) {
-                    console.log('Cart toggle function is available');
+                if (typeof window.toggleCart === 'function') {
+                    console.log('✅ Cart toggle function is available');
                 } else {
-                    console.error('Cart toggle function is not available');
+                    console.error('❌ Cart toggle function is not available');
                 }
-            }, 500);
+            }, 1000); // Increased timeout to ensure scripts are fully loaded
 
             console.log('=== PRODUCT PAGE INITIALIZATION COMPLETE ===');
-            console.log('Current product:', currentProduct);
-            console.log('Add to cart button:', document.getElementById('add-to-cart-btn'));
-            console.log('Cart toggle:', document.getElementById('cart-toggle'));
-            console.log('Desktop cart toggle:', document.getElementById('desktop-cart-toggle'));
-            console.log('Cart sidebar:', document.getElementById('cart-sidebar'));
-            console.log('Window toggleCart function:', typeof window.toggleCart);
+            console.log('✅ Current product loaded:', currentProduct?.name || 'None');
+            console.log('✅ Add to cart button:', !!document.getElementById('add-to-cart-btn'));
+            console.log('✅ Cart toggle:', !!document.getElementById('cart-toggle'));
+            console.log('✅ Desktop cart toggle:', !!document.getElementById('desktop-cart-toggle'));
+            console.log('✅ Cart sidebar:', !!document.getElementById('cart-sidebar'));
+            console.log('✅ Window toggleCart function:', typeof window.toggleCart);
             } else {
+                console.error('❌ Product not found for ID:', productId);
+                showError('Product not found. Redirecting to shop...');
                 // Redirect to shop if product not found
                 setTimeout(() => {
                     window.location.href = 'shop.html';

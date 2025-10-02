@@ -54,3 +54,8 @@ build/
 *_old.*
 
 .github/
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*

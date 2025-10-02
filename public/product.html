@@ -471,7 +471,9 @@
                 <!-- Main Product Image -->
                 <div class="relative bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 border border-gray-200 overflow-hidden">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full opacity-20 transform translate-x-12 -translate-y-12"></div>
-                    <img id="main-image" src="" alt="Product Image" class="relative z-10 w-full h-auto object-contain product-image transition-all duration-300 ease-in-out min-h-[400px]">
+                    <div class="relative z-10 w-full h-[400px] flex items-center justify-center bg-gray-50 rounded-xl">
+                        <img id="main-image" src="" alt="Product Image" class="max-w-full max-h-full object-contain product-image transition-all duration-300 ease-in-out">
+                    </div>
                 </div>
                 
                 <!-- Thumbnail Images -->
@@ -819,6 +821,56 @@
         let currentProduct = null;
         let currentQuantity = 1;
 
+        // Function to convert Google Drive URLs to direct image URLs
+        function convertGoogleDriveUrl(url) {
+            if (!url || !url.includes('drive.google.com')) {
+                return url;
+            }
+            
+            console.log('🔍 Original Google Drive URL:', url);
+            
+            // Extract file ID from different Google Drive URL formats
+            let fileId = null;
+            
+            // Format: https://drive.google.com/file/d/FILE_ID/view (with optional query params)
+            if (url.includes('/file/d/')) {
+                const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                if (match) {
+                    fileId = match[1];
+                    console.log('🔍 Extracted file ID from /file/d/ format:', fileId);
+                }
+            }
+            
+            // Format: https://drive.google.com/open?id=FILE_ID
+            if (!fileId && url.includes('open?id=')) {
+                const match = url.match(/open\?id=([a-zA-Z0-9_-]+)/);
+                if (match) {
+                    fileId = match[1];
+                    console.log('🔍 Extracted file ID from open?id= format:', fileId);
+                }
+            }
+            
+            // Format: https://drive.google.com/uc?id=FILE_ID
+            if (!fileId && url.includes('uc?id=')) {
+                const match = url.match(/uc\?id=([a-zA-Z0-9_-]+)/);
+                if (match) {
+                    fileId = match[1];
+                    console.log('🔍 Extracted file ID from uc?id= format:', fileId);
+                }
+            }
+            
+            if (fileId) {
+                // Convert to direct image URL
+                const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                console.log('✅ Converted Google Drive URL:', url, '->', directUrl);
+                return directUrl;
+            } else {
+                console.error('❌ Could not extract file ID from Google Drive URL:', url);
+                console.error('   URL was:', url);
+                return url; // Return original URL as fallback instead of placeholder
+            }
+        }
+
         // Get product ID from URL parameters
         function getProductIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -939,17 +991,27 @@
                 badge.className = 'inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mb-3';
             }
 
-            // Update price
-            document.getElementById('product-price').textContent = `${product.currency} ${product.price.toLocaleString()}.00`;
+            // Update price (with null checks since price section is commented out)
+            const priceElement = document.getElementById('product-price');
+            if (priceElement) {
+                priceElement.textContent = `${product.currency} ${product.price.toLocaleString()}.00`;
+            }
             
             // Handle discount (if original price exists)
             const discountSection = document.getElementById('product-discount');
-            if (product.originalPrice && product.originalPrice > product.price) {
+            if (discountSection && product.originalPrice && product.originalPrice > product.price) {
                 const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
-                document.getElementById('original-price').textContent = `${product.currency} ${product.originalPrice.toLocaleString()}.00`;
-                document.getElementById('discount-badge').textContent = `${discountPercent}% OFF`;
+                const originalPriceElement = document.getElementById('original-price');
+                const discountBadgeElement = document.getElementById('discount-badge');
+                
+                if (originalPriceElement) {
+                    originalPriceElement.textContent = `${product.currency} ${product.originalPrice.toLocaleString()}.00`;
+                }
+                if (discountBadgeElement) {
+                    discountBadgeElement.textContent = `${discountPercent}% OFF`;
+                }
                 discountSection.classList.remove('hidden');
-            } else {
+            } else if (discountSection) {
                 discountSection.classList.add('hidden');
             }
 
@@ -975,8 +1037,11 @@
                 }
             }
 
-            // Update description
-            document.getElementById('product-description').textContent = product.description || product.shortDescription || 'No description available.';
+            // Update description (with null check)
+            const descriptionElement = document.getElementById('product-description');
+            if (descriptionElement) {
+                descriptionElement.textContent = product.description || product.shortDescription || 'No description available.';
+            }
             // Handle datasheet button (support both id formats and guard if missing)
             const datasheetButton = document.getElementById('datasheet-btn') || document.getElementById('datasheetButton');
             if (datasheetButton) {
@@ -1001,20 +1066,37 @@
                     console.log('📄 Final datasheet path:', datasheetPath);
                     
                     datasheetButton.classList.remove('hidden');
-                    datasheetButton.onclick = function() {
+                    datasheetButton.onclick = function(event) {
+                        event.preventDefault();
                         console.log('📄 Opening datasheet:', datasheetPath);
+                        
                         try {
-                            // For Google Drive direct links, open directly
-                            if (datasheetPath.includes('drive.google.com') || datasheetPath.includes('googleusercontent.com')) {
-                                window.open(datasheetPath, '_blank');
-                                console.log('✅ Google Drive datasheet opened');
-                            } else {
-                                // For local files, test and open
-                                const testLink = document.createElement('a');
-                                testLink.href = datasheetPath;
-                                window.open(datasheetPath, '_blank');
-                                console.log('✅ Local datasheet opened');
+                            let finalUrl = datasheetPath;
+                            
+                            // For Google Drive URLs, convert to direct view link
+                            if (datasheetPath.includes('drive.google.com')) {
+                                console.log('📄 Converting Google Drive datasheet URL');
+                                finalUrl = convertGoogleDriveUrl(datasheetPath);
+                                console.log('📄 Converted datasheet URL:', finalUrl);
                             }
+                            
+                            // Open in new window/tab
+                            const newWindow = window.open(finalUrl, '_blank');
+                            
+                            // Check if popup was blocked
+                            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                                console.warn('🚫 Popup blocked, trying alternative method');
+                                // Fallback: create temporary link and click it
+                                const tempLink = document.createElement('a');
+                                tempLink.href = finalUrl;
+                                tempLink.target = '_blank';
+                                tempLink.rel = 'noopener noreferrer';
+                                document.body.appendChild(tempLink);
+                                tempLink.click();
+                                document.body.removeChild(tempLink);
+                            }
+                            
+                            console.log('✅ Datasheet opened successfully');
                         } catch (error) {
                             console.error('❌ Failed to open datasheet:', error);
                             showError('Failed to open datasheet. Please try again later.');
@@ -1124,55 +1206,7 @@
                 return correctedPath || 'assets/images/placeholder.svg';
             }
 
-            // Function to convert Google Drive URLs to direct image URLs
-            function convertGoogleDriveUrl(url) {
-                if (!url.includes('drive.google.com')) {
-                    return url;
-                }
-                
-                console.log('🔍 Original Google Drive URL:', url);
-                
-                // Extract file ID from different Google Drive URL formats
-                let fileId = null;
-                
-                // Format: https://drive.google.com/file/d/FILE_ID/view (with optional query params)
-                if (url.includes('/file/d/')) {
-                    const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                    if (match) {
-                        fileId = match[1];
-                        console.log('🔍 Extracted file ID from /file/d/ format:', fileId);
-                    }
-                }
-                
-                // Format: https://drive.google.com/open?id=FILE_ID
-                if (!fileId && url.includes('open?id=')) {
-                    const match = url.match(/open\?id=([a-zA-Z0-9_-]+)/);
-                    if (match) {
-                        fileId = match[1];
-                        console.log('🔍 Extracted file ID from open?id= format:', fileId);
-                    }
-                }
-                
-                // Format: https://drive.google.com/uc?id=FILE_ID
-                if (!fileId && url.includes('uc?id=')) {
-                    const match = url.match(/uc\?id=([a-zA-Z0-9_-]+)/);
-                    if (match) {
-                        fileId = match[1];
-                        console.log('🔍 Extracted file ID from uc?id= format:', fileId);
-                    }
-                }
-                
-                if (fileId) {
-                    // Convert to direct image URL
-                    const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-                    console.log('✅ Converted Google Drive URL:', url, '->', directUrl);
-                    return directUrl;
-                } else {
-                    console.error('❌ Could not extract file ID from Google Drive URL:', url);
-                    console.error('   URL was:', url);
-                    return url; // Return original URL as fallback instead of placeholder
-                }
-            }
+
 
             // Set main image - prioritize images array (Google Drive) over mainImage (local)
             let mainImagePath = null;
@@ -1293,15 +1327,19 @@
                     const button = document.createElement('button');
                     button.className = `thumbnail group bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-4 border-2 transition-all duration-300 transform hover:scale-105 ${
                         index === 0 ? 'border-purple-500 bg-purple-50 opacity-100 active' : 'border-transparent opacity-50 hover:opacity-100'
-                    } hover:border-purple-500`;
+                    } hover:border-purple-500 h-24 w-full`;
                     
                     button.onclick = () => changeImage(validPath, button);
+                    
+                    // Create image container div for consistent sizing
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'w-full h-16 flex items-center justify-center';
                     
                     // Create image element with error handling
                     const imgElement = document.createElement('img');
                     imgElement.src = validPath;
                     imgElement.alt = `Product view ${index + 1}`;
-                    imgElement.className = 'w-full h-auto object-contain group-hover:scale-110 transition-transform duration-300';
+                    imgElement.className = 'max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-300';
                     
                     imgElement.onerror = function() {
                         console.error(`❌ Failed to load thumbnail ${index + 1}:`, validPath);
@@ -1337,7 +1375,8 @@
                         console.log(`✅ Thumbnail ${index + 1} loaded:`, validPath);
                     };
                     
-                    button.appendChild(imgElement);
+                    imageContainer.appendChild(imgElement);
+                    button.appendChild(imageContainer);
                     thumbnailsContainer.appendChild(button);
                 });
             } else {

@@ -169,6 +169,133 @@ class APIService {
     }
 }
 
+// Image Utility Functions
+// Function to convert Google Drive URLs to direct image URLs
+function convertGoogleDriveUrl(url) {
+    if (!url || !url.includes('drive.google.com')) {
+        return url;
+    }
+    
+    // Extract file ID from different Google Drive URL formats
+    let fileId = null;
+    
+    // Format: https://drive.google.com/file/d/FILE_ID/view (with optional query params)
+    if (url.includes('/file/d/')) {
+        const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (match) {
+            fileId = match[1];
+        }
+    }
+    
+    // Format: https://drive.google.com/open?id=FILE_ID
+    if (!fileId && url.includes('open?id=')) {
+        const match = url.match(/open\?id=([a-zA-Z0-9_-]+)/);
+        if (match) {
+            fileId = match[1];
+        }
+    }
+    
+    // Format: https://drive.google.com/uc?id=FILE_ID
+    if (!fileId && url.includes('uc?id=')) {
+        const match = url.match(/uc\?id=([a-zA-Z0-9_-]+)/);
+        if (match) {
+            fileId = match[1];
+        }
+    }
+    
+    if (fileId) {
+        // Convert to direct image URL
+        const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        return directUrl;
+    } else {
+        return url; // Return original URL as fallback
+    }
+}
+
+// Function to get valid image path with enhanced handling
+function getValidImagePath(imagePath, fallbackPath = 'assets/images/placeholder.svg') {
+    if (!imagePath) {
+        return fallbackPath;
+    }
+    
+    // Handle Google Drive links
+    if (imagePath.includes('drive.google.com')) {
+        return convertGoogleDriveUrl(imagePath);
+    }
+    
+    // If it's already a full URL (but not Google Drive), use it as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath;
+    }
+    
+    // If it starts with a slash, remove it to make it relative
+    if (imagePath.startsWith('/')) {
+        imagePath = imagePath.slice(1);
+    }
+    
+    // Fix common path mismatches between database and filesystem
+    let correctedPath = imagePath;
+    
+    // Directory name corrections (database vs filesystem mismatches)
+    const pathCorrections = {
+        '/Cables/': '/Cable/',
+        '/Wall Mount/': '/Cable/', // Fallback to Cable directory for missing Wall Mount
+        '/wall-mount/': '/Cable/',
+        '/Mounts/': '/Cable/',
+        '/wall mount/': '/Cable/',
+    };
+    
+    // Apply corrections
+    Object.entries(pathCorrections).forEach(([wrong, correct]) => {
+        if (correctedPath.includes(wrong)) {
+            correctedPath = correctedPath.replace(wrong, correct);
+        }
+    });
+    
+    return correctedPath || fallbackPath;
+}
+
+// Function to create an image element with enhanced error handling
+function createImageWithFallback(src, alt, className = '', fallbackSrc = 'assets/images/placeholder.svg') {
+    const img = document.createElement('img');
+    const validSrc = getValidImagePath(src);
+    
+    img.alt = alt;
+    img.className = className;
+    
+    // Set up error handling chain
+    img.onerror = function() {
+        handleImageError(this, validSrc);
+    };
+    
+    img.src = validSrc;
+    return img;
+}
+
+// Function to handle image loading errors with Google Drive fallbacks
+function handleImageError(imgElement, originalSrc) {
+    // If it was a Google Drive URL that failed, try alternative formats
+    if (originalSrc && originalSrc.includes('drive.google.com')) {
+        const fileId = originalSrc.match(/id=([a-zA-Z0-9_-]+)/);
+        if (fileId) {
+            const alternativeUrl = `https://lh3.googleusercontent.com/d/${fileId[1]}`;
+            
+            const altImg = new Image();
+            altImg.onload = () => {
+                imgElement.src = alternativeUrl;
+            };
+            altImg.onerror = () => {
+                imgElement.src = 'assets/images/placeholder.svg';
+            };
+            altImg.src = alternativeUrl;
+            return;
+        }
+    }
+    
+    // Fallback to placeholder
+    imgElement.src = 'assets/images/placeholder.svg';
+}
+
 // Cart Service - Handles user-specific cart operations
 class CartService {
     static async loadUserCart() {
@@ -1694,13 +1821,35 @@ function displayFeaturedProducts() {
     
     const featuredProducts = products.slice(0, 8);
     
-    container.innerHTML = featuredProducts.map(product => `
+    container.innerHTML = featuredProducts.map(product => {
+        // Handle image URL with enhanced Google Drive support
+        let imageUrl = null;
+        
+        // First try images array (usually Google Drive URLs)
+        if (product.images && product.images.length > 0) {
+            imageUrl = product.images[0];
+        } 
+        // Fallback to mainImage field
+        else if (product.mainImage) {
+            imageUrl = product.mainImage;
+        }
+        // Fallback to legacy image field
+        else if (product.image) {
+            imageUrl = product.image;
+        }
+        
+        // Process the image URL using our enhanced handling
+        const validImageUrl = getValidImagePath(imageUrl, 'assets/images/placeholder.svg');
+        
+        return `
         <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 scroll-animate" 
              data-product-id="${product.id}">
-            <div class="relative mb-4">
-                <img src="https://placehold.co/300x300/E0E0E0?text=${product.image}" 
+            <div class="relative mb-4 h-48 bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg">
+                <img src="${validImageUrl}" 
                      alt="${product.name}" 
-                     class="w-full h-48 object-cover rounded-lg">
+                     class="max-w-full max-h-full object-contain"
+                     onerror="handleImageError(this, '${validImageUrl}')"
+                     loading="lazy">
                 ${product.originalPrice ? '<span class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">Sale</span>' : ''}
             </div>
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">${product.name}</h3>
@@ -1721,7 +1870,8 @@ function displayFeaturedProducts() {
                 </button>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Shop Page Functions
@@ -1981,25 +2131,36 @@ function displayShopProducts(productsToShow) {
         const currency = product.currency || 'EGP';
         const isOnSale = originalPrice && originalPrice > productPrice;
         
-        // Handle image URL
-        let imageUrl = product.mainImage || product.image;
-        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-            imageUrl = `assets/images/Products/${imageUrl}`;
+        // Handle image URL with enhanced Google Drive support
+        let imageUrl = null;
+        
+        // First try images array (usually Google Drive URLs)
+        if (product.images && product.images.length > 0) {
+            imageUrl = product.images[0];
+        } 
+        // Fallback to mainImage field
+        else if (product.mainImage) {
+            imageUrl = product.mainImage;
         }
-        if (!imageUrl) {
-            imageUrl = 'assets/images/placeholder.jpg';
+        // Fallback to legacy image field
+        else if (product.image) {
+            imageUrl = product.image;
         }
+        
+        // Process the image URL using our enhanced handling
+        const validImageUrl = getValidImagePath(imageUrl, 'assets/images/placeholder.svg');
         
         return `
             <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
                data-product-id="${product.id}" 
                data-category="${product.categorySlug || product.category}" 
                data-name="${product.name}" >
-                <div class="relative h-64">
-                    <img src="${imageUrl}" 
+                <div class="relative h-64 bg-gray-100 flex items-center justify-center overflow-hidden">
+                    <img src="${validImageUrl}" 
                          alt="${product.name}" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                         onerror="this.src='assets/images/placeholder.jpg'">
+                         class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                         onerror="handleImageError(this, '${validImageUrl}')"
+                         loading="lazy">
                     <!-- Product Badges -->
                     ${isOnSale ? '<span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SALE</span>' : ''}
                     ${product.featured ? '<span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>' : ''}
@@ -2897,7 +3058,24 @@ function createProductCard(product) {
     const badge = product.bestSeller ? 'Best Seller' : 
                   product.featured ? 'Featured' : '';
     
-    // ...removed out of stock badge and overlays...
+    // Handle image URL with enhanced Google Drive support
+    let imageUrl = null;
+    
+    // First try images array (usually Google Drive URLs)
+    if (product.images && product.images.length > 0) {
+        imageUrl = product.images[0];
+    } 
+    // Fallback to mainImage field
+    else if (product.mainImage) {
+        imageUrl = product.mainImage;
+    }
+    // Fallback to legacy image field
+    else if (product.image) {
+        imageUrl = product.image;
+    }
+    
+    // Process the image URL using our enhanced handling
+    const validImageUrl = getValidImagePath(imageUrl, 'assets/images/placeholder.svg');
 
     cardWrapper.innerHTML = `
         <div class="card" data-product-id="${product.id}" data-product-name="${product.name}" data-category="${product.categorySlug}" data-in-stock="${isInStock}">
@@ -2905,7 +3083,13 @@ function createProductCard(product) {
             <div class="card__glow"></div>
             <div class="card__content">
                 ${badge ? `<div class="card__badge">${badge}</div>` : ''}
-                <div class="card__image relative" style="background-image: url('${product.mainImage}'); background-size: cover; background-position: center;"></div>
+                <div class="card__image relative bg-gray-100 flex items-center justify-center overflow-hidden">
+                    <img src="${validImageUrl}" 
+                         alt="${product.name}" 
+                         class="w-full h-full object-contain"
+                         onerror="handleImageError(this, '${validImageUrl}')"
+                         loading="lazy">
+                </div>
                 <div class="card__text">
                     <p class="card__title">${product.name}</p>
                     <p class="card__description">${product.shortDescription}</p>

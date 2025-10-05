@@ -323,7 +323,7 @@ async function loadDashboardData() {
         }
         
         updateDashboardStats(statsData.data);
-        updateChartsWithData(statsData.data);
+        // updateChartsWithData(statsData.data); // Disabled - salesChart now shows product popularity
         hideLoadingState('dashboard');
         showNotification('Dashboard data loaded successfully', 'success', 3000);
     } catch (error) {
@@ -1380,27 +1380,11 @@ function initializeCharts() {
 
         const isDark = document.documentElement.classList.contains('dark');
         
+        // Legacy sales chart - DISABLED in favor of new product popularity chart in charts.js
         const salesCtx = document.getElementById('salesChart');
-        if (salesCtx) {
-            try {
-                salesChartInstance = new Chart(salesCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                        datasets: [{
-                            label: 'Sales',
-                            data: [1200, 1900, 3000, 2500, 2200, 3000, 4500],
-                            borderColor: 'rgb(34, 197, 94)',
-                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: getChartOptions(isDark)
-                });
-            } catch (error) {
-                console.error('Error creating sales chart:', error);
-            }
+        if (salesCtx && !window.chartManager?.salesChartInstance) {
+            console.log('Legacy admin.js: Sales chart already handled by charts.js, skipping...');
+            // Don't create the chart if it's already handled by the new charts.js
         }
 
         const categoryCtx = document.getElementById('categoryChart');

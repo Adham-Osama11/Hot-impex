@@ -814,6 +814,7 @@
 
     <!-- JavaScript -->
     <script src="assets/js/config.js"></script>
+    <script src="assets/js/modules/analytics-service.js"></script>
     <script src="assets/js/scripts.js"></script>
     
     <!-- Dynamic Product Loading Script -->
@@ -1638,6 +1639,12 @@
             const product = await fetchProduct(productId);
             if (product) {
                 populateProductData(product);
+                
+                // Track product visit for analytics
+                if (typeof AnalyticsService !== 'undefined') {
+                    AnalyticsService.trackProductVisit(productId, product.name);
+                    console.log(`📊 Tracked direct visit to product page: ${product.name}`);
+                }
                 
                 // Load related products
                 loadRelatedProducts(product);

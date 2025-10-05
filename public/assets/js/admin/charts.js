@@ -28,27 +28,109 @@ class ChartManager {
         // Destroy existing charts if they exist
         ChartManager.destroyAllCharts();
         
-        // Initialize sales chart
+        // Initialize product popularity chart (formerly sales chart)
         const salesCtx = document.getElementById('salesChart');
         if (salesCtx) {
             // Reset canvas dimensions
             salesCtx.style.width = '';
             salesCtx.style.height = '';
             
+            // Ensure analytics service is available and has data
+            if (typeof AnalyticsService !== 'undefined') {
+                // Generate sample data if no data exists
+                const analytics = AnalyticsService.getAnalytics();
+                if (Object.keys(analytics.productVisits).length === 0) {
+                    console.log('No analytics data found, generating sample data...');
+                    AnalyticsService.generateSampleData();
+                }
+            }
+            
+            const popularityData = ChartManager.getProductPopularityData();
+            
             window.chartManager.salesChartInstance = new Chart(salesCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'Revenue (EGP)',
-                        data: [0, 0, 0, 0, 0, 0, 0], // Will be updated with real data
-                        borderColor: 'rgb(34, 197, 94)',
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: ChartManager.getChartOptions(isDark)
+                type: 'bar', // Changed from 'line' to 'bar'
+                data: popularityData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.8, // Make it wider to accommodate product names
+                    indexAxis: 'y', // Make it horizontal bar chart
+                    resizeDelay: 200,
+                    plugins: {
+                        legend: {
+                            display: false // Hide legend since we only have one dataset
+                        },
+                        tooltip: {
+                            backgroundColor: isDark ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+                            titleColor: isDark ? '#f3f4f6' : '#374151',
+                            bodyColor: isDark ? '#f3f4f6' : '#374151',
+                            borderColor: isDark ? '#374151' : '#e5e7eb',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                },
+                                label: function(context) {
+                                    const visits = context.parsed.x;
+                                    return `${visits} visit${visits !== 1 ? 's' : ''}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Page Visits',
+                                color: isDark ? '#f3f4f6' : '#374151',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                stepSize: 1, // Ensure integer steps for visit counts
+                                color: isDark ? '#9ca3af' : '#6b7280',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                                drawBorder: false
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: isDark ? '#f3f4f6' : '#374151',
+                                font: {
+                                    size: 11,
+                                    weight: '500'
+                                },
+                                maxRotation: 0,
+                                callback: function(value, index, values) {
+                                    const label = this.getLabelForValue(value);
+                                    // Truncate long product names for display
+                                    return label.length > 25 ? label.substring(0, 25) + '...' : label;
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 20,
+                            top: 10,
+                            bottom: 10
+                        }
+                    }
+                }
             });
         }
 
@@ -131,71 +213,14 @@ class ChartManager {
         
         console.log('Updating charts with data:', { orders, products });
         
-        // Update sales chart with real weekly revenue trend data
+        // Skip updating the sales chart since it's now showing product popularity
+        // The salesChart is now used for product popularity, not sales data
+        console.log('Skipping sales chart update - chart now shows product popularity');
+        
+        // If you want to update the product popularity chart with fresh data, use this instead:
         if (window.chartManager && window.chartManager.salesChartInstance) {
-            const weeklyTrend = orders.weeklyRevenueTrend || [];
-            console.log('Weekly revenue trend:', weeklyTrend);
-            
-            if (weeklyTrend.length > 0) {
-                // Create labels and data from the actual trend data
-                const labels = [];
-                const salesData = [];
-                
-                // Sort by date to ensure proper order
-                const sortedTrend = weeklyTrend.sort((a, b) => new Date(a._id) - new Date(b._id));
-                
-                // Fill the last 7 days, using 0 for missing days
-                const today = new Date();
-                const last7Days = [];
-                
-                for (let i = 6; i >= 0; i--) {
-                    const date = new Date(today);
-                    date.setDate(date.getDate() - i);
-                    const dateStr = date.toISOString().split('T')[0]; // YYYY-MM-DD format
-                    last7Days.push(dateStr);
-                }
-                
-                // Create labels (day names) and data for the last 7 days
-                last7Days.forEach(dateStr => {
-                    const date = new Date(dateStr);
-                    const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
-                    labels.push(dayName);
-                    
-                    // Find revenue for this date
-                    const dayData = sortedTrend.find(item => item._id === dateStr);
-                    const revenue = dayData ? Math.round(dayData.dailyRevenue) : 0;
-                    salesData.push(revenue);
-                });
-                
-                console.log('Chart labels:', labels);
-                console.log('Chart data:', salesData);
-                
-                // Update the chart
-                window.chartManager.salesChartInstance.data.labels = labels;
-                window.chartManager.salesChartInstance.data.datasets[0].data = salesData;
-                window.chartManager.salesChartInstance.data.datasets[0].label = 'Daily Revenue ($)';
-            } else {
-                // Fallback to mock data if no real data available
-                const totalRevenue = orders.totalRevenue || 0;
-                const dailyAverage = totalRevenue / 30; // Assume 30 days
-                const mockWeeklyData = [
-                    Math.round(dailyAverage * 0.8),
-                    Math.round(dailyAverage * 1.2),
-                    Math.round(dailyAverage * 1.5),
-                    Math.round(dailyAverage * 1.1),
-                    Math.round(dailyAverage * 0.9),
-                    Math.round(dailyAverage * 1.3),
-                    Math.round(dailyAverage * 1.6)
-                ];
-                
-                window.chartManager.salesChartInstance.data.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                window.chartManager.salesChartInstance.data.datasets[0].data = mockWeeklyData;
-                window.chartManager.salesChartInstance.data.datasets[0].label = 'Daily Revenue (Estimated)';
-                
-                console.log('Using fallback mock data:', mockWeeklyData);
-            }
-            
-            window.chartManager.salesChartInstance.update('none'); // Disable animation to prevent resize issues
+            console.log('Refreshing product popularity chart...');
+            ChartManager.updateProductPopularityChart();
         }
 
         // Update category chart with product categories
@@ -361,6 +386,112 @@ class ChartManager {
     }
 
     /**
+     * Get product popularity data for chart
+     * @returns {object} - Chart data with labels and datasets
+     */
+    static getProductPopularityData() {
+        console.log('Getting product popularity data...');
+        console.log('AnalyticsService available:', typeof AnalyticsService !== 'undefined');
+        
+        // Check if AnalyticsService is available
+        if (typeof AnalyticsService === 'undefined') {
+            console.warn('AnalyticsService not available, using sample data');
+            return {
+                labels: ['Sample Product 1', 'Sample Product 2', 'Sample Product 3', 'Sample Product 4', 'Sample Product 5'],
+                datasets: [{
+                    label: 'Page Visits',
+                    data: [5, 3, 2, 1, 1],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(34, 197, 94, 0.8)', 
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(168, 85, 247, 0.8)',
+                        'rgba(236, 72, 153, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgb(59, 130, 246)',
+                        'rgb(34, 197, 94)',
+                        'rgb(249, 115, 22)',
+                        'rgb(168, 85, 247)',
+                        'rgb(236, 72, 153)'
+                    ],
+                    borderWidth: 2
+                }]
+            };
+        }
+
+        const chartData = AnalyticsService.getTopProductsChartData(10); // Get top 10 products
+        console.log('Chart data received:', chartData);
+        
+        if (chartData.labels.length === 0) {
+            console.log('No visit data, showing placeholder');
+            // No visit data yet, show placeholder
+            return {
+                labels: ['No visit data yet'],
+                datasets: [{
+                    label: 'Page Visits',
+                    data: [0],
+                    backgroundColor: ['rgba(156, 163, 175, 0.8)'],
+                    borderColor: ['rgb(156, 163, 175)'],
+                    borderWidth: 2
+                }]
+            };
+        }
+
+        // Generate colors for each product
+        const colors = [
+            'rgba(59, 130, 246, 0.8)',   // Blue
+            'rgba(34, 197, 94, 0.8)',    // Green
+            'rgba(249, 115, 22, 0.8)',   // Orange
+            'rgba(168, 85, 247, 0.8)',   // Purple
+            'rgba(236, 72, 153, 0.8)',   // Pink
+            'rgba(14, 165, 233, 0.8)',   // Sky
+            'rgba(245, 158, 11, 0.8)',   // Amber
+            'rgba(239, 68, 68, 0.8)',    // Red
+            'rgba(16, 185, 129, 0.8)',   // Emerald
+            'rgba(139, 92, 246, 0.8)'    // Violet
+        ];
+
+        const borderColors = [
+            'rgb(59, 130, 246)',
+            'rgb(34, 197, 94)',
+            'rgb(249, 115, 22)',
+            'rgb(168, 85, 247)',
+            'rgb(236, 72, 153)',
+            'rgb(14, 165, 233)',
+            'rgb(245, 158, 11)',
+            'rgb(239, 68, 68)',
+            'rgb(16, 185, 129)',
+            'rgb(139, 92, 246)'
+        ];
+
+        const result = {
+            labels: chartData.fullNames, // Use full names instead of truncated ones
+            datasets: [{
+                label: 'Page Visits',
+                data: chartData.data,
+                backgroundColor: colors.slice(0, chartData.data.length),
+                borderColor: borderColors.slice(0, chartData.data.length),
+                borderWidth: 2
+            }]
+        };
+        
+        console.log('Final chart data structure:', result);
+        return result;
+    }
+
+    /**
+     * Update product popularity chart with latest data
+     */
+    static updateProductPopularityChart() {
+        if (window.chartManager && window.chartManager.salesChartInstance) {
+            const newData = ChartManager.getProductPopularityData();
+            window.chartManager.salesChartInstance.data = newData;
+            window.chartManager.salesChartInstance.update('resize');
+        }
+    }
+
+    /**
      * Destroy all chart instances
      */
     static destroyAll() {
@@ -381,3 +512,24 @@ window.chartManager = new ChartManager();
 
 // Export the class
 window.ChartManager = ChartManager;
+
+// Update total visits display
+function updateTotalVisitsDisplay() {
+    const totalVisitsElement = document.getElementById('total-visits');
+    if (totalVisitsElement && typeof AnalyticsService !== 'undefined') {
+        totalVisitsElement.textContent = AnalyticsService.getTotalVisits();
+    }
+}
+
+// Auto-refresh product popularity chart every 30 seconds
+setInterval(() => {
+    if (window.chartManager && window.chartManager.salesChartInstance) {
+        ChartManager.updateProductPopularityChart();
+        updateTotalVisitsDisplay();
+    }
+}, 30000);
+
+// Update visits display on page load
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(updateTotalVisitsDisplay, 1000);
+});

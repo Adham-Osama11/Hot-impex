@@ -2272,8 +2272,46 @@ function viewProduct(productId) {
     // Close search if open
     closeSearchBar();
     
+    // Track product visit for analytics
+    if (typeof AnalyticsService !== 'undefined') {
+        // Try to get product name for better tracking
+        const productName = getProductNameById(productId);
+        AnalyticsService.trackProductVisit(productId, productName);
+    }
+    
     // Navigate to product page (use 'product' parameter for consistency)
     window.location.href = `product.html?product=${productId}`;
+}
+
+/**
+ * Helper function to get product name by ID from current products data
+ * @param {string} productId - The product ID
+ * @returns {string|null} - Product name or null if not found
+ */
+function getProductNameById(productId) {
+    try {
+        // Check if products data is available globally
+        if (window.products && Array.isArray(window.products)) {
+            const product = window.products.find(p => p.id === productId);
+            return product ? product.name : null;
+        }
+        
+        // Check if product is in the current page context (for shop.html, etc.)
+        const productElements = document.querySelectorAll('[data-product-id]');
+        for (let element of productElements) {
+            if (element.getAttribute('data-product-id') === productId) {
+                const nameElement = element.querySelector('.product-name, h3, .product-title');
+                if (nameElement) {
+                    return nameElement.textContent.trim();
+                }
+            }
+        }
+        
+        return null;
+    } catch (error) {
+        console.error('Error getting product name:', error);
+        return null;
+    }
 }
 
 function saveCartToStorage() {

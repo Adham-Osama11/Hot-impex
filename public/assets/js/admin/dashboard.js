@@ -36,7 +36,8 @@ class DashboardController {
                 this.updateGrowthIndicators(response.data);
                 this.updateRecentActivities(response.data);
                 this.updateAlerts(response.data);
-                ChartManager.updateChartsWithData(response.data);
+                // ChartManager.updateChartsWithData(response.data); // Disabled - salesChart now shows product popularity
+                console.log('Dashboard: Skipping chart data update to preserve product popularity chart');
                 
                 // Update last refresh time
                 this.updateLastRefreshTime();

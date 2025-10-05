@@ -8,13 +8,19 @@ class AdminApp {
         this.controllers = {};
         this.managers = {};
         this.isInitialized = false;
+        this.isInitializing = false;
     }
 
     /**
      * Initialize the admin application
      */
     async initialize() {
-        if (this.isInitialized) return;
+        if (this.isInitialized || this.isInitializing) {
+            console.log('Admin app already initialized or initializing, skipping...');
+            return;
+        }
+        
+        this.isInitializing = true;
 
         try {
             // Initialize API
@@ -38,7 +44,7 @@ class AdminApp {
             window.usersController = this.controllers.users;
             
             // Initialize charts
-            ChartManager.initialize();
+            await ChartManager.initialize();
             
             // Setup global event listeners
             this.setupGlobalEventListeners();
@@ -50,6 +56,7 @@ class AdminApp {
             await this.controllers.dashboard.loadData();
             
             this.isInitialized = true;
+            this.isInitializing = false;
             
             // Make app globally available for testing
             window.adminApp = this;
@@ -59,6 +66,7 @@ class AdminApp {
         } catch (error) {
             console.error('Failed to initialize admin dashboard:', error);
             NotificationManager.showError('Failed to initialize dashboard');
+            this.isInitializing = false;
         }
     }
 
@@ -311,8 +319,10 @@ window.closeProductModal = () => window.productsController?.closeModal();
 
 // Initialize the admin app when authentication is successful
 document.addEventListener('adminAuthSuccess', async () => {
-    window.adminApp = new AdminApp();
-    await window.adminApp.initialize();
+    if (!window.adminApp) {
+        window.adminApp = new AdminApp();
+        await window.adminApp.initialize();
+    }
 });
 
 // Fallback initialization for testing/development
@@ -324,7 +334,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.adminApp = new AdminApp();
             await window.adminApp.initialize();
         }
-    }, 100);
+    }, 500);
 });
 
 // Export for global access

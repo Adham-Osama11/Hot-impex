@@ -1,171 +1,277 @@
 /**
  * Analytics Service
- * Handles product visit tracking and analytics data
+ * Handles product visit tracking and analytics data using database API
  */
 class AnalyticsService {
-    static STORAGE_KEY = 'hotimpex_analytics';
+    static API_BASE = '/api/analytics';
     
     /**
-     * Initialize analytics system
+     * Generate or get session ID for tracking anonymous users
      */
-    static initialize() {
-        // Ensure analytics object exists in localStorage
-        if (!localStorage.getItem(this.STORAGE_KEY)) {
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
-                productVisits: {},
-                lastUpdated: new Date().toISOString()
-            }));
+    static getSessionId() {
+        let sessionId = localStorage.getItem('hotimpex_session_id');
+        if (!sessionId) {
+            sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('hotimpex_session_id', sessionId);
         }
+        return sessionId;
     }
     
     /**
      * Track a product page visit
      * @param {string} productId - The product ID
-     * @param {string} productName - The product name (optional)
+     * @param {string} productName - The product name
+     * @param {string} productCategory - The product category
      */
-    static trackProductVisit(productId, productName = null) {
+    static async trackProductVisit(productId, productName, productCategory = null) {
         try {
-            const analytics = this.getAnalytics();
-            
-            // Initialize product if it doesn't exist
-            if (!analytics.productVisits[productId]) {
-                analytics.productVisits[productId] = {
-                    count: 0,
-                    name: productName || `Product ${productId}`,
-                    lastVisit: null
-                };
+            const visitData = {
+                productId,
+                productName,
+                productCategory,
+                sessionId: this.getSessionId(),
+                userId: this.getCurrentUserId() // Get from auth if available
+            };
+
+            const response = await fetch(`${this.API_BASE}/track-visit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(visitData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+
+            const result = await response.json();
+            console.log(`📊 Tracked visit to product: ${productId}`, result);
             
-            // Increment visit count
-            analytics.productVisits[productId].count++;
-            analytics.productVisits[productId].lastVisit = new Date().toISOString();
-            
-            // Update product name if provided
-            if (productName) {
-                analytics.productVisits[productId].name = productName;
-            }
-            
-            // Update last updated timestamp
-            analytics.lastUpdated = new Date().toISOString();
-            
-            // Save back to localStorage
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(analytics));
-            
-            console.log(`📊 Tracked visit to product: ${productId}`, analytics.productVisits[productId]);
+            return result;
         } catch (error) {
             console.error('Error tracking product visit:', error);
+            // Fallback to localStorage for offline functionality
+            this.trackVisitOffline(productId, productName);
         }
     }
     
     /**
-     * Get all analytics data
-     * @returns {Object} Analytics data
+     * Fallback method to track visits offline using localStorage
+     * @param {string} productId 
+     * @param {string} productName 
      */
-    static getAnalytics() {
+    static trackVisitOffline(productId, productName) {
         try {
-            const data = localStorage.getItem(this.STORAGE_KEY);
-            return data ? JSON.parse(data) : { productVisits: {}, lastUpdated: new Date().toISOString() };
+            const offlineKey = 'hotimpex_offline_visits';
+            let offlineVisits = JSON.parse(localStorage.getItem(offlineKey) || '[]');
+            
+            offlineVisits.push({
+                productId,
+                productName,
+                timestamp: new Date().toISOString(),
+                sessionId: this.getSessionId()
+            });
+            
+            // Keep only last 100 offline visits
+            if (offlineVisits.length > 100) {
+                offlineVisits = offlineVisits.slice(-100);
+            }
+            
+            localStorage.setItem(offlineKey, JSON.stringify(offlineVisits));
+            console.log('📊 Visit tracked offline:', { productId, productName });
         } catch (error) {
-            console.error('Error loading analytics:', error);
-            return { productVisits: {}, lastUpdated: new Date().toISOString() };
+            console.error('Error tracking visit offline:', error);
         }
     }
     
     /**
-     * Get product visit statistics
-     * @returns {Array} Array of products with visit counts
+     * Get current user ID if authenticated
+     * @returns {string|null} User ID or null
      */
-    static getProductVisitStats() {
-        const analytics = this.getAnalytics();
-        
-        // Convert to array and sort by visit count
-        return Object.entries(analytics.productVisits)
-            .map(([productId, data]) => ({
-                id: productId,
-                name: data.name,
-                visits: data.count,
-                lastVisit: data.lastVisit
-            }))
-            .sort((a, b) => b.visits - a.visits);
+    static getCurrentUserId() {
+        // Check if user is logged in (implement based on your auth system)
+        const userData = localStorage.getItem('hotimpex_user');
+        if (userData) {
+            try {
+                const user = JSON.parse(userData);
+                return user.id || user._id;
+            } catch (e) {
+                return null;
+            }
+        }
+        return null;
     }
     
     /**
      * Get top visited products for chart display
      * @param {number} limit - Number of top products to return
+     * @param {string} timeframe - 'all', 'today', 'week', 'month'
      * @returns {Object} Chart data with labels and values
      */
-    static getTopProductsChartData(limit = 10) {
-        const stats = this.getProductVisitStats();
-        const topProducts = stats.slice(0, limit);
-        
-        return {
-            labels: topProducts.map(p => {
-                // For horizontal bar chart, we can afford longer names
-                return p.name.length > 30 ? p.name.substring(0, 30) + '...' : p.name;
-            }),
-            data: topProducts.map(p => p.visits),
-            fullNames: topProducts.map(p => p.name),
-            productIds: topProducts.map(p => p.id),
-            totalVisits: topProducts.reduce((sum, p) => sum + p.visits, 0)
-        };
-    }
-    
-    /**
-     * Clear all analytics data
-     */
-    static clearAnalytics() {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
-            productVisits: {},
-            lastUpdated: new Date().toISOString()
-        }));
-        console.log('📊 Analytics data cleared');
-    }
-    
-    /**
-     * Generate sample analytics data for demonstration
-     */
-    static generateSampleData() {
-        const sampleProducts = [
-            { id: 'wm-001', name: 'N2 Fixed Wall Mount', visits: 45 },
-            { id: 'wm-002', name: 'Premium Tilt Mount', visits: 32 },
-            { id: 'cable-001', name: 'HDMI Cable 4K', visits: 28 },
-            { id: 'gaming-001', name: 'Gaming Console Mount', visits: 23 },
-            { id: 'ceiling-001', name: 'Ceiling Bracket Pro', visits: 19 },
-            { id: 'motion-001', name: 'Full Motion Articulating', visits: 16 },
-            { id: 'cart-001', name: 'Mobile TV Cart', visits: 12 },
-            { id: 'motor-001', name: 'Motorized TV Lift', visits: 8 },
-            { id: 'wall-001', name: 'Video Wall System', visits: 5 }
-        ];
-        
-        const analytics = {
-            productVisits: {},
-            lastUpdated: new Date().toISOString()
-        };
-        
-        sampleProducts.forEach(product => {
-            analytics.productVisits[product.id] = {
-                count: product.visits,
-                name: product.name,
-                lastVisit: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
+    static async getTopProductsChartData(limit = 10, timeframe = 'all') {
+        try {
+            const response = await fetch(`${this.API_BASE}/chart-data?type=top-products&limit=${limit}&timeframe=${timeframe}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.status === 'success' && result.message.chartData) {
+                const chartData = result.message.chartData;
+                return {
+                    labels: chartData.labels,
+                    data: chartData.datasets[0].data,
+                    backgroundColor: chartData.datasets[0].backgroundColor,
+                    borderColor: chartData.datasets[0].borderColor,
+                    totalVisits: chartData.datasets[0].data.reduce((sum, val) => sum + val, 0)
+                };
+            }
+            
+            throw new Error('Invalid response format');
+            
+        } catch (error) {
+            console.error('Error fetching chart data:', error);
+            // Fallback to empty data
+            return {
+                labels: ['No Data'],
+                data: [0],
+                backgroundColor: ['rgba(200, 200, 200, 0.8)'],
+                borderColor: ['rgba(200, 200, 200, 1)'],
+                totalVisits: 0
             };
-        });
-        
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(analytics));
-        console.log('📊 Sample analytics data generated:', analytics);
-        
-        // Update chart if it exists
-        if (typeof ChartManager !== 'undefined' && ChartManager.updateProductPopularityChart) {
-            ChartManager.updateProductPopularityChart();
         }
     }
     
     /**
-     * Get total number of tracked visits
-     * @returns {number} Total visits
+     * Get analytics overview
+     * @returns {Object} Analytics overview data
      */
-    static getTotalVisits() {
-        const analytics = this.getAnalytics();
-        return Object.values(analytics.productVisits).reduce((total, product) => total + product.count, 0);
+    static async getAnalyticsOverview() {
+        try {
+            const response = await fetch(`${this.API_BASE}/overview`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                return result.data;
+            }
+            
+            throw new Error('Failed to fetch analytics overview');
+            
+        } catch (error) {
+            console.error('Error fetching analytics overview:', error);
+            return {
+                totalVisits: 0,
+                visitsToday: 0,
+                visitsThisWeek: 0,
+                visitsThisMonth: 0,
+                uniqueProducts: 0,
+                topCategories: []
+            };
+        }
+    }
+    
+    /**
+     * Get top categories by visits
+     * @param {number} limit - Number of categories to return
+     * @returns {Array} Top categories
+     */
+    static async getTopCategories(limit = 10) {
+        try {
+            const response = await fetch(`${this.API_BASE}/top-categories?limit=${limit}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                return result.data.categories;
+            }
+            
+            throw new Error('Failed to fetch top categories');
+            
+        } catch (error) {
+            console.error('Error fetching top categories:', error);
+            return [];
+        }
+    }
+    
+    /**
+     * Get visit trends over time
+     * @param {number} days - Number of days to look back
+     * @returns {Array} Visit trends
+     */
+    static async getVisitTrends(days = 7) {
+        try {
+            const response = await fetch(`${this.API_BASE}/trends?days=${days}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                return result.data.trends;
+            }
+            
+            throw new Error('Failed to fetch visit trends');
+            
+        } catch (error) {
+            console.error('Error fetching visit trends:', error);
+            return [];
+        }
+    }
+    
+    /**
+     * Sync offline visits with server (call this when connection is restored)
+     */
+    static async syncOfflineVisits() {
+        try {
+            const offlineKey = 'hotimpex_offline_visits';
+            const offlineVisits = JSON.parse(localStorage.getItem(offlineKey) || '[]');
+            
+            if (offlineVisits.length === 0) {
+                return;
+            }
+            
+            console.log(`📊 Syncing ${offlineVisits.length} offline visits...`);
+            
+            for (const visit of offlineVisits) {
+                await this.trackProductVisit(visit.productId, visit.productName);
+                // Small delay to avoid overwhelming the server
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // Clear offline visits after successful sync
+            localStorage.removeItem(offlineKey);
+            console.log('📊 Offline visits synced successfully');
+            
+        } catch (error) {
+            console.error('Error syncing offline visits:', error);
+        }
+    }
+    
+    /**
+     * Initialize analytics system
+     */
+    static initialize() {
+        // Sync offline visits on initialization
+        this.syncOfflineVisits();
+        
+        // Set up periodic sync for offline visits
+        setInterval(() => {
+            this.syncOfflineVisits();
+        }, 5 * 60 * 1000); // Sync every 5 minutes
     }
 }
 

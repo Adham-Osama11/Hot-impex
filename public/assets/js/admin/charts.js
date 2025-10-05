@@ -2,19 +2,30 @@
  * Chart Manager
  * Handles all chart-related functionality
  */
+
+// Global flag to prevent multiple simultaneous initializations
+window.chartsInitializing = false;
+
 class ChartManager {
     constructor() {
         this.salesChartInstance = null;
         this.categoryChartInstance = null;
         this.revenueChartInstance = null;
+        this.isInitialized = false;
     }
 
     /**
      * Initialize all charts
      */
-    static initialize() {
+    static async initialize() {
         if (typeof Chart === 'undefined') {
             console.warn('Chart.js not loaded');
+            return;
+        }
+
+        // Prevent simultaneous initializations
+        if (window.chartsInitializing) {
+            console.log('Charts initialization already in progress, skipping...');
             return;
         }
 
@@ -22,32 +33,42 @@ class ChartManager {
         if (!window.chartManager) {
             window.chartManager = new ChartManager();
         }
+        
+        // Prevent double initialization
+        if (window.chartManager.isInitialized) {
+            console.log('Charts already initialized, skipping...');
+            return;
+        }
+        
+        window.chartsInitializing = true;
+        console.log('Initializing charts...');
 
         const isDark = document.documentElement.classList.contains('dark');
         
-        // Destroy existing charts if they exist
-        ChartManager.destroyAllCharts();
+        // Only destroy existing charts if they actually exist and we're reinitializing
+        if (window.chartManager && window.chartManager.isInitialized) {
+            console.log('Destroying existing charts for reinitialization...');
+            ChartManager.destroyAllCharts();
+        }
         
         // Initialize product popularity chart (formerly sales chart)
         const salesCtx = document.getElementById('salesChart');
         if (salesCtx) {
-            // Reset canvas dimensions
-            salesCtx.style.width = '';
-            salesCtx.style.height = '';
-            
-            // Ensure analytics service is available and has data
-            if (typeof AnalyticsService !== 'undefined') {
-                // Generate sample data if no data exists
-                const analytics = AnalyticsService.getAnalytics();
-                if (Object.keys(analytics.productVisits).length === 0) {
-                    console.log('No analytics data found, generating sample data...');
-                    AnalyticsService.generateSampleData();
+            try {
+                // Clear any existing Chart.js association
+                if (salesCtx.chartjs) {
+                    Chart.getChart(salesCtx)?.destroy();
                 }
-            }
-            
-            const popularityData = ChartManager.getProductPopularityData();
-            
-            window.chartManager.salesChartInstance = new Chart(salesCtx, {
+                
+                // Reset canvas dimensions and clear any existing chart data
+                salesCtx.style.width = '';
+                salesCtx.style.height = '';
+                salesCtx.removeAttribute('width');
+                salesCtx.removeAttribute('height');
+                
+                const popularityData = await ChartManager.getProductPopularityData();
+                
+                window.chartManager.salesChartInstance = new Chart(salesCtx, {
                 type: 'bar', // Changed from 'line' to 'bar'
                 data: popularityData,
                 options: {
@@ -132,16 +153,32 @@ class ChartManager {
                     }
                 }
             });
+            } catch (error) {
+                console.error('Error initializing sales chart:', error);
+                // Clear any partially created chart
+                if (window.chartManager.salesChartInstance) {
+                    window.chartManager.salesChartInstance.destroy();
+                    window.chartManager.salesChartInstance = null;
+                }
+            }
         }
 
         // Initialize category chart
         const categoryCtx = document.getElementById('categoryChart');
         if (categoryCtx) {
-            // Reset canvas dimensions
-            categoryCtx.style.width = '';
-            categoryCtx.style.height = '';
-            
-            window.chartManager.categoryChartInstance = new Chart(categoryCtx, {
+            try {
+                // Clear any existing Chart.js association
+                if (categoryCtx.chartjs) {
+                    Chart.getChart(categoryCtx)?.destroy();
+                }
+                
+                // Reset canvas dimensions
+                categoryCtx.style.width = '';
+                categoryCtx.style.height = '';
+                categoryCtx.removeAttribute('width');
+                categoryCtx.removeAttribute('height');
+                
+                window.chartManager.categoryChartInstance = new Chart(categoryCtx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Fixed Stand', 'Stand Tilt', 'Full Motion', 'Cables', 'Ceiling Bracket', 'Gaming', 'Motorized TV', 'TV Cart', 'Video Wall'],
@@ -156,16 +193,31 @@ class ChartManager {
                 },
                 options: ChartManager.getDoughnutChartOptions(isDark)
             });
+            } catch (error) {
+                console.error('Error initializing category chart:', error);
+                if (window.chartManager.categoryChartInstance) {
+                    window.chartManager.categoryChartInstance.destroy();
+                    window.chartManager.categoryChartInstance = null;
+                }
+            }
         }
 
         // Initialize revenue chart
         const revenueCtx = document.getElementById('revenueChart');
         if (revenueCtx) {
-            // Reset canvas dimensions
-            revenueCtx.style.width = '';
-            revenueCtx.style.height = '';
-            
-            window.chartManager.revenueChartInstance = new Chart(revenueCtx, {
+            try {
+                // Clear any existing Chart.js association
+                if (revenueCtx.chartjs) {
+                    Chart.getChart(revenueCtx)?.destroy();
+                }
+                
+                // Reset canvas dimensions
+                revenueCtx.style.width = '';
+                revenueCtx.style.height = '';
+                revenueCtx.removeAttribute('width');
+                revenueCtx.removeAttribute('height');
+                
+                window.chartManager.revenueChartInstance = new Chart(revenueCtx, {
                 type: 'bar',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -179,13 +231,35 @@ class ChartManager {
                 },
                 options: ChartManager.getChartOptions(isDark)
             });
+            } catch (error) {
+                console.error('Error initializing revenue chart:', error);
+                if (window.chartManager.revenueChartInstance) {
+                    window.chartManager.revenueChartInstance.destroy();
+                    window.chartManager.revenueChartInstance = null;
+                }
+            }
         }
+        
+        // Mark as initialized
+        window.chartManager.isInitialized = true;
+        window.chartsInitializing = false;
+        console.log('Charts initialized successfully');
     }
 
     /**
      * Destroy all existing charts
      */
     static destroyAllCharts() {
+        // Destroy all Chart.js instances using the registry (Chart.js v3+)
+        Object.values(Chart.instances).forEach(instance => {
+            if (instance && typeof instance.destroy === 'function') {
+                instance.destroy();
+            }
+        });
+        
+        // Clear the Chart.js registry
+        Chart.instances = {};
+        
         if (window.chartManager) {
             if (window.chartManager.salesChartInstance) {
                 window.chartManager.salesChartInstance.destroy();
@@ -200,6 +274,33 @@ class ChartManager {
                 window.chartManager.revenueChartInstance = null;
             }
         }
+        
+        // Clear canvas contexts manually as additional cleanup
+        const canvasElements = ['salesChart', 'categoryChart', 'revenueChart'];
+        canvasElements.forEach(canvasId => {
+            const canvas = document.getElementById(canvasId);
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+                // Reset canvas attributes to clear Chart.js metadata
+                canvas.removeAttribute('width');
+                canvas.removeAttribute('height');
+                canvas.style.width = '';
+                canvas.style.height = '';
+                
+                // Remove Chart.js specific data attributes
+                delete canvas.chartjs;
+                canvas.removeAttribute('data-chartjs-id');
+            }
+        });
+        
+        // Reset initialization flags
+        if (window.chartManager) {
+            window.chartManager.isInitialized = false;
+        }
+        window.chartsInitializing = false;
     }
 
     /**
@@ -220,7 +321,9 @@ class ChartManager {
         // If you want to update the product popularity chart with fresh data, use this instead:
         if (window.chartManager && window.chartManager.salesChartInstance) {
             console.log('Refreshing product popularity chart...');
-            ChartManager.updateProductPopularityChart();
+            ChartManager.updateProductPopularityChart().catch(error => {
+                console.error('Error updating product popularity chart:', error);
+            });
         }
 
         // Update category chart with product categories
@@ -387,9 +490,9 @@ class ChartManager {
 
     /**
      * Get product popularity data for chart
-     * @returns {object} - Chart data with labels and datasets
+     * @returns {Promise<object>} - Chart data with labels and datasets
      */
-    static getProductPopularityData() {
+    static async getProductPopularityData() {
         console.log('Getting product popularity data...');
         console.log('AnalyticsService available:', typeof AnalyticsService !== 'undefined');
         
@@ -420,72 +523,60 @@ class ChartManager {
             };
         }
 
-        const chartData = AnalyticsService.getTopProductsChartData(10); // Get top 10 products
-        console.log('Chart data received:', chartData);
-        
-        if (chartData.labels.length === 0) {
-            console.log('No visit data, showing placeholder');
-            // No visit data yet, show placeholder
+        try {
+            const chartData = await AnalyticsService.getTopProductsChartData(10); // Get top 10 products
+            console.log('Chart data received:', chartData);
+            
+            if (chartData.labels.length === 0 || chartData.labels[0] === 'No Data') {
+                console.log('No visit data, showing placeholder');
+                // No visit data yet, show placeholder
+                return {
+                    labels: ['No visit data yet'],
+                    datasets: [{
+                        label: 'Page Visits',
+                        data: [0],
+                        backgroundColor: ['rgba(156, 163, 175, 0.8)'],
+                        borderColor: ['rgb(156, 163, 175)'],
+                        borderWidth: 2
+                    }]
+                };
+            }
+
+            const result = {
+                labels: chartData.labels,
+                datasets: [{
+                    label: 'Page Visits',
+                    data: chartData.data,
+                    backgroundColor: chartData.backgroundColor,
+                    borderColor: chartData.borderColor,
+                    borderWidth: 2
+                }]
+            };
+            
+            console.log('Final chart data structure:', result);
+            return result;
+        } catch (error) {
+            console.error('Error getting product popularity data:', error);
+            // Return fallback data on error
             return {
-                labels: ['No visit data yet'],
+                labels: ['Connection Error'],
                 datasets: [{
                     label: 'Page Visits',
                     data: [0],
-                    backgroundColor: ['rgba(156, 163, 175, 0.8)'],
-                    borderColor: ['rgb(156, 163, 175)'],
+                    backgroundColor: ['rgba(239, 68, 68, 0.8)'],
+                    borderColor: ['rgb(239, 68, 68)'],
                     borderWidth: 2
                 }]
             };
         }
-
-        // Generate colors for each product
-        const colors = [
-            'rgba(59, 130, 246, 0.8)',   // Blue
-            'rgba(34, 197, 94, 0.8)',    // Green
-            'rgba(249, 115, 22, 0.8)',   // Orange
-            'rgba(168, 85, 247, 0.8)',   // Purple
-            'rgba(236, 72, 153, 0.8)',   // Pink
-            'rgba(14, 165, 233, 0.8)',   // Sky
-            'rgba(245, 158, 11, 0.8)',   // Amber
-            'rgba(239, 68, 68, 0.8)',    // Red
-            'rgba(16, 185, 129, 0.8)',   // Emerald
-            'rgba(139, 92, 246, 0.8)'    // Violet
-        ];
-
-        const borderColors = [
-            'rgb(59, 130, 246)',
-            'rgb(34, 197, 94)',
-            'rgb(249, 115, 22)',
-            'rgb(168, 85, 247)',
-            'rgb(236, 72, 153)',
-            'rgb(14, 165, 233)',
-            'rgb(245, 158, 11)',
-            'rgb(239, 68, 68)',
-            'rgb(16, 185, 129)',
-            'rgb(139, 92, 246)'
-        ];
-
-        const result = {
-            labels: chartData.fullNames, // Use full names instead of truncated ones
-            datasets: [{
-                label: 'Page Visits',
-                data: chartData.data,
-                backgroundColor: colors.slice(0, chartData.data.length),
-                borderColor: borderColors.slice(0, chartData.data.length),
-                borderWidth: 2
-            }]
-        };
-        
-        console.log('Final chart data structure:', result);
-        return result;
     }
 
     /**
      * Update product popularity chart with latest data
      */
-    static updateProductPopularityChart() {
+    static async updateProductPopularityChart() {
         if (window.chartManager && window.chartManager.salesChartInstance) {
-            const newData = ChartManager.getProductPopularityData();
+            const newData = await ChartManager.getProductPopularityData();
             window.chartManager.salesChartInstance.data = newData;
             window.chartManager.salesChartInstance.update('resize');
         }

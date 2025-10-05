@@ -156,6 +156,20 @@ async function initializeProductPage() {
     const product = await fetchProductDetails(productId);
     if (product) {
         updateProductTabs(product);
+        
+        // Track product visit for analytics
+        if (typeof AnalyticsService !== 'undefined') {
+            try {
+                await AnalyticsService.trackProductVisit(
+                    product.data.id || product.data._id,
+                    product.data.name,
+                    product.data.category
+                );
+                console.log('📊 Product visit tracked:', product.data.name);
+            } catch (error) {
+                console.error('Error tracking product visit:', error);
+            }
+        }
     }
 
     // Initialize tabs

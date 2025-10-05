@@ -1009,10 +1009,51 @@
                 }
             }
 
-            // Update description (with null check)
+            // Update short description in "About This Product" section (with null check)
             const descriptionElement = document.getElementById('product-description');
             if (descriptionElement) {
-                descriptionElement.textContent = product.description || product.shortDescription || 'No description available.';
+                descriptionElement.textContent = product.shortDescription || product.description || 'No description available.';
+            }
+            
+            // Update full description in the Description tab
+            const fullDescriptionElement = document.querySelector('#description-tab .bg-gradient-to-r p');
+            if (fullDescriptionElement) {
+                fullDescriptionElement.textContent = product.description || product.shortDescription || 'No detailed description available.';
+            }
+            
+            // Update "Perfect For" section in Description tab
+            const perfectForGrid = document.querySelector('#description-tab .grid.grid-cols-1.md\\:grid-cols-2');
+            if (perfectForGrid && product.features && product.features.length > 0) {
+                perfectForGrid.innerHTML = '';
+                product.features.slice(0, 6).forEach(feature => {
+                    const featureItem = document.createElement('div');
+                    featureItem.className = 'flex items-center space-x-3 p-3 bg-gray-50 rounded-lg';
+                    featureItem.innerHTML = `
+                        <div class="w-2 h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex-shrink-0"></div>
+                        <span class="text-gray-700 text-sm font-medium">${feature}</span>
+                    `;
+                    perfectForGrid.appendChild(featureItem);
+                });
+            } else if (perfectForGrid) {
+                // Default use cases if no features available
+                const defaultUseCases = [
+                    'Professional installations',
+                    'Commercial applications',
+                    'Residential setups',
+                    'System integrators',
+                    'AV professionals',
+                    'Quality-conscious users'
+                ];
+                perfectForGrid.innerHTML = '';
+                defaultUseCases.forEach(useCase => {
+                    const featureItem = document.createElement('div');
+                    featureItem.className = 'flex items-center space-x-3 p-3 bg-gray-50 rounded-lg';
+                    featureItem.innerHTML = `
+                        <div class="w-2 h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex-shrink-0"></div>
+                        <span class="text-gray-700 text-sm font-medium">${useCase}</span>
+                    `;
+                    perfectForGrid.appendChild(featureItem);
+                });
             }
             // Handle datasheet button (support both id formats and guard if missing)
             const datasheetButton = document.getElementById('datasheet-btn') || document.getElementById('datasheetButton');
@@ -1075,6 +1116,258 @@
 
             // Update cart button
             updateCartButton();
+            
+            // Populate tab content
+            populateTabContent(product);
+            
+            // Initialize tab functionality
+            initializeTabSwitching();
+        }
+
+        // Populate content for all tabs
+        function populateTabContent(product) {
+            // Populate Specifications Tab
+            const specsTable = document.querySelector('#specifications-tab table');
+            if (specsTable && product.specifications) {
+                specsTable.innerHTML = '';
+                Object.entries(product.specifications).forEach(([key, value]) => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-200';
+                    row.innerHTML = `
+                        <td class="py-3 px-4 font-semibold text-gray-800 bg-gray-50">${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</td>
+                        <td class="py-3 px-4 text-gray-700">${value}</td>
+                    `;
+                    specsTable.appendChild(row);
+                });
+            }
+            
+            // Populate Package Contents
+            const packageList = document.querySelector('#specifications-tab ul');
+            if (packageList && product.packageContents && product.packageContents.length > 0) {
+                packageList.innerHTML = '';
+                product.packageContents.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'flex items-center space-x-2';
+                    listItem.innerHTML = `
+                        <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>${item}</span>
+                    `;
+                    packageList.appendChild(listItem);
+                });
+            } else if (packageList) {
+                // Default package contents
+                const defaultContents = [
+                    `1x ${product.name}`,
+                    'User Manual',
+                    'Warranty Card',
+                    'Mounting Hardware (if applicable)'
+                ];
+                packageList.innerHTML = '';
+                defaultContents.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'flex items-center space-x-2';
+                    listItem.innerHTML = `
+                        <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>${item}</span>
+                    `;
+                    packageList.appendChild(listItem);
+                });
+            }
+            
+            // Populate Setup & Usage Tab
+            const quickStartText = document.getElementById('quick-start-text');
+            if (quickStartText) {
+                if (product.setup && product.setup.quickStart) {
+                    quickStartText.textContent = product.setup.quickStart;
+                } else {
+                    quickStartText.textContent = `Connect your ${product.name} according to the included manual and verify all connections before powering on.`;
+                }
+            }
+            
+            // Populate Setup Instructions
+            const setupInstructions = document.querySelector('#setup-tab ol');
+            if (setupInstructions) {
+                setupInstructions.innerHTML = '';
+                if (product.setup && product.setup.instructions && product.setup.instructions.length > 0) {
+                    product.setup.instructions.forEach(instruction => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'text-gray-700';
+                        listItem.textContent = instruction;
+                        setupInstructions.appendChild(listItem);
+                    });
+                } else {
+                    // Default setup instructions
+                    const defaultInstructions = [
+                        'Unpack the product carefully and check all components',
+                        'Read the user manual thoroughly before installation',
+                        'Ensure power is off before making any connections',
+                        'Connect all cables securely according to specifications',
+                        'Power on the device and verify proper operation',
+                        'Test all functions to ensure correct installation'
+                    ];
+                    defaultInstructions.forEach(instruction => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'text-gray-700';
+                        listItem.textContent = instruction;
+                        setupInstructions.appendChild(listItem);
+                    });
+                }
+            }
+            
+            // Populate Common Patterns/Usage
+            const commonPatterns = document.querySelector('#setup-tab ul');
+            if (commonPatterns) {
+                commonPatterns.innerHTML = '';
+                if (product.setup && product.setup.commonPatterns && product.setup.commonPatterns.length > 0) {
+                    product.setup.commonPatterns.forEach(pattern => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'text-gray-700';
+                        listItem.textContent = pattern;
+                        commonPatterns.appendChild(listItem);
+                    });
+                } else {
+                    // Default usage patterns based on category
+                    let defaultPatterns = [];
+                    if (product.category.toLowerCase().includes('cable') || product.category.toLowerCase() === 'cables') {
+                        defaultPatterns = [
+                            'Signal transmission applications',
+                            'Audio/Video connectivity',
+                            'Data transfer connections',
+                            'Extension applications'
+                        ];
+                    } else if (product.category.toLowerCase().includes('mount') || product.category.toLowerCase().includes('bracket')) {
+                        defaultPatterns = [
+                            'TV and monitor mounting',
+                            'Commercial installations',
+                            'Home entertainment setups',
+                            'Digital signage applications'
+                        ];
+                    } else {
+                        defaultPatterns = [
+                            'Professional installations',
+                            'Commercial applications',
+                            'Residential use',
+                            'System integration'
+                        ];
+                    }
+                    
+                    defaultPatterns.forEach(pattern => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'text-gray-700';
+                        listItem.textContent = pattern;
+                        commonPatterns.appendChild(listItem);
+                    });
+                }
+            }
+            
+            // Populate Reviews Tab (placeholder content)
+            const reviewsTab = document.querySelector('#reviews-tab .space-y-6');
+            if (reviewsTab) {
+                reviewsTab.innerHTML = `
+                    <div class="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <span class="text-purple-600 font-bold text-sm">JD</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">John Doe</h4>
+                                    <p class="text-sm text-gray-600">Verified Purchase</p>
+                                </div>
+                            </div>
+                            <div class="flex text-yellow-400">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-2">
+                            Excellent product quality and fast delivery. Works exactly as described and the build quality is outstanding. Highly recommended for professional use.
+                        </p>
+                        <p class="text-sm text-gray-500">Posted 2 weeks ago</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span class="text-blue-600 font-bold text-sm">SM</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Sarah Miller</h4>
+                                    <p class="text-sm text-gray-600">Verified Purchase</p>
+                                </div>
+                            </div>
+                            <div class="flex text-yellow-400">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-2">
+                            Perfect for our office setup. Installation was straightforward and the product performs reliably. Great value for money.
+                        </p>
+                        <p class="text-sm text-gray-500">Posted 1 month ago</p>
+                    </div>
+                    <div class="text-center py-6">
+                        <button class="bg-purple-100 text-purple-700 px-6 py-2 rounded-lg hover:bg-purple-200 transition-colors duration-200">
+                            Load More Reviews
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize tab switching functionality
+        function initializeTabSwitching() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('tab-active', 'border-purple-500', 'text-purple-600');
+                        btn.classList.add('border-transparent', 'text-gray-500');
+                        // Remove active background
+                        const activeDiv = btn.querySelector('.absolute');
+                        if (activeDiv) {
+                            activeDiv.classList.remove('opacity-30');
+                            activeDiv.classList.add('opacity-0');
+                        }
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add('tab-active', 'border-purple-500', 'text-purple-600');
+                    this.classList.remove('border-transparent', 'text-gray-500');
+                    // Add active background
+                    const activeDiv = this.querySelector('.absolute');
+                    if (activeDiv) {
+                        activeDiv.classList.add('opacity-30');
+                        activeDiv.classList.remove('opacity-0');
+                    }
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show target tab content
+                    const targetContent = document.getElementById(targetTab + '-tab');
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
         }
 
         // Update product images
@@ -1486,20 +1779,27 @@
             const currency = product.currency || 'EGP';
             const isOnSale = originalPrice && originalPrice > productPrice;
             
-            // Check stock status - product is in stock if inStock is true AND stockQuantity > 0
-            const isInStock = product.inStock && (product.stockQuantity === undefined || product.stockQuantity > 0);
-            const stockQuantity = product.stockQuantity || 0;
+            // Handle image URL using the same logic as main product
+            let imageUrl = null;
             
-            // Handle image URL
-            let imageUrl = product.mainImage || product.image;
-            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-                // For products with full path already in mainImage
-                if (!imageUrl.startsWith('assets/')) {
-                    imageUrl = `assets/images/Products/${imageUrl}`;
-                }
+            // Prioritize images array (Google Drive) over mainImage (local)
+            if (product.images && product.images.length > 0) {
+                imageUrl = product.images[0];
             }
-            if (!imageUrl) {
-                imageUrl = 'assets/images/logos/logo.png'; // Use logo as fallback
+            // Fallback to mainImage field
+            else if (product.mainImage) {
+                imageUrl = product.mainImage;
+            }
+            // Fallback to image field
+            else if (product.image) {
+                imageUrl = product.image;
+            }
+            
+            // Use the same validation logic as main product images
+            if (imageUrl) {
+                imageUrl = getValidImagePath(imageUrl);
+            } else {
+                imageUrl = 'assets/images/placeholder.svg';
             }
 
             // Determine the gradient colors based on product index or category
@@ -1514,28 +1814,21 @@
             const colorIndex = Math.abs(product.id.toString().split('').reduce((a, b) => (a << 5) - a + b.charCodeAt(0), 0)) % gradients.length;
             const gradient = gradients[colorIndex];
 
-            // Apply out of stock styling and responsive card sizing
-            const cardClasses = `group bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200 flex-shrink-0 w-64 sm:w-full sm:min-w-[280px] ${!isInStock ? 'opacity-90' : ''}`;
-            const imageClasses = `max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500 ${!isInStock ? 'opacity-70' : ''}`;
+            // Card styling
+            const cardClasses = `group bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-gray-200 flex-shrink-0 w-64 sm:w-full sm:min-w-[280px]`;
+            const imageClasses = `max-w-full max-h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-500`;
 
             return `
-                <a href="product.html?product=${product.id}" class="${cardClasses}" onclick="${!isInStock ? 'event.preventDefault(); alert(\'This product is currently out of stock.\'); return false;' : ''}">
+                <a href="product.html?product=${product.id}" class="${cardClasses}">
                     <div class="relative bg-gradient-to-br ${gradient.bg} p-4 sm:p-6 h-48 sm:h-64 flex items-center justify-center">
                         <div class="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${gradient.accent} rounded-full opacity-30 transform translate-x-6 sm:translate-x-8 -translate-y-6 sm:-translate-y-8 group-hover:scale-125 transition-transform duration-500"></div>
                         <div class="w-full h-full flex items-center justify-center relative z-10">
                             <img src="${imageUrl}" 
                                  alt="${product.name}" 
                                  class="${imageClasses} max-w-[70%] sm:max-w-[80%] max-h-[70%] sm:max-h-[80%]"
-                                 onerror="this.src='assets/images/logos/logo.png'">
+                                 onerror="this.src='assets/images/placeholder.svg'">
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-t from-gray-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        
-                        <!-- Out of Stock Badge -->
-                        ${!isInStock ? `
-                            <div class="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full z-50">
-                                Out of Stock
-                            </div>
-                        ` : ''}
                         
                         <!-- Product badges -->
                         ${product.featured ? '<span class="absolute top-2 left-2 sm:top-3 sm:left-3 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full z-50">FEATURED</span>' : ''}
@@ -1543,35 +1836,18 @@
                         ${isOnSale ? '<span class="absolute top-2 left-2 sm:top-3 sm:left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-50">SALE</span>' : ''}
                     </div>
                     <div class="p-3 sm:p-4">
-                        <h3 class="font-bold text-gray-800 text-base sm:text-lg mb-2 group-hover:${gradient.text} transition-colors duration-300 line-clamp-2 ${!isInStock ? 'text-gray-500' : ''}" title="${product.name}">${product.name}</h3>
+                        <h3 class="font-bold text-gray-800 text-base sm:text-lg mb-2 group-hover:${gradient.text} transition-colors duration-300 line-clamp-2" title="${product.name}">${product.name}</h3>
                         <div class="flex items-center justify-between">
                             <div class="flex flex-col min-w-0 flex-1">
                                 ${isOnSale ? `<span class="text-xs sm:text-sm text-gray-500 line-through">${currency} ${originalPrice.toFixed(2)}</span>` : ''}
-                                <p class="${isInStock ? gradient.text : 'text-gray-500'} font-black text-base sm:text-lg">${currency} ${productPrice.toFixed(2)}</p>
-                                ${!isInStock ? `
-                                    <div class="flex flex-col">
-                                        <span class="text-red-600 text-xs font-medium">Unavailable</span>
-                                        ${stockQuantity !== undefined ? `<span class="text-gray-500 text-xs">Stock: ${stockQuantity}</span>` : ''}
-                                    </div>
-                                ` : ''}
+                                <p class="${gradient.text} font-black text-base sm:text-lg">${currency} ${productPrice.toFixed(2)}</p>
                             </div>
                             <div class="ml-2 sm:ml-3 flex-shrink-0">
-                                ${isInStock ? `
-                                    <button onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', 1);" 
-                                            class="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-r ${gradient.button} rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-2 sm:translate-x-3 group-hover:translate-x-0 transition-all duration-300"
-                                            title="Add to Cart">
-                                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
-                                    </button>
-                                ` : `
-                                    <button class="w-8 h-8 sm:w-9 sm:h-9 bg-gray-400 rounded-full flex items-center justify-center text-white cursor-not-allowed"
-                                            title="Out of Stock">
-                                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                    </button>
-                                `}
+                                <div class="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-r ${gradient.button} rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-2 sm:translate-x-3 group-hover:translate-x-0 transition-all duration-300">
+                                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>

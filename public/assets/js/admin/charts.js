@@ -62,16 +62,14 @@ class ChartManager {
             window.chartManager.categoryChartInstance = new Chart(categoryCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Gaming', 'Electronics', 'Commercial', 'Cables'],
+                    labels: ['Fixed Stand', 'Stand Tilt', 'Full Motion', 'Cables', 'Ceiling Bracket', 'Gaming', 'Motorized TV', 'TV Cart', 'Video Wall'],
                     datasets: [{
-                        data: [35, 25, 25, 15],
-                        backgroundColor: [
-                            'rgba(59, 130, 246, 0.8)', 
-                            'rgba(34, 197, 94, 0.8)', 
-                            'rgba(13, 148, 136, 0.8)', 
-                            'rgba(249, 115, 22, 0.8)'
-                        ],
-                        borderWidth: 0
+                        data: [28, 15, 18, 12, 8, 6, 5, 4, 4],
+                        backgroundColor: ChartManager.getCategoryColors(),
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverBorderWidth: 3,
+                        hoverBorderColor: '#ffffff'
                     }]
                 },
                 options: ChartManager.getDoughnutChartOptions(isDark)
@@ -203,8 +201,13 @@ class ChartManager {
         // Update category chart with product categories
         if (window.chartManager && window.chartManager.categoryChartInstance && products.categories) {
             const categories = products.categories || [];
-            window.chartManager.categoryChartInstance.data.labels = categories.map(cat => cat._id);
-            window.chartManager.categoryChartInstance.data.datasets[0].data = categories.map(cat => cat.count);
+            const labels = categories.map(cat => cat._id);
+            const data = categories.map(cat => cat.count);
+            const colors = labels.map(label => ChartManager.getCategoryColor(label));
+            
+            window.chartManager.categoryChartInstance.data.labels = labels;
+            window.chartManager.categoryChartInstance.data.datasets[0].data = data;
+            window.chartManager.categoryChartInstance.data.datasets[0].backgroundColor = colors;
             window.chartManager.categoryChartInstance.update('none'); // Disable animation to prevent resize issues
         }
     }
@@ -272,6 +275,49 @@ class ChartManager {
                 }
             }
         };
+    }
+
+    /**
+     * Get unique colors for product categories
+     * @returns {array} - Array of colors for categories
+     */
+    static getCategoryColors() {
+        return [
+            'rgba(239, 68, 68, 0.8)',   // Red - Fixed Stand
+            'rgba(34, 197, 94, 0.8)',   // Green - Stand Tilt
+            'rgba(59, 130, 246, 0.8)',  // Blue - Full Motion
+            'rgba(249, 115, 22, 0.8)',  // Orange - Cables
+            'rgba(168, 85, 247, 0.8)',  // Purple - Ceiling Bracket
+            'rgba(236, 72, 153, 0.8)',  // Pink - Gaming
+            'rgba(14, 165, 233, 0.8)',  // Sky Blue - Motorized TV
+            'rgba(16, 185, 129, 0.8)',  // Emerald - TV Cart
+            'rgba(245, 158, 11, 0.8)'   // Amber - Video Wall
+        ];
+    }
+
+    /**
+     * Get color for a specific category
+     * @param {string} categoryName - Category name
+     * @returns {string} - Color for the category
+     */
+    static getCategoryColor(categoryName) {
+        const categoryColors = {
+            'Fixed stand': 'rgba(239, 68, 68, 0.8)',    // Red
+            'Stand Tilt': 'rgba(34, 197, 94, 0.8)',     // Green
+            'Full Motion': 'rgba(59, 130, 246, 0.8)',   // Blue
+            'Cables': 'rgba(249, 115, 22, 0.8)',        // Orange
+            'Cable': 'rgba(249, 115, 22, 0.8)',         // Orange (singular form)
+            'Ceiling Bracket': 'rgba(168, 85, 247, 0.8)', // Purple
+            'Gaming': 'rgba(236, 72, 153, 0.8)',        // Pink
+            'Motorized TV': 'rgba(14, 165, 233, 0.8)',  // Sky Blue
+            'TV Cart': 'rgba(16, 185, 129, 0.8)',       // Emerald
+            'Video Wall': 'rgba(245, 158, 11, 0.8)',    // Amber
+            'Commercial': 'rgba(99, 102, 241, 0.8)',    // Indigo
+            'AV Distribution': 'rgba(139, 92, 246, 0.8)', // Violet
+            'Av distribution': 'rgba(139, 92, 246, 0.8)' // Violet (lowercase)
+        };
+        
+        return categoryColors[categoryName] || 'rgba(107, 114, 128, 0.8)'; // Default gray
     }
 
     /**

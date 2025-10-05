@@ -1290,6 +1290,40 @@ function getDoughnutChartOptions(isDark) {
     };
 }
 
+function getCategoryColors() {
+    return [
+        'rgba(239, 68, 68, 0.8)',   // Red - Fixed Stand
+        'rgba(34, 197, 94, 0.8)',   // Green - Stand Tilt
+        'rgba(59, 130, 246, 0.8)',  // Blue - Full Motion
+        'rgba(249, 115, 22, 0.8)',  // Orange - Cables
+        'rgba(168, 85, 247, 0.8)',  // Purple - Ceiling Bracket
+        'rgba(236, 72, 153, 0.8)',  // Pink - Gaming
+        'rgba(14, 165, 233, 0.8)',  // Sky Blue - Motorized TV
+        'rgba(16, 185, 129, 0.8)',  // Emerald - TV Cart
+        'rgba(245, 158, 11, 0.8)'   // Amber - Video Wall
+    ];
+}
+
+function getCategoryColor(categoryName) {
+    const categoryColors = {
+        'Fixed stand': 'rgba(239, 68, 68, 0.8)',    // Red
+        'Stand Tilt': 'rgba(34, 197, 94, 0.8)',     // Green
+        'Full Motion': 'rgba(59, 130, 246, 0.8)',   // Blue
+        'Cables': 'rgba(249, 115, 22, 0.8)',        // Orange
+        'Cable': 'rgba(249, 115, 22, 0.8)',         // Orange (singular form)
+        'Ceiling Bracket': 'rgba(168, 85, 247, 0.8)', // Purple
+        'Gaming': 'rgba(236, 72, 153, 0.8)',        // Pink
+        'Motorized TV': 'rgba(14, 165, 233, 0.8)',  // Sky Blue
+        'TV Cart': 'rgba(16, 185, 129, 0.8)',       // Emerald
+        'Video Wall': 'rgba(245, 158, 11, 0.8)',    // Amber
+        'Commercial': 'rgba(99, 102, 241, 0.8)',    // Indigo
+        'AV Distribution': 'rgba(139, 92, 246, 0.8)', // Violet
+        'Av distribution': 'rgba(139, 92, 246, 0.8)' // Violet (lowercase)
+    };
+    
+    return categoryColors[categoryName] || 'rgba(107, 114, 128, 0.8)'; // Default gray
+}
+
 function updateChartsWithData(stats) {
     try {
         if (!stats) {
@@ -1319,9 +1353,13 @@ function updateChartsWithData(stats) {
             try {
                 const categories = stats.products?.categories || [];
                 if (categories.length > 0) {
-                    const topCategories = categories.slice(0, 5);
-                    categoryChartInstance.data.labels = topCategories.map(cat => cat._id || cat.name);
-                    categoryChartInstance.data.datasets[0].data = topCategories.map(cat => cat.count);
+                    const labels = categories.map(cat => cat._id || cat.name);
+                    const data = categories.map(cat => cat.count);
+                    const colors = labels.map(label => getCategoryColor(label));
+                    
+                    categoryChartInstance.data.labels = labels;
+                    categoryChartInstance.data.datasets[0].data = data;
+                    categoryChartInstance.data.datasets[0].backgroundColor = colors;
                     categoryChartInstance.update();
                 }
             } catch (chartError) {
@@ -1371,16 +1409,14 @@ function initializeCharts() {
                 categoryChartInstance = new Chart(categoryCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Cable', 'AV Distribution', 'Ceiling Bracket', 'Gaming'],
+                        labels: ['Fixed Stand', 'Stand Tilt', 'Full Motion', 'Cables', 'Ceiling Bracket', 'Gaming', 'Motorized TV', 'TV Cart', 'Video Wall'],
                         datasets: [{
-                            data: [35, 25, 25, 15],
-                            backgroundColor: [
-                                'rgba(59, 130, 246, 0.8)', 
-                                'rgba(34, 197, 94, 0.8)', 
-                                'rgba(13, 148, 136, 0.8)', 
-                                'rgba(249, 115, 22, 0.8)'
-                            ],
-                            borderWidth: 0
+                            data: [28, 15, 18, 12, 8, 6, 5, 4, 4],
+                            backgroundColor: getCategoryColors(),
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverBorderWidth: 3,
+                            hoverBorderColor: '#ffffff'
                         }]
                     },
                     options: getDoughnutChartOptions(isDark)

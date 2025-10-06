@@ -248,17 +248,20 @@
       <!-- Products Section -->
       <div id="products-section" class="admin-section hidden">
         <div class="admin-card rounded-2xl shadow-xl p-8 border border-white/30 dark:border-gray-700/30">
-          <div class="flex justify-between items-center mb-8">
+          <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
             <div>
               <h2 class="text-3xl font-bold">Product Management</h2>
               <p class="text-gray-700 dark:text-gray-400">Manage your product catalog and inventory</p>
             </div>
-            <button onclick="showAddProductModal()" class="bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-              </svg>
-              <span>Add Product</span>
-            </button>
+            <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full sm:w-auto">
+              <input id="product-search-bar" type="text" placeholder="Search products..." class="glass-effect rounded-xl px-4 py-2 border border-white/20 dark:border-gray-700/20 focus:ring-pink-500 focus:border-pink-500 w-full sm:w-64" />
+              <button onclick="showAddProductModal()" class="bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                <span>Add Product</span>
+              </button>
+            </div>
           </div>
 
           <!-- Products Table -->
@@ -358,7 +361,6 @@
                   <th scope="col" class="px-6 py-4">Name</th>
                   <th scope="col" class="px-6 py-4">Email</th>
                   <th scope="col" class="px-6 py-4">Role</th>
-                  <th scope="col" class="px-6 py-4">Total Spent</th>
                   <th scope="col" class="px-6 py-4">Joined Date</th>
                   <th scope="col" class="px-6 py-4 text-right">Actions</th>
                 </tr>
@@ -789,5 +791,25 @@
 
   <!-- Optionally keep (only if other legacy features rely on it). It will no-op for product forms due to the flag above. -->
   <script src="../assets/js/admin.js"></script>
+</body>
+<script>
+// Product Management Search Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('product-search-bar');
+  if (!searchInput) return;
+
+  function setupProductSearch() {
+    if (!window.productsController || typeof window.productsController.searchProducts !== 'function') {
+      setTimeout(setupProductSearch, 100);
+      return;
+    }
+    searchInput.addEventListener('input', function() {
+      const query = searchInput.value.trim();
+      window.productsController.searchProducts(query);
+    });
+  }
+  setupProductSearch();
+});
+</script>
 </body>
 </html>

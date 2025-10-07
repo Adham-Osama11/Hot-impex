@@ -59,9 +59,13 @@ class ProductsController {
         stockQuantity: stockQ,         // compat
         shortDescription: (form.querySelector('#addProductShortDescription')?.value || '').trim(),
         description: (form.querySelector('#addProductDescription')?.value || '').trim(),
+        detailedDescription: (form.querySelector('#addProductDetailedDescription')?.value || '').trim(),
         images: (form.querySelector('#addProductImages')?.value || '')
           .split('\n').map(s => s.trim()).filter(Boolean),
-        datasheet: (form.querySelector('#addProductDatasheet')?.value || '').trim() || null   // ✅ NEW
+        datasheet: (form.querySelector('#addProductDatasheet')?.value || '').trim() || null,   // ✅ NEW
+        setup: {
+          quickStart: (form.querySelector('#addProductQuickStart')?.value || '').trim()
+        }
       };
 
       await this.api.createProduct(productData);
@@ -101,9 +105,13 @@ class ProductsController {
         stockQuantity: stockE,         // compat
         shortDescription: (fd.get('shortDescription') || '').trim(),
         description: (fd.get('description') || '').trim(),
+        detailedDescription: (fd.get('detailedDescription') || '').trim(),
         images: String(fd.get('images') || '')
           .split('\n').map(s => s.trim()).filter(Boolean),
-        datasheet: (fd.get('datasheet') || '').trim() || null   // ✅ NEW
+        datasheet: (fd.get('datasheet') || '').trim() || null,   // ✅ NEW
+        setup: {
+          quickStart: (fd.get('quickStart') || '').trim()
+        }
       };
 
       await this.api.updateProduct(idField, productData);
@@ -212,6 +220,8 @@ class ProductsController {
     document.getElementById('productStock').value = product.stockQuantity ?? product.stock ?? '';
     document.getElementById('productShortDescription').value = product.shortDescription ?? '';
     document.getElementById('productDescription').value = product.description ?? '';
+    document.getElementById('productDetailedDescription').value = product.detailedDescription ?? '';
+    document.getElementById('productQuickStart').value = product.setup?.quickStart ?? '';
     document.getElementById('productImages').value = Array.isArray(product.images) ? product.images.join('\n') : '';
     document.getElementById('productDatasheet').value = product.datasheet ?? '';   // ✅ NEW
 

@@ -221,16 +221,13 @@ class SidebarManager {
      * @param {HTMLElement} activeLink - Active navigation link
      */
     updateActiveStates(activeLink) {
-        const activeClasses = ['opacity-100'];
-        const inactiveClasses = ['opacity-50'];
-
+        // Remove active class from all links
         this.sidebarLinks.forEach(l => {
-            l.classList.remove(...activeClasses);
-            l.classList.add(...inactiveClasses);
+            l.classList.remove('active');
         });
         
-        activeLink.classList.add(...activeClasses);
-        activeLink.classList.remove(...inactiveClasses);
+        // Add active class to clicked link
+        activeLink.classList.add('active');
     }
 
     /**
@@ -280,7 +277,7 @@ class SidebarManager {
      * @returns {string} - Active section name
      */
     getCurrentSection() {
-        const activeLink = document.querySelector('.sidebar-link.opacity-100');
+        const activeLink = document.querySelector('.sidebar-link.active');
         return activeLink ? activeLink.getAttribute('data-section') : 'dashboard';
     }
 

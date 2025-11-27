@@ -307,6 +307,7 @@ img, .product-image, .thumbnail img {
 }
 
 .product-btn-secondary {
+    position: relative;
     width: 100%;
     background-color: #f3f4f6;
     color: #374151;
@@ -321,6 +322,7 @@ img, .product-image, .thumbnail img {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    overflow: hidden;
 }
 
 .product-btn-secondary:hover {

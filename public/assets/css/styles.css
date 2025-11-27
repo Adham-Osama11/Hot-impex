@@ -88,51 +88,9 @@ html.dark body {
    DARK MODE NAVIGATION & HEADER
    ====================================*/
 
-/* Navigation container */
-html.dark nav .bg-white\/15,
-html.dark nav [class*="bg-white"] {
-    background: transparent !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-}
+/* Navigation styles are primarily handled in index.css and navbar.css */
 
-/* Hot button */
-html.dark .logo {
-    color: var(--text-primary) !important;
-    background: transparent !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-/* Navigation links */
-html.dark nav a {
-    color: var(--text-primary) !important;
-}
-
-html.dark nav a:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Active navigation link */
-html.dark nav a.bg-white\/30 {
-    background: rgba(255, 255, 255, 0.2) !important;
-    color: #ffffff !important;
-}
-
-/* Mobile menu toggle */
-html.dark #mobile-menu-toggle {
-    color: var(--text-primary) !important;
-    background: transparent !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-/* User and cart icons */
-html.dark .user-icon {
-    fill: var(--text-primary) !important;
-}
-
-html.dark svg.text-gray-700 {
-    color: var(--text-secondary) !important;
-}
-
+/* User icon styling */
 .user-icon {
     width: 2rem; /* 32px */
     height: 2rem; /* 32px */
@@ -674,81 +632,7 @@ html.dark .stat-counter:hover {
    10. THEME TOGGLE & UTILITY CLASSES
    ====================================*/
 
-/* Dark Mode Toggle Button */
-.theme-toggle {
-    position: relative;
-    width: 48px;
-    height: 28px;
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2px;
-}
-
-.theme-toggle:hover {
-    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.theme-toggle::before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border-radius: 50%;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-
-/* Dark mode active state */
-html.dark .theme-toggle {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-html.dark .theme-toggle::before {
-    transform: translateX(20px);
-    background: linear-gradient(135deg, #475569 0%, #64748b 100%);
-}
-
-/* Icon positioning */
-.theme-toggle .sun-icon,
-.theme-toggle .moon-icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: opacity 0.3s ease;
-    z-index: 0;
-}
-
-.theme-toggle .sun-icon {
-    left: 4px;
-    opacity: 1;
-}
-
-.theme-toggle .moon-icon {
-    right: 4px;
-    opacity: 0;
-}
-
-html.dark .theme-toggle .sun-icon {
-    opacity: 0;
-}
-
-html.dark .theme-toggle .moon-icon {
-    opacity: 1;
-    color: #fbbf24;
-}
+/* Theme toggle styles are defined in index.css to avoid conflicts */
 
 /* ====================================
    DARK MODE TEXT VISIBILITY
@@ -906,21 +790,6 @@ html.dark .border-t.border-gray-200 {
         height: 16rem !important;
     }
     
-    /* Theme toggle adjustments for mobile */
-    .theme-toggle {
-        width: 44px;
-        height: 26px;
-    }
-    
-    .theme-toggle::before {
-        width: 18px;
-        height: 18px;
-    }
-    
-    html.dark .theme-toggle::before {
-        transform: translateX(18px);
-    }
-    
     /* Floating elements size adjustment */
     .absolute.-top-10.-right-10 {
         width: 3rem !important;
@@ -957,21 +826,6 @@ html.dark .border-t.border-gray-200 {
     .feature-tag {
         font-size: 0.75rem !important;
         padding: 0.375rem 0.75rem !important;
-    }
-    
-    /* Smaller theme toggle for very small screens */
-    .theme-toggle {
-        width: 40px;
-        height: 24px;
-    }
-    
-    .theme-toggle::before {
-        width: 16px;
-        height: 16px;
-    }
-    
-    html.dark .theme-toggle::before {
-        transform: translateX(16px);
     }
     
     /* Navigation controls spacing */

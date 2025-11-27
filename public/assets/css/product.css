@@ -982,17 +982,15 @@ img, .product-image, .thumbnail img {
 }
 
 .product-related-grid {
-    display: flex;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
     gap: 1rem;
-    padding-bottom: 1rem;
     max-width: 1536px;
     margin: 0 auto;
 }
 
 @media (min-width: 640px) {
     .product-related-grid {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
     }

@@ -1720,18 +1720,13 @@
                     </div>
                     <div class="p-3 sm:p-4">
                         <h3 class="font-bold text-gray-800 text-base sm:text-lg mb-2 group-hover:${gradient.text} transition-colors duration-300 line-clamp-2" title="${product.name}">${product.name}</h3>
-                        <div class="flex items-center justify-between">
-                            <div class="flex flex-col min-w-0 flex-1">
-                                ${isOnSale ? `<span class="text-xs sm:text-sm text-gray-500 line-through">${currency} ${originalPrice.toFixed(2)}</span>` : ''}
-                                <p class="${gradient.text} font-black text-base sm:text-lg">${currency} ${productPrice.toFixed(2)}</p>
-                            </div>
-                            <div class="ml-2 sm:ml-3 flex-shrink-0">
-                                <div class="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-r ${gradient.button} rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-2 sm:translate-x-3 group-hover:translate-x-0 transition-all duration-300">
-                                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </div>
-                            </div>
+                        <p class="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-3 capitalize">${product.category || 'Product'}</p>
+                        
+                        <div class="flex items-center space-x-1 sm:space-x-2">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 ${gradient.text}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                            <span class="text-xs sm:text-sm font-medium ${gradient.text} group-hover:translate-x-1 transition-transform duration-300">View Details</span>
                         </div>
                     </div>
                 </a>

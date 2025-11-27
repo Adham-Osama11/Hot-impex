@@ -545,8 +545,8 @@
                     <button class="product-tab-btn" data-tab="specifications">
                         <span>Specifications</span>
                     </button>
-                    <button class="product-tab-btn" data-tab="setup">
-                        <span>Setup & Usage</span>
+                    <button class="product-tab-btn" data-tab="documents">
+                        <span>Documents</span>
                     </button>
                 </nav>
             </div>
@@ -605,36 +605,11 @@
                     </div>
                 </div>
 
-                <!-- Setup & Usage Tab -->
-                <div id="setup-tab" class="tab-content hidden">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Setup & Usage Guide</h3>
-                    <div class="space-y-6">
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <div class="flex">
-                                <svg class="w-6 h-6 text-blue-600 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                </svg>
-                                <div>
-                                    <h4 class="font-semibold text-blue-800">Quick Start</h4>
-                                    <p class="text-blue-700 mt-1" id="quick-start-text"><!-- This will be populated by JavaScript --></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Setup Instructions</h4>
-                                <ol class="list-decimal list-inside space-y-3 text-gray-700">
-                                    <!-- This will be populated by JavaScript -->
-                                </ol>
-                            </div>
-                            <div>
-                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Common Test Patterns</h4>
-                                <ul class="list-disc list-inside space-y-2 text-gray-700">
-                                    <!-- This will be populated by JavaScript -->
-                                </ul>
-                            </div>
-                        </div>
+                <!-- Documents Tab -->
+                <div id="documents-tab" class="tab-content hidden">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Product Documents</h3>
+                    <div id="documents-list" class="space-y-4">
+                        <!-- Documents will be populated by JavaScript -->
                     </div>
                 </div>
 
@@ -1056,96 +1031,177 @@
                 });
             }
             
-            // Populate Setup & Usage Tab
-            const quickStartText = document.getElementById('quick-start-text');
-            if (quickStartText) {
-                if (product.setup && product.setup.quickStart) {
-                    quickStartText.textContent = product.setup.quickStart;
-                } else {
-                    quickStartText.textContent = `Connect your ${product.name} according to the included manual and verify all connections before powering on.`;
-                }
-            }
-            
-            // Populate Setup Instructions
-            const setupInstructions = document.querySelector('#setup-tab ol');
-            if (setupInstructions) {
-                setupInstructions.innerHTML = '';
-                if (product.setup && product.setup.instructions && product.setup.instructions.length > 0) {
-                    product.setup.instructions.forEach(instruction => {
-                        const listItem = document.createElement('li');
-                        listItem.className = 'text-gray-700';
-                        listItem.textContent = instruction;
-                        setupInstructions.appendChild(listItem);
-                    });
-                } else {
-                    // Default setup instructions
-                    const defaultInstructions = [
-                        'Unpack the product carefully and check all components',
-                        'Read the user manual thoroughly before installation',
-                        'Ensure power is off before making any connections',
-                        'Connect all cables securely according to specifications',
-                        'Power on the device and verify proper operation',
-                        'Test all functions to ensure correct installation'
-                    ];
-                    defaultInstructions.forEach(instruction => {
-                        const listItem = document.createElement('li');
-                        listItem.className = 'text-gray-700';
-                        listItem.textContent = instruction;
-                        setupInstructions.appendChild(listItem);
-                    });
-                }
-            }
-            
-            // Populate Common Patterns/Usage
-            const commonPatterns = document.querySelector('#setup-tab ul');
-            if (commonPatterns) {
-                commonPatterns.innerHTML = '';
-                if (product.setup && product.setup.commonPatterns && product.setup.commonPatterns.length > 0) {
-                    product.setup.commonPatterns.forEach(pattern => {
-                        const listItem = document.createElement('li');
-                        listItem.className = 'text-gray-700';
-                        listItem.textContent = pattern;
-                        commonPatterns.appendChild(listItem);
-                    });
-                } else {
-                    // Default usage patterns based on category
-                    let defaultPatterns = [];
-                    if (product.category.toLowerCase().includes('cable') || product.category.toLowerCase() === 'cables') {
-                        defaultPatterns = [
-                            'Signal transmission applications',
-                            'Audio/Video connectivity',
-                            'Data transfer connections',
-                            'Extension applications'
-                        ];
-                    } else if (product.category.toLowerCase().includes('mount') || product.category.toLowerCase().includes('bracket')) {
-                        defaultPatterns = [
-                            'TV and monitor mounting',
-                            'Commercial installations',
-                            'Home entertainment setups',
-                            'Digital signage applications'
-                        ];
-                    } else {
-                        defaultPatterns = [
-                            'Professional installations',
-                            'Commercial applications',
-                            'Residential use',
-                            'System integration'
-                        ];
+            // Populate Documents Tab
+            const documentsList = document.getElementById('documents-list');
+            if (documentsList) {
+                documentsList.innerHTML = '';
+                
+                let hasDocuments = false;
+                
+                // Add datasheet if available
+                if (product.datasheet && product.datasheet.trim() !== '') {
+                    hasDocuments = true;
+                    let datasheetPath = product.datasheet.trim();
+                    
+                    // Handle Google Drive URLs
+                    if (datasheetPath.includes('drive.google.com')) {
+                        datasheetPath = convertGoogleDriveUrl(datasheetPath);
+                    } else if (!datasheetPath.startsWith('http://') && !datasheetPath.startsWith('https://')) {
+                        if (datasheetPath.startsWith('/')) {
+                            datasheetPath = datasheetPath.slice(1);
+                        }
                     }
                     
-                    defaultPatterns.forEach(pattern => {
-                        const listItem = document.createElement('li');
-                        listItem.className = 'text-gray-700';
-                        listItem.textContent = pattern;
-                        commonPatterns.appendChild(listItem);
-                    });
+                    const datasheetCard = document.createElement('div');
+                    datasheetCard.className = 'bg-white rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200';
+                    datasheetCard.innerHTML = `
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0">
+                                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 384 512">
+                                            <path d="M181.9 256.1c-5-16-4.9-46.9-2-46.9 8.4 0 7.6 36.9 2 46.9zm-1.7 47.2c-7.7 20.2-17.3 43.3-28.4 62.7 18.3-7 39-17.2 62.9-21.9-12.7-9.6-24.9-23.4-34.5-40.8zM86.1 428.1c0 .8 13.2-5.4 34.9-40.2-6.7 6.3-29.1 24.5-34.9 40.2zM248 160h136v328c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V24C0 10.7 10.7 0 24 0h200v136c0 13.2 10.8 24 24 24zm-8 171.8c-20-12.2-33.3-29-42.7-53.8 4.5-18.5 11.6-46.6 6.2-64.2-4.7-29.4-42.4-26.5-47.8-6.8-5 18.3-.4 44.1 8.1 77-11.6 27.6-28.7 64.6-40.8 85.8-.1 0-.1.1-.2.1-27.1 13.9-73.6 44.5-54.5 68 5.6 6.9 16 10 21.5 10 17.9 0 35.7-18 61.1-61.8 25.8-8.5 54.1-19.1 79-23.2 21.7 11.8 47.1 19.5 64 19.5 29.2 0 31.2-32 19.7-43.4-13.9-13.6-54.3-9.7-73.6-7.2zM377 105L279 7c-4.5-4.5-10.6-7-17-7h-6v128h128v-6c0-6.4-2.5-12.5-7-17z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-1">Product Datasheet</h4>
+                                    <p class="text-sm text-gray-600 mb-3">Technical specifications and detailed product information</p>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>PDF Document</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="${datasheetPath}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Download
+                            </a>
+                        </div>
+                    `;
+                    documentsList.appendChild(datasheetCard);
+                }
+                
+                // Add user manual if available
+                if (product.userManual && product.userManual.trim() !== '') {
+                    hasDocuments = true;
+                    let manualPath = product.userManual.trim();
+                    
+                    // Handle Google Drive URLs
+                    if (manualPath.includes('drive.google.com')) {
+                        manualPath = convertGoogleDriveUrl(manualPath);
+                    } else if (!manualPath.startsWith('http://') && !manualPath.startsWith('https://')) {
+                        if (manualPath.startsWith('/')) {
+                            manualPath = manualPath.slice(1);
+                        }
+                    }
+                    
+                    const manualCard = document.createElement('div');
+                    manualCard.className = 'bg-white rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200';
+                    manualCard.innerHTML = `
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-1">User Manual</h4>
+                                    <p class="text-sm text-gray-600 mb-3">Complete guide for installation, operation, and maintenance</p>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>PDF Document</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="${manualPath}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Download
+                            </a>
+                        </div>
+                    `;
+                    documentsList.appendChild(manualCard);
+                }
+                
+                // Add warranty certificate if available
+                if (product.warranty && product.warranty.trim() !== '') {
+                    hasDocuments = true;
+                    let warrantyPath = product.warranty.trim();
+                    
+                    // Handle Google Drive URLs
+                    if (warrantyPath.includes('drive.google.com')) {
+                        warrantyPath = convertGoogleDriveUrl(warrantyPath);
+                    } else if (!warrantyPath.startsWith('http://') && !warrantyPath.startsWith('https://')) {
+                        if (warrantyPath.startsWith('/')) {
+                            warrantyPath = warrantyPath.slice(1);
+                        }
+                    }
+                    
+                    const warrantyCard = document.createElement('div');
+                    warrantyCard.className = 'bg-white rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200';
+                    warrantyCard.innerHTML = `
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0">
+                                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-1">Warranty Information</h4>
+                                    <p class="text-sm text-gray-600 mb-3">Product warranty details and coverage information</p>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>PDF Document</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="${warrantyPath}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Download
+                            </a>
+                        </div>
+                    `;
+                    documentsList.appendChild(warrantyCard);
+                }
+                
+                // Show message if no documents available
+                if (!hasDocuments) {
+                    documentsList.innerHTML = `
+                        <div class="text-center py-12">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">No Documents Available</h4>
+                            <p class="text-gray-600">There are currently no downloadable documents for this product.</p>
+                        </div>
+                    `;
                 }
             }
         }
 
         // Initialize tab switching functionality
         function initializeTabSwitching() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabButtons = document.querySelectorAll('.product-tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
 
             tabButtons.forEach(button => {

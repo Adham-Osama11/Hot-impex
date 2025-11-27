@@ -374,92 +374,70 @@
 
     <!-- Main Content -->
     <div class="shop-main">
-        <div class="shop-layout">
-            <!-- Left Sidebar - Categories -->
-            <div class="shop-sidebar">
-                <div class="shop-sidebar-content">
-                    <!-- Browse Categories -->
-                    <div class="shop-categories">
-                        <div class="shop-categories-header" id="categories-toggle">
-                            <h3 class="shop-categories-title">BROWSE CATEGORIES</h3>
-                            <svg id="categories-arrow" class="shop-categories-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <ul id="categories-list" class="shop-categories-list hidden lg:block">
-                            <li><a href="#" class="category-filter shop-category-link" data-category="all">All Products</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="wall-mount">Fixed Stand</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="stand-tilt">Stand Tilt</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="full-motion">Full Motion</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="cables">Cables</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="ceiling-bracket">Ceiling Bracket</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="gaming">Gaming</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="motorized-tv">Motorized TV</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="tv-cart">TV Cart</a></li>
-                            <li><a href="#" class="category-filter shop-category-link" data-category="video-wall">Video Wall</a></li>
-                        </ul>
-                    </div>
+        <!-- Breadcrumb Navigation -->
+        <div id="breadcrumb" class="breadcrumb hidden">
+            <button id="back-to-catalog" class="breadcrumb-back">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                <span>Back to Categories</span>
+            </button>
+            <div class="breadcrumb-text">
+                <span class="breadcrumb-home">Categories</span>
+                <svg class="breadcrumb-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                <span id="current-category" class="breadcrumb-current"></span>
+            </div>
+        </div>
 
-                    <!-- Filter by Price -->
-                    <!-- <div>
-                        <div class="flex items-center justify-between mb-4 cursor-pointer lg:cursor-default" id="filter-toggle">
-                            <h3 class="text-lg font-bold text-gray-800">FILTER BY</h3>
-                            <svg id="filter-arrow" class="w-5 h-5 text-gray-600 transform transition-transform duration-200 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div id="filter-content" class="mb-4 hidden lg:block">
-                            <h4 class="text-md font-semibold text-gray-700 mb-3">Price</h4>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-sm text-gray-600">EGP 25</span>
-                                <span class="text-sm text-gray-600">EGP 35</span>
-                            </div>
-                            <div class="relative">
-                                <input type="range" min="25" max="35" value="30" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
-                            </div>
-                        </div>
-                    </div> -->
+        <!-- Catalog View (Categories Grid) -->
+        <div id="catalog-view" class="catalog-view">
+            <div class="catalog-header">
+                <h1 class="catalog-title">Browse Our Categories</h1>
+                <p class="catalog-subtitle">Explore our wide range of premium products organized by category</p>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="catalog-loading" class="catalog-loading">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Loading categories...</p>
+            </div>
+            
+            <!-- Categories Grid -->
+            <div id="categories-grid" class="categories-grid hidden">
+                <!-- Categories will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Products View -->
+        <div id="products-view" class="products-view hidden">
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <div class="search-wrapper">
+                    <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" id="product-search" placeholder="Search products in this category..." class="search-input">
                 </div>
             </div>
 
-            <!-- Right Content - Products Grid -->
-            <div class="shop-content">
-                <!-- Search and Sort -->
-                <div class="shop-search-bar">
-                    <div class="shop-search-controls">
-                        <div class="shop-search-wrapper">
-                            <input type="text" placeholder="Search for products..." class="shop-search-input">
-                            <svg class="shop-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-                        <!-- <div class="relative">
-                            <select class="w-full sm:w-auto appearance-none bg-gray-100 border border-gray-200 text-gray-700 py-3 px-5 pr-8 rounded-full focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option>Sort by: Featured</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Newest Arrivals</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div> -->
-                    </div>
-                </div>
+            <!-- Products Loading State -->
+            <div id="products-loading" class="products-loading hidden">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Loading products...</p>
+            </div>
+            
+            <!-- Products Grid -->
+            <div id="products-grid" class="products-grid">
+                <!-- Products will be dynamically inserted here -->
+            </div>
 
-                <!-- Products Grid -->
-                <!-- Loading State (will be replaced by JavaScript) -->
-                <div id="loading-state" class="shop-loading">
-                    <div class="shop-loading-content">
-                        <div class="shop-loading-spinner"></div>
-                        <p class="shop-loading-text">Loading products...</p>
-                    </div>
-                </div>
-                
-                <!-- Products Grid (will be populated by JavaScript) -->
-                <div class="shop-products-grid hidden" id="products-grid">
-                    <!-- Products will be dynamically inserted here -->
-                </div>
+            <!-- No Products Message -->
+            <div id="no-products" class="no-results hidden">
+                <div class="no-results-icon">📦</div>
+                <h3 class="no-results-title">No products found</h3>
+                <p class="no-results-text">Try adjusting your search or browse other categories.</p>
             </div>
         </div>
     </div>
@@ -694,359 +672,50 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/modules/analytics-service.js"></script>
     <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/modules/shop.js"></script>
     
-    <!-- Force products loading -->
+    <!-- Catalog initialization -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Shop page DOM loaded, forcing product load...');
+            console.log('=== SHOP PAGE INITIALIZATION ===');
+            console.log('DOM Content Loaded');
+            console.log('window.shopManager:', typeof window.shopManager);
+            console.log('window.ShopManager:', typeof window.ShopManager);
+            console.log('window.APIService:', typeof window.APIService);
+            console.log('window.API_CONFIG:', typeof window.API_CONFIG);
             
-            // Force load products directly using proper API config
-            setTimeout(async function() {
-                try {
-                    console.log('Fetching products directly...');
-                    const response = await fetch(`${API_CONFIG.getApiUrl()}/products?limit=100`);
-                    const data = await response.json();
-                    
-                    console.log('Products response:', data);
-                    
-                    if (data.status === 'success') {
-                        const products = data.data.products || [];
-                        console.log('Found', products.length, 'products');
-                        
-                        // Hide loading
-                        const loading = document.getElementById('loading-state');
-                        if (loading) {
-                            loading.style.display = 'none';
-                        }
-                        
-                        // Show products grid
-                        const grid = document.getElementById('products-grid');
-                        if (grid) {
-                            grid.classList.remove('hidden');
-                            
-                            if (products.length > 0) {
-                                // Use the existing createProductCard function if available
-                                if (typeof window.createProductCard === 'function') {
-                                    grid.innerHTML = '';
-                                    products.forEach(product => {
-                                        const card = window.createProductCard(product);
-                                        // Ensure the card has the necessary data attributes for filtering
-                                        const normalizedCategory = product.category ? product.category.toLowerCase().replace(/\s+/g, '-') : 'uncategorized';
-                                        card.classList.add('product-card');
-                                        card.setAttribute('data-category', normalizedCategory);
-                                        card.setAttribute('data-name', product.name || '');
-                                        //card.setAttribute('data-price', product.price || 0);
-                                        grid.appendChild(card);
-                                    });
-                                } else {
-                                    // Simple fallback without out-of-stock logic
-                                    grid.innerHTML = products.map(product => {
-                                        // Normalize category for filtering
-                                        const normalizedCategory = product.category ? product.category.toLowerCase().replace(/\s+/g, '-') : 'uncategorized';
-                                        return `
-                                            <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden p-6 relative"
-                                                 data-in-stock="true"
-                                                 data-category="${normalizedCategory}"
-                                                 data-name="${product.name || ''}">
-                                                <h3 class="font-semibold text-gray-800 text-lg mb-2">${product.name}</h3>
-                                                <p class="text-gray-500 text-sm mb-4">${product.category}</p>
-                                            </div>
-                                        `;
-                                    }).join('');
-                                }
-                                console.log('Products displayed successfully!');
-                                
-                                // Initialize category filtering after products are loaded
-                                setTimeout(() => {
-                                    initializeCategoryFiltering();
-                                }, 100);
-                            } else {
-                                grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">No products found.</p></div>';
-                            }
-                        }
-                    } else {
-                        console.error('API error:', data);
-                    }
-                } catch (error) {
-                    console.error('Error loading products:', error);
-                }
-            }, 1000);
-            
-            // Initialize collapsible categories for mobile
-            initializeCategoriesToggle();
-        });
-        
-        // Collapsible categories and filter functionality
-        function initializeCategoriesToggle() {
-            initializeToggleSection('categories-toggle', 'categories-list', 'categories-arrow');
-            initializeToggleSection('filter-toggle', 'filter-content', 'filter-arrow');
-        }
-        
-        function initializeToggleSection(toggleId, contentId, arrowId) {
-            const toggle = document.getElementById(toggleId);
-            const content = document.getElementById(contentId);
-            const arrow = document.getElementById(arrowId);
-            
-            if (toggle && content && arrow) {
-                toggle.addEventListener('click', function() {
-                    // Only handle click on mobile (when arrow is visible)
-                    const isDesktop = window.getComputedStyle(arrow).display === 'none';
-                    if (isDesktop) return;
-                    
-                    const isExpanded = !content.classList.contains('hidden');
-                    
-                    if (isExpanded) {
-                        // Collapse
-                        content.classList.add('hidden');
-                        arrow.style.transform = 'rotate(0deg)';
-                    } else {
-                        // Expand
-                        content.classList.remove('hidden');
-                        arrow.style.transform = 'rotate(180deg)';
-                    }
-                });
+            // Function to initialize shop
+            function initShop() {
+                console.log('Attempting to initialize shop...');
                 
-                // Handle window resize to ensure proper state
-                window.addEventListener('resize', function() {
-                    const isDesktop = window.innerWidth >= 1024; // lg breakpoint
-                    if (isDesktop) {
-                        // Always show on desktop
-                        content.classList.remove('hidden');
-                        arrow.style.transform = 'rotate(0deg)';
-                    } else {
-                        // Ensure collapsed on mobile by default
-                        if (!content.classList.contains('hidden')) {
-                            // Only collapse if it's not intentionally expanded by user
-                            const wasExpanded = arrow.style.transform === 'rotate(180deg)';
-                            if (!wasExpanded) {
-                                content.classList.add('hidden');
-                            }
-                        }
-                    }
-                });
-            }
-        }
-    </script>
-</body>
-</html>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('=== CART DEBUG INFO ===');
-            
-            // Cart functionality is now handled by global scripts.js
-            // Just wait for it to initialize and then reinitialize listeners
-            setTimeout(() => {
-                console.log('Reinitializing cart event listeners for shop page...');
-                if (window.reinitializeCartEventListeners) {
-                    window.reinitializeCartEventListeners();
+                if (typeof window.shopManager !== 'undefined') {
+                    console.log('Shop manager found, initializing...');
+                    window.shopManager.init().catch(err => {
+                        console.error('Shop initialization error:', err);
+                    });
+                } else if (typeof window.ShopManager !== 'undefined') {
+                    console.log('ShopManager class found, creating instance...');
+                    window.shopManager = new window.ShopManager();
+                    window.shopManager.init().catch(err => {
+                        console.error('Shop initialization error:', err);
+                    });
                 } else {
-                    console.warn('Global reinitializeCartEventListeners not available');
+                    console.error('Shop manager not available');
+                    console.log('Available window properties:', Object.keys(window).filter(k => k.toLowerCase().includes('shop')));
                 }
-                
-                // Verify cart functionality
-                const cartToggle = document.getElementById('cart-toggle');
-                const cartSidebar = document.getElementById('cart-sidebar');
-                const cartOverlay = document.getElementById('cart-overlay');
-                
-                console.log('Cart elements check:', {
-                    toggle: !!cartToggle,
-                    sidebar: !!cartSidebar,
-                    overlay: !!cartOverlay,
-                    toggleFunction: typeof window.toggleCart
-                });
-            }, 100);
-        });
-    </script>
-    
-
-    
-    <!-- Category Filtering JavaScript -->
-    <script>
-        // Global function to initialize category filtering
-        function initializeCategoryFiltering() {
-            const categoryFilters = document.querySelectorAll('.category-filter');
-            const searchInput = document.querySelector('input[placeholder="Search for products..."]');
-            const sortSelect = document.querySelector('select');
-            const productsGrid = document.getElementById('products-grid');
-
-            function getProductCards() {
-                return document.querySelectorAll('.product-card');
             }
-
-            function sortProducts(sortType) {
-                const productCards = Array.from(getProductCards());
-                const grid = document.getElementById('products-grid');
-                
-                productCards.sort((a, b) => {
-                    const priceA = parseFloat(a.getAttribute('data-price')) || 0;
-                    const priceB = parseFloat(b.getAttribute('data-price')) || 0;
-                    const nameA = (a.getAttribute('data-name') || '').toLowerCase();
-                    const nameB = (b.getAttribute('data-name') || '').toLowerCase();
-                    
-                    switch(sortType) {
-                        case 'Price: Low to High':
-                            return priceA - priceB;
-                        case 'Price: High to Low':
-                            return priceB - priceA;
-                        case 'Newest Arrivals':
-                            // For now, sort by name as we don't have creation dates
-                            return nameB.localeCompare(nameA);
-                        case 'Sort by: Featured':
-                        default:
-                            // Default sorting by name
-                            return nameA.localeCompare(nameB);
-                    }
-                });
-                
-                // Re-append sorted cards to grid
-                productCards.forEach(card => {
-                    grid.appendChild(card);
-                });
-            }
-
-            function filterProducts(selectedCategory, searchTerm = '') {
-                console.log('Filtering products:', selectedCategory, searchTerm);
-                
-                // Update active filter link
-                categoryFilters.forEach(f => {
-                    if (f.getAttribute('data-category') === selectedCategory) {
-                        f.classList.add('text-blue-600', 'font-bold');
-                        f.classList.remove('text-gray-700');
-                    } else {
-                        f.classList.remove('text-blue-600', 'font-bold');
-                        f.classList.add('text-gray-700');
-                    }
-                });
-
-                const lowerCaseSearchTerm = searchTerm.toLowerCase();
-                const productCards = getProductCards();
-                
-                console.log('Found product cards:', productCards.length);
-
-                // Filter products
-                let visibleCount = 0;
-                productCards.forEach(card => {
-                    const cardCategory = card.getAttribute('data-category');
-                    const cardName = (card.getAttribute('data-name') || '').toLowerCase();
-                    
-                    const categoryMatch = selectedCategory === 'all' || cardCategory === selectedCategory;
-                    const searchMatch = !searchTerm || cardName.includes(lowerCaseSearchTerm);
-
-                    console.log('Card:', cardName, 'Category:', cardCategory, 'Match:', categoryMatch && searchMatch);
-
-                    // Animate filtering
-                    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                    
-                    if (categoryMatch && searchMatch) {
-                        card.style.display = 'block';
-                        card.style.opacity = '1';
-                        card.style.transform = 'scale(1)';
-                        visibleCount++;
-                    } else {
-                        card.style.opacity = '0';
-                        card.style.transform = 'scale(0.9)';
-                        setTimeout(() => {
-                            if (!categoryMatch || !searchMatch) {
-                                card.style.display = 'none';
-                            }
-                        }, 300);
-                    }
-                });
-
-                console.log('Visible products:', visibleCount);
-
-                // Show/hide no results message
+            
+            // Try to initialize immediately
+            if (window.shopManager || window.ShopManager) {
+                initShop();
+            } else {
+                // Wait a bit and try again
+                console.log('Shop manager not ready, waiting...');
                 setTimeout(() => {
-                    let noResultsMessage = document.getElementById('no-results-message');
-                    if (visibleCount === 0) {
-                        if (!noResultsMessage) {
-                            noResultsMessage = document.createElement('div');
-                            noResultsMessage.id = 'no-results-message';
-                            noResultsMessage.className = 'col-span-full text-center py-16';
-                            noResultsMessage.innerHTML = `
-                                <div class="text-gray-400 text-xl mb-4">
-                                    <svg class="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 009.586 13H7"></path>
-                                    </svg>
-                                    No products found
-                                </div>
-                                <p class="text-gray-500">Try adjusting your search or filters.</p>
-                            `;
-                            productsGrid.appendChild(noResultsMessage);
-                        }
-                        noResultsMessage.style.display = 'block';
-                    } else {
-                        if (noResultsMessage) {
-                            noResultsMessage.style.display = 'none';
-                        }
-                    }
-                }, 400);
+                    console.log('Retry after delay...');
+                    initShop();
+                }, 100);
             }
-
-            function getSelectedCategory() {
-                const params = new URLSearchParams(window.location.search);
-                return params.get('category') || 'all';
-            }
-
-            function handleFilterChange() {
-                const selectedCategory = document.querySelector('.category-filter.font-bold')?.getAttribute('data-category') || getSelectedCategory();
-                const searchTerm = searchInput ? searchInput.value : '';
-                filterProducts(selectedCategory, searchTerm);
-            }
-
-            // Add event listeners to category filters
-            categoryFilters.forEach(filter => {
-                filter.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const selectedCategory = this.getAttribute('data-category');
-                    
-                    console.log('Category filter clicked:', selectedCategory);
-                    
-                    // Update URL without reloading page
-                    const url = new URL(window.location);
-                    if (selectedCategory === 'all') {
-                        url.searchParams.delete('category');
-                    } else {
-                        url.searchParams.set('category', selectedCategory);
-                    }
-                    window.history.pushState({path: url.href}, '', url.href);
-                    
-                    filterProducts(selectedCategory, searchInput ? searchInput.value : '');
-                });
-            });
-
-            // Add search input listener
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const selectedCategory = document.querySelector('.category-filter.font-bold')?.getAttribute('data-category') || getSelectedCategory();
-                    filterProducts(selectedCategory, this.value);
-                });
-            }
-
-            // Add sort dropdown listener
-            if (sortSelect) {
-                sortSelect.addEventListener('change', function() {
-                    console.log('Sort changed to:', this.value);
-                    sortProducts(this.value);
-                });
-            }
-
-            // Initial filter on page load
-            const initialCategory = getSelectedCategory();
-            console.log('Initial category:', initialCategory);
-            filterProducts(initialCategory);
-        }
-
-        // Initialize category filtering when DOM is loaded (fallback)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Wait a bit to see if products are already loaded
-            setTimeout(() => {
-                const productCards = document.querySelectorAll('.product-card');
-                if (productCards.length > 0) {
-                    console.log('Products already loaded, initializing filtering');
-                    initializeCategoryFiltering();
-                }
-            }, 500);
         });
     </script>
 </body>

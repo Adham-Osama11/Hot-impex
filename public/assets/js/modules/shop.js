@@ -1,291 +1,361 @@
 // Hot Impex Shop Module
-// Handles shop page functionality including product display, filtering, and pagination
+// Handles catalog and products display with category-based navigation
 
 class ShopManager {
     constructor() {
-        this.shopProducts = [];
-        this.filteredProducts = [];
-        this.currentCategory = 'all';
+        this.allProducts = [];
+        this.categories = [];
+        this.currentCategory = null;
         this.currentSearchTerm = '';
         this.isLoading = false;
     }
 
     async init() {
-        if (!document.getElementById('products-grid')) {
+        if (!document.getElementById('catalog-view')) {
             return; // Not on shop page
         }
 
-        console.log('Initializing shop page...');
-        this.showLoading();
+        console.log('Initializing catalog page...');
         
         try {
             await this.loadProducts();
-            this.initializeFilters();
-            this.handleURLParams();
-            this.setupSearch();
+            this.setupEventListeners();
+            this.showCatalogView();
         } catch (error) {
-            console.error('Error initializing shop page:', error);
-            this.showError('Failed to load products. Please refresh the page.');
+            console.error('Failed to initialize shop:', error);
+            // Hide loading and show error
+            const catalogLoading = document.getElementById('catalog-loading');
+            if (catalogLoading) catalogLoading.style.display = 'none';
+            
+            const categoriesGrid = document.getElementById('categories-grid');
+            if (categoriesGrid) {
+                categoriesGrid.classList.remove('hidden');
+                categoriesGrid.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <p class="text-red-500 mb-4">Failed to load categories</p>
+                        <button onclick="location.reload()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
         }
     }
 
     async loadProducts() {
         try {
             console.log('Loading products from API...');
-            // Request all products with a high limit to ensure we get everything
+            console.log('APIService available?', typeof APIService !== 'undefined');
+            console.log('API_CONFIG available?', typeof API_CONFIG !== 'undefined');
+            
+            if (typeof APIService === 'undefined') {
+                throw new Error('APIService is not defined');
+            }
+            
             const response = await APIService.getProducts({ limit: 1000 });
             
             if (response.status === 'success') {
-                this.shopProducts = response.data.products || [];
-                console.log('Loaded products from database:', this.shopProducts.length);
-                // Log categories to help debug product filtering
-                const categories = [...new Set(this.shopProducts.map(p => p.category))];
-                console.log('Available categories:', categories);
-                
-                this.displayProducts(this.shopProducts);
-                this.updateCategoryFilters(this.shopProducts);
+                this.allProducts = response.data.products || [];
+                console.log('Loaded products:', this.allProducts.length);
+                this.extractCategories();
             } else {
                 throw new Error(response.message || 'Failed to load products');
             }
         } catch (error) {
             console.error('Error loading products:', error);
-            
-            // Fallback to static products if API fails
-            console.log('Falling back to static products...');
-            this.shopProducts = window.products || [];
-            this.displayProducts(this.shopProducts);
-            this.updateCategoryFilters(this.shopProducts);
+            console.log('Using fallback products');
+            this.allProducts = window.products || [];
+            console.log('Fallback products count:', this.allProducts.length);
+            this.extractCategories();
         }
     }
 
-    initializeFilters() {
-        const categoryButtons = document.querySelectorAll('.category-btn, .category-filter');
-        
-        categoryButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const category = btn.dataset.category;
-                this.filterByCategory(category);
-                
-                // Update active button
-                categoryButtons.forEach(b => {
-                    b.classList.remove('active', 'font-bold', 'text-blue-600');
-                    b.classList.add('text-gray-600');
+    extractCategories() {
+        // Create a map to store unique categories with their data
+        const categoryMap = new Map();
+
+        this.allProducts.forEach(product => {
+            let categoryName = product.category || 'Other';
+            
+            // Normalize category names (singular/plural, etc.)
+            categoryName = this.normalizeCategoryName(categoryName);
+            
+            // Generate slug from normalized name (not from product.categorySlug)
+            const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
+
+            if (!categoryMap.has(categorySlug)) {
+                categoryMap.set(categorySlug, {
+                    slug: categorySlug,
+                    name: categoryName,
+                    count: 0,
+                    image: null // Start with null, will be set below
                 });
-                btn.classList.add('active', 'font-bold', 'text-blue-600');
-                btn.classList.remove('text-gray-600');
-                
-                // Update URL
-                this.updateURL({ category });
-            });
+            }
+
+            const category = categoryMap.get(categorySlug);
+            category.count++;
+            
+            // Set category image priority:
+            // 1. Featured products with images
+            // 2. Any product with an image (if category doesn't have one yet)
+            // 3. Fallback to placeholder
+            const productImage = product.mainImage || product.image;
+            
+            if (product.featured && productImage) {
+                // Always use featured product image
+                category.image = productImage;
+            } else if (!category.image && productImage) {
+                // Use first available image if category doesn't have one
+                category.image = productImage;
+            }
         });
+
+        // Set fallback for categories without images
+        this.categories = Array.from(categoryMap.values()).map(cat => {
+            if (!cat.image) {
+                cat.image = 'assets/images/placeholder.jpg';
+            }
+            return cat;
+        });
+        
+        console.log('Extracted categories:', this.categories);
     }
 
-    setupSearch() {
-        if (window.searchManager) {
-            window.searchManager.setupShopSearch((query) => {
-                this.currentSearchTerm = query;
+    normalizeCategoryName(name) {
+        // Normalize category names to handle singular/plural and variations
+        const normalized = name.trim();
+        
+        // Map of variations to standard names
+        const categoryMap = {
+            'cable': 'Cables',
+            'cables': 'Cables',
+            'ceiling bracket': 'Ceiling Bracket',
+            'ceiling brackets': 'Ceiling Bracket',
+            'gaming': 'Gaming',
+            'wall mount': 'Wall Mount',
+            'wall-mount': 'Wall Mount',
+            'stand tilt': 'Stand Tilt',
+            'stand-tilt': 'Stand Tilt',
+            'full motion': 'Full Motion',
+            'full-motion': 'Full Motion',
+            'motorized tv': 'Motorized TV',
+            'motorized-tv': 'Motorized TV',
+            'tv cart': 'TV Cart',
+            'tv-cart': 'TV Cart',
+            'video wall': 'Video Wall',
+            'video-wall': 'Video Wall'
+        };
+        
+        const lowerName = normalized.toLowerCase();
+        return categoryMap[lowerName] || normalized;
+    }
+
+    setupEventListeners() {
+        // Back to catalog button
+        const backBtn = document.getElementById('back-to-catalog');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => this.showCatalogView());
+        }
+
+        // Product search
+        const searchInput = document.getElementById('product-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.currentSearchTerm = e.target.value;
                 this.filterProducts();
-                this.updateURL({ search: query });
             });
         }
     }
 
-    handleURLParams() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const category = urlParams.get('category');
-        const search = urlParams.get('search');
+    showCatalogView() {
+        console.log('Showing catalog view');
         
-        if (search) {
-            const searchInput = document.getElementById('shop-search-input');
-            if (searchInput) {
-                searchInput.value = search;
-            }
-            this.currentSearchTerm = search;
-        }
-        
-        if (category) {
-            this.currentCategory = category;
-            
-            // Update active category button
-            const categoryBtn = document.querySelector(`[data-category="${category}"]`);
-            if (categoryBtn) {
-                const allButtons = document.querySelectorAll('.category-btn, .category-filter');
-                allButtons.forEach(b => {
-                    b.classList.remove('active', 'font-bold', 'text-blue-600');
-                    b.classList.add('text-gray-600');
-                });
-                categoryBtn.classList.add('active', 'font-bold', 'text-blue-600');
-                categoryBtn.classList.remove('text-gray-600');
-            }
-        }
-        
-        // Apply filters
-        this.filterProducts();
-    }
-
-    updateURL(params) {
+        // Update URL
         const url = new URL(window.location);
-        
-        if (params.category) {
-            if (params.category === 'all') {
-                url.searchParams.delete('category');
-            } else {
-                url.searchParams.set('category', params.category);
-            }
-        }
-        
-        if (params.search !== undefined) {
-            if (params.search) {
-                url.searchParams.set('search', params.search);
-            } else {
-                url.searchParams.delete('search');
-            }
-        }
-        
+        url.searchParams.delete('category');
         window.history.pushState({}, '', url);
+        
+        // Hide breadcrumb and products view
+        const breadcrumb = document.getElementById('breadcrumb');
+        const productsView = document.getElementById('products-view');
+        const catalogView = document.getElementById('catalog-view');
+        
+        if (breadcrumb) breadcrumb.classList.add('hidden');
+        if (productsView) productsView.classList.add('hidden');
+        if (catalogView) catalogView.classList.remove('hidden');
+        
+        // Reset search
+        this.currentCategory = null;
+        this.currentSearchTerm = '';
+        
+        // Display categories
+        this.displayCategories();
     }
 
-    updateCategoryFilters(products) {
-        // Get unique categories from products
-        const categories = [...new Set(products.map(p => p.categorySlug || p.category).filter(Boolean))];
-        console.log('Available categories:', categories);
+    displayCategories() {
+        console.log('Displaying categories:', this.categories.length);
+        const categoriesGrid = document.getElementById('categories-grid');
+        const catalogLoading = document.getElementById('catalog-loading');
         
-        // You can dynamically update category filters here if needed
-        // For now, we'll keep the existing static categories
-    }
-
-    filterByCategory(category) {
-        console.log('Filtering by category:', category);
-        this.currentCategory = category;
-        this.filterProducts();
-    }
-
-    filterProducts() {
-        console.log('Filtering products...');
-        console.log('Current category:', this.currentCategory);
-        console.log('Current search term:', this.currentSearchTerm);
-        
-        let filtered = [...this.shopProducts];
-        
-                // Filter by category
-        if (this.currentCategory && this.currentCategory !== 'all') {
-            filtered = filtered.filter(product => {
-                const productCategory = (product.category || '').toLowerCase();
-                const productSlug = (product.categorySlug || '').toLowerCase();
-                const targetCategory = this.currentCategory.toLowerCase();
-                
-                // Log category matching for debugging
-                console.log('Product:', product.name);
-                console.log('Product category:', productCategory);
-                console.log('Product slug:', productSlug);
-                console.log('Target category:', targetCategory);
-                
-                return productCategory === targetCategory || 
-                       productSlug === targetCategory ||
-                       productCategory.replace(/\s+/g, '-') === targetCategory;
-            });
-        }
-        
-        // Filter by search term
-        if (this.currentSearchTerm) {
-            const term = this.currentSearchTerm.toLowerCase();
-            filtered = filtered.filter(product =>
-                product.name.toLowerCase().includes(term) ||
-                (product.description && product.description.toLowerCase().includes(term)) ||
-                (product.shortDescription && product.shortDescription.toLowerCase().includes(term)) ||
-                (product.tags && product.tags.some(tag => tag.toLowerCase().includes(term)))
-            );
-        }
-        
-        console.log(`Filtered products: ${filtered.length} of ${this.shopProducts.length}`);
-        this.filteredProducts = filtered;
-        this.displayProducts(filtered);
-    }
-
-    showLoading() {
-        const loadingState = document.getElementById('loading-state');
-        const productsGrid = document.getElementById('products-grid');
-        
-        if (loadingState) {
-            loadingState.style.display = 'flex';
-        }
-        
-        if (productsGrid) {
-            productsGrid.classList.add('hidden');
-            productsGrid.innerHTML = '';
-        }
-        
-        this.isLoading = true;
-    }
-
-    hideLoading() {
-        const loadingState = document.getElementById('loading-state');
-        const productsGrid = document.getElementById('products-grid');
-        
-        if (loadingState) {
-            loadingState.style.display = 'none';
-        }
-        
-        if (productsGrid) {
-            productsGrid.classList.remove('hidden');
-        }
-        
-        this.isLoading = false;
-    }
-
-    showError(message) {
-        const container = document.getElementById('products-grid');
-        if (!container) return;
-        
-        this.hideLoading();
-        
-        container.innerHTML = `
-            <div class="col-span-full flex items-center justify-center py-20">
-                <div class="text-center">
-                    <div class="text-red-500 text-6xl mb-4">⚠️</div>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">${message}</p>
-                    <button onclick="location.reload()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                        Try Again
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    displayProducts(productsToShow) {
-        console.log('displayProducts called with:', productsToShow?.length, 'products');
-        const container = document.getElementById('products-grid');
-        
-        if (!container) {
-            console.error('Products grid container not found!');
+        if (!categoriesGrid) {
+            console.error('Categories grid not found!');
             return;
         }
-
-        this.hideLoading();
         
-        if (!productsToShow || productsToShow.length === 0) {
-            container.innerHTML = `
-                <div class="col-span-full flex items-center justify-center py-20">
-                    <div class="text-center">
-                        <div class="text-gray-400 text-6xl mb-4">📦</div>
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">No products found</h3>
-                        <p class="text-gray-600 dark:text-gray-400">Try adjusting your search or filter criteria.</p>
-                    </div>
+        // Always hide loading
+        if (catalogLoading) {
+            catalogLoading.style.display = 'none';
+        }
+        
+        // Show categories grid
+        categoriesGrid.classList.remove('hidden');
+        
+        if (this.categories.length === 0) {
+            console.warn('No categories to display');
+            categoriesGrid.innerHTML = `
+                <div class="col-span-full text-center py-20">
+                    <p class="text-gray-500 dark:text-gray-400">No categories available</p>
                 </div>
             `;
             return;
         }
         
-        container.innerHTML = productsToShow.map(product => this.createProductCard(product)).join('');
+        console.log('Creating category cards...');
+        categoriesGrid.innerHTML = this.categories.map(category => this.createCategoryCard(category)).join('');
         
-        // Add click event listeners for add to cart buttons
-        container.querySelectorAll('button[onclick*="addToCart"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        // Add click listeners
+        categoriesGrid.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const categorySlug = card.dataset.categorySlug;
+                console.log('Category clicked:', categorySlug);
+                this.showProductsView(categorySlug);
             });
         });
+        
+        console.log('Categories displayed successfully');
+    }
+
+    createCategoryCard(category) {
+        // Handle image URL - check various formats
+        let imageUrl = category.image || 'assets/images/placeholder.jpg';
+        
+        // If it's already a full URL (http/https), use it as is
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+            // Use as is
+        }
+        // If it starts with /, it's absolute from root
+        else if (imageUrl.startsWith('/')) {
+            // Use as is
+        }
+        // If it already starts with assets/, use as is
+        else if (imageUrl.startsWith('assets/')) {
+            // Use as is
+        }
+        // Otherwise, assume it's a filename that needs the full path
+        else {
+            imageUrl = `assets/images/Products/${imageUrl}`;
+        }
+        
+        return `
+            <div class="category-card" data-category-slug="${category.slug}">
+                <img src="${imageUrl}" 
+                     alt="${category.name}" 
+                     class="category-card-image"
+                     onerror="this.src='assets/images/placeholder.jpg'">
+                <div class="category-card-overlay">
+                    <h3 class="category-card-name">${category.name}</h3>
+                    <p class="category-card-count">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        ${category.count} ${category.count === 1 ? 'Product' : 'Products'}
+                    </p>
+                </div>
+                <div class="category-card-arrow">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+            </div>
+        `;
+    }
+
+    showProductsView(categorySlug) {
+        console.log('Showing products for category:', categorySlug);
+        
+        const category = this.categories.find(c => c.slug === categorySlug);
+        if (!category) return;
+        
+        this.currentCategory = categorySlug;
+        
+        // Update URL
+        const url = new URL(window.location);
+        url.searchParams.set('category', categorySlug);
+        window.history.pushState({}, '', url);
+        
+        // Show breadcrumb and products view
+        const breadcrumb = document.getElementById('breadcrumb');
+        const catalogView = document.getElementById('catalog-view');
+        const productsView = document.getElementById('products-view');
+        const currentCategorySpan = document.getElementById('current-category');
+        
+        if (breadcrumb) breadcrumb.classList.remove('hidden');
+        if (catalogView) catalogView.classList.add('hidden');
+        if (productsView) productsView.classList.remove('hidden');
+        if (currentCategorySpan) currentCategorySpan.textContent = category.name;
+        
+        // Display products
+        this.displayProducts();
+    }
+
+    filterProducts() {
+        if (!this.currentCategory) return;
+        this.displayProducts();
+    }
+
+    displayProducts() {
+        const productsGrid = document.getElementById('products-grid');
+        const productsLoading = document.getElementById('products-loading');
+        const noProducts = document.getElementById('no-products');
+        
+        if (!productsGrid) return;
+        
+        // Filter products by category using normalized names
+        let filteredProducts = this.allProducts.filter(product => {
+            const productCategoryName = product.category || 'Other';
+            const normalizedProductCategory = this.normalizeCategoryName(productCategoryName);
+            const productSlug = normalizedProductCategory.toLowerCase().replace(/\s+/g, '-');
+            return productSlug === this.currentCategory;
+        });
+        
+        // Apply search filter
+        if (this.currentSearchTerm) {
+            const term = this.currentSearchTerm.toLowerCase();
+            filteredProducts = filteredProducts.filter(product =>
+                product.name.toLowerCase().includes(term) ||
+                (product.description && product.description.toLowerCase().includes(term)) ||
+                (product.shortDescription && product.shortDescription.toLowerCase().includes(term))
+            );
+        }
+        
+        console.log('Filtered products:', filteredProducts.length);
+        
+        // Hide loading
+        if (productsLoading) {
+            productsLoading.classList.add('hidden');
+        }
+        
+        // Show/hide no products message
+        if (filteredProducts.length === 0) {
+            productsGrid.innerHTML = '';
+            if (noProducts) noProducts.classList.remove('hidden');
+            return;
+        }
+        
+        if (noProducts) noProducts.classList.add('hidden');
+        
+        // Display products
+        productsGrid.innerHTML = filteredProducts.map(product => this.createProductCard(product)).join('');
     }
 
     createProductCard(product) {
@@ -294,81 +364,66 @@ class ShopManager {
         const currency = product.currency || 'EGP';
         const isOnSale = originalPrice && originalPrice > productPrice;
         
-        // Handle image URL
-        let imageUrl = product.mainImage || product.image;
-        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-            imageUrl = `assets/images/Products/${imageUrl}`;
+        // Handle image URL - check various formats
+        let imageUrl = product.mainImage || product.image || 'assets/images/placeholder.jpg';
+        
+        // If it's already a full URL (http/https), use it as is
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+            // Use as is
         }
-        if (!imageUrl) {
-            imageUrl = 'assets/images/placeholder.jpg';
+        // If it starts with /, it's absolute from root
+        else if (imageUrl.startsWith('/')) {
+            // Use as is
+        }
+        // If it already starts with assets/, use as is
+        else if (imageUrl.startsWith('assets/')) {
+            // Use as is
+        }
+        // Otherwise, assume it's a filename that needs the full path
+        else {
+            imageUrl = `assets/images/Products/${imageUrl}`;
         }
         
         return `
-            <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
-               data-product-id="${product.id}" 
-               data-category="${product.categorySlug || product.category}" 
-               data-name="${product.name}" 
-               data-price="${productPrice}">
-                <div class="relative h-64">
+            <div class="product-card" data-product-id="${product.id}">
+                <div class="product-card-image-container">
                     <img src="${imageUrl}" 
                          alt="${product.name}" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                         class="product-card-image"
                          onerror="this.src='assets/images/placeholder.jpg'">
+                    ${isOnSale ? '<span class="product-card-badge">Sale</span>' : ''}
+                    ${product.featured ? '<span class="product-card-badge">Featured</span>' : ''}
                     
-                    <!-- Product Badges -->
-                    ${isOnSale ? '<span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SALE</span>' : ''}
-                    ${product.featured ? '<span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>' : ''}
-                    ${product.bestSeller ? '<span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">BEST SELLER</span>' : ''}
-                    
-                    <!-- Hover Actions -->
-                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', 1);" 
-                                class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
-                                title="Add to Cart">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </button>
-                        <button onclick="event.preventDefault(); event.stopPropagation(); openQuickView('${product.id}');" 
-                                class="text-white bg-black bg-opacity-50 p-3 rounded-full hover:bg-blue-600 transition-colors"
-                                title="Quick View">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="product-card-actions">
+                        <button onclick="event.stopPropagation(); window.location.href='product.html?product=${product.id}'" 
+                                class="product-card-action-btn" title="View Details">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                        <button onclick="event.stopPropagation(); addToCart('${product.id}', 1)" 
+                                class="product-card-action-btn" title="Add to Cart">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
                         </button>
                     </div>
                 </div>
                 
-                <div class="p-6">
-                    <h3 class="font-semibold text-gray-800 dark:text-white text-lg mb-2 truncate">${product.name}</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 capitalize">${product.category || 'Product'}</p>
+                <div class="product-card-content" onclick="window.location.href='product.html?product=${product.id}'">
+                    <p class="product-card-category">${product.category || 'Product'}</p>
+                    <h3 class="product-card-name">${product.name}</h3>
+                    ${product.shortDescription ? `<p class="product-card-description">${product.shortDescription}</p>` : ''}
                     
-                    <!-- Rating -->
-                    ${product.rating ? `
-                        <div class="flex items-center mb-3">
-                            <div class="flex text-yellow-400">
-                                ${Array.from({length: 5}, (_, i) => 
-                                    `<svg class="w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>`
-                                ).join('')}
-                            </div>
-                            <span class="text-gray-600 dark:text-gray-400 ml-1 text-sm">${product.rating}</span>
-                        </div>
-                    ` : ''}
-                    
-                    <!-- Price hidden on product cards; retained in data-price for sorting -->
-                    <div class="flex justify-between items-center">
-                        <!-- Stock Status -->
-                        ${product.inStock !== undefined ? `
-                            <span class="text-xs px-2 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                ${product.inStock ? 'In Stock' : 'Out of Stock'}
-                            </span>
-                        ` : ''}
+                    <div class="product-card-footer">
+                        <button onclick="event.stopPropagation(); addToCart('${product.id}', 1)" 
+                                class="product-card-add-btn">
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
-            </a>
+            </div>
         `;
     }
 }

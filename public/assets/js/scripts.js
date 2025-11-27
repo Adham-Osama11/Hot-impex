@@ -169,6 +169,9 @@ class APIService {
     }
 }
 
+// Make APIService globally available
+window.APIService = APIService;
+
 // Image Utility Functions
 // Function to convert Google Drive URLs to direct image URLs
 function convertGoogleDriveUrl(url) {

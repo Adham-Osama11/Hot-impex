@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/about.css">
+    <link rel="stylesheet" href="assets/css/navbar.css">
     <!-- Theme initialization script - must run before body content -->
     <script>
         // Check for saved dark mode preference and apply immediately
@@ -25,104 +27,91 @@
 </head>
 <body class="min-h-screen">
     <!-- Navigation Bar -->
-    <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300">
-        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6">
-            <nav class="flex items-center justify-between h-16">
-                <!-- Mobile Header with Hot Button and Menu Toggle -->
-                <div class="flex items-center justify-between w-full lg:w-auto lg:flex-shrink-0">
-                    <!-- Hot Button Section -->
-                    <div class="flex-shrink-0">
-                        <button class="logo text-gray-800 font-bold py-3 px-6 rounded-full border border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-200 text-xl lg:text-xl bg-white/15 backdrop-blur-3xl">
-                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="h-10 w-28 lg:h-12 lg:w-32">
-                        </button>
-                    </div>
+    <header class="nav-header">
+        <div class="nav-container">
+            <nav class="nav-flex">
+                <!-- Mobile Menu Toggle Button (Left side on mobile) -->
+                <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
 
-                    <!-- Mobile Menu Toggle Button -->
-                    <button id="mobile-menu-toggle" class="lg:hidden text-gray-800 p-3 rounded-full border border-white/30 shadow-2xl transition-all duration-200 bg-white/15 backdrop-blur-3xl hover:bg-white/25">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
+                <!-- Invisible spacer for mobile balance -->
+                <div class="mobile-spacer"></div>
 
-                <!-- Main Navigation Section -->
-                <div id="main-nav" class="hidden lg:flex items-center">
-                    <div class="rounded-full p-3 flex items-center border border-white/30 shadow-2xl gap-2 bg-white/15 backdrop-blur-3xl">
-                        <a href="index.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Home</a>
-                        <a href="shop.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Products</a>
-                        <a href="contact.html" class="text-gray-800 px-5 py-2.5 rounded-full hover:bg-white/25 hover:backdrop-blur-sm transition-all duration-200 text-base lg:text-lg font-medium text-center whitespace-nowrap">Contact Us</a>
-                        <a href="about.html" class="text-gray-800 px-5 py-2.5 rounded-full bg-white/30 backdrop-blur-sm transition-colors duration-200 text-base lg:text-lg font-medium text-center border border-white/20 shadow-lg whitespace-nowrap">About Us</a>
+                <!-- Main Navigation Section (Centered) -->
+                <div id="main-nav" class="main-nav">
+                    <div class="nav-content">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="shop.html" class="nav-link">Products</a>
+                        <a href="contact.html" class="nav-link">Contact Us</a>
+                        <a href="about.html" class="nav-link active">About Us</a>
                         
                         <!-- Dark Mode Toggle -->
-                        <div class="flex items-center justify-center px-4 py-2.5">
+                        <div class="theme-toggle-container">
                             <div id="theme-toggle" class="theme-toggle" title="Toggle Dark Mode">
-                                <svg class="sun-icon absolute top-1 left-1 w-4 h-4 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="sun-icon" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
                                 </svg>
-                                <svg class="moon-icon absolute top-1 right-1 w-4 h-4 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="moon-icon" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                                 </svg>
                             </div>
                         </div>
                         
                         <!-- User Icon with Dropdown -->
-                        <div class="relative">
-                            <div id="user-dropdown-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
+                        <div class="user-dropdown-wrapper">
+                            <div id="user-dropdown-toggle" class="user-dropdown-toggle">
                                 <!-- Simple SVG for user icon -->
-                                <svg class="user-icon w-4 h-4" viewBox="0 0 24 24" fill="#374151">
+                                <svg class="user-icon" viewBox="0 0 24 24" fill="#374151">
                                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                                 </svg>
-                                <span id="user-display-name" class="hidden lg:inline text-gray-700 text-base">Account</span>
+                                <span id="user-display-name" class="user-display-name">Account</span>
                                 <!-- Dropdown Arrow -->
-                                <svg class="w-3.5 h-3.5 text-gray-700 transition-transform duration-200" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="user-dropdown-arrow" id="user-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </div>
                             
                             <!-- User Dropdown Menu -->
-                            <div id="user-dropdown-menu" class="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/30 py-2 hidden z-50">
+                            <div id="user-dropdown-menu" class="user-dropdown-menu hidden">
                                 <!-- Not Logged In State -->
-                                <div id="user-not-logged-in" class="px-4 py-3 border-b border-gray-200/50">
-                                    <p class="text-sm text-gray-600 mb-3">Sign in to access your account</p>
-                                    <div class="space-y-2">
-                                        <button id="show-login-modal" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                <div id="user-not-logged-in" class="user-not-logged-in">
+                                    <p>Sign in to access your account</p>
+                                    <div class="btn-group">
+                                        <button id="show-login-modal" class="btn-signin">
                                             Sign In
                                         </button>
-                                        <button id="show-register-modal" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                        <button id="show-register-modal" class="btn-register">
                                             Create Account
                                         </button>
                                     </div>
                                 </div>
                                 
                                 <!-- Logged In State (Hidden by default) -->
-                                <div id="user-logged-in" class="hidden">
-                                    <div class="px-4 py-3 border-b border-gray-200/50">
-                                        <p class="text-sm font-medium text-gray-900" id="user-welcome">Welcome back!</p>
-                                        <p class="text-sm text-gray-600" id="user-email"></p>
+                                <div id="user-logged-in" class="user-logged-in">
+                                    <div class="user-info">
+                                        <p class="user-welcome" id="user-welcome">Welcome back!</p>
+                                        <p class="user-email" id="user-email"></p>
                                     </div>
-                                    <div class="py-1">
-                                        <a href="profile.html" id="user-profile-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
-                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="user-menu">
+                                        <a href="profile.html" id="user-profile-link" class="user-menu-link">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                             </svg>
                                             Profile
                                         </a>
-                                        <!-- <a href="my-orders.html" id="user-orders-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100/50 transition-colors duration-200">
-                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
-                                            </svg>
-                                            My Orders
-                                        </a> -->
                                         <!-- Admin Panel Link (visible only for admin users) -->
-                                        <a href="admin/admin.html" id="admin-panel-link" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50/50 transition-colors duration-200 hidden">
-                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <a href="admin/admin.html" id="admin-panel-link" class="user-menu-link admin-panel-link hidden">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                                             </svg>
                                             Admin Panel
                                         </a>
-                                        <div class="border-t border-gray-200/50 mt-2 pt-2">
-                                            <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/50 transition-colors duration-200">
-                                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="menu-divider">
+                                            <button id="logout-btn" class="btn-logout">
+                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                                 </svg>
                                                 Sign Out
@@ -132,15 +121,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Shopping Cart Icon with Count -->
-                        <!-- <div id="cart-toggle" class="flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-full hover:bg-gray-200/50 transition-colors duration-200 cursor-pointer text-base lg:text-lg font-medium whitespace-nowrap">
-                            
-                            <svg class="user-icon w-4 h-4" viewBox="0 0 24 24" fill="#374151">
-                                <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.763.746-1.858 1.705L2.26 19.99a2.25 2.25 0 002.24 2.51h15.002a2.25 2.25 0 002.24-2.51l-1.395-11.535A1.875 1.875 0 0018.488 6.75H16.5V6a4.5 4.5 0 10-9 0zM15 6.75V6a3 3 0 10-6 0v.75H15z" clip-rule="evenodd" />
-                            </svg>
-                            <span id="cart-badge" class="bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full" style="display: none;">0</span>
-                        </div> -->
                     </div>
                 </div>
             </nav>
@@ -148,28 +128,28 @@
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 z-50 lg:hidden hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-        <div class="fixed top-0 right-0 h-full w-80 bg-white/15 backdrop-blur-3xl shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-white/30">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Menu</h2>
-                    <button id="close-mobile-menu" class="text-gray-800 dark:text-white hover:text-orange-400 transition-colors duration-200 p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+    <div id="mobile-menu" class="mobile-menu-overlay hidden">
+        <div class="mobile-menu-backdrop"></div>
+        <div class="mobile-menu-panel">
+            <div class="mobile-menu-content">
+                <div class="mobile-menu-header">
+                    <h2 class="mobile-menu-title">Menu</h2>
+                    <button id="close-mobile-menu" class="mobile-menu-close">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-                <nav class="space-y-6">
-                    <ul class="space-y-4">
-                        <li><a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Home</a></li>
-                        <li><a href="shop.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Products</a></li>
-                        <li><a href="contact.html" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">Contact Us</a></li>
-                        <li><a href="about.html" class="block py-3 px-4 rounded-lg bg-orange-500/30 backdrop-blur-sm text-orange-600 font-medium border border-orange-300/30 shadow-lg">About Us</a></li>
+                <nav class="mobile-menu-nav">
+                    <ul class="mobile-menu-list">
+                        <li><a href="index.html" class="mobile-menu-link active">Home</a></li>
+                        <li><a href="shop.html" class="mobile-menu-link">Products</a></li>
+                        <li><a href="contact.html" class="mobile-menu-link">Contact Us</a></li>
+                        <li><a href="about.html" class="mobile-menu-link">About Us</a></li>
                         <li>
-                            <a href="profile.html" id="mobile-profile-link" class="block py-3 px-4 rounded-lg hover:bg-white/25 hover:backdrop-blur-sm text-gray-800 dark:text-white transition-all duration-200 border border-white/20">
-                                <div class="flex items-center space-x-3">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <a href="profile.html" id="mobile-profile-link" class="mobile-menu-link">
+                                <div class="mobile-menu-link-content">
+                                    <svg class="mobile-menu-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
                                     <span>My Profile</span>
@@ -199,18 +179,18 @@
                                 </div>
                             </button>
                         </li> -->
-                        <li class="border-t border-white/20 pt-4 mt-4">
-                            <button id="mobile-login-btn" class="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white font-medium transition-all duration-200 hover:shadow-lg hover:scale-105" style="display: none;">
-                                <div class="flex items-center justify-center space-x-3">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <li class="mobile-menu-divider">
+                            <button id="mobile-login-btn" class="mobile-menu-button login" style="display: none;">
+                                <div class="mobile-menu-button-content">
+                                    <svg class="mobile-menu-button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                                     </svg>
                                     <span>Sign In / Register</span>
                                 </div>
                             </button>
-                            <button id="mobile-logout-btn" class="block w-full py-3 px-4 rounded-lg bg-red-500 text-white font-medium transition-all duration-200 hover:bg-red-600 hover:shadow-lg" style="display: none;">
-                                <div class="flex items-center justify-center space-x-3">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button id="mobile-logout-btn" class="mobile-menu-button logout" style="display: none;">
+                                <div class="mobile-menu-button-content">
+                                    <svg class="mobile-menu-button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                                     </svg>
                                     <span>Sign Out</span>
@@ -218,9 +198,9 @@
                             </button>
                         </li>
                     </ul>
-                    <div class="mt-8 pt-8 border-t border-white/30">
-                        <div class="flex items-center justify-between p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
-                            <span class="text-gray-800 dark:text-white font-medium">Dark Mode</span>
+                    <div class="mobile-menu-theme">
+                        <div class="mobile-menu-theme-content">
+                            <span class="mobile-menu-theme-label">Dark Mode</span>
                             <div id="mobile-theme-toggle" class="theme-toggle">
                                 <svg class="sun-icon w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
@@ -237,35 +217,35 @@
     </div>
 
     <!-- Login Modal -->
-    <div id="login-modal" class="fixed inset-0 z-50 hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 w-full max-w-md p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900">Sign In</h2>
-                    <button id="close-login-modal" class="text-gray-500 hover:text-gray-700 transition-colors duration-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div id="login-modal" class="modal-overlay hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-wrapper">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Sign In</h2>
+                    <button id="close-login-modal" class="modal-close">
+                        <svg class="modal-close-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
                 
-                <form id="login-form" class="space-y-6">
-                    <div>
-                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <form id="login-form" class="modal-form">
+                    <div class="modal-form-group">
+                        <label for="login-email" class="modal-label">Email</label>
                         <input type="email" id="login-email" name="email" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                               class="modal-input"
                                placeholder="Enter your email">
                     </div>
                     
-                    <div>
-                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <div class="relative">
+                    <div class="modal-form-group">
+                        <label for="login-password" class="modal-label">Password</label>
+                        <div class="modal-input-wrapper">
                             <input type="password" id="login-password" name="password" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                                   class="modal-input"
                                    placeholder="Enter your password">
-                            <button type="button" id="toggle-login-password" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button type="button" id="toggle-login-password" class="modal-input-button">
+                                <svg class="modal-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
@@ -273,192 +253,190 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <input type="checkbox" class="rounded border-gray-300 text-orange-600 focus:ring-orange-500">
-                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    <div class="modal-remember-forgot">
+                        <label class="modal-checkbox-wrapper">
+                            <input type="checkbox" class="modal-checkbox">
+                            <span class="modal-checkbox-label">Remember me</span>
                         </label>
-                        <a href="#" class="text-sm text-orange-600 hover:text-orange-500">Forgot password?</a>
+                        <a href="#" class="modal-link text-sm">Forgot password?</a>
                     </div>
                     
-                    <button type="submit" 
-                            class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+                    <button type="submit" class="modal-submit">
                         Sign In
                     </button>
                     
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">Don't have an account? </span>
-                        <button type="button" id="switch-to-register" class="text-sm text-orange-600 hover:text-orange-500 font-medium">
+                    <div class="modal-footer">
+                        <span class="modal-footer-text">Don't have an account? </span>
+                        <button type="button" id="switch-to-register" class="modal-footer-button">
                             Create one
                         </button>
                     </div>
                 </form>
                 
-                <div id="login-error" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p class="text-red-600 text-sm"></p>
+                <div id="login-error" class="modal-message error hidden">
+                    <p class="modal-message-text"></p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Register Modal -->
-    <div id="register-modal" class="fixed inset-0 z-50 hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 w-full max-w-md p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900">Create Account</h2>
-                    <button id="close-register-modal" class="text-gray-500 hover:text-gray-700 transition-colors duration-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div id="register-modal" class="modal-overlay hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-wrapper">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Create Account</h2>
+                    <button id="close-register-modal" class="modal-close">
+                        <svg class="modal-close-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
                 
-                <form id="register-form" class="space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="register-firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                <form id="register-form" class="modal-form">
+                    <div class="modal-form-row">
+                        <div class="modal-form-group">
+                            <label for="register-firstName" class="modal-label">First Name</label>
                             <input type="text" id="register-firstName" name="firstName" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                                   class="modal-input"
                                    placeholder="First name">
                         </div>
-                        <div>
-                            <label for="register-lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <div class="modal-form-group">
+                            <label for="register-lastName" class="modal-label">Last Name</label>
                             <input type="text" id="register-lastName" name="lastName" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                                   class="modal-input"
                                    placeholder="Last name">
                         </div>
                     </div>
                     
-                    <div>
-                        <label for="register-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <div class="modal-form-group">
+                        <label for="register-email" class="modal-label">Email</label>
                         <input type="email" id="register-email" name="email" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                               class="modal-input"
                                placeholder="Enter your email">
                     </div>
                     
-                    <div>
-                        <label for="register-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <div class="modal-form-group">
+                        <label for="register-phone" class="modal-label">Phone Number</label>
                         <input type="tel" id="register-phone" name="phone" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                               class="modal-input"
                                placeholder="Enter your phone number">
                     </div>
                     
-                    <div>
-                        <label for="register-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <div class="relative">
+                    <div class="modal-form-group">
+                        <label for="register-password" class="modal-label">Password</label>
+                        <div class="modal-input-wrapper">
                             <input type="password" id="register-password" name="password" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200"
+                                   class="modal-input"
                                    placeholder="Create a password">
-                            <button type="button" id="toggle-register-password" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button type="button" id="toggle-register-password" class="modal-input-button">
+                                <svg class="modal-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
                             </button>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">Minimum 8 characters</p>
+                        <p class="modal-helper-text">Minimum 8 characters</p>
                     </div>
                     
-                    <div>
-                        <label class="flex items-center">
-                            <input type="checkbox" id="register-terms" required class="rounded border-gray-300 text-orange-600 focus:ring-orange-500">
-                            <span class="ml-2 text-sm text-gray-600">
-                                I agree to the <a href="#" class="text-orange-600 hover:text-orange-500">Terms of Service</a> 
-                                and <a href="#" class="text-orange-600 hover:text-orange-500">Privacy Policy</a>
+                    <div class="modal-form-group">
+                        <label class="modal-checkbox-wrapper">
+                            <input type="checkbox" id="register-terms" required class="modal-checkbox">
+                            <span class="modal-checkbox-label">
+                                I agree to the <a href="#" class="modal-link">Terms of Service</a> 
+                                and <a href="#" class="modal-link">Privacy Policy</a>
                             </span>
                         </label>
                     </div>
                     
-                    <button type="submit" 
-                            class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+                    <button type="submit" class="modal-submit">
                         Create Account
                     </button>
                     
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">Already have an account? </span>
-                        <button type="button" id="switch-to-login" class="text-sm text-orange-600 hover:text-orange-500 font-medium">
+                    <div class="modal-footer">
+                        <span class="modal-footer-text">Already have an account? </span>
+                        <button type="button" id="switch-to-login" class="modal-footer-button">
                             Sign in
                         </button>
                     </div>
                 </form>
                 
-                <div id="register-error" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p class="text-red-600 text-sm"></p>
+                <div id="register-error" class="modal-message error hidden">
+                    <p class="modal-message-text"></p>
                 </div>
                 
-                <div id="register-success" class="hidden mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <p class="text-green-600 text-sm"></p>
+                <div id="register-success" class="modal-message success hidden">
+                    <p class="modal-message-text"></p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Main Content -->
-    <main class="pt-32 pb-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="about-main">
+        <div class="about-container">
             <!-- Page Header -->
-            <div class="text-center mb-16">
-                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-6">
-                    About <span class="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">Hot Impex</span>
+            <div class="about-header">
+                <h1 class="about-title">
+                    About <span class="about-title-highlight">Hot Impex</span>
                 </h1>
-                <p class="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                <p class="about-subtitle">
                     We are dedicated to providing cutting-edge technology solutions that transform businesses and enhance everyday experiences.
                 </p>
             </div>
 
             <!-- Company Story -->
-            <section class="mb-20">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div class="space-y-6">
-                        <h2 class="text-4xl font-bold text-gray-900 dark:text-white">Our Story</h2>
-                        <div class="space-y-4 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                            <p>
+            <section class="story-section">
+                <div class="story-grid">
+                    <div class="story-content">
+                        <h2 class="story-title">Our Story</h2>
+                        <div class="story-text-wrapper">
+                            <p class="story-text">
                                 Founded with a vision to bridge the gap between innovative technology and practical solutions, Hot Impex has been at the forefront of the tech industry for over a decade.
                             </p>
-                            <p>
+                            <p class="story-text">
                                 What started as a small team of passionate engineers has grown into a comprehensive technology company, serving thousands of customers across the region with high-quality products and exceptional service.
                             </p>
-                            <p>
+                            <p class="story-text">
                                 Today, we continue to push boundaries, embracing new technologies and maintaining our commitment to excellence in everything we do.
                             </p>
                         </div>
                     </div>
-                    <div class="relative">
-                        <div class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-8 text-white">
-                            <div class="space-y-6">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <div>
+                        <div class="stats-card">
+                            <div class="stats-content">
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <svg fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="text-2xl font-bold">10+ Years</h3>
-                                        <p class="text-white/80">of Excellence</p>
+                                        <h3 class="stat-number">10+ Years</h3>
+                                        <p class="stat-label">of Excellence</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <svg fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="text-2xl font-bold">10,000+</h3>
-                                        <p class="text-white/80">Happy Customers</p>
+                                        <h3 class="stat-number">10,000+</h3>
+                                        <p class="stat-label">Happy Customers</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <svg fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="text-2xl font-bold">1,000+</h3>
-                                        <p class="text-white/80">Products</p>
+                                        <h3 class="stat-number">1,000+</h3>
+                                        <p class="stat-label">Products</p>
                                     </div>
                                 </div>
                             </div>
@@ -468,97 +446,97 @@
             </section>
 
             <!-- Mission & Values -->
-            <section class="mb-20">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Mission & Values</h2>
-                    <p class="text-xl text-gray-600 dark:text-gray-300">The principles that drive everything we do</p>
+            <section class="mission-section">
+                <div class="mission-header">
+                    <h2 class="mission-title">Our Mission & Values</h2>
+                    <p class="mission-subtitle">The principles that drive everything we do</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="mission-grid">
                     <!-- Innovation -->
-                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 text-center">
-                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="mission-card">
+                        <div class="mission-icon-wrapper blue">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Innovation</h3>
-                        <p class="text-gray-600 dark:text-gray-300">We constantly push the boundaries of technology to deliver cutting-edge solutions that exceed expectations.</p>
+                        <h3 class="mission-card-title">Innovation</h3>
+                        <p class="mission-card-text">We constantly push the boundaries of technology to deliver cutting-edge solutions that exceed expectations.</p>
                     </div>
 
                     <!-- Quality -->
-                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 text-center">
-                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="mission-card">
+                        <div class="mission-icon-wrapper green">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Quality</h3>
-                        <p class="text-gray-600 dark:text-gray-300">Every product undergoes rigorous testing to ensure the highest standards of quality and reliability.</p>
+                        <h3 class="mission-card-title">Quality</h3>
+                        <p class="mission-card-text">Every product undergoes rigorous testing to ensure the highest standards of quality and reliability.</p>
                     </div>
 
                     <!-- Service -->
-                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 text-center">
-                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="mission-card">
+                        <div class="mission-icon-wrapper purple">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Customer Service</h3>
-                        <p class="text-gray-600 dark:text-gray-300">We believe in building lasting relationships through exceptional customer service and support.</p>
+                        <h3 class="mission-card-title">Customer Service</h3>
+                        <p class="mission-card-text">We believe in building lasting relationships through exceptional customer service and support.</p>
                     </div>
                 </div>
             </section>
 
             <!-- Team Section -->
-            <section class="mb-20">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Meet Our Team</h2>
-                    <p class="text-xl text-gray-600 dark:text-gray-300">The passionate individuals behind Hot Impex</p>
+            <section class="team-section">
+                <div class="team-header">
+                    <h2 class="team-title">Meet Our Team</h2>
+                    <p class="team-subtitle">The passionate individuals behind Hot Impex</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="team-grid">
                     <!-- Team Member 1 -->
-                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 text-center">
-                        <div class="w-24 h-24 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-                            <span class="text-2xl font-bold text-white">AH</span>
+                    <div class="team-card">
+                        <div class="team-avatar purple">
+                            <span class="team-avatar-initials">AH</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Ahmed Hassan</h3>
-                        <p class="text-purple-600 dark:text-purple-400 font-medium mb-4">CEO & Founder</p>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Leading the company with vision and passion for technology innovation.</p>
+                        <h3 class="team-member-name">Ahmed Hassan</h3>
+                        <p class="team-member-role">CEO & Founder</p>
+                        <p class="team-member-bio">Leading the company with vision and passion for technology innovation.</p>
                     </div>
 
                     <!-- Team Member 2 -->
-                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 text-center">
-                        <div class="w-24 h-24 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-                            <span class="text-2xl font-bold text-white">SM</span>
+                    <div class="team-card">
+                        <div class="team-avatar blue">
+                            <span class="team-avatar-initials">SM</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Sara Mohamed</h3>
-                        <p class="text-purple-600 dark:text-purple-400 font-medium mb-4">CTO</p>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Driving technical excellence and overseeing product development.</p>
+                        <h3 class="team-member-name">Sara Mohamed</h3>
+                        <p class="team-member-role">CTO</p>
+                        <p class="team-member-bio">Driving technical excellence and overseeing product development.</p>
                     </div>
 
                     <!-- Team Member 3 -->
-                    <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 text-center">
-                        <div class="w-24 h-24 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-                            <span class="text-2xl font-bold text-white">MK</span>
+                    <div class="team-card">
+                        <div class="team-avatar green">
+                            <span class="team-avatar-initials">MK</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Mohamed Khaled</h3>
-                        <p class="text-purple-600 dark:text-purple-400 font-medium mb-4">Head of Sales</p>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Building relationships and ensuring customer satisfaction worldwide.</p>
+                        <h3 class="team-member-name">Mohamed Khaled</h3>
+                        <p class="team-member-role">Head of Sales</p>
+                        <p class="team-member-bio">Building relationships and ensuring customer satisfaction worldwide.</p>
                     </div>
                 </div>
             </section>
 
             <!-- Call to Action -->
-            <section class="text-center bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-12 text-white">
-                <h2 class="text-4xl font-bold mb-6">Ready to Work With Us?</h2>
-                <p class="text-xl mb-8 text-white/90">Join thousands of satisfied customers who trust Hot Impex for their technology needs.</p>
-                <div class="space-x-4">
-                    <a href="contact.html" class="inline-block bg-white text-purple-600 font-bold py-4 px-8 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+            <section class="cta-section">
+                <h2 class="cta-title">Ready to Work With Us?</h2>
+                <p class="cta-text">Join thousands of satisfied customers who trust Hot Impex for their technology needs.</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="cta-btn-primary">
                         Contact Us
                     </a>
-                    <a href="shop.html" class="inline-block border-2 border-white text-white font-bold py-4 px-8 rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105">
+                    <a href="shop.html" class="cta-btn-secondary">
                         View Products
                     </a>
                 </div>

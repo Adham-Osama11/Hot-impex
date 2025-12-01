@@ -1,122 +1,96 @@
-# HOT IMPEX - Professional E-commerce Website
+# HOT IMPEX - Product Catalog
 
-A modern, responsive e-commerce website for HOT IMPEX featuring product showcases, dark/light theme support, professional admin dashboard, and a complete Node.js backend API.
+A professional product catalog website for HOT IMPEX, showcasing AV distribution, cables, gaming equipment, and other tech products.
 
-## 🚀 Features
+## 🚀 Overview
 
-### Frontend
-- **Responsive Design** - Works on all devices
-- **Dark/Light Theme** - User preference support
-- **Product Catalog** - Professional product showcase
-- **Admin Dashboard** - Complete management interface
-- **Modern UI** - Clean and professional design
-
-### Backend (NEW!)
-- **RESTful API** - Complete product, user, and order management
-- **JWT Authentication** - Secure user sessions
-- **Admin Management** - Full CRUD operations
-- **File-based Database** - Easy deployment with JSON files
-- **Security Features** - Rate limiting, input validation, CORS
-- **Real-time API** - Instant data updates
+This is a static frontend application that displays products from a nopCommerce backend API. The catalog allows users to browse categories, view product details, and search for items.
 
 ## 📁 Project Structure
 
 ```
-Hot impex/
-├── 📁 public/                   # Frontend assets and pages
-│   ├── 📁 admin/               # Admin dashboard
-│   │   └── admin.html          # Admin panel interface
-│   ├── 📁 assets/              # Static assets
-│   │   ├── 📁 css/             # Stylesheets
-│   │   │   ├── admin-styles.css # Admin panel styles
-│   │   │   └── styles.css      # Main website styles
-│   │   ├── 📁 js/              # JavaScript files
-│   │   │   ├── admin.js        # Admin panel functionality
-│   │   │   └── scripts.js      # Main website scripts
-│   │   └── 📁 images/          # Image assets
-│   │       ├── 📁 logos/       # Logo files
-│   │       ├── 📁 partners/    # Partner logos
-│   │       ├── 📁 Products/    # Product images
-│   │       └── *.png           # Other images
-│   ├── about.html              # About page
-│   ├── contact.html            # Contact page
-│   ├── checkout.html           # Checkout page
-│   ├── index.html              # Homepage
-│   ├── product.html            # Product details page
-│   ├── profile.html            # User profile page
-│   └── shop.html               # Shop/catalog page
-├── 📁 server/                  # Backend API
-│   ├── 📁 config/              # Configuration files
-│   ├── 📁 controllers/         # Route controllers
-│   ├── 📁 middleware/          # Express middleware
-│   ├── 📁 models/              # Data models
-│   ├── 📁 routes/              # API routes
-│   ├── 📁 services/            # Business logic
-│   ├── 📁 utils/               # Utility functions
-│   └── server.js               # Main server file
-├── 📁 database/                # JSON database files
-│   ├── orders.json            # Order data
-│   ├── products.json          # Product data
-│   └── users.json             # User data
-├── 📁 docs/                    # Documentation
-│   ├── DEVELOPMENT.md         # Development guide
-│   └── MONGODB_SETUP.md       # MongoDB setup guide
-├── 📁 scripts/                 # Utility scripts
-│   ├── setup-mongodb.sh      # MongoDB setup script
-│   ├── test-api.sh           # API testing script
-│   └── verify-structure.sh    # Structure verification
-├── 📁 tests/                   # Test files
-│   └── test-cart-functionality.html
-├── package.json               # Dependencies and scripts
-├── tailwind.config.js         # Tailwind CSS configuration
-└── README.md                  # This file
+Hot-impex/
+├── index.html              # Home page
+├── shop.html               # Product catalog/shop page
+├── product.html            # Product detail page
+├── about.html              # About page
+├── contact.html            # Contact page
+├── profile.html            # User profile page
+├── 404.html                # Error page
+├── favicon.ico             # Site icon
+│
+├── admin/                  # Admin dashboard
+│   └── admin.html
+│
+├── assets/                 # Static assets
+│   ├── css/                # Stylesheets
+│   │   ├── styles.css
+│   │   ├── index.css
+│   │   ├── shop.css
+│   │   ├── product.css
+│   │   ├── navbar.css
+│   │   └── ...
+│   │
+│   ├── js/                 # JavaScript files
+│   │   ├── config.js       # API configuration
+│   │   ├── main.js         # Main entry point
+│   │   ├── scripts.js      # General scripts
+│   │   │
+│   │   ├── modules/        # Feature modules
+│   │   │   ├── api-service.js
+│   │   │   ├── shop.js
+│   │   │   ├── products.js
+│   │   │   ├── search.js
+│   │   │   ├── auth-service.js
+│   │   │   └── ...
+│   │   │
+│   │   └── admin/          # Admin dashboard scripts
+│   │       ├── app.js
+│   │       ├── dashboard.js
+│   │       ├── products.js
+│   │       └── ...
+│   │
+│   └── images/             # Image assets
+│       ├── logos/
+│       ├── partners/
+│       └── Products/
+│
+├── docs/                   # Documentation
+│   └── DEVELOPMENT.md
+│
+└── .github/                # GitHub workflows
 ```
 
-## 🚀 Features
-
-- **Responsive Design**: Fully responsive across all devices
-- **Dark/Light Theme**: Toggle between dark and light modes
-- **Product Showcase**: Interactive product display with animations
-- **Admin Dashboard**: Complete admin panel for product management
-- **Modern UI**: Clean, professional design with animations
-- **SEO Optimized**: Proper meta tags and semantic HTML
-
-## 🛠️ Technologies Used
+## 🔧 Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: Tailwind CSS, Custom CSS with CSS Variables
-- **3D Graphics**: Three.js for interactive elements
-- **Icons**: SVG icons and custom graphics
-- **Fonts**: Google Fonts (Inter, Playfair Display)
+- **Styling**: Tailwind CSS
+- **Backend API**: nopCommerce (hosted separately)
+- **Icons**: Font Awesome
+- **Deployment**: Static hosting (GitHub Pages, Netlify, Vercel, etc.)
 
-## 📋 Setup Instructions
+## 🎯 Features
 
-### Backend + Frontend Setup (Recommended)
+### Customer Features
+- ✅ Browse products by category
+- ✅ View detailed product information
+- ✅ Search products
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Fast loading and optimized performance
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Adham-Osama11/Hot-impex.git
-   cd Hot-impex
-   ```
+### Admin Features
+- ✅ Dashboard with analytics
+- ✅ Product management
+- ✅ User management
+- ✅ Order tracking
 
-2. **Install Node.js dependencies**
-   ```bash
-   npm install
-   ```
+## 🚀 Getting Started
 
-3. **Start the backend server**
-   ```bash
-   npm start
-   # Or for development with auto-restart
-   npm run dev
-   ```
+### Prerequisites
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- nopCommerce backend API URL and credentials
 
-4. **Access the application**
-   - **Website**: http://localhost:3000
-   - **Admin Panel**: http://localhost:3000/admin
-   - **API Documentation**: http://localhost:3000/api/health
-
-### Frontend Only Setup
+### Installation
 
 1. **Clone the repository**
    ```bash
@@ -124,123 +98,102 @@ Hot impex/
    cd Hot-impex
    ```
 
-2. **Open the project**
-   - Open `public/index.html` in your browser for the main website
-   - Open `public/admin/admin.html` for the admin dashboard
+2. **Configure API connection**
+   
+   Edit `assets/js/config.js` and update with your nopCommerce API details:
+   ```javascript
+   const API_CONFIG = {
+       BASE_URL: 'https://your-nopcommerce-api.com/api',
+       API_KEY: 'your-api-key-here',
+       // ... other config
+   };
+   ```
 
-3. **Development**
-   - No build process required - pure HTML/CSS/JS
-   - Edit files directly and refresh browser to see changes
+3. **Run locally**
+   
+   Option 1: Using Python
+   ```bash
+   python3 -m http.server 8000
+   ```
+   
+   Option 2: Using PHP
+   ```bash
+   php -S localhost:8000
+   ```
+   
+   Option 3: Using VS Code Live Server extension
+   - Install Live Server extension
+   - Right-click `index.html` → "Open with Live Server"
 
-### Available Scripts
+4. **Access the site**
+   ```
+   http://localhost:8000
+   ```
 
+## 🌐 Deployment
+
+### Deploy to Netlify
+1. Push your code to GitHub
+2. Go to [Netlify](https://netlify.com)
+3. Click "New site from Git"
+4. Select your repository
+5. Deploy!
+
+### Deploy to GitHub Pages
 ```bash
-npm start        # Start the backend server
-npm run dev      # Start server with nodemon (auto-restart)
-npm run client   # Serve frontend files only (Python server)
-npm run server   # Start backend server
+git checkout -b gh-pages
+git push origin gh-pages
+```
+Enable GitHub Pages in repository settings.
+
+### Deploy to Vercel
+```bash
+npx vercel
 ```
 
-## 🔧 API Endpoints
+## 📝 Configuration
 
-The backend provides a complete RESTful API:
+### API Configuration
+Update `assets/js/config.js` with your backend details:
 
-### Products
-- `GET /api/products` - Get all products
-- `GET /api/products/:id` - Get single product
-- `GET /api/products/category/:category` - Get products by category
-- `GET /api/products/search/:query` - Search products
+```javascript
+const API_CONFIG = {
+    BASE_URL: 'https://api.yourstore.com/api',
+    API_KEY: 'your-api-key',
+    ENDPOINTS: {
+        CATEGORIES: '/categories',
+        PRODUCTS: '/products',
+        // ... more endpoints
+    }
+};
+```
 
-### Users
-- `POST /api/users/register` - Register new user
-- `POST /api/users/login` - User login
-- `GET /api/users/profile` - Get user profile (auth required)
-
-### Orders
-- `POST /api/orders` - Create new order
-- `GET /api/orders` - Get user orders (auth required)
-- `GET /api/orders/:id` - Get single order (auth required)
-
-### Admin (Authentication Required)
-- `GET /api/admin/stats` - Dashboard statistics
-- `GET /api/admin/orders` - All orders management
-- `POST /api/admin/products` - Create product
-- `PUT /api/admin/products/:id` - Update product
-- `DELETE /api/admin/products/:id` - Delete product
-
-### Default Admin Credentials
-- **Email**: admin@hotimpex.com
-- **Password**: password
-
-## 🎨 Customization
-
-### Colors and Themes
-- Main CSS variables are defined in `assets/css/styles.css`
-- Dark mode styles are prefixed with `html.dark`
-- Custom gradients and colors can be modified in the `:root` section
-
-### Adding Products
-- Update `products.json` for product data
-- Add product images to `assets/images/Products/`
-- Update JavaScript arrays in `assets/js/scripts.js`
-
-### Admin Panel
-- Admin styles in `assets/css/admin-styles.css`
-- Admin functionality in `assets/js/admin.js`
-
-## 📱 Pages
-
-1. **Homepage** (`index.html`)
-   - Hero section with product showcase
-   - Interactive 3D elements
-   - Partner logos section
-   - Stats and features
-
-2. **Shop** (`shop.html`)
-   - Product catalog
-   - Filtering and search
-   - Product cards with animations
-
-3. **Contact** (`contact.html`)
-   - Contact form
-   - Company information
-   - Social media links
-
-4. **About** (`about.html`)
-   - Company story
-   - Mission and vision
-   - Team information
-
-5. **Admin Dashboard** (`admin/admin.html`)
-   - Product management
-   - Order tracking
-   - Analytics dashboard
-
-## 🔧 Browser Support
-
-- Chrome 80+
-- Firefox 75+
-- Safari 13+
-- Edge 80+
-
-## 📝 License
-
-Copyright © 2025 HOT IMPEX. All rights reserved.
+### Styling
+- Main styles: `assets/css/styles.css`
+- Tailwind config: `tailwind.config.js`
+- Page-specific styles in respective CSS files
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📞 Support
+## 📄 License
 
-For technical support or questions:
-- Email: support@hotimpex.com
-- Website: [HOT IMPEX](https://hotimpex.com)
+This project is licensed under the MIT License.
 
----
+## 📞 Contact
 
-**Note**: This project has been recently cleaned and organized for better maintainability and development experience.
+**HOT IMPEX**
+- Website: [hotimpex.com](https://hotimpex.com)
+- Email: info@hotimpex.com
+- GitHub: [@Adham-Osama11](https://github.com/Adham-Osama11)
+
+## 🙏 Acknowledgments
+
+- nopCommerce for backend API
+- Tailwind CSS for styling framework
+- Font Awesome for icons

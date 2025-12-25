@@ -74,7 +74,11 @@ Hot-impex/
 ### Customer Features
 - ✅ Browse products by category
 - ✅ View detailed product information
-- ✅ Search products
+- ✅ Search products with autocomplete
+- ✅ Shopping cart and wishlist
+- ✅ Product reviews and comparison
+- ✅ User authentication and profile management
+- ✅ Order history and tracking
 - ✅ Responsive design (mobile, tablet, desktop)
 - ✅ Fast loading and optimized performance
 
@@ -84,11 +88,19 @@ Hot-impex/
 - ✅ User management
 - ✅ Order tracking
 
+## 📚 Documentation
+
+- **[Domnex API Integration Guide](docs/DOMNEX_API_GUIDE.md)** - Complete API reference and examples
+- **[API Usage Guide](docs/API_USAGE_GUIDE.md)** - Best practices and patterns
+- **[Development Guide](docs/DEVELOPMENT.md)** - Development setup and workflows
+- **[Project Structure](STRUCTURE.md)** - Detailed file structure
+- **[API Requirements](API_REQUIREMENTS.md)** - Backend requirements
+
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Modern web browser (Chrome, Firefox, Safari, Edge)
-- nopCommerce backend API URL and credentials
+- Domnex Web API Backend (already configured)
 
 ### Installation
 
@@ -98,14 +110,15 @@ Hot-impex/
    cd Hot-impex
    ```
 
-2. **Configure API connection**
+2. **API is pre-configured**
    
-   Edit `assets/js/config.js` and update with your nopCommerce API details:
+   The Domnex Web API is already configured in `assets/js/config.js`:
    ```javascript
    const API_CONFIG = {
-       BASE_URL: 'https://your-nopcommerce-api.com/api',
-       API_KEY: 'your-api-key-here',
-       // ... other config
+       BASE_URL: 'http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net',
+       ENDPOINTS: {
+           // All endpoints pre-configured
+       }
    };
    ```
 
@@ -121,7 +134,12 @@ Hot-impex/
    php -S localhost:8000
    ```
    
-   Option 3: Using VS Code Live Server extension
+   Option 3: Using Node.js (npm start)
+   ```bash
+   npm start
+   ```
+   
+   Option 4: Using VS Code Live Server extension
    - Install Live Server extension
    - Right-click `index.html` → "Open with Live Server"
 
@@ -129,6 +147,31 @@ Hot-impex/
    ```
    http://localhost:8000
    ```
+
+### API Usage Examples
+
+```javascript
+// Products
+const products = await nopAPI.getHomePageProducts();
+const product = await nopAPI.getProductById(123);
+
+// Search
+const results = await nopAPI.searchProducts({ q: 'cable', pageSize: 12 });
+
+// Cart
+await nopAPI.addToCartFromCatalog(123, { quantity: 1 });
+const cart = await nopAPI.getCart();
+
+// Authentication
+await nopAPI.login({ email: 'user@example.com', password: 'password' });
+const user = await nopAPI.getCurrentUser();
+
+// Categories
+const categories = await nopAPI.getCategories();
+const categoryProducts = await nopAPI.getCategoryProducts(5);
+```
+
+For complete API documentation, see **[Domnex API Guide](docs/DOMNEX_API_GUIDE.md)**.
 
 ## 🌐 Deployment
 
@@ -154,19 +197,32 @@ npx vercel
 ## 📝 Configuration
 
 ### API Configuration
-Update `assets/js/config.js` with your backend details:
+The Domnex Web API is configured in `assets/js/config.js`:
 
 ```javascript
 const API_CONFIG = {
-    BASE_URL: 'https://api.yourstore.com/api',
-    API_KEY: 'your-api-key',
+    BASE_URL: 'http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net',
     ENDPOINTS: {
-        CATEGORIES: '/categories',
-        PRODUCTS: '/products',
-        // ... more endpoints
+        // Authentication
+        LOGIN: '/api-frontend/Customer/Login',
+        REGISTER: '/api-frontend/Customer/Register',
+        
+        // Products
+        PRODUCTS: '/api-frontend/Catalog/GetCatalogRoot',
+        PRODUCT_BY_ID: '/api-frontend/Product/GetProductDetails/{productId}',
+        
+        // Shopping Cart
+        CART: '/api-frontend/ShoppingCart/Cart',
+        ADD_TO_CART: '/api-frontend/ShoppingCart/AddProductToCartFromCatalog/{productId}',
+        
+        // ... 50+ more endpoints
     }
 };
 ```
+
+**API Documentation**: 
+- [Complete API Guide](docs/DOMNEX_API_GUIDE.md)
+- [Live API Docs](http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net/api/index.html)
 
 ### Styling
 - Main styles: `assets/css/styles.css`
@@ -194,6 +250,12 @@ This project is licensed under the MIT License.
 
 ## 🙏 Acknowledgments
 
-- nopCommerce for backend API
-- Tailwind CSS for styling framework
-- Font Awesome for icons
+- **Domnex Web API** (nopCommerce-based) for backend services
+- **Tailwind CSS** for styling framework
+- **Font Awesome** for icons
+- **nopCommerce** open-source e-commerce platform
+
+---
+
+**API Version**: Domnex Web API Frontend v4.60.07  
+**Last Updated**: December 25, 2024

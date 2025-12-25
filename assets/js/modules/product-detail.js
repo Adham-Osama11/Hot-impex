@@ -6,14 +6,21 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
-// Function to fetch product data from the server
+// Function to fetch product data from the API
 async function fetchProductDetails(productId) {
     try {
-        const response = await fetch(`/api/products/${productId}`);
-        if (!response.ok) {
-            throw new Error('Product not found');
+        // Wait for APIService to be available
+        if (typeof APIService === 'undefined') {
+            console.error('APIService not loaded');
+            return null;
         }
-        return await response.json();
+
+        const response = await APIService.getProduct(productId);
+        if (response.status === 'success') {
+            return response.data;
+        } else {
+            throw new Error(response.message || 'Product not found');
+        }
     } catch (error) {
         console.error('Error fetching product details:', error);
         return null;
@@ -147,7 +154,7 @@ function initializeTabs() {
 
 // Initialize product details page
 async function initializeProductPage() {
-    const productId = getUrlParameter('id');
+    const productId = getUrlParameter('product') || getUrlParameter('id');
     if (!productId) {
         console.error('No product ID provided');
         return;
@@ -161,11 +168,11 @@ async function initializeProductPage() {
         if (typeof AnalyticsService !== 'undefined') {
             try {
                 await AnalyticsService.trackProductVisit(
-                    product.data.id || product.data._id,
-                    product.data.name,
-                    product.data.category
+                    product.id,
+                    product.name,
+                    product.category
                 );
-                console.log('📊 Product visit tracked:', product.data.name);
+                console.log('📊 Product visit tracked:', product.name);
             } catch (error) {
                 console.error('Error tracking product visit:', error);
             }

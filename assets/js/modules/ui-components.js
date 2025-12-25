@@ -206,12 +206,8 @@ class UIComponents {
                             ${product.description || `High-quality ${product.category} product designed for optimal performance.`}
                         </p>
                         <div class="flex space-x-3">
-                            <button onclick="addToCart('${product.id}'); UIComponents.closeQuickViewModal();" 
-                                    class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
-                                Add to Cart
-                            </button>
                             <button onclick="viewProduct('${product.id}')" 
-                                    class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
                                 View Details
                             </button>
                         </div>

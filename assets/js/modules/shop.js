@@ -18,9 +18,23 @@ class ShopManager {
         console.log('Initializing catalog page...');
         
         try {
-            await this.loadProducts();
+            await this.loadCategories();
             this.setupEventListeners();
-            this.showCatalogView();
+            
+            // Check if a category was provided in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryId = urlParams.get('categoryId');
+            const categoryName = urlParams.get('category');
+            
+            if (categoryId) {
+                console.log('Loading category from URL by ID:', categoryId);
+                await this.loadCategoryById(categoryId);
+            } else if (categoryName) {
+                console.log('Loading category from URL by name:', categoryName);
+                await this.loadCategoryByName(categoryName);
+            } else {
+                this.showCatalogView();
+            }
         } catch (error) {
             console.error('Failed to initialize shop:', error);
             // Hide loading and show error
@@ -42,11 +56,137 @@ class ShopManager {
         }
     }
 
+    async loadCategories() {
+        try {
+            console.log('Loading categories from API...');
+            console.log('APIService available?', typeof APIService !== 'undefined');
+            console.log('API_CONFIG available?', typeof API_CONFIG !== 'undefined');
+            
+            if (typeof APIService === 'undefined') {
+                throw new Error('APIService is not defined');
+            }
+            
+            const response = await APIService.getCategories();
+            
+            if (response.status === 'success') {
+                this.categories = response.data.categories || [];
+                console.log('Loaded categories:', this.categories);
+            } else {
+                throw new Error(response.message || 'Failed to load categories');
+            }
+        } catch (error) {
+            console.error('Error loading categories:', error);
+            this.categories = [];
+        }
+    }
+
+    async loadCategoryById(categoryId) {
+        try {
+            console.log('Loading category products for ID:', categoryId);
+            
+            // Show loading state
+            const catalogView = document.getElementById('catalog-view');
+            const productsView = document.getElementById('products-view');
+            const productsGrid = document.getElementById('products-grid');
+            
+            if (catalogView) catalogView.classList.add('hidden');
+            if (productsView) productsView.classList.remove('hidden');
+            
+            // Show loading indicator
+            if (productsGrid) {
+                productsGrid.innerHTML = '<div class="col-span-full text-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div></div>';
+            }
+            
+            // Load category products using nopAPI
+            const response = await window.nopAPI.getCategoryProducts(categoryId, {
+                PageSize: 50,
+                PageNumber: 1
+            });
+            
+            if (response && response.catalog_products_model) {
+                const products = response.catalog_products_model.products || [];
+                const categoryName = response.name || 'Category';
+                
+                console.log(`Loaded ${products.length} products from category`);
+                
+                // Update breadcrumb
+                const breadcrumb = document.getElementById('breadcrumb');
+                const currentCategorySpan = document.getElementById('current-category');
+                if (breadcrumb) breadcrumb.classList.remove('hidden');
+                if (currentCategorySpan) currentCategorySpan.textContent = categoryName;
+                
+                // Store current category
+                this.currentCategory = categoryId;
+                this.allProducts = products;
+                
+                // Display products
+                this.displayProducts(products);
+                
+                // Update URL
+                const url = new URL(window.location);
+                url.searchParams.set('categoryId', categoryId);
+                window.history.pushState({}, '', url);
+            } else {
+                throw new Error('Invalid response from API');
+            }
+        } catch (error) {
+            console.error('Error loading category:', error);
+            const productsGrid = document.getElementById('products-grid');
+            if (productsGrid) {
+                productsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <p class="text-red-500 mb-4">Failed to load category products</p>
+                        <button onclick="window.location.href='shop.html'" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Back to Categories
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    async loadCategoryByName(categoryName) {
+        try {
+            console.log('Loading category by name:', categoryName);
+            
+            // First, get all categories to find the ID
+            const categories = await window.nopAPI.getHomePageCategories();
+            
+            // Find the category with matching se_name
+            const category = categories.find(cat => cat.se_name === categoryName);
+            
+            if (category) {
+                console.log('Found category:', category.name, 'ID:', category.id);
+                // Load the category using its ID
+                await this.loadCategoryById(category.id);
+            } else {
+                throw new Error(`Category not found: ${categoryName}`);
+            }
+        } catch (error) {
+            console.error('Error loading category by name:', error);
+            const productsGrid = document.getElementById('products-grid');
+            const catalogView = document.getElementById('catalog-view');
+            const productsView = document.getElementById('products-view');
+            
+            if (catalogView) catalogView.classList.add('hidden');
+            if (productsView) productsView.classList.remove('hidden');
+            
+            if (productsGrid) {
+                productsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <p class="text-red-500 mb-4">Category "${categoryName}" not found</p>
+                        <button onclick="window.location.href='shop.html'" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Back to Categories
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    }
+
     async loadProducts() {
         try {
             console.log('Loading products from API...');
-            console.log('APIService available?', typeof APIService !== 'undefined');
-            console.log('API_CONFIG available?', typeof API_CONFIG !== 'undefined');
             
             if (typeof APIService === 'undefined') {
                 throw new Error('APIService is not defined');
@@ -57,16 +197,12 @@ class ShopManager {
             if (response.status === 'success') {
                 this.allProducts = response.data.products || [];
                 console.log('Loaded products:', this.allProducts.length);
-                this.extractCategories();
             } else {
                 throw new Error(response.message || 'Failed to load products');
             }
         } catch (error) {
             console.error('Error loading products:', error);
-            console.log('Using fallback products');
-            this.allProducts = window.products || [];
-            console.log('Fallback products count:', this.allProducts.length);
-            this.extractCategories();
+            this.allProducts = [];
         }
     }
 
@@ -237,7 +373,7 @@ class ShopManager {
 
     createCategoryCard(category) {
         // Handle image URL - check various formats
-        let imageUrl = category.image || 'assets/images/placeholder.jpg';
+        let imageUrl = category.image || category.imageUrl || 'assets/images/placeholder.jpg';
         
         // If it's already a full URL (http/https), use it as is
         if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
@@ -268,7 +404,7 @@ class ShopManager {
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        ${category.count} ${category.count === 1 ? 'Product' : 'Products'}
+                        View Products
                     </p>
                 </div>
                 <div class="category-card-arrow">
@@ -280,11 +416,14 @@ class ShopManager {
         `;
     }
 
-    showProductsView(categorySlug) {
+    async showProductsView(categorySlug) {
         console.log('Showing products for category:', categorySlug);
         
         const category = this.categories.find(c => c.slug === categorySlug);
-        if (!category) return;
+        if (!category) {
+            console.error('Category not found:', categorySlug);
+            return;
+        }
         
         this.currentCategory = categorySlug;
         
@@ -304,8 +443,33 @@ class ShopManager {
         if (productsView) productsView.classList.remove('hidden');
         if (currentCategorySpan) currentCategorySpan.textContent = category.name;
         
+        // Load products for this category
+        await this.loadCategoryProducts(category.id);
+        
         // Display products
         this.displayProducts();
+    }
+
+    async loadCategoryProducts(categoryId) {
+        try {
+            console.log('Loading products for category ID:', categoryId);
+            
+            if (typeof APIService === 'undefined') {
+                throw new Error('APIService is not defined');
+            }
+            
+            const response = await APIService.getProducts({ categoryId });
+            
+            if (response.status === 'success') {
+                this.allProducts = response.data.products || [];
+                console.log('Loaded category products:', this.allProducts.length);
+            } else {
+                throw new Error(response.message || 'Failed to load products');
+            }
+        } catch (error) {
+            console.error('Error loading category products:', error);
+            this.allProducts = [];
+        }
     }
 
     filterProducts() {
@@ -320,15 +484,10 @@ class ShopManager {
         
         if (!productsGrid) return;
         
-        // Filter products by category using normalized names
-        let filteredProducts = this.allProducts.filter(product => {
-            const productCategoryName = product.category || 'Other';
-            const normalizedProductCategory = this.normalizeCategoryName(productCategoryName);
-            const productSlug = normalizedProductCategory.toLowerCase().replace(/\s+/g, '-');
-            return productSlug === this.currentCategory;
-        });
+        // Use all loaded products (already filtered by category from API)
+        let filteredProducts = [...this.allProducts];
         
-        // Apply search filter
+        // Apply search filter if any
         if (this.currentSearchTerm) {
             const term = this.currentSearchTerm.toLowerCase();
             filteredProducts = filteredProducts.filter(product =>
@@ -364,24 +523,27 @@ class ShopManager {
         const currency = product.currency || 'EGP';
         const isOnSale = originalPrice && originalPrice > productPrice;
         
-        // Handle image URL - check various formats
-        let imageUrl = product.mainImage || product.image || 'assets/images/placeholder.jpg';
+        // Handle image URL - support multiple API formats
+        let imageUrl = 'assets/images/placeholder.jpg';
         
-        // If it's already a full URL (http/https), use it as is
-        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-            // Use as is
+        // Check for nopCommerce API format first
+        if (product.picture_models && product.picture_models.length > 0) {
+            imageUrl = product.picture_models[0].image_url || product.picture_models[0].full_size_image_url;
         }
-        // If it starts with /, it's absolute from root
-        else if (imageUrl.startsWith('/')) {
-            // Use as is
+        // Check for default_picture_model (alternative nopCommerce format)
+        else if (product.default_picture_model && product.default_picture_model.image_url) {
+            imageUrl = product.default_picture_model.image_url;
         }
-        // If it already starts with assets/, use as is
-        else if (imageUrl.startsWith('assets/')) {
-            // Use as is
-        }
-        // Otherwise, assume it's a filename that needs the full path
-        else {
-            imageUrl = `assets/images/Products/${imageUrl}`;
+        // Fallback to legacy format
+        else if (product.mainImage || product.image) {
+            imageUrl = product.mainImage || product.image;
+            
+            // If not a full URL, construct the path
+            if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://') && !imageUrl.startsWith('/')) {
+                if (!imageUrl.startsWith('assets/')) {
+                    imageUrl = `assets/images/Products/${imageUrl}`;
+                }
+            }
         }
         
         return `
@@ -416,11 +578,7 @@ class ShopManager {
                     <h3 class="product-card-name">${product.name}</h3>
                     ${product.shortDescription ? `<p class="product-card-description">${product.shortDescription}</p>` : ''}
                     
-                    <div class="product-card-footer">
-                        <button onclick="event.stopPropagation(); addToCart('${product.id}', 1)" 
-                                class="product-card-add-btn">
-                            Add to Cart
-                        </button>
+                    <div class="product-card-info">
                     </div>
                 </div>
             </div>

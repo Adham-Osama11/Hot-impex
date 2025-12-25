@@ -927,27 +927,14 @@ function toggleDarkMode() {
 }
 
 function updateDarkModeToggle(isDarkMode) {
-    const toggle = document.getElementById('theme-toggle');
-    if (toggle) {
-        const sunIcon = toggle.querySelector('.sun-icon');
-        const moonIcon = toggle.querySelector('.moon-icon');
-        
-        if (isDarkMode) {
-            sunIcon.style.opacity = '0';
-            moonIcon.style.opacity = '1';
-        } else {
-            sunIcon.style.opacity = '1';
-            moonIcon.style.opacity = '0';
-        }
-    }
+    // No need to manually update icons - CSS handles it via html.dark class
+    // The icons automatically switch based on html.dark in navbar.css
 }
 
 function updateMobileDarkModeToggle(isDarkMode) {
-    const toggle = document.getElementById('mobile-theme-toggle');
-    if (toggle) {
-        const sunIcon = toggle.querySelector('.sun-icon');
-        const moonIcon = toggle.querySelector('.moon-icon');
-        
+    // No need to manually update icons - CSS handles it via html.dark class
+    // The icons automatically switch based on html.dark in navbar.css
+}
         if (isDarkMode) {
             sunIcon.style.opacity = '0';
             moonIcon.style.opacity = '1';

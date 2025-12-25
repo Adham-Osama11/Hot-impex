@@ -150,18 +150,25 @@ class HotImpexApp {
     async initializeHomePage() {
         console.log('Initializing home page...');
         
-        // Initialize hero product showcase
-        if (window.initializeHeroProductShowcase) {
-            initializeHeroProductShowcase();
-        }
+        // Use the new home page manager if available
+        if (window.homePageManager) {
+            // Home page manager will handle all initialization
+            console.log('Home page manager will handle initialization');
+        } else {
+            // Fallback to legacy initialization
+            // Initialize hero product showcase
+            if (window.initializeHeroProductShowcase) {
+                initializeHeroProductShowcase();
+            }
 
-        // Load and display featured products
-        if (window.productsManager) {
-            await productsManager.loadFeaturedProducts();
-        }
+            // Load and display featured products
+            if (window.productsManager) {
+                await productsManager.loadFeaturedProducts();
+            }
 
-        // Initialize any home-specific animations
-        this.initializeHomeAnimations();
+            // Initialize any home-specific animations
+            this.initializeHomeAnimations();
+        }
     }
 
     async initializeShopPage() {

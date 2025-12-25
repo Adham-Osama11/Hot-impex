@@ -11,16 +11,10 @@ const API_CONFIG = {
     // ==================== BASE CONFIGURATION ====================
     
     /**
-     * Base API URL - UPDATE THIS WITH YOUR NOPCOMMERCE API URL
-     * Example: 'https://api.hotimpex.com/api'
+     * Base API URL - Domnex Web API Frontend
+     * Example: 'http://backend.hotimpex.net'
      */
-    BASE_URL: 'https://your-nopcommerce-server.com/api',
-    
-    /**
-     * API Key - UPDATE THIS WITH YOUR API KEY
-     * Get this from your backend team
-     */
-    API_KEY: 'your-api-key-here',
+    BASE_URL: 'http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net',
     
     // ==================== REQUEST HEADERS ====================
     
@@ -29,57 +23,57 @@ const API_CONFIG = {
         'Accept': 'application/json'
     },
     
-    // ==================== API ENDPOINTS ====================
+    // ==================== API ENDPOINTS (CATALOG ONLY) ====================
     
     ENDPOINTS: {
-        // Authentication & User Management
-        LOGIN: '/customers/login',
-        REGISTER: '/customers/register',
-        LOGOUT: '/customers/logout',
-        CURRENT_USER: '/customers/current',
-        FORGOT_PASSWORD: '/customers/forgotpassword',
-        RESET_PASSWORD: '/customers/resetpassword',
+        // API Version
+        API_VERSION: '/api-frontend/Authenticate/GetApiVersion', // GET
         
         // Products
-        PRODUCTS: '/products',
-        PRODUCT_BY_ID: '/products/{id}',
-        PRODUCT_SEARCH: '/products/search',
+        PRODUCT_BY_ID: '/api-frontend/Product/GetProductDetails/{productId}', // GET
+        PRODUCT_COMBINATIONS: '/api-frontend/Product/GetProductCombinations/{productId}', // GET
+        HOME_PAGE_PRODUCTS: '/api-frontend/Product/HomePageProducts', // GET
+        RELATED_PRODUCTS: '/api-frontend/Product/GetRelatedProducts/{productId}', // GET
+        RECENTLY_VIEWED_PRODUCTS: '/api-frontend/Product/RecentlyViewedProducts', // GET
         
         // Categories
-        CATEGORIES: '/categories',
-        CATEGORY_BY_ID: '/categories/{id}',
+        CATALOG_ROOT: '/api-frontend/Catalog/GetCatalogRoot', // GET (returns all categories)
+        CATEGORY_BY_ID: '/api-frontend/Catalog/GetCategory/{categoryId}', // POST
+        CATEGORY_PRODUCTS: '/api-frontend/Catalog/GetCategoryProducts/{categoryId}', // POST
+        CATEGORY_SUBCATEGORIES: '/api-frontend/Catalog/GetCatalogSubCategories/{id}', // GET
+        HOME_PAGE_CATEGORIES: '/api-frontend/Catalog/HomePageCategories', // GET
         
-        // Customer Profile
-        CUSTOMER_PROFILE: '/customers/{id}',
-        CUSTOMER_ADDRESSES: '/customers/{id}/addresses',
-        CUSTOMER_AVATAR: '/customers/{id}/avatar',
+        // Search
+        SEARCH: '/api-frontend/Catalog/Search', // POST
+        SEARCH_PRODUCTS: '/api-frontend/Catalog/SearchProducts', // POST
+        SEARCH_AUTOCOMPLETE: '/api-frontend/Catalog/SearchTermAutoComplete', // GET with ?term=
+        
+        // New Products
+        NEW_PRODUCTS: '/api-frontend/Catalog/NewProducts', // GET
+        NEW_PRODUCTS_RSS: '/api-frontend/Catalog/NewProductsRss', // GET
+        
+        // Product Tags
+        PRODUCTS_BY_TAG: '/api-frontend/Catalog/GetProductsByTag/{productTagId}', // POST
+        TAG_PRODUCTS: '/api-frontend/Catalog/GetTagProducts/{productTagId}', // POST
+        ALL_PRODUCT_TAGS: '/api-frontend/Catalog/ProductTagsAll', // GET
+        
+        // Manufacturers
+        MANUFACTURER_BY_ID: '/api-frontend/Catalog/GetManufacturer/{manufacturerId}', // POST
+        MANUFACTURER_PRODUCTS: '/api-frontend/Catalog/GetManufacturerProducts/{manufacturerId}', // POST
+        ALL_MANUFACTURERS: '/api-frontend/Catalog/ManufacturerAll', // GET
+        
+        // Vendors
+        VENDOR_BY_ID: '/api-frontend/Catalog/GetVendor/{vendorId}', // POST
+        VENDOR_PRODUCTS: '/api-frontend/Catalog/GetVendorProducts/{vendorId}', // POST
+        ALL_VENDORS: '/api-frontend/Catalog/VendorAll', // GET
         
         // Contact & Communication
-        CONTACT_SEND: '/contact/send',
-        NEWSLETTER: '/newsletter/subscribe',
-        
-        // Admin - Products
-        ADMIN_PRODUCTS: '/admin/products',
-        ADMIN_PRODUCT_BY_ID: '/admin/products/{id}',
-        
-        // Admin - Categories
-        ADMIN_CATEGORIES: '/admin/categories',
-        ADMIN_CATEGORY_BY_ID: '/admin/categories/{id}',
-        
-        // Admin - Customers
-        ADMIN_CUSTOMERS: '/admin/customers',
-        ADMIN_CUSTOMER_BY_ID: '/admin/customers/{id}',
-        
-        // Admin - Statistics
-        ADMIN_STATISTICS: '/admin/statistics/dashboard',
-        
-        // Images & Media
-        IMAGE_THUMB: '/images/thumbs',
-        IMAGE_FULL: '/images/full',
+        CONTACT_US: '/api-frontend/Common/ContactUs', // GET
+        CONTACT_US_SEND: '/api-frontend/Common/ContactUsSend', // POST
         
         // Utility
-        HEALTH: '/health',
-        STORE_INFO: '/store/info'
+        TOPIC_DETAILS: '/api-frontend/Topic/GetTopicDetails/{id}', // GET
+        TOPIC_BY_SYSTEM_NAME: '/api-frontend/Topic/GetTopicDetailsBySystemName/{systemName}' // GET
     },
     
     // ==================== PAGINATION SETTINGS ====================

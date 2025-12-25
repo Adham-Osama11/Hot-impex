@@ -222,12 +222,8 @@ class ProductsManager {
                     </div>
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="addToCart('${product.id}')" 
-                            class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                        Add to Cart
-                    </button>
                     <button onclick="openQuickView('${product.id}')" 
-                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
                         Quick View
                     </button>
                 </div>

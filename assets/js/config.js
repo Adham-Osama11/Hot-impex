@@ -14,7 +14,7 @@ const API_CONFIG = {
      * Base API URL - Domnex Web API Frontend
      * Example: 'http://backend.hotimpex.net'
      */
-    BASE_URL: 'http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net',
+    BASE_URL: '',  // Use relative URLs to work with Netlify proxy
     
     // ==================== REQUEST HEADERS ====================
     

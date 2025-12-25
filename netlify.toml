@@ -2,6 +2,12 @@
   publish = "."
 
 [[redirects]]
+  from = "/api-frontend/*"
+  to = "http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net/api-frontend/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

@@ -431,19 +431,23 @@ class NopCommerceAPI {
 
 // ==================== EXPORT AND INITIALIZATION ====================
 
-// Initialize global API instance when config is available
-if (typeof window !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
+// Initialize global API instance immediately when config is available
+if (typeof window !== 'undefined' && typeof API_CONFIG !== 'undefined') {
+    window.nopAPI = new NopCommerceAPI(API_CONFIG);
+    console.log('[nopCommerce API] Catalog service initialized');
+} else if (typeof window !== 'undefined') {
+    // Wait for config to be available
+    const checkConfig = setInterval(() => {
         if (typeof API_CONFIG !== 'undefined') {
             window.nopAPI = new NopCommerceAPI(API_CONFIG);
-            console.log('[nopCommerce API] Catalog service initialized');
-        } else {
-            console.error('[nopCommerce API] API_CONFIG not found. Please include config.js before this script.');
+            console.log('[nopCommerce API] Catalog service initialized (delayed)');
+            clearInterval(checkConfig);
         }
-    });
+    }, 10);
 }
 
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = NopCommerceAPI;
 }
+

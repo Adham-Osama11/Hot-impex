@@ -6,7 +6,7 @@
 
 class HomePageManager {
     constructor() {
-        this.api = window.nopAPI;
+        this.api = null; // Will be set in init
         this.heroProducts = [];
         this.currentHeroIndex = 0;
         this.autoSlideInterval = null;
@@ -18,6 +18,38 @@ class HomePageManager {
      */
     async init() {
         console.log('Initializing home page manager...');
+        
+        // Wait for nopAPI to be available
+        if (typeof window.nopAPI === 'undefined') {
+            console.log('Waiting for nopAPI to initialize...');
+            await new Promise(resolve => {
+                const checkAPI = setInterval(() => {
+                    if (typeof window.nopAPI !== 'undefined') {
+                        console.log('nopAPI is now available');
+                        clearInterval(checkAPI);
+                        resolve();
+                    }
+                }, 50);
+                
+                // Timeout after 5 seconds
+                setTimeout(() => {
+                    clearInterval(checkAPI);
+                    console.error('nopAPI initialization timeout');
+                    resolve();
+                }, 5000);
+            });
+        }
+        
+        // Set the API reference
+        this.api = window.nopAPI;
+        
+        if (!this.api) {
+            console.error('❌ nopAPI not available after timeout');
+            this.showStatusBadge('⚠ Using default content', 'error');
+            setTimeout(() => this.hideStatusBadge(), 5000);
+            this.showErrorState();
+            return;
+        }
         
         try {
             // Show loading status
@@ -49,29 +81,17 @@ class HomePageManager {
      * Load categories that are marked to show on home page
      */
     async loadHomePageCategories() {
-        const loadingEl = document.getElementById('categories-loading');
         const gridEl = document.getElementById('categories-grid');
         
         try {
             console.log('Loading home page categories...');
             
-            // Show loading state
-            if (loadingEl) {
-                loadingEl.style.display = 'block';
-            }
-            if (gridEl) {
-                gridEl.style.display = 'none';
-            }
-            
-            const categories = await this.api.getHomePageCategories();
-            
-            // Hide loading state
-            if (loadingEl) {
-                loadingEl.style.display = 'none';
-            }
+            // Don't hide the grid - keep fallback visible
             if (gridEl) {
                 gridEl.style.display = 'grid';
             }
+            
+            const categories = await this.api.getHomePageCategories();
             
             if (categories && categories.length > 0) {
                 this.renderCategories(categories);
@@ -81,11 +101,9 @@ class HomePageManager {
             }
         } catch (error) {
             console.error('❌ Error loading home page categories:', error);
+            console.log('ℹ️ Using fallback categories from HTML');
             
-            // Hide loading state
-            if (loadingEl) {
-                loadingEl.style.display = 'none';
-            }
+            // Make sure grid is visible
             if (gridEl) {
                 gridEl.style.display = 'grid';
             }
@@ -98,18 +116,14 @@ class HomePageManager {
      * If none exist, loads products from categories marked as "show on home"
      */
     async loadHomePageProducts() {
-        const loadingEl = document.getElementById('products-loading');
         const gridEl = document.getElementById('products-grid');
         
         try {
             console.log('Loading home page products...');
             
-            // Show loading state
-            if (loadingEl) {
-                loadingEl.style.display = 'block';
-            }
+            // Don't hide the grid - keep fallback visible
             if (gridEl) {
-                gridEl.style.display = 'none';
+                gridEl.style.display = 'grid';
             }
             
             let products = await this.api.getHomePageProducts();
@@ -148,14 +162,6 @@ class HomePageManager {
                 console.log(`✅ Loaded ${products.length} home page products`);
             }
             
-            // Hide loading state
-            if (loadingEl) {
-                loadingEl.style.display = 'none';
-            }
-            if (gridEl) {
-                gridEl.style.display = 'grid';
-            }
-            
             if (products && products.length > 0) {
                 this.renderProducts(products);
             } else {
@@ -163,11 +169,9 @@ class HomePageManager {
             }
         } catch (error) {
             console.error('❌ Error loading home page products:', error);
+            console.log('ℹ️ Using fallback products from HTML');
             
-            // Hide loading state
-            if (loadingEl) {
-                loadingEl.style.display = 'none';
-            }
+            // Make sure grid is visible
             if (gridEl) {
                 gridEl.style.display = 'grid';
             }
@@ -291,7 +295,7 @@ class HomePageManager {
                 <div class="card__glow"></div>
                 <div class="card__content">
                     <div class="card__badge">Featured</div>
-                    <div class="card__image" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;"></div>
+                    <div class="card__image" style="background-image: url('${imageUrl}');"></div>
                     <div class="card__text">
                         <p class="card__title">${productName}</p>
                         <p class="card__description">${this.truncateText(shortDescription, 60)}</p>

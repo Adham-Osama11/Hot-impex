@@ -17,6 +17,27 @@ class ShopManager {
 
         console.log('Initializing catalog page...');
         
+        // Wait for nopAPI to be available
+        if (typeof window.nopAPI === 'undefined') {
+            console.log('Waiting for nopAPI to initialize...');
+            await new Promise(resolve => {
+                const checkAPI = setInterval(() => {
+                    if (typeof window.nopAPI !== 'undefined') {
+                        console.log('nopAPI is now available');
+                        clearInterval(checkAPI);
+                        resolve();
+                    }
+                }, 50);
+                
+                // Timeout after 5 seconds
+                setTimeout(() => {
+                    clearInterval(checkAPI);
+                    console.error('nopAPI initialization timeout');
+                    resolve();
+                }, 5000);
+            });
+        }
+        
         try {
             await this.loadCategories();
             this.setupEventListeners();
@@ -59,20 +80,28 @@ class ShopManager {
     async loadCategories() {
         try {
             console.log('Loading categories from API...');
-            console.log('APIService available?', typeof APIService !== 'undefined');
-            console.log('API_CONFIG available?', typeof API_CONFIG !== 'undefined');
+            console.log('nopAPI available?', typeof window.nopAPI !== 'undefined');
             
-            if (typeof APIService === 'undefined') {
-                throw new Error('APIService is not defined');
+            if (typeof window.nopAPI === 'undefined') {
+                throw new Error('nopAPI is not defined');
             }
             
-            const response = await APIService.getCategories();
+            // Get categories from nopCommerce API
+            const categories = await window.nopAPI.getHomePageCategories();
             
-            if (response.status === 'success') {
-                this.categories = response.data.categories || [];
-                console.log('Loaded categories:', this.categories);
+            if (categories && Array.isArray(categories) && categories.length > 0) {
+                // Transform categories to expected format
+                this.categories = categories.map(cat => ({
+                    id: cat.id,
+                    name: cat.name,
+                    slug: cat.se_name || cat.name.toLowerCase().replace(/\s+/g, '-'),
+                    image: cat.picture_model?.image_url || cat.picture_model?.full_size_image_url || 'assets/images/placeholder.jpg',
+                    count: 0 // Will be populated if needed
+                }));
+                console.log('Loaded categories:', this.categories.length);
             } else {
-                throw new Error(response.message || 'Failed to load categories');
+                console.log('No categories returned from API');
+                this.categories = [];
             }
         } catch (error) {
             console.error('Error loading categories:', error);
@@ -347,10 +376,16 @@ class ShopManager {
         categoriesGrid.classList.remove('hidden');
         
         if (this.categories.length === 0) {
-            console.warn('No categories to display');
+            console.warn('No categories to display - showing message');
             categoriesGrid.innerHTML = `
                 <div class="col-span-full text-center py-20">
-                    <p class="text-gray-500 dark:text-gray-400">No categories available</p>
+                    <div class="max-w-md mx-auto">
+                        <svg class="w-20 h-20 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                        <p class="text-gray-600 dark:text-gray-400 text-lg mb-2">No categories available at the moment</p>
+                        <p class="text-gray-500 dark:text-gray-500 text-sm">Please check back later or contact support if this issue persists.</p>
+                    </div>
                 </div>
             `;
             return;
@@ -437,14 +472,23 @@ class ShopManager {
         const catalogView = document.getElementById('catalog-view');
         const productsView = document.getElementById('products-view');
         const currentCategorySpan = document.getElementById('current-category');
+        const productsGrid = document.getElementById('products-grid');
+        const productsLoading = document.getElementById('products-loading');
         
         if (breadcrumb) breadcrumb.classList.remove('hidden');
         if (catalogView) catalogView.classList.add('hidden');
         if (productsView) productsView.classList.remove('hidden');
         if (currentCategorySpan) currentCategorySpan.textContent = category.name;
         
+        // Show loading state
+        if (productsLoading) productsLoading.classList.remove('hidden');
+        if (productsGrid) productsGrid.innerHTML = '';
+        
         // Load products for this category
         await this.loadCategoryProducts(category.id);
+        
+        // Hide loading state
+        if (productsLoading) productsLoading.classList.add('hidden');
         
         // Display products
         this.displayProducts();
@@ -454,17 +498,35 @@ class ShopManager {
         try {
             console.log('Loading products for category ID:', categoryId);
             
-            if (typeof APIService === 'undefined') {
-                throw new Error('APIService is not defined');
+            if (typeof window.nopAPI === 'undefined') {
+                throw new Error('nopAPI is not defined');
             }
             
-            const response = await APIService.getProducts({ categoryId });
+            const response = await window.nopAPI.getCategoryProducts(categoryId, {
+                PageSize: 100,
+                PageNumber: 1
+            });
             
-            if (response.status === 'success') {
-                this.allProducts = response.data.products || [];
+            if (response && response.catalog_products_model) {
+                const products = response.catalog_products_model.products || [];
+                
+                // Transform products to expected format
+                this.allProducts = products.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    shortDescription: p.short_description || '',
+                    category: response.name || 'Product',
+                    price: p.product_price?.price || 0,
+                    currency: 'EGP',
+                    featured: p.show_on_home_page || false,
+                    picture_models: p.picture_models || [],
+                    default_picture_model: p.default_picture_model || null
+                }));
+                
                 console.log('Loaded category products:', this.allProducts.length);
             } else {
-                throw new Error(response.message || 'Failed to load products');
+                console.log('No products found in response');
+                this.allProducts = [];
             }
         } catch (error) {
             console.error('Error loading category products:', error);

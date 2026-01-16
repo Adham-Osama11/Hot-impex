@@ -610,7 +610,7 @@ class ShopManager {
         
         // Fix relative URLs from API - prepend backend domain
         if (imageUrl && imageUrl.startsWith('/')) {
-            imageUrl = `http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
+            imageUrl = `https://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
         }
         
         return `

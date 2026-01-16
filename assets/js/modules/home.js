@@ -244,7 +244,7 @@ class HomePageManager {
         // Fix image URL - prepend backend domain if it's a relative path
         let fullImageUrl = imageUrl;
         if (imageUrl && imageUrl.startsWith('/')) {
-            fullImageUrl = `http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
+            fullImageUrl = `https://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
         }
         
         card.innerHTML = `
@@ -303,7 +303,7 @@ class HomePageManager {
 
         // Fix image URL - prepend backend domain if it's a relative path
         if (imageUrl && imageUrl.startsWith('/')) {
-            imageUrl = `http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
+            imageUrl = `https://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
         }
 
         const productName = product.name || 'Product';

@@ -100,8 +100,8 @@
 /* Enhanced product and category cards for dynamic content */
 #products-grid .card,
 #categories-grid .collection-card {
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 1; /* Show by default for fallback content */
+    transform: translateY(0);
 }
 
 #products-grid .card.loaded,

@@ -93,8 +93,9 @@ class HomePageManager {
             }
             
             const categories = await this.api.getHomePageCategories();
+            console.log('API returned categories:', categories);
             
-            if (categories && categories.length > 0) {
+            if (categories && Array.isArray(categories) && categories.length > 0) {
                 this.renderCategories(categories);
                 console.log(`✅ Loaded ${categories.length} home page categories`);
             } else {
@@ -128,6 +129,7 @@ class HomePageManager {
             }
             
             let products = await this.api.getHomePageProducts();
+            console.log('API returned products (home page):', products);
             
             // If no products with "show on home" are found, 
             // load products from categories that have "show on home" enabled
@@ -211,7 +213,8 @@ class HomePageManager {
         if (!collectionsGrid) return;
 
         if (categories && categories.length > 0) {
-            collectionsGrid.innerHTML = '';
+            console.log('Rendering API categories...');
+            collectionsGrid.innerHTML = ''; // Only clear when we have API data to replace with
             const colorSchemes = ['purple', 'emerald', 'orange', 'blue', 'rose', 'teal'];
 
             categories.forEach((category, index) => {
@@ -225,6 +228,8 @@ class HomePageManager {
             });
             
             this.animateCategories();
+        } else {
+            console.log('No categories to render, keeping fallback HTML');
         }
     }
 
@@ -263,7 +268,8 @@ class HomePageManager {
         if (!productsGrid) return;
 
         if (products && products.length > 0) {
-            productsGrid.innerHTML = '';
+            console.log('Rendering API products...');
+            productsGrid.innerHTML = ''; // Only clear when we have API data to replace with
             const displayProducts = products.slice(0, 8);
 
             displayProducts.forEach((product) => {
@@ -272,6 +278,8 @@ class HomePageManager {
             });
             
             this.animateProducts();
+        } else {
+            console.log('No products to render, keeping fallback HTML');
         }
     }
 

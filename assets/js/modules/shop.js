@@ -86,19 +86,47 @@ class ShopManager {
                 throw new Error('nopAPI is not defined');
             }
             
-            // Get categories from nopCommerce API
-            const categories = await window.nopAPI.getHomePageCategories();
+            // Get ALL categories from nopCommerce API (not just homepage categories)
+            const categories = await window.nopAPI.getCategories(true);
             
             if (categories && Array.isArray(categories) && categories.length > 0) {
                 // Transform categories to expected format
-                this.categories = categories.map(cat => ({
-                    id: cat.id,
-                    name: cat.name,
-                    slug: cat.se_name || cat.name.toLowerCase().replace(/\s+/g, '-'),
-                    image: cat.picture_model?.image_url || cat.picture_model?.full_size_image_url || 'assets/images/placeholder.jpg',
-                    count: 0 // Will be populated if needed
-                }));
+                this.categories = categories.map(cat => {
+                    // Handle category image URL
+                    let imageUrl = 'assets/images/placeholder.jpg';
+                    if (cat.picture_model) {
+                        const picModel = cat.picture_model;
+                        // Try different image URL properties
+                        const apiImageUrl = picModel.image_url || picModel.imageUrl || 
+                                          picModel.full_size_image_url || picModel.fullSizeImageUrl;
+                        
+                        if (apiImageUrl) {
+                            // If it's already a full URL, use it as is
+                            if (apiImageUrl.startsWith('http://') || apiImageUrl.startsWith('https://')) {
+                                imageUrl = apiImageUrl;
+                            }
+                            // If it starts with /, prepend base URL if configured
+                            else if (apiImageUrl.startsWith('/')) {
+                                const baseUrl = window.API_CONFIG?.BASE_URL || '';
+                                imageUrl = baseUrl ? `${baseUrl}${apiImageUrl}` : apiImageUrl;
+                            }
+                            // Otherwise use as relative path
+                            else {
+                                imageUrl = apiImageUrl;
+                            }
+                        }
+                    }
+                    
+                    return {
+                        id: cat.id,
+                        name: cat.name,
+                        slug: cat.se_name || cat.name.toLowerCase().replace(/\s+/g, '-'),
+                        image: imageUrl,
+                        count: 0 // Will be populated if needed
+                    };
+                });
                 console.log('Loaded categories:', this.categories.length);
+                console.log('Category images:', this.categories.map(c => ({ name: c.name, image: c.image })));
             } else {
                 console.log('No categories returned from API');
                 this.categories = [];
@@ -590,11 +618,42 @@ class ShopManager {
         
         // Check for nopCommerce API format first
         if (product.picture_models && product.picture_models.length > 0) {
-            imageUrl = product.picture_models[0].image_url || product.picture_models[0].full_size_image_url;
+            const picModel = product.picture_models[0];
+            const apiImageUrl = picModel.image_url || picModel.imageUrl || 
+                              picModel.full_size_image_url || picModel.fullSizeImageUrl;
+            
+            if (apiImageUrl) {
+                // If it's already a full URL, use it
+                if (apiImageUrl.startsWith('http://') || apiImageUrl.startsWith('https://')) {
+                    imageUrl = apiImageUrl;
+                }
+                // If it starts with /, prepend base URL if configured
+                else if (apiImageUrl.startsWith('/')) {
+                    const baseUrl = window.API_CONFIG?.BASE_URL || '';
+                    imageUrl = baseUrl ? `${baseUrl}${apiImageUrl}` : apiImageUrl;
+                }
+                // Otherwise use as relative path
+                else {
+                    imageUrl = apiImageUrl;
+                }
+            }
         }
         // Check for default_picture_model (alternative nopCommerce format)
-        else if (product.default_picture_model && product.default_picture_model.image_url) {
-            imageUrl = product.default_picture_model.image_url;
+        else if (product.default_picture_model) {
+            const picModel = product.default_picture_model;
+            const apiImageUrl = picModel.image_url || picModel.imageUrl || 
+                              picModel.full_size_image_url || picModel.fullSizeImageUrl;
+            
+            if (apiImageUrl) {
+                if (apiImageUrl.startsWith('http://') || apiImageUrl.startsWith('https://')) {
+                    imageUrl = apiImageUrl;
+                } else if (apiImageUrl.startsWith('/')) {
+                    const baseUrl = window.API_CONFIG?.BASE_URL || '';
+                    imageUrl = baseUrl ? `${baseUrl}${apiImageUrl}` : apiImageUrl;
+                } else {
+                    imageUrl = apiImageUrl;
+                }
+            }
         }
         // Fallback to legacy format
         else if (product.mainImage || product.image) {

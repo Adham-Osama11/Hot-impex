@@ -52,8 +52,8 @@ class HomePageManager {
         }
         
         try {
-            // Show loading status
-            this.showStatusBadge('Loading products & categories...', 'loading');
+            // Don't show loading badge since fallback content is visible
+            // this.showStatusBadge('Loading products & categories...', 'loading');
             
             // Load and display content
             await Promise.all([
@@ -71,8 +71,9 @@ class HomePageManager {
             console.log('✅ Home page manager initialized successfully');
         } catch (error) {
             console.error('❌ Error initializing home page:', error);
-            this.showStatusBadge('⚠ Using default content', 'error');
-            setTimeout(() => this.hideStatusBadge(), 5000);
+            // Don't show error badge, just log it
+            // this.showStatusBadge('⚠ Using default content', 'error');
+            // setTimeout(() => this.hideStatusBadge(), 5000);
             this.showErrorState();
         }
     }

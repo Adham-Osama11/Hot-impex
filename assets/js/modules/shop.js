@@ -608,6 +608,11 @@ class ShopManager {
             }
         }
         
+        // Fix relative URLs from API - prepend backend domain
+        if (imageUrl && imageUrl.startsWith('/')) {
+            imageUrl = `http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
+        }
+        
         return `
             <div class="product-card" data-product-id="${product.id}">
                 <div class="product-card-image-container">

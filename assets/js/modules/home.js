@@ -241,10 +241,16 @@ class HomePageManager {
         card.href = `shop.html?category=${category.se_name || category.id}`;
         card.className = 'collection-card group';
         
+        // Fix image URL - prepend backend domain if it's a relative path
+        let fullImageUrl = imageUrl;
+        if (imageUrl && imageUrl.startsWith('/')) {
+            fullImageUrl = `http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
+        }
+        
         card.innerHTML = `
             <div class="collection-bg-overlay ${colorScheme}"></div>
             <div class="collection-content">
-                <img src="${imageUrl}" 
+                <img src="${fullImageUrl}" 
                      alt="${category.name}" 
                      class="collection-image"
                      onerror="this.src='assets/images/placeholder.png'">
@@ -291,9 +297,14 @@ class HomePageManager {
         link.href = `product.html?id=${product.id}`;
         link.className = 'block';
 
-        const imageUrl = product.default_picture_model?.image_url || 
+        let imageUrl = product.default_picture_model?.image_url || 
                         product.picture_models?.[0]?.image_url ||
                         'assets/images/placeholder.png';
+
+        // Fix image URL - prepend backend domain if it's a relative path
+        if (imageUrl && imageUrl.startsWith('/')) {
+            imageUrl = `http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net${imageUrl}`;
+        }
 
         const productName = product.name || 'Product';
         const shortDescription = product.short_description || '';

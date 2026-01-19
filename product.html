@@ -153,7 +153,6 @@
             <div class="product-details-section">
                 <!-- Product Title and Price -->
                 <div class="product-header">
-                    <span id="product-badge" class="product-badge product-badge-featured">Loading...</span>
                     <h1 id="product-title" class="product-title">Loading Product...</h1>
                     <!-- <div class="flex flex-col space-y-2 mb-4">
                         <span id="product-price" class="text-xl lg:text-2xl font-bold text-blue-600">EGP 0.00</span>
@@ -193,18 +192,6 @@
                     </div>
                 </div>
 
-                <!-- Key Features - Compact -->
-                <div class="product-features-card">
-                    <h3 class="product-features-title">
-                        <svg class="product-features-icon" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        Key Features
-                    </h3>
-                    <div id="product-features" class="product-features-grid">
-                        <!-- Features will be dynamically loaded -->
-                    </div>
-                </div>
 
                 <!-- Product Options - Compact -->
                 <div class="space-y-4">
@@ -276,19 +263,6 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-8 bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
-                            <h4 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                                <div class="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                Perfect For:
-                            </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- This will be populated by JavaScript -->
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -306,6 +280,19 @@
                             <ul class="space-y-2 text-gray-700">
                                 <!-- This will be populated by JavaScript -->
                             </ul>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
+                        <h4 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                            <div class="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            Perfect For:
+                        </h4>
+                        <div id="perfect-for-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- This will be populated by JavaScript -->
                         </div>
                     </div>
                 </div>
@@ -482,25 +469,10 @@
                 breadcrumbProduct.textContent = product.name;
             }
             
-            // Update product title and badge
+            // Update product title
             const productTitle = document.getElementById('product-title');
             if (productTitle) {
                 productTitle.textContent = product.name;
-            }
-            
-            // Update badge based on product properties
-            const badge = document.getElementById('product-badge');
-            if (badge) {
-                if (product.featured) {
-                    badge.textContent = 'Featured';
-                    badge.className = 'product-badge product-badge-featured';
-                } else if (product.bestSeller) {
-                    badge.textContent = 'Best Seller';
-                    badge.className = 'product-badge product-badge-bestseller';
-                } else {
-                    badge.textContent = 'Professional Grade';
-                    badge.className = 'product-badge product-badge-default';
-                }
             }
 
             // Update price (with null checks since price section is commented out)
@@ -566,8 +538,8 @@
                 fullDescriptionElement.innerHTML = description;
             }
             
-            // Update "Perfect For" section in Description tab
-            const perfectForGrid = document.querySelector('#description-tab .grid.grid-cols-1.md\\:grid-cols-2');
+            // Update "Perfect For" section in Specifications tab
+            const perfectForGrid = document.getElementById('perfect-for-grid');
             if (perfectForGrid && product.features && product.features.length > 0) {
                 perfectForGrid.innerHTML = '';
                 product.features.slice(0, 6).forEach(feature => {
@@ -662,9 +634,6 @@
 
             // Update images
             updateProductImages(product);
-
-            // Update features
-            updateProductFeatures(product);
 
             // Update cart button
             updateCartButton();
@@ -1140,40 +1109,6 @@
             }
         }
 
-        // Update product features
-        function updateProductFeatures(product) {
-            const featuresContainer = document.getElementById('product-features');
-            featuresContainer.innerHTML = '';
-
-            if (product.features && product.features.length > 0) {
-                product.features.forEach(feature => {
-                    const featureDiv = document.createElement('div');
-                    featureDiv.className = 'flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group';
-                    featureDiv.innerHTML = `
-                        <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="text-gray-800 font-medium text-sm">${feature}</span>
-                    `;
-                    featuresContainer.appendChild(featureDiv);
-                });
-            } else {
-                // Fallback features if none provided
-                const defaultFeatures = ['High Quality', 'Professional Grade', 'Reliable Performance', 'Easy Installation'];
-                defaultFeatures.forEach(feature => {
-                    const featureDiv = document.createElement('div');
-                    featureDiv.className = 'flex items-center space-x-2 p-2 rounded-lg hover:bg-emerald-50 transition-colors duration-200 group';
-                    featureDiv.innerHTML = `
-                        <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="text-gray-800 font-medium text-sm">${feature}</span>
-                    `;
-                    featuresContainer.appendChild(featureDiv);
-                });
-            }
-        }
-
         // Image switching functionality
         window.changeImage = function(src, clickedThumbnail) {
             const mainImage = document.getElementById('main-image');
@@ -1251,73 +1186,99 @@
 
         // Load and display related products
         async function loadRelatedProducts(currentProduct) {
+            const grid = document.getElementById('related-products-grid');
             
             try {
-                // Try API first
-                const response = await fetch('/api/products');
-                let allProducts = [];
+                console.log('Loading related products for:', currentProduct);
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.status === 'success') {
-                        allProducts = data.data.products;
+                if (!currentProduct) {
+                    console.error('No current product provided');
+                    if (grid) {
+                        grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">No related products available</p></div>';
                     }
-                } else {
-                    // Fallback to local products data
-                    if (window.products && Array.isArray(window.products)) {
-                        allProducts = window.products;
-                    }
-                }
-
-                if (allProducts.length === 0) {
                     return;
                 }
-
-                // Filter related products
-                let relatedProducts = getRelatedProducts(currentProduct, allProducts);
                 
-                // Display related products
-                displayRelatedProducts(relatedProducts);
+                // Check if categoryId exists, if not try to extract from breadcrumb or use a default
+                let categoryId = currentProduct.categoryId || currentProduct.category_id;
+                
+                // If still no category ID, try to get from breadcrumb
+                if (!categoryId && currentProduct.breadcrumb) {
+                    categoryId = currentProduct.breadcrumb.category_id;
+                }
+                
+                console.log('Using category ID:', categoryId);
+                
+                if (!categoryId) {
+                    console.log('No category ID found, showing message');
+                    if (grid) {
+                        grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">No related products available</p></div>';
+                    }
+                    return;
+                }
+                
+                // Fetch all products from the same category
+                console.log('Fetching products from category:', categoryId);
+                const categoryResult = await nopAPI.getCategoryProducts(categoryId, { 
+                    pageNumber: 1,
+                    pageSize: 50 
+                });
+                
+                console.log('Category result:', categoryResult);
+                
+                const allProducts = categoryResult?.catalog_products_model?.products || categoryResult?.products || [];
+                console.log('All products from category:', allProducts.length);
+                
+                // Filter out the current product
+                const availableProducts = allProducts.filter(p => p.id !== currentProduct.id);
+                console.log('Available products after filtering current:', availableProducts.length);
+                
+                if (availableProducts.length === 0) {
+                    if (grid) {
+                        grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">No related products available</p></div>';
+                    }
+                    return;
+                }
+                
+                // Shuffle and pick 4 random products
+                const shuffled = availableProducts.sort(() => 0.5 - Math.random());
+                const relatedProducts = shuffled.slice(0, 4);
+                
+                console.log('Selected related products:', relatedProducts);
+                
+                // Transform and display
+                const transformedProducts = relatedProducts.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    price: p.price?.value || p.product_price?.price || 0,
+                    currency: 'EGP',
+                    mainImage: p.default_picture_model?.image_url || p.picture_models?.[0]?.image_url || '',
+                    seName: p.se_name || ''
+                }));
+                
+                console.log('Transformed products:', transformedProducts);
+                displayRelatedProducts(transformedProducts);
                 
             } catch (error) {
-                // Hide loading state and show error or empty message
-                const grid = document.getElementById('related-products-grid');
+                console.error('Error loading related products:', error);
                 if (grid) {
                     grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">Unable to load related products</p></div>';
                 }
             }
         }
 
-        // Get related products based on current product
-        function getRelatedProducts(currentProduct, allProducts) {
-            const maxRelatedProducts = 4;
-            let relatedProducts = [];
+        // Display related products
+        function displayRelatedProducts(products) {
+            const grid = document.getElementById('related-products-grid');
+            if (!grid) return;
 
-            // First, try to get products from the same category
-            const sameCategory = allProducts.filter(product => 
-                product.id !== currentProduct.id && 
-                (product.category === currentProduct.category || 
-                 product.categorySlug === currentProduct.categorySlug ||
-                 product.categorySlug === currentProduct.category)
-            );
-
-            // Add products from same category first
-            relatedProducts = [...sameCategory.slice(0, maxRelatedProducts)];
-
-            // If we need more products, add random products from other categories
-            if (relatedProducts.length < maxRelatedProducts) {
-                const otherProducts = allProducts.filter(product => 
-                    product.id !== currentProduct.id && 
-                    !relatedProducts.some(rp => rp.id === product.id)
-                );
-                
-                // Shuffle and add remaining products
-                const shuffled = otherProducts.sort(() => 0.5 - Math.random());
-                const needed = maxRelatedProducts - relatedProducts.length;
-                relatedProducts = [...relatedProducts, ...shuffled.slice(0, needed)];
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-gray-600">No related products found</p></div>';
+                return;
             }
 
-            return relatedProducts.slice(0, maxRelatedProducts);
+            const productsHTML = products.map(product => createRelatedProductCard(product)).join('');
+            grid.innerHTML = productsHTML;
         }
 
         // Create a product card for related products using the same style as shop
@@ -1327,27 +1288,15 @@
             const currency = product.currency || 'EGP';
             const isOnSale = originalPrice && originalPrice > productPrice;
             
-            // Handle image URL using the same logic as main product
-            let imageUrl = null;
+            // Handle image URL - simplified
+            let imageUrl = product.mainImage || product.image || 'assets/images/placeholder.svg';
             
-            // Prioritize images array (Google Drive) over mainImage (local)
-            if (product.images && product.images.length > 0) {
-                imageUrl = product.images[0];
-            }
-            // Fallback to mainImage field
-            else if (product.mainImage) {
-                imageUrl = product.mainImage;
-            }
-            // Fallback to image field
-            else if (product.image) {
-                imageUrl = product.image;
-            }
-            
-            // Use the same validation logic as main product images
-            if (imageUrl) {
-                imageUrl = getValidImagePath(imageUrl);
-            } else {
-                imageUrl = 'assets/images/placeholder.svg';
+            // If it's a Google Drive link, convert it
+            if (imageUrl && imageUrl.includes('drive.google.com')) {
+                const fileIdMatch = imageUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (fileIdMatch) {
+                    imageUrl = `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
+                }
             }
 
             // Determine the gradient colors based on product index or category
@@ -1409,26 +1358,6 @@
             
             // Final fallback to placeholder
             img.src = 'assets/images/placeholder.svg';
-        }
-
-        // Display related products
-        function displayRelatedProducts(relatedProducts) {
-            const grid = document.getElementById('related-products-grid');
-            if (!grid) {
-                return;
-            }
-
-            if (relatedProducts.length === 0) {
-                grid.innerHTML = '<div class="flex-shrink-0 w-full sm:col-span-full text-center py-8"><p class="text-gray-600">No related products found</p></div>';
-                return;
-            }
-
-            // Generate HTML for all related products
-            const productsHTML = relatedProducts.map(product => createRelatedProductCard(product)).join('');
-            
-            // Update the grid
-            grid.innerHTML = productsHTML;
-            
         }
 
         // Initialize product page

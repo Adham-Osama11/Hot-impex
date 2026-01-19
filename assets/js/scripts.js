@@ -3,174 +3,13 @@
 // Use the API configuration from config.js
 // This will automatically use Railway URL in production and localhost in development
 
-// API Service Functions
-class APIService {
-    static async request(endpoint, options = {}) {
-        try {
-            console.log(`Making API request to: ${API_CONFIG.getApiUrl()}${endpoint}`);
-            const response = await fetch(`${API_CONFIG.getApiUrl()}${endpoint}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...options.headers
-                },
-                credentials: 'omit', // Don't send cookies for CORS requests
-                ...options
-            });
-            
-            console.log(`API Response status: ${response.status}`);
-            
-            if (!response.ok) {
-                console.error(`API Error: ${response.status} - ${response.statusText}`);
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            console.log('API Response data:', data);
-            
-            return data;
-        } catch (error) {
-            console.error('API Request failed:', error);
-            console.error('Endpoint:', endpoint);
-            console.error('API URL:', API_CONFIG.getApiUrl());
-            throw error;
-        }
-    }
-
-    static async getProducts(params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        const endpoint = queryString ? `/products?${queryString}` : '/products';
-        return await this.request(endpoint);
-    }
-
-    static async getProduct(id) {
-        return await this.request(`/products/${id}`);
-    }
-
-    static async getCategories() {
-        return await this.request('/products/categories');
-    }
-
-    static async searchProducts(query) {
-        return await this.request(`/products/search/${encodeURIComponent(query)}`);
-    }
-
-    static async getFeaturedProducts() {
-        return await this.getProducts({ featured: 'true', limit: 4 });
-    }
-
-    static async getBestSellers() {
-        return await this.getProducts({ bestSeller: 'true', limit: 4 });
-    }
-
-    // Cart API methods
-    static async getCart() {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        return await this.request('/users/cart', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    }
-
-    static async addToCart(productId, quantity = 1, productData = {}) {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        console.log('APIService.addToCart called with:', { productId, quantity, productData });
-        
-        const requestBody = { productId, quantity, productData };
-        console.log('Request body:', JSON.stringify(requestBody));
-        
-        return await this.request('/users/cart', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(requestBody)
-        });
-    }
-
-    static async updateCartItem(productId, quantity) {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        return await this.request(`/users/cart/${productId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ quantity })
-        });
-    }
-
-    static async removeFromCart(productId) {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        return await this.request(`/users/cart/${productId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    }
-
-    static async clearCart() {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        return await this.request('/users/cart', {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    }
-
-    // Order API methods
-    static async getUserOrders(params = {}) {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        const queryString = new URLSearchParams(params).toString();
-        const endpoint = queryString ? `/orders?${queryString}` : '/orders';
-        
-        return await this.request(endpoint, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    }
-
-    static async getOrder(orderId) {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        return await this.request(`/orders/${orderId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    }
-
-    static async cancelOrder(orderId) {
-        const token = AuthService.getToken();
-        if (!token) throw new Error('User not authenticated');
-        
-        return await this.request(`/orders/${orderId}/cancel`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    }
+// NOTE: APIService is loaded from assets/js/modules/api-service.js
+// If api-service.js is not loaded, the fallback APIService will be defined here
+if (typeof APIService === 'undefined') {
+    console.warn('APIService module not found, using fallback...');
+    // Fallback APIService would be defined here if needed
+    // For now, we expect api-service.js to always be loaded
 }
-
-// Make APIService globally available
-window.APIService = APIService;
 
 // Image Utility Functions
 // Function to convert Google Drive URLs to direct image URLs
@@ -883,20 +722,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Mobile Menu
 function initializeMobileMenu() {
+    console.log('Initializing mobile menu...');
     const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
     const closeMobileMenu = document.getElementById('mobile-menu-close') || document.getElementById('close-mobile-menu');
     const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
     
+    console.log('Mobile menu elements:', {
+        mobileMenuBtn: !!mobileMenuBtn,
+        mobileMenu: !!mobileMenu,
+        closeMobileMenu: !!closeMobileMenu,
+        mobileMenuBackdrop: !!mobileMenuBackdrop
+    });
+    
     if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', () => {
+        console.log('Adding click listener to mobile menu button');
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Mobile menu button clicked!');
             mobileMenu.classList.toggle('hidden');
+            console.log('Menu hidden class:', mobileMenu.classList.contains('hidden'));
             document.body.style.overflow = mobileMenu.classList.contains('hidden') ? '' : 'hidden';
+        });
+    } else {
+        console.error('Mobile menu button or menu not found!', {
+            mobileMenuBtn,
+            mobileMenu
         });
     }
     
     if (closeMobileMenu && mobileMenu) {
-        closeMobileMenu.addEventListener('click', () => {
+        closeMobileMenu.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Close button clicked');
             mobileMenu.classList.add('hidden');
             document.body.style.overflow = '';
         });
@@ -905,6 +763,7 @@ function initializeMobileMenu() {
     // Close menu when clicking backdrop
     if (mobileMenuBackdrop && mobileMenu) {
         mobileMenuBackdrop.addEventListener('click', () => {
+            console.log('Backdrop clicked');
             mobileMenu.classList.add('hidden');
             document.body.style.overflow = '';
         });

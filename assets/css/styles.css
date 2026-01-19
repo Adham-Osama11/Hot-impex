@@ -277,7 +277,7 @@ html, body {
 }
 
 .card:hover .card__glow {
-    opacity: 1;
+    opacity: 0;
 }
 
 .card__content {
@@ -306,16 +306,17 @@ html, body {
     transform: translateY(10px) rotate(0deg);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
+    display: none;
 }
 
 .card:hover .card__badge {
-    opacity: 1;
+    opacity: 0;
     transform: translateY(0) rotate(0deg);
 }
 
 .card:hover .card__badge {
     transform: rotate(12deg) scale(1);
-    opacity: 1;
+    opacity: 0;
 }
 
 .card__image {

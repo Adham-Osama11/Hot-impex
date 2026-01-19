@@ -1307,7 +1307,7 @@
 }
 
 .collection-card:hover .collection-bg-overlay {
-    opacity: 1;
+    opacity: 0;
 }
 
 .collection-content {
@@ -1340,15 +1340,15 @@
 }
 
 .collection-card:hover .collection-title.purple {
-    color: #9333ea;
+    color: #1f2937;
 }
 
 .collection-card:hover .collection-title.emerald {
-    color: #059669;
+    color: #1f2937;
 }
 
 .collection-card:hover .collection-title.orange {
-    color: #ea580c;
+    color: #1f2937;
 }
 
 .collection-gradient-overlay {
@@ -1371,7 +1371,7 @@
 }
 
 .collection-card:hover .collection-gradient-overlay {
-    opacity: 1;
+    opacity: 0;
 }
 
 /* ===================================
@@ -1902,5 +1902,175 @@
 
     .footer-brand-title {
         font-size: 3.75rem;
+    }
+}
+
+/* ===================================
+   SLIDER STYLES
+   =================================== */
+.slider-container {
+    position: relative;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.slider-wrapper {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    padding: 2rem 0;
+}
+
+.slider-track {
+    display: flex !important;
+    gap: 1.5rem;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+/* Remove vertical margins from cards in slider */
+.slider-track .card {
+    margin: 0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.slider-track .card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Products slider cards */
+.best-sellers-grid.slider-track > * {
+    flex: 0 0 calc(25% - 1.125rem);
+    min-width: 250px;
+}
+
+/* Make product cards equal height */
+.best-sellers-grid.slider-track .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.best-sellers-grid.slider-track .card__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.best-sellers-grid.slider-track .card__text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.best-sellers-grid.slider-track .card__title {
+    min-height: 2.5rem;
+}
+
+/* Categories slider cards */
+.collections-grid.slider-track > * {
+    flex: 0 0 calc(33.333% - 1rem);
+    min-width: 300px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1023px) {
+    .best-sellers-grid.slider-track > * {
+        flex: 0 0 calc(33.333% - 1rem);
+    }
+    
+    .collections-grid.slider-track > * {
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+}
+
+@media (max-width: 767px) {
+    .best-sellers-grid.slider-track > *,
+    .collections-grid.slider-track > * {
+        flex: 0 0 calc(50% - 0.75rem);
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 639px) {
+    .best-sellers-grid.slider-track > *,
+    .collections-grid.slider-track > * {
+        flex: 0 0 100%;
+        min-width: unset;
+    }
+}
+
+/* Navigation buttons */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: #1f2937;
+}
+
+.slider-nav:hover {
+    background: white;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slider-nav:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.slider-nav svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2.5;
+}
+
+.slider-nav-left {
+    left: -1.5rem;
+}
+
+.slider-nav-right {
+    right: -1.5rem;
+}
+
+.slider-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Hide navigation buttons on small screens */
+@media (max-width: 640px) {
+    .slider-nav {
+        display: none;
+    }
+}
+
+/* Adjust for larger screens */
+@media (min-width: 1024px) {
+    .slider-nav {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+    
+    .slider-nav-left {
+        left: -1.75rem;
+    }
+    
+    .slider-nav-right {
+        right: -1.75rem;
     }
 }

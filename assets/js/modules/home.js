@@ -11,6 +11,12 @@ class HomePageManager {
         this.currentHeroIndex = 0;
         this.autoSlideInterval = null;
         this.isMouseInHero = false;
+        
+        // Slider state
+        this.productsSlideIndex = 0;
+        this.categoriesSlideIndex = 0;
+        this.productsPerView = 4;
+        this.categoriesPerView = 3;
     }
 
     /**
@@ -64,6 +70,9 @@ class HomePageManager {
 
             // Initialize hero carousel
             this.initializeHeroCarousel();
+            
+            // Initialize sliders
+            this.initializeSliders();
             
             // Hide status badge
             this.hideStatusBadge();
@@ -138,15 +147,15 @@ class HomePageManager {
                 const categories = await this.api.getHomePageCategories();
                 
                 if (categories && categories.length > 0) {
-                    // Load products from the first home page category
+                    // Load ALL products from ALL home page categories
                     const allProducts = [];
                     
-                    // Load products from up to 3 categories to get variety
-                    for (let i = 0; i < Math.min(categories.length, 3); i++) {
+                    // Load products from ALL categories marked as "show on home"
+                    for (let i = 0; i < categories.length; i++) {
                         const categoryId = categories[i].id;
                         try {
                             const response = await this.api.getCategoryProducts(categoryId, {
-                                PageSize: 8,
+                                PageSize: 1000, // Load all products (large number to ensure we get all)
                                 PageNumber: 1
                             });
                             
@@ -228,6 +237,12 @@ class HomePageManager {
             });
             
             this.animateCategories();
+            
+            // Update slider after rendering
+            setTimeout(() => {
+                this.categoriesSlideIndex = 0;
+                this.updateCategoriesSlider();
+            }, 100);
         } else {
             console.log('No categories to render, keeping fallback HTML');
         }
@@ -270,21 +285,26 @@ class HomePageManager {
         if (products && products.length > 0) {
             console.log('Rendering API products...');
             productsGrid.innerHTML = ''; // Only clear when we have API data to replace with
-            const displayProducts = products.slice(0, 8);
 
-            displayProducts.forEach((product) => {
+            products.forEach((product) => {
                 const productCard = this.createProductCard(product);
                 productsGrid.appendChild(productCard);
             });
             
             this.animateProducts();
+            
+            // Update slider after rendering
+            setTimeout(() => {
+                this.productsSlideIndex = 0;
+                this.updateProductsSlider();
+            }, 100);
         } else {
             console.log('No products to render, keeping fallback HTML');
         }
     }
 
     /**
-     * Create a product card element
+     * Create a product card element (without description for slider)
      */
     createProductCard(product) {
         const link = document.createElement('a');
@@ -296,7 +316,6 @@ class HomePageManager {
                         'assets/images/placeholder.png';
 
         const productName = product.name || 'Product';
-        const shortDescription = product.short_description || '';
         
         link.innerHTML = `
             <div class="card" data-product-id="${product.id}" data-product-name="${productName}">
@@ -307,14 +326,6 @@ class HomePageManager {
                     <div class="card__image" style="background-image: url('${imageUrl}');"></div>
                     <div class="card__text">
                         <p class="card__title">${productName}</p>
-                        <p class="card__description">${this.truncateText(shortDescription, 60)}</p>
-                    </div>
-                    <div class="card__footer">
-                        <div class="card__button add-to-cart" onclick="event.preventDefault(); event.stopPropagation(); alert('Add to cart feature coming soon');">
-                            <svg height="16" width="16" viewBox="0 0 24 24">
-                                <path stroke-width="2" stroke="currentColor" d="M4 12H20M12 4V20" fill="none"></path>
-                            </svg>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -520,6 +531,188 @@ class HomePageManager {
         const badge = document.getElementById('api-status-badge');
         if (badge) {
             badge.style.display = 'none';
+        }
+    }
+
+    /**
+     * Initialize product and category sliders
+     */
+    initializeSliders() {
+        this.initializeProductsSlider();
+        this.initializeCategoriesSlider();
+        
+        // Update on window resize
+        window.addEventListener('resize', () => {
+            this.updateSliderSettings();
+        });
+    }
+
+    /**
+     * Update slider settings based on screen size
+     */
+    updateSliderSettings() {
+        const width = window.innerWidth;
+        
+        // Products: 4 on large, 3 on medium, 2 on small, 1 on mobile
+        if (width >= 1024) {
+            this.productsPerView = 4;
+        } else if (width >= 768) {
+            this.productsPerView = 3;
+        } else if (width >= 640) {
+            this.productsPerView = 2;
+        } else {
+            this.productsPerView = 1;
+        }
+        
+        // Categories: 3 on large, 2 on medium, 1 on small
+        if (width >= 1024) {
+            this.categoriesPerView = 3;
+        } else if (width >= 768) {
+            this.categoriesPerView = 2;
+        } else {
+            this.categoriesPerView = 1;
+        }
+        
+        // Reset slide positions
+        this.productsSlideIndex = 0;
+        this.categoriesSlideIndex = 0;
+        this.updateProductsSlider();
+        this.updateCategoriesSlider();
+    }
+
+    /**
+     * Initialize products slider
+     */
+    initializeProductsSlider() {
+        const prevBtn = document.getElementById('products-prev');
+        const nextBtn = document.getElementById('products-next');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => this.slideProducts(-1));
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.slideProducts(1));
+        }
+        
+        this.updateSliderSettings();
+    }
+
+    /**
+     * Initialize categories slider
+     */
+    initializeCategoriesSlider() {
+        const prevBtn = document.getElementById('categories-prev');
+        const nextBtn = document.getElementById('categories-next');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => this.slideCategories(-1));
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.slideCategories(1));
+        }
+    }
+
+    /**
+     * Slide products
+     */
+    slideProducts(direction) {
+        const grid = document.getElementById('products-grid');
+        if (!grid) return;
+        
+        const totalProducts = grid.children.length;
+        const maxIndex = Math.max(0, totalProducts - this.productsPerView);
+        
+        this.productsSlideIndex += direction;
+        
+        // Clamp the index
+        if (this.productsSlideIndex < 0) {
+            this.productsSlideIndex = 0;
+        } else if (this.productsSlideIndex > maxIndex) {
+            this.productsSlideIndex = maxIndex;
+        }
+        
+        this.updateProductsSlider();
+    }
+
+    /**
+     * Update products slider position
+     */
+    updateProductsSlider() {
+        const grid = document.getElementById('products-grid');
+        const prevBtn = document.getElementById('products-prev');
+        const nextBtn = document.getElementById('products-next');
+        
+        if (!grid) return;
+        
+        const totalProducts = grid.children.length;
+        
+        // Calculate the percentage to move based on cards per view
+        const percentPerSlide = 100 / this.productsPerView;
+        const offset = this.productsSlideIndex * percentPerSlide;
+        
+        grid.style.transform = `translateX(-${offset}%)`;
+        
+        // Update button states
+        if (prevBtn) {
+            prevBtn.disabled = this.productsSlideIndex === 0;
+        }
+        
+        if (nextBtn) {
+            const maxIndex = Math.max(0, totalProducts - this.productsPerView);
+            nextBtn.disabled = this.productsSlideIndex >= maxIndex;
+        }
+    }
+
+    /**
+     * Slide categories
+     */
+    slideCategories(direction) {
+        const grid = document.getElementById('categories-grid');
+        if (!grid) return;
+        
+        const totalCategories = grid.children.length;
+        const maxIndex = Math.max(0, totalCategories - this.categoriesPerView);
+        
+        this.categoriesSlideIndex += direction;
+        
+        // Clamp the index
+        if (this.categoriesSlideIndex < 0) {
+            this.categoriesSlideIndex = 0;
+        } else if (this.categoriesSlideIndex > maxIndex) {
+            this.categoriesSlideIndex = maxIndex;
+        }
+        
+        this.updateCategoriesSlider();
+    }
+
+    /**
+     * Update categories slider position
+     */
+    updateCategoriesSlider() {
+        const grid = document.getElementById('categories-grid');
+        const prevBtn = document.getElementById('categories-prev');
+        const nextBtn = document.getElementById('categories-next');
+        
+        if (!grid) return;
+        
+        const totalCategories = grid.children.length;
+        
+        // Calculate the percentage to move based on cards per view
+        const percentPerSlide = 100 / this.categoriesPerView;
+        const offset = this.categoriesSlideIndex * percentPerSlide;
+        
+        grid.style.transform = `translateX(-${offset}%)`;
+        
+        // Update button states
+        if (prevBtn) {
+            prevBtn.disabled = this.categoriesSlideIndex === 0;
+        }
+        
+        if (nextBtn) {
+            const maxIndex = Math.max(0, totalCategories - this.categoriesPerView);
+            nextBtn.disabled = this.categoriesSlideIndex >= maxIndex;
         }
     }
 }

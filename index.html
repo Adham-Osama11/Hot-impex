@@ -198,15 +198,32 @@
             </a>
         </div>
         
-        <div class="best-sellers-grid" id="products-grid" style="display: grid;">
-            <!-- Products will be loaded dynamically from API -->
-            <!-- Loading animation -->
-            <div class="col-span-full flex justify-center items-center py-20">
-                <div class="text-center">
-                    <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
-                    <p class="text-gray-600 text-lg font-medium">Loading products...</p>
+        <!-- Slider Container -->
+        <div class="slider-container">
+            <button class="slider-nav slider-nav-left" id="products-prev" aria-label="Previous products">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            
+            <div class="slider-wrapper">
+                <div class="best-sellers-grid slider-track" id="products-grid" style="display: grid;">
+                    <!-- Products will be loaded dynamically from API -->
+                    <!-- Loading animation -->
+                    <div class="col-span-full flex justify-center items-center py-20">
+                        <div class="text-center">
+                            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
+                            <p class="text-gray-600 text-lg font-medium">Loading products...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            <button class="slider-nav slider-nav-right" id="products-next" aria-label="Next products">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
         </div>
     </section>
 
@@ -230,15 +247,32 @@
             </a>
         </div>
         
-        <div class="collections-grid" id="categories-grid" style="display: grid;">
-            <!-- Categories will be loaded dynamically from API -->
-            <!-- Loading animation -->
-            <div class="col-span-full flex justify-center items-center py-20">
-                <div class="text-center">
-                    <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-emerald-600 mx-auto mb-4"></div>
-                    <p class="text-gray-600 text-lg font-medium">Loading categories...</p>
+        <!-- Slider Container -->
+        <div class="slider-container">
+            <button class="slider-nav slider-nav-left" id="categories-prev" aria-label="Previous categories">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            
+            <div class="slider-wrapper">
+                <div class="collections-grid slider-track" id="categories-grid" style="display: grid;">
+                    <!-- Categories will be loaded dynamically from API -->
+                    <!-- Loading animation -->
+                    <div class="col-span-full flex justify-center items-center py-20">
+                        <div class="text-center">
+                            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-emerald-600 mx-auto mb-4"></div>
+                            <p class="text-gray-600 text-lg font-medium">Loading categories...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            <button class="slider-nav slider-nav-right" id="categories-next" aria-label="Next categories">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
         </div>
     </section>
 

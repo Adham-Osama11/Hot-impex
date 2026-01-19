@@ -30,8 +30,8 @@
     scroll-behavior: smooth;
 }
 
-/* Force Consistent Image Sizing */
-img, .product-image, .thumbnail img {
+/* Force Consistent Image Sizing - Only for product images, not navbar logo */
+.product-image, .thumbnail img, .product-image-gallery img {
     width: 240px !important;
     height: 240px !important;
     object-fit: contain !important;

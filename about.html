@@ -13,17 +13,6 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/about.css">
     <link rel="stylesheet" href="assets/css/navbar.css">
-    <!-- Theme initialization script - must run before body content -->
-    <script>
-        // Check for saved dark mode preference and apply immediately
-        const isDarkMode = localStorage.getItem('darkMode') === 'true';
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        } else {
-            // Ensure light mode is properly applied
-            document.documentElement.classList.remove('dark');
-        }
-    </script>
 </head>
 <body class="min-h-screen">
     <!-- Navigation Bar -->
@@ -47,18 +36,6 @@
                         <a href="shop.html" class="nav-link">Products</a>
                         <a href="contact.html" class="nav-link">Contact Us</a>
                         <a href="about.html" class="nav-link active">About Us</a>
-                        
-                        <!-- Dark Mode Toggle -->
-                        <div class="theme-toggle-container">
-                            <div id="theme-toggle" class="theme-toggle" title="Toggle Dark Mode">
-                                <svg class="sun-icon" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
-                                </svg>
-                                <svg class="moon-icon" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                                </svg>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </nav>
@@ -85,19 +62,6 @@
                         <li><a href="contact.html" class="mobile-menu-link">Contact Us</a></li>
                         <li><a href="about.html" class="mobile-menu-link">About Us</a></li>
                     </ul>
-                    <div class="mobile-menu-theme">
-                        <div class="mobile-menu-theme-content">
-                            <span class="mobile-menu-theme-label">Dark Mode</span>
-                            <div id="mobile-theme-toggle" class="theme-toggle">
-                                <svg class="sun-icon w-5 h-5 text-yellow-500 transition-opacity duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
-                                </svg>
-                                <svg class="moon-icon w-5 h-5 text-gray-400 transition-opacity duration-300 opacity-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
                 </nav>
             </div>
         </div>
@@ -276,11 +240,11 @@
 
     <!-- Cart Sidebar -->
     <!-- <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-    <div id="cart-sidebar" class="fixed top-4 right-0 h-[calc(100vh-2rem)] w-[450px] bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-2xl z-50 transform translate-x-full transition-transform duration-500 ease-in-out border border-white/20 rounded-l-2xl">
+    <div id="cart-sidebar" class="fixed top-4 right-0 h-[calc(100vh-2rem)] w-[450px] bg-white/80 backdrop-blur-lg shadow-2xl z-50 transform translate-x-full transition-transform duration-500 ease-in-out border border-white/20 rounded-l-2xl">
         <div class="flex flex-col h-full">
             <div class="flex items-center justify-between p-6 border-b border-gray-200/10 flex-shrink-0">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Shopping Cart</h2>
-                <button id="close-cart" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors">
+                <h2 class="text-2xl font-bold text-gray-800">Shopping Cart</h2>
+                <button id="close-cart" class="p-2 rounded-full text-gray-600 hover:bg-gray-200/50 transition-colors">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -289,8 +253,8 @@
 
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
                 <div id="cart-items">
-                    <div class="text-center text-gray-500 dark:text-gray-400 py-16">
-                        <svg class="w-24 h-24 mx-auto text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="text-center text-gray-500 py-16">
+                        <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                         <p class="mt-4 text-lg font-semibold">Your cart is empty</p>
@@ -300,10 +264,10 @@
             </div>
             <div class="border-t border-gray-200/10 p-6 flex-shrink-0">
                 <div class="flex items-center justify-between mb-4">
-                    <span class="text-lg font-semibold text-gray-800 dark:text-white">Subtotal:</span>
-                    <span id="cart-total" class="text-2xl font-bold text-purple-600 dark:text-purple-400">0 EGP</span>
+                    <span class="text-lg font-semibold text-gray-800">Subtotal:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-purple-600">0 EGP</span>
                 </div>
-                <a href="checkout.html" class="block w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 font-bold text-lg text-center">
+                <a href="checkout.html" class="block w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 font-bold text-lg text-center">
                     Proceed to Checkout
                 </a>
             </div>

@@ -2,81 +2,6 @@
 // Handles common UI components and interactions
 
 class UIComponents {
-    // Dark Mode Functionality
-    static initializeDarkMode() {
-        const darkModeToggle = document.getElementById('theme-toggle');
-        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
-        const html = document.documentElement;
-        
-        // Check for saved dark mode preference
-        const isDarkMode = localStorage.getItem('darkMode') === 'true';
-        
-        if (isDarkMode) {
-            html.classList.add('dark');
-            this.updateDarkModeToggle(true);
-            this.updateMobileDarkModeToggle(true);
-        }
-        
-        if (darkModeToggle) {
-            darkModeToggle.addEventListener('click', this.toggleDarkMode.bind(this));
-        }
-        
-        if (mobileThemeToggle) {
-            mobileThemeToggle.addEventListener('click', this.toggleDarkMode.bind(this));
-        }
-    }
-
-    static toggleDarkMode() {
-        const html = document.documentElement;
-        const isDarkMode = html.classList.toggle('dark');
-        
-        localStorage.setItem('darkMode', isDarkMode);
-        this.updateDarkModeToggle(isDarkMode);
-        this.updateMobileDarkModeToggle(isDarkMode);
-        
-        // Trigger animation
-        html.style.transition = 'background 0.3s ease, color 0.3s ease';
-        setTimeout(() => {
-            html.style.transition = '';
-        }, 300);
-    }
-
-    static updateDarkModeToggle(isDarkMode) {
-        const toggle = document.getElementById('theme-toggle');
-        if (toggle) {
-            const icon = toggle.querySelector('svg');
-            if (icon) {
-                if (isDarkMode) {
-                    icon.innerHTML = `
-                        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    `;
-                } else {
-                    icon.innerHTML = `
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                    `;
-                }
-            }
-        }
-    }
-
-    static updateMobileDarkModeToggle(isDarkMode) {
-        const toggle = document.getElementById('mobile-theme-toggle');
-        if (toggle) {
-            const icon = toggle.querySelector('svg');
-            if (icon) {
-                if (isDarkMode) {
-                    icon.innerHTML = `
-                        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    `;
-                } else {
-                    icon.innerHTML = `
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                    `;
-                }
-            }
-        }
-    }
-
     // Mobile Menu
     static initializeMobileMenu() {
         const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
@@ -194,15 +119,15 @@ class UIComponents {
                              alt="${product.name}" class="w-full h-64 md:h-96 object-cover rounded-lg">
                     </div>
                     <div class="md:w-1/2 md:pl-6 mt-4 md:mt-0">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">${product.name}</h2>
-                        <p class="text-gray-600 dark:text-gray-300 capitalize mb-4">${product.category} Category</p>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">${product.name}</h2>
+                        <p class="text-gray-600 capitalize mb-4">${product.category} Category</p>
                         <div class="mb-4">
                             ${product.originalPrice ? 
                                 `<span class="text-lg text-gray-500 line-through">${product.originalPrice}${product.currency || 'EGP'}</span>` : ''
                             }
                             <span class="text-2xl font-bold text-blue-600 ml-2">${product.price}${product.currency || 'EGP'}</span>
                         </div>
-                        <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        <p class="text-gray-600 mb-6">
                             ${product.description || `High-quality ${product.category} product designed for optimal performance.`}
                         </p>
                         <div class="flex space-x-3">
@@ -282,7 +207,6 @@ class UIComponents {
 
     // Initialize all UI components
     static init() {
-        this.initializeDarkMode();
         this.initializeMobileMenu();
         this.initializeCarousel();
         this.initializeProductCards();

@@ -281,7 +281,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     await window.hotImpexApp.init();
     
     // Legacy compatibility - make functions globally available
-    window.initializeDarkMode = () => UIComponents.initializeDarkMode();
     window.initializeMobileMenu = () => UIComponents.initializeMobileMenu();
     window.initializeCarousel = () => UIComponents.initializeCarousel();
     window.initializeProductCards = () => UIComponents.initializeProductCards();

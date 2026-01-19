@@ -26,16 +26,8 @@
     color: #111827;
 }
 
-.dark .profile-header-title {
-    color: #ffffff;
-}
-
 .profile-header-subtitle {
     color: #4b5563;
-}
-
-.dark .profile-header-subtitle {
-    color: #9ca3af;
 }
 
 /* Profile Grid */
@@ -51,10 +43,6 @@
     border-radius: 0.75rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     padding: 1.5rem;
-}
-
-.dark .profile-card {
-    background-color: #1f2937;
 }
 
 .profile-card-content {
@@ -110,17 +98,9 @@
     color: #111827;
 }
 
-.dark .profile-user-name {
-    color: #ffffff;
-}
-
 .profile-user-email {
     margin-bottom: 1rem;
     color: #4b5563;
-}
-
-.dark .profile-user-email {
-    color: #9ca3af;
 }
 
 /* Member Since Badge */
@@ -131,17 +111,9 @@
     margin-bottom: 1rem;
 }
 
-.dark .profile-member-badge {
-    background-color: #374151;
-}
-
 .profile-member-label {
     font-size: 0.875rem;
     color: #4b5563;
-}
-
-.dark .profile-member-label {
-    color: #9ca3af;
 }
 
 .profile-member-date {
@@ -150,20 +122,12 @@
     color: #111827;
 }
 
-.dark .profile-member-date {
-    color: #ffffff;
-}
-
 /* Profile Form Section */
 .profile-form-section {
     background-color: white;
     border-radius: 0.75rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     padding: 1.5rem;
-}
-
-.dark .profile-form-section {
-    background-color: #1f2937;
 }
 
 .profile-form-header {
@@ -177,10 +141,6 @@
     font-size: 1.125rem;
     font-weight: 600;
     color: #111827;
-}
-
-.dark .profile-form-title {
-    color: #ffffff;
 }
 
 .profile-edit-button {
@@ -246,10 +206,6 @@
     color: #374151;
 }
 
-.dark .profile-form-label {
-    color: #d1d5db;
-}
-
 .profile-form-label-note {
     font-size: 0.75rem;
     color: #6b7280;
@@ -265,12 +221,6 @@
     background-color: white;
 }
 
-.dark .profile-form-input {
-    border-color: #4b5563;
-    background-color: #374151;
-    color: white;
-}
-
 .profile-form-input:focus {
     outline: none;
     border-color: #3b82f6;
@@ -282,20 +232,10 @@
     color: #6b7280;
 }
 
-.dark .profile-form-input:disabled {
-    background-color: #1f2937;
-    color: #6b7280;
-}
-
 .profile-form-input:read-only {
     background-color: #f3f4f6;
     color: #6b7280;
     cursor: not-allowed;
-}
-
-.dark .profile-form-input:read-only {
-    background-color: #1f2937;
-    color: #9ca3af;
 }
 
 .profile-form-input.capitalize {
@@ -320,17 +260,8 @@
     cursor: pointer;
 }
 
-.dark .profile-button-cancel {
-    border-color: #4b5563;
-    color: #d1d5db;
-}
-
 .profile-button-cancel:hover {
     background-color: #f3f4f6;
-}
-
-.dark .profile-button-cancel:hover {
-    background-color: #374151;
 }
 
 .profile-button-save {
@@ -356,19 +287,11 @@
     padding: 1.5rem;
 }
 
-.dark .profile-password-section {
-    background-color: #1f2937;
-}
-
 .profile-password-title {
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
     color: #111827;
-}
-
-.dark .profile-password-title {
-    color: #ffffff;
 }
 
 .profile-password-form {
@@ -418,10 +341,6 @@
     gap: 1rem;
 }
 
-.dark .profile-loading-content {
-    background-color: #1f2937;
-}
-
 .profile-loading-spinner {
     width: 2rem;
     height: 2rem;
@@ -439,10 +358,6 @@
 
 .profile-loading-text {
     color: #111827;
-}
-
-.dark .profile-loading-text {
-    color: #ffffff;
 }
 
 /* ===================================

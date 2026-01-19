@@ -136,7 +136,7 @@ class SearchManager {
         
         if (results.length === 0) {
             searchResults.innerHTML = `
-                <div class="p-4 text-gray-500 dark:text-gray-400 text-center">
+                <div class="p-4 text-gray-500 text-center">
                     No products found
                 </div>
             `;
@@ -144,14 +144,14 @@ class SearchManager {
         }
         
         searchResults.innerHTML = results.slice(0, 5).map(product => `
-            <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-600" 
+            <div class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100" 
                  onclick="viewProduct('${product.id}')">
                 <div class="flex items-center space-x-3">
                     <img src="${product.mainImage || `https://placehold.co/50x50/E0E0E0/808080?text=${product.image || product.name}`}" 
                          alt="${product.name}" class="w-12 h-12 rounded-lg object-cover">
                     <div>
-                        <h4 class="font-medium text-gray-900 dark:text-white">${product.name}</h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">${product.category}</p>
+                        <h4 class="font-medium text-gray-900">${product.name}</h4>
+                        <p class="text-sm text-gray-500 capitalize">${product.category}</p>
                         <!-- Price hidden in search results -->
                     </div>
                 </div>

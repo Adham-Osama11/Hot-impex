@@ -95,7 +95,6 @@ Cart user interface and interactions:
 
 ### ui-components.js
 Reusable UI components and common interactions:
-- Dark mode toggle
 - Mobile menu
 - Quick view modals
 - Notifications
@@ -103,7 +102,6 @@ Reusable UI components and common interactions:
 
 **Key Classes/Functions:**
 - `UIComponents` - UI component manager
-- `UIComponents.toggleDarkMode()` - Switch between light/dark themes
 - `UIComponents.showNotification()` - Display user notifications
 - `UIComponents.openQuickView()` - Show product quick view
 

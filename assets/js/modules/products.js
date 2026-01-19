@@ -203,7 +203,7 @@ class ProductsManager {
         }
         
         return `
-            <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 scroll-animate" 
+            <div class="product-card bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 scroll-animate" 
                  data-product-id="${product.id}">
                 <div class="relative mb-4">
                     <img src="${imageUrl}" 
@@ -214,8 +214,8 @@ class ProductsManager {
                     ${product.featured ? '<span class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-sm">Featured</span>' : ''}
                     ${product.bestSeller ? '<span class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-sm">Best Seller</span>' : ''}
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">${product.name}</h3>
-                <p class="text-gray-600 dark:text-gray-300 capitalize mb-3">${product.category}</p>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">${product.name}</h3>
+                <p class="text-gray-600 capitalize mb-3">${product.category}</p>
                 <div class="flex items-center justify-between mb-4">
                     <div>
                         <!-- Price hidden on product cards; used internally via data-price -->

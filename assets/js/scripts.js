@@ -835,7 +835,6 @@ window.reinitializeCartEventListeners = reinitializeCartEventListeners;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('=== HOT IMPEX INITIALIZATION START ===');
     
-    initializeDarkMode();
     initializeMobileMenu();
     initializeCarousel();
     initializeProductCards();
@@ -881,69 +880,6 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleCart: typeof window.toggleCart
     });
 });
-
-// Dark Mode Functionality
-function initializeDarkMode() {
-    const darkModeToggle = document.getElementById('theme-toggle');
-    const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
-    const html = document.documentElement;
-    
-    // Check for saved dark mode preference
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    if (isDarkMode) {
-        html.classList.add('dark');
-        updateDarkModeToggle(true);
-        updateMobileDarkModeToggle(true);
-    } else {
-        // Ensure light mode is properly applied
-        html.classList.remove('dark');
-        updateDarkModeToggle(false);
-        updateMobileDarkModeToggle(false);
-    }
-    
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener('click', toggleDarkMode);
-    }
-    
-    if (mobileThemeToggle) {
-        mobileThemeToggle.addEventListener('click', toggleDarkMode);
-    }
-}
-
-function toggleDarkMode() {
-    const html = document.documentElement;
-    const isDarkMode = html.classList.toggle('dark');
-    
-    localStorage.setItem('darkMode', isDarkMode);
-    updateDarkModeToggle(isDarkMode);
-    updateMobileDarkModeToggle(isDarkMode);
-    
-    // Trigger animation
-    html.style.transition = 'background 0.3s ease, color 0.3s ease';
-    setTimeout(() => {
-        html.style.transition = '';
-    }, 300);
-}
-
-function updateDarkModeToggle(isDarkMode) {
-    // No need to manually update icons - CSS handles it via html.dark class
-    // The icons automatically switch based on html.dark in navbar.css
-}
-
-function updateMobileDarkModeToggle(isDarkMode) {
-    // No need to manually update icons - CSS handles it via html.dark class
-    // The icons automatically switch based on html.dark in navbar.css
-}
-        if (isDarkMode) {
-            sunIcon.style.opacity = '0';
-            moonIcon.style.opacity = '1';
-        } else {
-            sunIcon.style.opacity = '1';
-            moonIcon.style.opacity = '0';
-        }
-    }
-}
 
 // Mobile Menu
 function initializeMobileMenu() {
@@ -1227,19 +1163,19 @@ function displaySearchResults(results) {
     if (!searchResults) return;
     
     if (results.length === 0) {
-        searchResults.innerHTML = '<div class="p-4 text-gray-500 dark:text-gray-400">No products found</div>';
+        searchResults.innerHTML = '<div class="p-4 text-gray-500">No products found</div>';
         return;
     }
     
     searchResults.innerHTML = results.map(product => `
-        <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-600" 
+        <div class="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100" 
              onclick="viewProduct(${product.id})">
             <div class="flex items-center space-x-3">
                 <img src="https://placehold.co/50x50/E0E0E0/808080?text=${product.image}" 
                      alt="${product.name}" class="w-12 h-12 rounded-lg object-cover">
                 <div>
-                    <h4 class="font-medium text-gray-900 dark:text-white">${product.name}</h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">${product.category}</p>
+                    <h4 class="font-medium text-gray-900">${product.name}</h4>
+                    <p class="text-sm text-gray-500 capitalize">${product.category}</p>
                     <!-- Price hidden in search results -->
                 </div>
             </div>
@@ -1566,8 +1502,8 @@ function updateCartUI() {
     if (cartItems) {
         if (cart.length === 0) {
             cartItems.innerHTML = `
-                <div class="text-center text-gray-500 dark:text-gray-400 py-16">
-                    <svg class="w-24 h-24 mx-auto text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="text-center text-gray-500 py-16">
+                    <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     <p class="mt-4 text-lg font-semibold">Your cart is empty</p>
@@ -1582,24 +1518,24 @@ function updateCartUI() {
                 const currency = productData.currency || 'EGP';
                 
                 return `
-                <div class="flex items-center space-x-3 p-3 border-b border-gray-200 dark:border-gray-600" data-item-id="${productId}">
+                <div class="flex items-center space-x-3 p-3 border-b border-gray-200" data-item-id="${productId}">
                     <img src="${productData.image || productData.mainImage || 'assets/images/Products/placeholder.jpg'}" 
                          alt="${productData.name}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
                     <div class="flex-1">
-                        <h4 class="font-medium text-gray-900 dark:text-white">${productData.name}</h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">${itemPrice.toFixed(2)} ${currency} each</p>
+                        <h4 class="font-medium text-gray-900">${productData.name}</h4>
+                        <p class="text-sm text-gray-500">${itemPrice.toFixed(2)} ${currency} each</p>
                         <div class="flex items-center space-x-2 mt-1">
-                            <button class="decrease-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                            <button class="decrease-qty w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-sm hover:bg-gray-300 transition-colors">
                                 <span class="font-bold">−</span>
                             </button>
-                            <span class="text-sm font-bold w-8 text-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-md">${item.quantity}</span>
-                            <button class="increase-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                            <span class="text-sm font-bold w-8 text-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md">${item.quantity}</span>
+                            <button class="increase-qty w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-sm hover:bg-gray-300 transition-colors">
                                 <span class="font-bold">+</span>
                             </button>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="font-medium text-gray-900 dark:text-white">${(itemPrice * item.quantity).toFixed(2)} ${currency}</p>
+                        <p class="font-medium text-gray-900">${(itemPrice * item.quantity).toFixed(2)} ${currency}</p>
                         <button class="remove-item text-red-500 hover:text-red-700 text-sm font-medium transition-colors">
                             Remove
                         </button>
@@ -1710,10 +1646,10 @@ function openQuickView(productId) {
                          alt="${product.name}" class="w-full h-64 md:h-96 object-cover rounded-lg">
                 </div>
                 <div class="md:w-1/2 md:pl-6 mt-4 md:mt-0">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">${product.name}</h2>
-                    <p class="text-gray-600 dark:text-gray-300 capitalize mb-4">${product.category} Category</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">${product.name}</h2>
+                    <p class="text-gray-600 capitalize mb-4">${product.category} Category</p>
                    
-                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                    <p class="text-gray-600 mb-6">
                         High-quality ${product.category} supplement designed for optimal performance and health benefits.
                     </p>
                     <div class="flex space-x-3">
@@ -1722,7 +1658,7 @@ function openQuickView(productId) {
                             Add to Cart
                         </button>
                         <button onclick="viewProduct(${product.id})" 
-                                class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                             View Details
                         </button>
                     </div>
@@ -1832,7 +1768,7 @@ function displayFeaturedProducts() {
         const validImageUrl = getValidImagePath(imageUrl, 'assets/images/placeholder.svg');
         
         return `
-        <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 scroll-animate" 
+        <div class="product-card bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 scroll-animate" 
              data-product-id="${product.id}">
             <div class="relative mb-4 h-48 bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg">
                 <img src="${validImageUrl}" 
@@ -1842,8 +1778,8 @@ function displayFeaturedProducts() {
                      loading="lazy">
                 ${product.originalPrice ? '<span class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">Sale</span>' : ''}
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">${product.name}</h3>
-            <p class="text-gray-600 dark:text-gray-300 capitalize mb-3">${product.category}</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">${product.name}</h3>
+            <p class="text-gray-600 capitalize mb-3">${product.category}</p>
             <div class="flex items-center justify-between mb-4">
                 <div>
                     <!-- Price hidden on featured product cards -->
@@ -1855,7 +1791,7 @@ function displayFeaturedProducts() {
                     Add to Cart
                 </button>
                 <button onclick="openQuickView(${product.id})" 
-                        class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     Quick View
                 </button>
             </div>
@@ -2072,7 +2008,7 @@ function showShopError(message) {
         <div class="col-span-full flex items-center justify-center py-20">
             <div class="text-center">
                 <div class="text-red-500 text-6xl mb-4">⚠️</div>
-                <p class="text-gray-600 dark:text-gray-400 mb-4">${message}</p>
+                <p class="text-gray-600 mb-4">${message}</p>
                 <button onclick="location.reload()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                     Try Again
                 </button>
@@ -2106,8 +2042,8 @@ function displayShopProducts(productsToShow) {
             <div class="col-span-full flex items-center justify-center py-20">
                 <div class="text-center">
                     <div class="text-gray-400 text-6xl mb-4">📦</div>
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">No products found</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Try adjusting your search or filter criteria.</p>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">No products found</h3>
+                    <p class="text-gray-600">Try adjusting your search or filter criteria.</p>
                 </div>
             </div>
         `;
@@ -2141,7 +2077,7 @@ function displayShopProducts(productsToShow) {
         const validImageUrl = getValidImagePath(imageUrl, 'assets/images/placeholder.svg');
         
         return `
-            <a href="product.html?product=${product.id}" class="product-card block bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
+            <a href="product.html?product=${product.id}" class="product-card block bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl" 
                data-product-id="${product.id}" 
                data-category="${product.categorySlug || product.category}" 
                data-name="${product.name}" >
@@ -2176,8 +2112,8 @@ function displayShopProducts(productsToShow) {
                 </div>
                 
                 <div class="p-6">
-                    <h3 class="font-semibold text-gray-800 dark:text-white text-lg mb-2 truncate">${product.name}</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 capitalize">${product.category || 'Product'}</p>
+                    <h3 class="font-semibold text-gray-800 text-lg mb-2 truncate">${product.name}</h3>
+                    <p class="text-gray-500 text-sm mb-4 capitalize">${product.category || 'Product'}</p>
                     
                     <!-- Rating -->
                     ${product.rating ? `
@@ -2189,7 +2125,7 @@ function displayShopProducts(productsToShow) {
                                     </svg>`
                                 ).join('')}
                             </div>
-                            <span class="text-gray-600 dark:text-gray-400 ml-1 text-sm">${product.rating}</span>
+                            <span class="text-gray-600 ml-1 text-sm">${product.rating}</span>
                         </div>
                     ` : ''}
                     
@@ -2446,7 +2382,6 @@ function updateProduct(index) {
     }, 200);
 }
 
-    
     // Navigation functions
     function nextProduct() {
         currentProductIndex = (currentProductIndex + 1) % products.length;
@@ -3261,7 +3196,7 @@ function initProductShowcase() {
 }
 
 // Make functions globally available
-window.toggleDarkMode = toggleDarkMode;
+
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.updateCartQuantity = updateCartQuantity;
@@ -4599,7 +4534,7 @@ class MyOrdersService {
         const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
         return `
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer" 
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow cursor-pointer" 
                  data-order-id="${order._id || order.id}">
                 <div class="p-6">
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
@@ -4612,10 +4547,10 @@ class MyOrdersService {
                                 </div>
                             </div>
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                <h3 class="text-lg font-semibold text-gray-900">
                                     Order #${order.orderNumber}
                                 </h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                <p class="text-sm text-gray-600">
                                     ${orderDate} • ${totalItems} item${totalItems > 1 ? 's' : ''}
                                 </p>
                             </div>
@@ -4625,18 +4560,18 @@ class MyOrdersService {
                                 ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                             </span>
                             <div class="text-right">
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                <p class="text-lg font-semibold text-gray-900">
                                     ${order.pricing.total.toFixed(2)} ${order.currency}
                                 </p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
+                    <div class="border-t border-gray-200 pt-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 ${order.items.slice(0, 3).map(item => `
-                                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                                    <div class="text-sm text-gray-600">
                                         ${item.productName}${item.quantity > 1 ? ` (×${item.quantity})` : ''}
                                     </div>
                                 `).join('<span class="text-gray-400">•</span>')}
@@ -4725,12 +4660,12 @@ class MyOrdersService {
         return `
             <div class="max-w-4xl mx-auto">
                 <!-- Header -->
-                <div class="bg-gray-50 dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between rounded-t-2xl">
+                <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex items-center justify-between rounded-t-2xl">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Order #${order.orderNumber}</h2>
-                        <p class="text-gray-600 dark:text-gray-400">${orderDate}</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Order #${order.orderNumber}</h2>
+                        <p class="text-gray-600">${orderDate}</p>
                     </div>
-                    <button data-close-modal class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <button data-close-modal class="text-gray-500 hover:text-gray-700">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -4753,22 +4688,22 @@ class MyOrdersService {
 
                     <!-- Order Items -->
                     <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Order Items</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Order Items</h3>
                         <div class="space-y-4">
                             ${order.items.map(item => `
-                                <div class="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                    <div class="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                                <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                                    <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
                                         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4m8-4V7l-8-4"></path>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
-                                        <h4 class="font-medium text-gray-900 dark:text-white">${item.productName}</h4>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">Quantity: ${item.quantity}</p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">Unit Price: ${item.price.toFixed(2)} ${order.currency}</p>
+                                        <h4 class="font-medium text-gray-900">${item.productName}</h4>
+                                        <p class="text-sm text-gray-600">Quantity: ${item.quantity}</p>
+                                        <p class="text-sm text-gray-600">Unit Price: ${item.price.toFixed(2)} ${order.currency}</p>
                                     </div>
                                     <div class="text-right">
-                                        <p class="font-semibold text-gray-900 dark:text-white">
+                                        <p class="font-semibold text-gray-900">
                                             ${(item.price * item.quantity).toFixed(2)} ${order.currency}
                                         </p>
                                     </div>
@@ -4781,13 +4716,13 @@ class MyOrdersService {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Shipping Address -->
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Shipping Address</h3>
-                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                                <p class="font-medium text-gray-900 dark:text-white">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="font-medium text-gray-900">
                                     ${order.shippingAddress.firstName} ${order.shippingAddress.lastName}
                                 </p>
-                                <p class="text-gray-600 dark:text-gray-400">${order.shippingAddress.street}</p>
-                                <p class="text-gray-600 dark:text-gray-400">
+                                <p class="text-gray-600">${order.shippingAddress.street}</p>
+                                <p class="text-gray-600">
                                     ${order.shippingAddress.city}, ${order.shippingAddress.country}
                                 </p>
                             </div>
@@ -4795,24 +4730,24 @@ class MyOrdersService {
 
                         <!-- Order Total -->
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Order Summary</h3>
-                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg space-y-2">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg space-y-2">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Subtotal:</span>
-                                    <span class="text-gray-900 dark:text-white">${order.pricing.subtotal.toFixed(2)} ${order.currency}</span>
+                                    <span class="text-gray-600">Subtotal:</span>
+                                    <span class="text-gray-900">${order.pricing.subtotal.toFixed(2)} ${order.currency}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Shipping:</span>
-                                    <span class="text-gray-900 dark:text-white">${order.pricing.shipping.toFixed(2)} ${order.currency}</span>
+                                    <span class="text-gray-600">Shipping:</span>
+                                    <span class="text-gray-900">${order.pricing.shipping.toFixed(2)} ${order.currency}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600 dark:text-gray-400">Tax:</span>
-                                    <span class="text-gray-900 dark:text-white">${order.pricing.tax.toFixed(2)} ${order.currency}</span>
+                                    <span class="text-gray-600">Tax:</span>
+                                    <span class="text-gray-900">${order.pricing.tax.toFixed(2)} ${order.currency}</span>
                                 </div>
-                                <div class="border-t border-gray-300 dark:border-gray-600 pt-2">
+                                <div class="border-t border-gray-300 pt-2">
                                     <div class="flex justify-between font-semibold">
-                                        <span class="text-gray-900 dark:text-white">Total:</span>
-                                        <span class="text-gray-900 dark:text-white">${order.pricing.total.toFixed(2)} ${order.currency}</span>
+                                        <span class="text-gray-900">Total:</span>
+                                        <span class="text-gray-900">${order.pricing.total.toFixed(2)} ${order.currency}</span>
                                     </div>
                                 </div>
                             </div>
@@ -4821,12 +4756,12 @@ class MyOrdersService {
 
                     <!-- Payment Method -->
                     <div class="mt-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Payment Method</h3>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                            <p class="text-gray-900 dark:text-white">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Payment Method</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-900">
                                 ${order.paymentMethod === 'cash_on_delivery' ? 'Cash on Delivery' : order.paymentMethod}
                             </p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                            <p class="text-sm text-gray-600">
                                 Status: ${order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)}
                             </p>
                         </div>
@@ -4892,10 +4827,10 @@ class MyOrdersService {
         if (emptyEl) {
             emptyEl.classList.remove('hidden');
             emptyEl.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center">
+                <div class="bg-white rounded-xl shadow-lg p-12 text-center">
                     <div class="text-gray-400 text-6xl mb-4">🔐</div>
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Please sign in to view your orders</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">You need to be logged in to access your order history.</p>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Please sign in to view your orders</h3>
+                    <p class="text-gray-600 mb-6">You need to be logged in to access your order history.</p>
                     <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
                         <button id="show-login-from-orders" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4937,10 +4872,10 @@ class MyOrdersService {
         if (emptyEl) {
             emptyEl.classList.remove('hidden');
             emptyEl.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center">
+                <div class="bg-white rounded-xl shadow-lg p-12 text-center">
                     <div class="text-red-500 text-6xl mb-4">⚠️</div>
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Error Loading Orders</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">${message}</p>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Error Loading Orders</h3>
+                    <p class="text-gray-600 mb-6">${message}</p>
                     <button onclick="MyOrdersService.loadOrders()" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                         Try Again
                     </button>

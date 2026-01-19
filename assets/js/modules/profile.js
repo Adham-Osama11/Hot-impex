@@ -169,13 +169,13 @@ class ProfileManager {
         const currency = order.currency || 'EGP';
 
         return `
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-4">
+            <div class="bg-white rounded-lg shadow p-6 mb-4">
                 <div class="flex justify-between items-start mb-4">
                     <div>
-                        <h3 class="font-semibold text-lg text-gray-900 dark:text-white">
+                        <h3 class="font-semibold text-lg text-gray-900">
                             Order #${order.orderNumber || order._id}
                         </h3>
-                        <p class="text-gray-600 dark:text-gray-400">
+                        <p class="text-gray-600">
                             Placed on ${orderDate}
                         </p>
                     </div>
@@ -184,13 +184,13 @@ class ProfileManager {
                     </span>
                 </div>
 
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <div class="border-t border-gray-200 pt-4">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-gray-600 dark:text-gray-400">Items:</span>
+                        <span class="text-gray-600">Items:</span>
                         <span class="font-medium">${order.items?.length || 0}</span>
                     </div>
                     <div class="flex justify-between items-center mb-4">
-                        <span class="text-gray-600 dark:text-gray-400">Total:</span>
+                        <span class="text-gray-600">Total:</span>
                         <span class="font-bold text-lg">${total.toFixed(2)} ${currency}</span>
                     </div>
                 </div>
@@ -231,10 +231,10 @@ class ProfileManager {
         const modal = document.createElement('div');
         modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
         modal.innerHTML = `
-            <div class="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                        <h2 class="text-xl font-bold text-gray-900">
                             Order #${order.orderNumber || order._id}
                         </h2>
                         <button onclick="this.parentElement.parentElement.parentElement.remove()" 
@@ -249,10 +249,10 @@ class ProfileManager {
                         <h3 class="font-semibold mb-2">Order Items:</h3>
                         <div class="space-y-2">
                             ${(order.items || []).map(item => `
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                     <div>
                                         <span class="font-medium">${item.productData?.name || 'Unknown Product'}</span>
-                                        <span class="text-gray-600 dark:text-gray-400 ml-2">x${item.quantity}</span>
+                                        <span class="text-gray-600 ml-2">x${item.quantity}</span>
                                     </div>
                                     <span class="font-medium">${(item.productData?.price * item.quantity).toFixed(2)} ${order.currency || 'EGP'}</span>
                                 </div>
@@ -260,7 +260,7 @@ class ProfileManager {
                         </div>
                     </div>
 
-                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <div class="border-t border-gray-200 pt-4">
                         <div class="flex justify-between items-center font-bold text-lg">
                             <span>Total:</span>
                             <span>${order.total?.toFixed(2)} ${order.currency || 'EGP'}</span>
@@ -270,7 +270,7 @@ class ProfileManager {
                     ${order.shippingAddress ? `
                         <div class="mt-4">
                             <h3 class="font-semibold mb-2">Shipping Address:</h3>
-                            <p class="text-gray-600 dark:text-gray-400">
+                            <p class="text-gray-600">
                                 ${order.shippingAddress.street}, ${order.shippingAddress.city}<br>
                                 ${order.shippingAddress.country} ${order.shippingAddress.zipCode}
                             </p>

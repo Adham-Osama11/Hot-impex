@@ -798,7 +798,7 @@
 
 .card-info {
     position: absolute;
-    top: 60px;
+    bottom: 60px;
     left: 60px;
     z-index: 10;
 }

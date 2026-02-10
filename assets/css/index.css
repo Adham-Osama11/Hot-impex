@@ -742,18 +742,23 @@
 }
 
 /* Hero Section Styles - Carousel */
-.hero-section {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+.hero {
+    width: 100vw;
+    min-height: 80vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 2rem 0;
-    position: relative;
-}
-.carousel {
+    justify-content: center;
     overflow: hidden;
     position: relative;
+    transition: background 0.6s ease;
+}
+
+.carousel {
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .track {
@@ -764,6 +769,7 @@
 }
 
 .card {
+    background: transparent;
     width: 50vw;
     flex: 0 0 auto;
     transition: transform .4s ease, opacity .4s ease, filter .4s ease;

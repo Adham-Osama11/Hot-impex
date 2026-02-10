@@ -2181,6 +2181,8 @@ function initializeHeroProductShowcase() {
         parseFloat(cardStyle.marginRight);
 
     const cardSpace = cardWidth + margin;
+    const bg = cards[index].dataset.bg;
+    document.querySelector(".hero").style.background = bg;
 
     // Center active card inside container
     const offset =

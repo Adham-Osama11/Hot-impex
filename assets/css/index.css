@@ -963,12 +963,12 @@
     }
     
     .card-info {
-        top: 30px;
+        bottom: 30px;
         left: 30px;
     }
     
     .card-title {
-        font-size: 1.8rem;
+        font-size: 1rem;
     }
     
     .card-image {

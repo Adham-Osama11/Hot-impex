@@ -698,12 +698,13 @@ document.addEventListener('DOMContentLoaded', function() {
         displayFeaturedProducts();
     }
     
-    // Initialize shop page if present
-    if (document.getElementById('products-grid')) {
+    // Initialize shop page if present (but NOT on homepage which uses home.js)
+    const isHomePage = window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+    if (document.getElementById('products-grid') && !isHomePage) {
         console.log('Products grid found, initializing shop page...');
         initializeShopPage();
     } else {
-        console.log('No products grid found on this page');
+        console.log('No products grid found on this page or on homepage');
     }
     
     // Initialize product page if present

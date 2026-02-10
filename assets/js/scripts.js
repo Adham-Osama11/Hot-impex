@@ -2158,153 +2158,124 @@ function addProduct(productData) {
 
 // Hero Product Showcase Implementation
 function initializeHeroProductShowcase() {
-    const products = [
-        {
-            id: 1,
-            title: "Racing Sim Seat",
-            description: "Professional racing simulation seat for ultimate gaming experience",
-            image: "assets/images/racing sim seat_without BG.png",
-            features: ["Ergonomic design", "Premium materials", "Adjustable settings"]
-        },
-        {
-            id: 2,
-            title: "Mobile Experience",
-            description: "Seamless mobile interface for on-the-go access",
-            image: "assets/images/kiosks without BG.png",
-            features: ["Responsive design", "Touch optimized", "Offline support"]
-        },
-        {
-            id: 3,
-            title: "Screen Telescopic",
-            description: "Advanced telescopic screen system with crystal clear display",
-            image: "assets/images/screen telescopic_without BG.png",
-            features: ["4K Resolution", "Auto-adjust", "Smart controls"]
-        }
-    ];
+    const track = document.querySelector(".track");
+    const cards = document.querySelectorAll(".card");
+    const dots = document.querySelectorAll(".dot");
+    
+    if (!track || cards.length === 0) {
+        console.log('Carousel elements not found');
+        return;
+    }
+    
+    let index = 0;
+    
+    function update() {
+    const container = track.parentElement; 
+    const containerWidth = container.offsetWidth;
 
-    let currentProductIndex = 1; // Start with second product (Mobile Experience)
-    let autoAdvanceInterval;
-    
-    // Get DOM elements
-    const productImage = document.getElementById('product-image');
-    const productTitle = document.getElementById('product-title');
-    const productDescription = document.getElementById('product-description');
-    const productFeatures = document.getElementById('product-features');
-    const cardNumber = document.getElementById('card-number');
-    const progressBar = document.getElementById('progress-bar');
-    const prevButton = document.getElementById('prev-product');
-    const nextButton = document.getElementById('next-product');
-    
-// Update product display
-function updateProduct(index) {
-    const product = products[index];
-    
-    // Add transition effect
-    const card = document.getElementById('active-product-card');
-    card.style.transform = 'scale(0.95) rotateY(10deg)';
-    card.style.opacity = '0.7';
-    
-    setTimeout(() => {
-        // Update content
-        if (productImage) productImage.src = product.image;
-        if (productTitle) productTitle.textContent = product.title;
-        if (productDescription) productDescription.textContent = product.description;
-        if (cardNumber) cardNumber.textContent = `${index + 1}/${products.length}`;
-        
-        // Update features
-        if (productFeatures) {
-            productFeatures.innerHTML = product.features.map(feature => 
-                `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">${feature}</span>`
-            ).join('');
-        }
+    const firstCard = cards[0];
+    const cardWidth = firstCard.offsetWidth;
+    const cardStyle = getComputedStyle(firstCard);
+    const margin =
+        parseFloat(cardStyle.marginLeft) +
+        parseFloat(cardStyle.marginRight);
 
-        // ✅ Update datasheet button
-        const datasheetBtn = document.getElementById("datasheet-btn");
-        if (datasheetBtn) {
-            if (product.datasheet) {
-                datasheetBtn.onclick = () => window.open(product.datasheet, "_blank");
-                datasheetBtn.style.display = "block";
-            } else {
-                datasheetBtn.style.display = "none";
-            }
-        }
-        
-        // Update progress bar
-        if (progressBar) {
-            const progressWidth = ((index + 1) / products.length) * 100;
-            progressBar.style.width = `${progressWidth}%`;
-        }
-        
-        // Restore card appearance
-        card.style.transform = 'scale(1) rotateY(0deg)';
-        card.style.opacity = '1';
-    }, 200);
-}
+    const cardSpace = cardWidth + margin;
 
-    // Navigation functions
-    function nextProduct() {
-        currentProductIndex = (currentProductIndex + 1) % products.length;
-        updateProduct(currentProductIndex);
-        resetAutoAdvance();
-    }
-    
-    function prevProduct() {
-        currentProductIndex = (currentProductIndex - 1 + products.length) % products.length;
-        updateProduct(currentProductIndex);
-        resetAutoAdvance();
-    }
-    
-    // Auto-advance functionality
-    function startAutoAdvance() {
-        autoAdvanceInterval = setInterval(nextProduct, 4000); // Change every 4 seconds
-    }
-    
-    function stopAutoAdvance() {
-        if (autoAdvanceInterval) {
-            clearInterval(autoAdvanceInterval);
-            autoAdvanceInterval = null;
-        }
-    }
-    
-    function resetAutoAdvance() {
-        stopAutoAdvance();
-        startAutoAdvance();
-    }
-    
-    // Event listeners
-    if (nextButton) {
-        nextButton.addEventListener('click', nextProduct);
-    }
-    
-    if (prevButton) {
-        prevButton.addEventListener('click', prevProduct);
-    }
-    
-    // Pause auto-advance on hover
-    const heroSection = document.getElementById('hero-showroom');
-    if (heroSection) {
-        heroSection.addEventListener('mouseenter', stopAutoAdvance);
-        heroSection.addEventListener('mouseleave', startAutoAdvance);
-    }
-    
-    // Initialize first product and start auto-advance
-    updateProduct(currentProductIndex);
-    startAutoAdvance();
-    
-    // Handle page visibility changes
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            stopAutoAdvance();
+    // Center active card inside container
+    const offset =
+        containerWidth / 2 -
+        cardWidth / 2 -
+        index * cardSpace;
+
+    track.style.transform = `translateX(${offset}px)`;
+
+    cards.forEach((card, i) => {
+        const distance = Math.abs(i - index);
+
+        if (i === index) {
+            card.style.transform = "scale(1)";
+            card.style.opacity = "1";
+            card.style.filter = "none";
+            card.style.zIndex = "5";
         } else {
-            startAutoAdvance();
+            card.style.transform = "scale(0.85)";
+            card.style.opacity = "0.35";
+            card.style.filter = "blur(1px)";
+            card.style.zIndex = "1";
         }
     });
+
+    dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+    });
+}
+
+    
+    const nextBtn = document.getElementById("next");
+    const prevBtn = document.getElementById("prev");
+    
+    if (nextBtn) {
+        nextBtn.onclick = () => {
+            index = Math.min(index + 1, cards.length - 1);
+            update();
+        };
+    }
+    
+    if (prevBtn) {
+        prevBtn.onclick = () => {
+            index = Math.max(index - 1, 0);
+            update();
+        };
+    }
+    
+    // Dot navigation
+    dots.forEach((dot, i) => {
+        dot.onclick = () => {
+            index = i;
+            update();
+        };
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' && index > 0) {
+            index--;
+            update();
+        } else if (e.key === 'ArrowRight' && index < cards.length - 1) {
+            index++;
+            update();
+        }
+    });
+    
+    let startX = 0;
+
+track.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+});
+
+track.addEventListener("touchend", e => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > 60) {
+        if (diff > 0 && index < cards.length - 1) index++;
+        if (diff < 0 && index > 0) index--;
+        update();
+    }
+});
+
+    
+    // Update on window resize
+    window.addEventListener('resize', update);
+    
+    update();
 }
 
 // Legacy function for compatibility
 function initializeHeroVideo() {
     // This function is now replaced by initializeHeroProductShowcase()
-    console.log('Hero now using product showcase instead of video');
+    console.log('Hero now using carousel');
     initializeHeroProductShowcase();
 }
 

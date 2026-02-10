@@ -70,107 +70,54 @@
         </div>
     </div>
 
-    <!-- Hero Product Suite Section -->
+    <!-- Carousel Hero Section -->
     <section id="hero-showroom" class="hero-section">
-        <div class="hero-container">
-            <div class="hero-grid">
-                
-                <!-- Left Content Section -->
-                <div class="hero-content-left">
-                    <!-- Company Logo -->
-                    <div class="hero-logo-section">
-                        <div class="hero-logo-wrapper">
-                            <img id="logo" src="assets/images/logos/logo.png" alt="Hot Impex Logo" class="hero-logo">
+        <div class="carousel">
+            <div class="track">
+                <div class="card" data-category="Professional">
+                    <div class="card-content">
+                        <div class="card-info">
+                            <span class="card-category">Professional</span>
+                            <h2 class="card-title">Interactive Kiosks</h2>
+                            <a href="shop.html" class="card-btn">SHOP</a>
                         </div>
-                        <p class="hero-description">
-                            Your trusted partner for innovative technology solutions. We deliver high-quality products that enhance connectivity, performance, and user experience across various industries and applications.
-                        </p>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="hero-actions">
-                        <a href="shop.html" class="hero-btn-primary group">
-                            <span>Browse Products</span>
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
-                        </a>
-                        <button class="hero-btn-secondary group">
-                            <div class="hero-video-icon-wrapper">
-                                <svg class="hero-video-icon" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </div>
-                            <span>Watch Video</span>
-                        </button>
+                        <img src="assets/images/kiosks without BG.png" alt="Kiosks" class="card-image">
+                        <div class="card-indicator">01</div>
                     </div>
                 </div>
-
-                <!-- Right Product Cards Section -->
-                <div class="hero-product-section">
-                    <!-- Floating Elements -->
-                    <div class="hero-floating-element-1"></div>
-                    <div class="hero-floating-element-2"></div>
-                    
-                    <!-- Product Card Container -->
-                    <div class="hero-product-container">
-                        <!-- Enhanced Card Stack Background -->
-                        <div class="hero-card-stack-1"></div>
-                        <div class="hero-card-stack-2"></div>
-                        
-                        <!-- Active Product Card -->
-                        <div id="active-product-card" class="hero-product-card">
-                            <!-- Product Image -->
-                            <div class="hero-product-image-wrapper">
-                                <div class="hero-product-image-bg">
-                                    <img id="product-image" src="./assets/images/racing sim seat_without BG.png" alt="Mobile Experience" class="hero-product-image">
-                                </div>
-                                <!-- Enhanced Card Number -->
-                                <div class="hero-card-number">
-                                    <span id="card-number">2/3</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Product Content -->
-                            <div class="hero-product-content">
-                                <h3 id="product-title" class="hero-product-title">Mobile Experience</h3>
-                                <p id="product-description" class="hero-product-description">Seamless mobile interface for on-the-go access</p>
-                                
-                                <!-- Product Features -->
-                                <div id="product-features" class="hero-product-features">
-                                    <span class="hero-feature-tag feature-tag">Responsive design</span>
-                                    <span class="hero-feature-tag feature-tag">Touch optimized</span>
-                                    <span class="hero-feature-tag feature-tag">Offline support</span>
-                                </div>
-                            </div>
+                <div class="card" data-category="Gaming">
+                    <div class="card-content">
+                        <div class="card-info">
+                            <span class="card-category">Gaming</span>
+                            <h2 class="card-title">Racing Sim Seat</h2>
+                            <a href="shop.html" class="card-btn">SHOP</a>
                         </div>
-
-                        <!-- Enhanced Navigation Controls -->
-                        <div class="hero-navigation-controls">
-                            <button id="prev-product" class="hero-nav-button group">
-                                <svg class="hero-nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                                </svg>
-                            </button>
-                            
-                            <!-- Enhanced Progress Indicator -->
-                            <div class="hero-progress-wrapper">
-                                <div class="hero-progress-bar-bg">
-                                    <div id="progress-bar" class="hero-progress-bar" style="width: 66%"></div>
-                                </div>
-                                <div class="hero-progress-text">
-                                    <span class="hero-progress-label">Auto-advance</span>
-                                </div>
-                            </div>
-                            
-                            <button id="next-product" class="hero-nav-button group">
-                                <svg class="hero-nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </button>
-                        </div>
+                        <img src="assets/images/racing sim seat_without BG.png" alt="Racing Sim Seat" class="card-image">
+                        <div class="card-indicator">02</div>
                     </div>
                 </div>
+                <div class="card" data-category="Display">
+                    <div class="card-content">
+                        <div class="card-info">
+                            <span class="card-category">Display</span>
+                            <h2 class="card-title">Screen Telescopic</h2>
+                            <a href="shop.html" class="card-btn">SHOP</a>
+                        </div>
+                        <img src="assets/images/screen telescopic_without BG.png" alt="Screen Telescopic" class="card-image">
+                        <div class="card-indicator">03</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="prev">‹</button>
+                <button id="next">›</button>
+            </div>
+            
+            <div class="carousel-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
             </div>
         </div>
     </section>

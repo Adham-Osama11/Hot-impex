@@ -14,7 +14,7 @@ const API_CONFIG = {
      * Base API URL
      */
     BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://backend.hotimpex.net.162-222-225-82.plesk-web7.webhostbox.net'
+        ? 'http://backend.hotimpex.net'
         : '',
     
     // ==================== REQUEST HEADERS ====================

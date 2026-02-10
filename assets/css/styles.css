@@ -12,8 +12,8 @@
    ====================================*/
 :root {
     /* Color Gradients */
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --primary-gradient: linear-gradient(135deg, #e8212a 0%, #245376 100%);
+    --secondary-gradient: linear-gradient(135deg, #ca303c 0%, #d44146 100%);
     --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
     --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
 

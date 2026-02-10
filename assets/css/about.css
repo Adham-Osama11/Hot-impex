@@ -30,7 +30,7 @@
 }
 
 .about-title-highlight {
-    background: linear-gradient(to right, #9333ea, #db2777, #f97316);
+    background: linear-gradient(to right, #e8212a, #245376, #ca303c);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -83,7 +83,7 @@
 /* Stats Card */
 .stats-card {
     position: relative;
-    background: linear-gradient(to bottom right, #9333ea, #db2777);
+    background: linear-gradient(to right, #e8212a, #245376);
     border-radius: 1rem;
     padding: 2rem;
     color: white;
@@ -289,7 +289,7 @@
 /* CTA Section */
 .cta-section {
     text-align: center;
-    background: linear-gradient(to right, #9333ea, #db2777);
+    background: linear-gradient(to right, #e8212a, #245376);
     border-radius: 1rem;
     padding: 3rem;
     color: white;

@@ -38,13 +38,13 @@
 /* Mobile Menu Toggle */
 .mobile-menu-toggle {
     display: block;
-    color: #1f2937;
+    color: #000000; /* Updated to match palette */
     padding: 0.75rem;
     border-radius: 9999px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     transition: all 0.2s;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 0, 0, 0.15); /* Updated to match palette */
     backdrop-filter: blur(40px);
 }
 

@@ -23,11 +23,11 @@
     font-size: 1.875rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    color: #111827;
+    color: #000000; /* Updated to match palette */
 }
 
 .profile-header-subtitle {
-    color: #4b5563;
+    color: #d44146; /* Updated to match palette */
 }
 
 /* Profile Grid */

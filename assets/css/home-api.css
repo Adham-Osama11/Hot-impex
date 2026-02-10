@@ -15,6 +15,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    color: #e8212a; /* Updated to match palette */
 }
 
 /* Loading Spinner Animation */

@@ -3,7 +3,7 @@
 /* Page Layout */
 .product-page {
     min-height: 100vh;
-    background: linear-gradient(to bottom right, #e8212a, #245376, #ca303c);
+    background: #ffffff;
 }
 
 /* Custom Scrollbar */

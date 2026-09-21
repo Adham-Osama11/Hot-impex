@@ -13,9 +13,7 @@ const API_CONFIG = {
     /**
      * Base API URL
      */
-    BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://backend.hotimpex.net'
-        : '',
+    BASE_URL: 'https://backend.hotimpex.net',
     
     // ==================== REQUEST HEADERS ====================
     

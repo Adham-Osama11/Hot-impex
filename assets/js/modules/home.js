@@ -109,6 +109,7 @@ class HomePageManager {
                 console.log(`✅ Loaded ${categories.length} home page categories`);
             } else {
                 console.log('ℹ️ No categories with "show on home" enabled - keeping default categories');
+                this.showEmptyState(gridEl, 'No collections are available right now.');
             }
         } catch (error) {
             console.error('❌ Error loading home page categories:', error);
@@ -117,6 +118,7 @@ class HomePageManager {
             // Make sure grid is visible
             if (gridEl) {
                 gridEl.style.display = 'grid';
+                this.showEmptyState(gridEl, 'Collections could not be loaded right now.');
             }
         }
     }
@@ -178,6 +180,7 @@ class HomePageManager {
                 this.renderProducts(products);
             } else {
                 console.log('ℹ️ No products available - keeping default products');
+                this.showEmptyState(gridEl, 'No products are available right now.');
             }
         } catch (error) {
             console.error('❌ Error loading home page products:', error);
@@ -186,8 +189,19 @@ class HomePageManager {
             // Make sure grid is visible
             if (gridEl) {
                 gridEl.style.display = 'grid';
+                this.showEmptyState(gridEl, 'Products could not be loaded right now.');
             }
         }
+    }
+
+    showEmptyState(gridEl, message) {
+        if (!gridEl) return;
+
+        gridEl.innerHTML = `
+            <div class="col-span-full text-center py-20 text-gray-600">
+                <p class="text-lg font-medium">${message}</p>
+            </div>
+        `;
     }
 
     /**
